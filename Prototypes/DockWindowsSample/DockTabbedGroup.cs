@@ -13,8 +13,8 @@ namespace DockWindowsSample
 
         private AvaloniaList<DockItem> _items = new AvaloniaList<DockItem>();
 
-        SingleSelectionBehavior<DockItem> _singleSelectionBehavior =
-            new SingleSelectionBehavior<DockItem>();
+        SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
+            new SingleSelectionFirstByDefaultBehavior<DockItem>();
 
         public DockTabbedGroup()
         {

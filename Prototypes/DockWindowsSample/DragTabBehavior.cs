@@ -108,13 +108,14 @@ namespace DockWindowsSample
 
                     DockItem draggedDockItem = (DockItem) draggedTabItem.Content ;
 
+                    int draggedDockItemIdx = itemsList.IndexOf(draggedDockItem);
+
+                    DockItem dropDockItem = (DockItem)tabMouseOver.Content;
+                    int dropIdx = itemsList!.IndexOf(dropDockItem);
+
                     itemsList?.Remove(draggedDockItem);
 
-                    DockItem dropDockItem = (DockItem) tabMouseOver.Content;
-
-                    int dropIdx = itemsList!.IndexOf(dropDockItem) + 1;
-
-                    itemsList.Insert(dropIdx, draggedDockItem);
+                    itemsList?.Insert(dropIdx, draggedDockItem);
 
                     draggedDockItem.IsSelected = true;
                 }
