@@ -1,0 +1,165 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:np="https://np.com/visuals"
+        xmlns:local="clr-namespace:DockWindowsSample"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="550"
+        Width="700"
+        Height="450"
+        x:Class="DockWindowsSample.MainWindow"
+        Title="DockWindowsSample">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <Window.Styles>
+    <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
+
+    <Style Selector="local|DockTabControl">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border
+              Margin="{TemplateBinding Margin}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              Background="{TemplateBinding Background}"
+              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+              VerticalAlignment="{TemplateBinding VerticalAlignment}">
+            <DockPanel>
+              <ItemsPresenter
+                  DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                  Name="PART_ItemsPresenter"
+                  Items="{TemplateBinding Items}"
+                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                  ItemTemplate="{TemplateBinding ItemTemplate}">
+              </ItemsPresenter>
+              <ContentPresenter
+                  Name="PART_SelectedContentHost"
+                  Margin="{TemplateBinding Padding}"
+                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+              </ContentPresenter>
+            </DockPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Top]">
+      <Setter Property="Padding" Value="0 4 0 0"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+      <Setter Property="DockPanel.Dock" Value="Top"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
+      <Setter Property="DockPanel.Dock" Value="Bottom"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Bottom]">
+      <Setter Property="Padding" Value="0 0 0 4"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
+      <Setter Property="DockPanel.Dock" Value="Left"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+      <Setter Property="Orientation" Value="Vertical"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Left]">
+      <Setter Property="Padding" Value="4 0 0 0"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
+      <Setter Property="DockPanel.Dock" Value="Right"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+      <Setter Property="Orientation" Value="Vertical"/>
+    </Style>
+    <Style Selector="local|DockTabControl[TabStripPlacement=Right]">
+      <Setter Property="Padding" Value="0 0 4 0"/>
+    </Style>
+    <Style Selector="TabItem">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}"/>
+      <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLowBrush}"/>
+      <Setter Property="HorizontalContentAlignment" Value="Left"/>
+      <Setter Property="Padding" Value="8"/>
+      <Setter Property="local:DragTabBehavior.IsSet"
+              Value="True"/>
+      <Setter Property="IsSelected"
+              Value="{Binding Path=Content.IsSelected, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
+      <Setter Property="np:CallAction.TheEvent"
+              Value="{x:Static InputElement.PointerPressedEvent}"/>
+      <Setter Property="np:CallAction.TargetObject"
+              Value="{Binding Path=Content, RelativeSource={RelativeSource Self}}" />
+      <Setter Property="np:CallAction.MethodName"
+              Value="Select"/>
+      <Setter Property="np:CallAction.TheRoutingStrategy"
+              Value="Bubble"/>
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid ColumnDefinitions="Auto, Auto"
+                Background="{TemplateBinding Background}"
+                DataContext="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}">
+            <ContentPresenter
+                Name="PART_ContentPresenter"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                ContentTemplate="{Binding Path=Content.HeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                Content="{Binding Path=Content.Header, RelativeSource={RelativeSource TemplatedParent}}"
+                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                Margin="{TemplateBinding Margin}"
+                Padding="{TemplateBinding Padding}"/>
+            <Button x:Name="CloseButton"
+                    Classes="WindowIconButton IconButton"
+                    Grid.Column="1"
+                    np:AttachedProperties.IconData="{StaticResource CloseIcon}"
+                    np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+                    np:CallAction.MethodName="Remove"
+                    Margin="10"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="local|DockTabbedGroup">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="local:DockTabbedGroup">
+            <local:DockTabControl Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Styles>
+  <Grid ColumnDefinitions="*, *">
+    <local:DockTabbedGroup>
+      <local:DockTabbedGroup.Items>
+        <local:DockItem Header="Tab1">
+          <TextBlock Text="Hello World!"/>
+        </local:DockItem>
+        <local:DockItem Header="Tab2">
+          <TextBlock Text="Hi World!"/>
+        </local:DockItem>
+      </local:DockTabbedGroup.Items>
+    </local:DockTabbedGroup>
+
+    <local:DockTabbedGroup
+          Grid.Column="1">
+      <local:DockTabbedGroup.Items>
+        <local:DockItem Header="Tab1" Content="Hello World!">
+          <local:DockItem.ContentTemplate>
+            <DataTemplate>
+              <TextBlock Foreground="Red"
+                         FontSize="20"
+                         Text="{Binding}"/>
+            </DataTemplate>
+          </local:DockItem.ContentTemplate>
+        </local:DockItem>
+        <local:DockItem Header="Tab2" Content="Hi World!"/>
+      </local:DockTabbedGroup.Items>
+    </local:DockTabbedGroup>
+  </Grid>
+</Window>
