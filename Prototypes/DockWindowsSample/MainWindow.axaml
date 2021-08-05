@@ -32,13 +32,13 @@
               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
               VerticalAlignment="{TemplateBinding VerticalAlignment}">
             <DockPanel>
-              <ItemsPresenter
-                  DockPanel.Dock="{TemplateBinding TabStripPlacement}"
-                  Name="PART_ItemsPresenter"
-                  Items="{TemplateBinding Items}"
-                  ItemsPanel="{TemplateBinding ItemsPanel}"
-                  ItemTemplate="{TemplateBinding ItemTemplate}">
-              </ItemsPresenter>
+				<ItemsPresenter
+					local:DragTabBehavior.IsSet="True"
+					DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+					Name="PART_ItemsPresenter"
+					Items="{TemplateBinding Items}"
+					ItemsPanel="{TemplateBinding ItemsPanel}"
+					ItemTemplate="{TemplateBinding ItemTemplate}"/>
               <ContentPresenter
                   Name="PART_SelectedContentHost"
                   Margin="{TemplateBinding Padding}"
@@ -86,8 +86,6 @@
       <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLowBrush}"/>
       <Setter Property="HorizontalContentAlignment" Value="Left"/>
       <Setter Property="Padding" Value="8"/>
-      <Setter Property="local:DragTabBehavior.IsSet"
-              Value="True"/>
       <Setter Property="IsSelected"
               Value="{Binding Path=Content.IsSelected, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
       <Setter Property="np:CallAction.TheEvent"
@@ -143,6 +141,9 @@
         <local:DockItem Header="Tab2">
           <TextBlock Text="Hi World!"/>
         </local:DockItem>
+		  <local:DockItem Header="Tab3">
+			  <TextBlock Text="Hi World 1234!"/>
+		  </local:DockItem>
       </local:DockTabbedGroup.Items>
     </local:DockTabbedGroup>
 

@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Utilities;
@@ -39,62 +40,127 @@ namespace DockWindowsSample
 
         private static void OnIsSetChanged(AvaloniaPropertyChangedEventArgs<bool> change)
         {
-            Control control = (Control) change.Sender;
+            Control tabContainer = (Control) change.Sender;
 
             if (change.NewValue.Value)
             {
-                control.PointerPressed += Control_PointerPressed;
+                tabContainer.AddHandler
+                (
+                    Control.PointerPressedEvent,
+                    Control_PointerPressed!,
+                    RoutingStrategies.Bubble,
+                    true);
             }
             else
             {
-                control.PointerPressed -= Control_PointerPressed;
+                tabContainer.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed!);
             }
         }
 
         private static Point2D? _startMousePoint;
 
         private static bool _allowDrag = false;
+
+        private static TabItem _startTabItem;
+
+        private static DockItem? _draggedDockItem;
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e)
         {
-            Control control = (Control) sender;
+            Control tabContainer = (Control) sender;
 
-            _startMousePoint = e.GetPosition(control).ToPoint2D();
+            _startMousePoint = e.GetPosition(tabContainer).ToPoint2D();
 
-            control.PointerReleased += Control_PointerReleased;
-            control.PointerMoved += Control_PointerMoved;
+            _startTabItem = e.GetTabItemCurrentPosition((ItemsPresenter) sender)!;
+
+            if (_startTabItem == null)
+            {
+                return;
+            }
+
+            _draggedDockItem = _startTabItem?.Content as DockItem;
+
+            tabContainer.AddHandler
+            (
+                Control.PointerMovedEvent, 
+                Control_PointerMoved!, 
+                RoutingStrategies.Bubble, 
+                true);
+
+            tabContainer.AddHandler
+            (
+                Control.PointerReleasedEvent,
+                ClearHandlers!,
+                RoutingStrategies.Bubble,
+                true);
+
+            tabContainer.AddHandler
+            (
+                Control.PointerReleasedEvent,
+                OnPointerLeft!,
+                RoutingStrategies.Bubble,
+                true);
+
 
             _allowDrag = false;
         }
 
-        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e)
+        private static void ClearHandlers(object sender, PointerEventArgs e)
         {
             Control control = (Control)sender;
 
-            control.PointerReleased -= Control_PointerReleased;
-            control.PointerMoved -= Control_PointerMoved;
+            control.RemoveHandler(Control.PointerReleasedEvent, ClearHandlers!);
+            control.RemoveHandler(Control.PointerMovedEvent, Control_PointerMoved!);
+            control.RemoveHandler(Control.PointerLeaveEvent, OnPointerLeft!);
+        }
+
+
+        private static void OnPointerLeft(object sender, PointerEventArgs e)
+        {
+            ClearHandlers(sender, e);
+        }
+
+
+        public static TabItem? GetTabItemCurrentPosition(this PointerEventArgs e, ItemsPresenter itemsPresenter)
+        {
+            Point pointerPositionWithinTabContainer = e.GetPosition(itemsPresenter);
+
+            TabItem? tabMouseOver =
+                    itemsPresenter
+                        .GetVisualDescendants()
+                        .OfType<TabItem>()
+                        .FirstOrDefault(tab => tab.IsPointerWithinControl(e));
+
+            return tabMouseOver;
+        }
+
+        public static DockItem GetDockItemCurrentPosition(this PointerEventArgs e, ItemsPresenter itemsPresenter)
+        {
+            return (DockItem)e.GetTabItemCurrentPosition(itemsPresenter)!.Content;
         }
 
         private static void Control_PointerMoved(object sender, PointerEventArgs e)
         {
-            TabItem draggedTabItem = (TabItem)sender;
+            if (_startTabItem == null)
+            {
+                return;
+            }
 
-            Point2D currentPoint = e.GetPosition(draggedTabItem).ToPoint2D();
+            ItemsPresenter tabContainer = (ItemsPresenter)sender;
+
+            Point2D currentPoint = e.GetPosition(tabContainer).ToPoint2D();
 
             if (currentPoint.Minus(_startMousePoint).ToAbs().GreaterOrEqual(PointHelper.MinimumDragDistance).Any)
             {
-                e.Pointer.Capture(draggedTabItem);
+                e.Pointer.Capture(tabContainer);
+
                 _allowDrag = true;
             }
 
-            if (e.Pointer.Captured != draggedTabItem || !_allowDrag)
+            if (e.Pointer.Captured != tabContainer || !_allowDrag)
                 return;
-
-            var tabContainer = draggedTabItem.FindAncestorOfType<ItemsPresenter>();
 
             var siblingTabs =
                 tabContainer.GetVisualDescendants().OfType<TabItem>().ToList();
-
-            siblingTabs.Remove(draggedTabItem);
 
             Point pointerPositionWithinTabContainer = e.GetPosition(tabContainer);
             if (tabContainer.IsPointWithinControl(pointerPositionWithinTabContainer))
@@ -102,22 +168,20 @@ namespace DockWindowsSample
                 TabItem? tabMouseOver = 
                     siblingTabs?.FirstOrDefault(tab => tab.IsPointerWithinControl(e));
 
-                if (tabMouseOver != null)
+                if (tabMouseOver != null && tabMouseOver != _startTabItem)
                 {
                     IList itemsList = (IList) tabContainer.Items;
 
-                    DockItem draggedDockItem = (DockItem) draggedTabItem.Content ;
-
-                    int draggedDockItemIdx = itemsList.IndexOf(draggedDockItem);
+                    int draggedDockItemIdx = itemsList.IndexOf(_draggedDockItem);
 
                     DockItem dropDockItem = (DockItem)tabMouseOver.Content;
                     int dropIdx = itemsList!.IndexOf(dropDockItem);
 
-                    itemsList?.Remove(draggedDockItem);
+                    itemsList?.Remove(_draggedDockItem);
 
-                    itemsList?.Insert(dropIdx, draggedDockItem);
+                    itemsList?.Insert(dropIdx, _draggedDockItem);
 
-                    draggedDockItem.IsSelected = true;
+                    _draggedDockItem!.IsSelected = true;
                 }
             }
         }
