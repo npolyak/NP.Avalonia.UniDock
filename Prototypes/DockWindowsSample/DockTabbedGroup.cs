@@ -19,6 +19,23 @@ namespace DockWindowsSample
         public DockTabbedGroup()
         {
             SetBehavior();
+
+            _singleSelectionBehavior.PropertyChanged += _singleSelectionBehavior_PropertyChanged;
+
+            SetSelectedItem();
+        }
+
+        private void _singleSelectionBehavior_PropertyChanged
+        (
+            object? sender, 
+            System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            SetSelectedItem();
+        }
+
+        private void SetSelectedItem()
+        {
+            SelectedItem = _singleSelectionBehavior.TheSelectedItem;
         }
 
         /// <summary>
@@ -53,26 +70,20 @@ namespace DockWindowsSample
         }
 
 
-        #region SelectedItem Direct Avalonia Property
-        public static readonly DirectProperty<DockTabbedGroup, DockItem> SelectedItemProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, DockItem>
-            (
-                nameof(SelectedItem),
-                o => o.SelectedItem,
-                (o, v) => o.SelectedItem = v
-            );
-        #endregion SelectedItem Direct Avalonia Property
-
-
-        public DockItem SelectedItem
+        #region SelectedItem Styled Avalonia Property
+        public object SelectedItem
         {
-            get => _singleSelectionBehavior.TheSelectedItem;
-
-            set
-            {
-                value.IsSelected = true;
-            }
+            get { return GetValue(SelectedItemProperty); }
+            private set { SetValue(SelectedItemProperty, value); }
         }
+
+        public static readonly StyledProperty<object> SelectedItemProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, object>
+            (
+                nameof(SelectedItem)
+            );
+        #endregion SelectedItem Styled Avalonia Property
+
 
         private void SetBehavior()
         {

@@ -23,6 +23,7 @@ namespace DockWindowsSample
         #endregion SelectedItem Styled Avalonia Property
 
 
+
         #region TabStripPlacement Styled Avalonia Property
         public Dock TabStripPlacement
         {

@@ -41,7 +41,7 @@ namespace DockWindowsSample
         }
 
         public override string ToString() =>
-            $"{Header?.ToString()} IsSelected={IsSelected}";
+            $"TheDockItem: {Header?.ToString()} IsSelected={IsSelected}";
 
         private void FireSelectionChanged()
         {

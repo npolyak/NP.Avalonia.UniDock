@@ -32,16 +32,18 @@
               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
               VerticalAlignment="{TemplateBinding VerticalAlignment}">
             <DockPanel>
-				<ItemsPresenter
-					local:DragTabBehavior.IsSet="True"
-					DockPanel.Dock="{TemplateBinding TabStripPlacement}"
-					Name="PART_ItemsPresenter"
-					Items="{TemplateBinding Items}"
-					ItemsPanel="{TemplateBinding ItemsPanel}"
-					ItemTemplate="{TemplateBinding ItemTemplate}"/>
+              <ItemsPresenter
+                    local:DragTabBehavior.IsSet="True"
+                    DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                    Name="PART_ItemsPresenter"
+                    Items="{TemplateBinding Items}"
+                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                    ItemTemplate="{TemplateBinding ItemTemplate}"/>
               <ContentPresenter
                   Name="PART_SelectedContentHost"
                   Margin="{TemplateBinding Padding}"
+                  Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                  ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
               </ContentPresenter>
@@ -126,7 +128,8 @@
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="local:DockTabbedGroup">
-            <local:DockTabControl Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <local:DockTabControl Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"
+                                  SelectedItem="{Binding Path=SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"/>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
