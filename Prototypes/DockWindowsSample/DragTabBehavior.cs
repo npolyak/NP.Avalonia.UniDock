@@ -5,6 +5,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
+using NP.Avalonia.Visuals.Behaviors;
+using NP.Avalonia.Visuals.Controls;
 using NP.Utilities;
 using System;
 using System.Collections;
@@ -82,7 +84,7 @@ namespace DockWindowsSample
             tabContainer.AddHandler
             (
                 Control.PointerMovedEvent, 
-                Control_PointerMoved!, 
+                DragControl_PointerMoved!, 
                 RoutingStrategies.Bubble, 
                 true);
 
@@ -93,30 +95,20 @@ namespace DockWindowsSample
                 RoutingStrategies.Bubble,
                 true);
 
-            tabContainer.AddHandler
-            (
-                Control.PointerReleasedEvent,
-                OnPointerLeft!,
-                RoutingStrategies.Bubble,
-                true);
-
-
             _allowDrag = false;
         }
 
         private static void ClearHandlers(object sender, PointerEventArgs e)
         {
+            ClearHandlers(sender);
+        }
+
+        private static void ClearHandlers(object sender)
+        {
             Control control = (Control)sender;
 
             control.RemoveHandler(Control.PointerReleasedEvent, ClearHandlers!);
-            control.RemoveHandler(Control.PointerMovedEvent, Control_PointerMoved!);
-            control.RemoveHandler(Control.PointerLeaveEvent, OnPointerLeft!);
-        }
-
-
-        private static void OnPointerLeft(object sender, PointerEventArgs e)
-        {
-            ClearHandlers(sender, e);
+            control.RemoveHandler(Control.PointerMovedEvent, DragControl_PointerMoved!);
         }
 
 
@@ -138,7 +130,7 @@ namespace DockWindowsSample
             return (DockItem)e.GetTabItemCurrentPosition(itemsPresenter)!.Content;
         }
 
-        private static void Control_PointerMoved(object sender, PointerEventArgs e)
+        private static void DragControl_PointerMoved(object sender, PointerEventArgs e)
         {
             if (_startTabItem == null)
             {
@@ -151,18 +143,21 @@ namespace DockWindowsSample
 
             if (currentPoint.Minus(_startMousePoint).ToAbs().GreaterOrEqual(PointHelper.MinimumDragDistance).Any)
             {
-                e.Pointer.Capture(tabContainer);
+                CurrentScreenPointBehavior.Capture(tabContainer);
 
                 _allowDrag = true;
             }
 
-            if (e.Pointer.Captured != tabContainer || !_allowDrag)
+            if (CurrentScreenPointBehavior.CapturedControl != tabContainer|| !_allowDrag)
                 return;
 
             var siblingTabs =
                 tabContainer.GetVisualDescendants().OfType<TabItem>().ToList();
 
             Point pointerPositionWithinTabContainer = e.GetPosition(tabContainer);
+
+            IList itemsList = (IList)tabContainer.Items;
+
             if (tabContainer.IsPointWithinControl(pointerPositionWithinTabContainer))
             {
                 TabItem? tabMouseOver = 
@@ -170,8 +165,6 @@ namespace DockWindowsSample
 
                 if (tabMouseOver != null && tabMouseOver != _startTabItem)
                 {
-                    IList itemsList = (IList) tabContainer.Items;
-
                     int draggedDockItemIdx = itemsList.IndexOf(_draggedDockItem);
 
                     DockItem dropDockItem = (DockItem)tabMouseOver.Content;
@@ -184,6 +177,42 @@ namespace DockWindowsSample
                     _draggedDockItem!.IsSelected = true;
                 }
             }
+            else
+            {
+                // remove from tabs within the tab group
+                itemsList?.Remove(_draggedDockItem);
+
+                // create the window
+                ClearHandlers(sender);
+
+                CustomWindow customWindow = new CustomWindow
+                {
+                    Classes = new Classes("PlainCustomWindow")
+                };
+
+                var pointerScreenPosition = tabContainer.PointToScreen(pointerPositionWithinTabContainer);
+
+                customWindow.Width = 400;
+                customWindow.Height = 300;
+
+                customWindow.DataContext = _draggedDockItem;
+
+                customWindow.DragOnBeginMove = false;
+
+                customWindow.HasCustomWindowFeatures = true;
+                customWindow.Content = _draggedDockItem.Content;
+                customWindow.ContentTemplate = _draggedDockItem.ContentTemplate;
+
+                customWindow.SetMovePtr();
+
+
+                customWindow.Show();
+                customWindow.Activate();
+            }
+        }
+
+        private static void CustomWindow_PointerEnter(object? sender, PointerEventArgs e)
+        {
         }
     }
 }

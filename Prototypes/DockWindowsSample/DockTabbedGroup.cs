@@ -20,7 +20,8 @@ namespace DockWindowsSample
         {
             SetBehavior();
 
-            _singleSelectionBehavior.PropertyChanged += _singleSelectionBehavior_PropertyChanged;
+            _singleSelectionBehavior.PropertyChanged += 
+                _singleSelectionBehavior_PropertyChanged;
 
             SetSelectedItem();
         }
