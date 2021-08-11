@@ -6,7 +6,7 @@ using Avalonia.Layout;
 
 namespace DockWindowsSample
 {
-    public class DockTabControl : ItemsControl
+    public class DockTabsControl : ItemsControl
     {
         #region SelectedItem Styled Avalonia Property
         public object? SelectedItem
@@ -16,7 +16,7 @@ namespace DockWindowsSample
         }
 
         public static readonly StyledProperty<object?> SelectedItemProperty =
-            AvaloniaProperty.Register<DockTabControl, object?>
+            AvaloniaProperty.Register<DockTabsControl, object?>
             (
                 nameof(SelectedItem)
             );
@@ -32,7 +32,7 @@ namespace DockWindowsSample
         }
 
         public static readonly StyledProperty<Dock> TabStripPlacementProperty =
-            AvaloniaProperty.Register<DockTabControl, Dock>
+            AvaloniaProperty.Register<DockTabsControl, Dock>
             (
                 nameof(TabStripPlacement),
                 Dock.Top
@@ -48,7 +48,7 @@ namespace DockWindowsSample
         }
 
         public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-            AvaloniaProperty.Register<DockTabControl, HorizontalAlignment>
+            AvaloniaProperty.Register<DockTabsControl, HorizontalAlignment>
             (
                 nameof(HorizontalContentAlignment)
             );
@@ -63,7 +63,7 @@ namespace DockWindowsSample
         }
 
         public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-            AvaloniaProperty.Register<DockTabControl, VerticalAlignment>
+            AvaloniaProperty.Register<DockTabsControl, VerticalAlignment>
             (
                 nameof(VerticalContentAlignment)
             );
@@ -78,10 +78,10 @@ namespace DockWindowsSample
         private static readonly FuncTemplate<IPanel> DefaultPanel =
             new FuncTemplate<IPanel>(() => new WrapPanel() { Orientation = Orientation.Horizontal });
 
-        static DockTabControl()
+        static DockTabsControl()
         {
-            ItemsPanelProperty.OverrideDefaultValue<DockTabControl>(DefaultPanel);
-            AffectsMeasure<DockTabControl>(TabStripPlacementProperty);
+            ItemsPanelProperty.OverrideDefaultValue<DockTabsControl>(DefaultPanel);
+            AffectsMeasure<DockTabsControl>(TabStripPlacementProperty);
         }
     }
 }

@@ -5,19 +5,9 @@ namespace DockWindowsSample
 {
     public class DockTabItemContainerGenerator : ItemContainerGenerator<TabItem>
     {
-        public DockTabItemContainerGenerator(DockTabControl owner) : 
+        public DockTabItemContainerGenerator(DockTabsControl owner) : 
             base(owner, ContentControl.ContentProperty, ContentControl.ContentTemplateProperty)
         {
-            Owner = owner;
-        }
-
-        public new DockTabControl Owner { get; }
-
-        protected override IControl CreateContainer(object item)
-        {
-            var tabItem = (TabItem)base.CreateContainer(item);
-
-            return tabItem;
         }
     }
 }
