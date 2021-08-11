@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Collections;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System;
@@ -18,6 +20,7 @@ namespace NP.AvaloniaDock
 
         public DockTabbedGroup()
         {
+            AffectsMeasure<DockTabsPresenter>(TabStripPlacementProperty);
             SetBehavior();
 
             _singleSelectionBehavior.PropertyChanged += 
@@ -70,7 +73,6 @@ namespace NP.AvaloniaDock
             }
         }
 
-
         #region SelectedItem Styled Avalonia Property
         public object SelectedItem
         {
@@ -84,6 +86,50 @@ namespace NP.AvaloniaDock
                 nameof(SelectedItem)
             );
         #endregion SelectedItem Styled Avalonia Property
+
+        #region TabStripPlacement Styled Avalonia Property
+        public Dock TabStripPlacement
+        {
+            get { return GetValue(TabStripPlacementProperty); }
+            set { SetValue(TabStripPlacementProperty, value); }
+        }
+
+        public static readonly StyledProperty<Dock> TabStripPlacementProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, Dock>
+            (
+                nameof(TabStripPlacement),
+                Dock.Top
+            );
+        #endregion TabStripPlacement Styled Avalonia Property
+
+        #region HorizontalContentAlignment Styled Avalonia Property
+        public HorizontalAlignment HorizontalContentAlignment
+        {
+            get { return GetValue(HorizontalContentAlignmentProperty); }
+            set { SetValue(HorizontalContentAlignmentProperty, value); }
+        }
+
+        public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, HorizontalAlignment>
+            (
+                nameof(HorizontalContentAlignment)
+            );
+        #endregion HorizontalContentAlignment Styled Avalonia Property
+
+
+        #region VerticalContentAlignment Styled Avalonia Property
+        public VerticalAlignment VerticalContentAlignment
+        {
+            get { return GetValue(VerticalContentAlignmentProperty); }
+            set { SetValue(VerticalContentAlignmentProperty, value); }
+        }
+
+        public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, VerticalAlignment>
+            (
+                nameof(VerticalContentAlignment)
+            );
+        #endregion VerticalContentAlignment Styled Avalonia Property
 
 
         private void SetBehavior()

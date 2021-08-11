@@ -69,68 +69,7 @@
       </Setter.Value>
     </Setter>
   </Style>
-  
-  <Style Selector="local|DockTabsControl">
-    <Setter Property="Template">
-      <ControlTemplate>
-        <Border
-            Margin="{TemplateBinding Margin}"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            Background="{TemplateBinding Background}"
-            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-            VerticalAlignment="{TemplateBinding VerticalAlignment}">
-          <DockPanel>
-            <ItemsPresenter
-                  local:DragTabBehavior.IsSet="True"
-                  DockPanel.Dock="{TemplateBinding TabStripPlacement}"
-                  Name="PART_ItemsPresenter"
-                  Items="{TemplateBinding Items}"
-                  ItemsPanel="{TemplateBinding ItemsPanel}"
-                  ItemTemplate="{TemplateBinding ItemTemplate}"/>
-            <ContentPresenter
-                Name="PART_SelectedContentHost"
-                Margin="{TemplateBinding Padding}"
-                Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
-            </ContentPresenter>
-          </DockPanel>
-        </Border>
-      </ControlTemplate>
-    </Setter>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Top]">
-    <Setter Property="Padding" Value="0 4 0 0"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
-    <Setter Property="DockPanel.Dock" Value="Top"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
-    <Setter Property="DockPanel.Dock" Value="Bottom"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Bottom]">
-    <Setter Property="Padding" Value="0 0 0 4"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
-    <Setter Property="DockPanel.Dock" Value="Left"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
-    <Setter Property="Orientation" Value="Vertical"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Left]">
-    <Setter Property="Padding" Value="4 0 0 0"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
-    <Setter Property="DockPanel.Dock" Value="Right"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
-    <Setter Property="Orientation" Value="Vertical"/>
-  </Style>
-  <Style Selector="local|DockTabsControl[TabStripPlacement=Right]">
-    <Setter Property="Padding" Value="0 0 4 0"/>
-  </Style>
+
   <Style Selector="TabItem">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}"/>
@@ -177,10 +116,60 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="local:DockTabbedGroup">
-          <local:DockTabsControl Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"
-                                 SelectedItem="{Binding Path=SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"/>
+          <Border
+              Margin="{TemplateBinding Margin}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              Background="{TemplateBinding Background}"
+              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+              VerticalAlignment="{TemplateBinding VerticalAlignment}">
+            <DockPanel>
+              <local:DockTabsPresenter x:Name="PART_ItemsPresenter"
+                                       np:DragTabBehavior.IsSet="True"
+                                       DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                                       Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
+              <ContentPresenter
+                  Name="PART_SelectedContentHost"
+                  Margin="{TemplateBinding Padding}"
+                  Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                  ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </DockPanel>
+          </Border>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+  </Style>
+
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Top]">
+    <Setter Property="Padding" Value="0 4 0 0"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="DockPanel.Dock" Value="Top"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="DockPanel.Dock" Value="Bottom"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Bottom]">
+    <Setter Property="Padding" Value="0 0 0 4"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="DockPanel.Dock" Value="Left"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+    <Setter Property="Orientation" Value="Vertical"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left]">
+    <Setter Property="Padding" Value="4 0 0 0"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="DockPanel.Dock" Value="Right"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+    <Setter Property="Orientation" Value="Vertical"/>
+  </Style>
+  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right]">
+    <Setter Property="Padding" Value="0 0 4 0"/>
   </Style>
 </Styles>
