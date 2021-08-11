@@ -6,11 +6,70 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
+        <ResourceInclude Source="avares://NP.AvaloniaDock/Themes/DockGeometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
+  <Style Selector="local|DockSideControl">
+    <Setter Property="BorderBrush"
+            Value="Gray"/>
+    <Setter Property="BorderThickness"
+            Value="2,6,2,2"/>
+    <Setter Property="Background"
+            Value="Transparent"/>
+    <Setter Property="Margin"
+            Value="5"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="local:DockSideControl">
+          <Border BorderThickness="{TemplateBinding BorderThickness}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  Background="{TemplateBinding Background}"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|DockCompass">
+    <Setter Property="Width"
+            Value="120"/>
+    <Setter Property="Height"
+            Value="120"/>
+    <Setter Property="Background"
+            Value="#DFD3D3D3"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="local:DockCompass">
+          <Grid RowDefinitions="*,*,*"
+                ColumnDefinitions="*,*,*">
+            <Path Data="{StaticResource DockPaneEmpty}"
+                  Fill="{TemplateBinding Background}"
+                  Stretch="Fill"
+                  Grid.RowSpan="3"
+                  Grid.ColumnSpan="3"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"/>
+            <np:DockSideControl Grid.Row="1"
+                                Grid.Column="1"
+                                DockSide="{x:Null}"/>
+            <np:DockSideControl Grid.Row="1"
+                                DockSide="Left"/>
+            <np:DockSideControl Grid.Column="1"
+                                DockSide="Top"/>
+            <np:DockSideControl Grid.Row="1"
+                                Grid.Column="2"
+                                DockSide="Right"/>
+            <np:DockSideControl Grid.Row="2"
+                                Grid.Column="1"
+                                DockSide="Bottom"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  
   <Style Selector="local|DockTabsControl">
     <Setter Property="Template">
       <ControlTemplate>

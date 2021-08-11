@@ -20,6 +20,7 @@
   </Window.Resources>
   <Window.Styles>
     <StyleInclude Source="avares://NP.AvaloniaDock/Themes/DockStyles.axaml"/>
+
   </Window.Styles>
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
@@ -43,9 +44,11 @@
           <np:DockItem Header="Tab1" Content="Hello World!">
             <np:DockItem.ContentTemplate>
               <DataTemplate>
-                <TextBlock Foreground="Red"
-                           FontSize="20"
-                           Text="{Binding}"/>
+                <Grid RowDefinitions="Auto, *">
+                  <TextBlock Foreground="Red"
+                             FontSize="20"
+                             Text="{Binding}"/>
+                </Grid>
               </DataTemplate>
             </np:DockItem.ContentTemplate>
           </np:DockItem>
