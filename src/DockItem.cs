@@ -3,7 +3,7 @@ using Avalonia.Controls.Primitives;
 using NP.Concepts.Behaviors;
 using System;
 
-namespace DockWindowsSample
+namespace NP.AvaloniaDock
 {
     public class DockItem : HeaderedContentControl, IRemovable, ISelectableItem<DockItem>
     {

@@ -7,3 +7,7 @@
 /Prototypes/DockWindowsSample/obj
 /Prototypes/AvaloniaDockApplication
 /SubModules/AvalonDock
+/src/.vs/NP.Avalonia.Dock/v16
+/src/bin/Debug/net5.0
+/src/obj/Debug/net5.0
+/src/obj

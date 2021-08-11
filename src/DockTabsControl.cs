@@ -4,7 +4,7 @@ using Avalonia.Controls.Generators;
 using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 
-namespace DockWindowsSample
+namespace NP.AvaloniaDock
 {
     public class DockTabsControl : ItemsControl
     {

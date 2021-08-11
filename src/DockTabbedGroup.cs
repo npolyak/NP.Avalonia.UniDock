@@ -5,7 +5,7 @@ using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System;
 
-namespace DockWindowsSample
+namespace NP.AvaloniaDock
 {
     public class DockTabbedGroup : TemplatedControl
     {

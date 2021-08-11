@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 
-namespace DockWindowsSample
+namespace NP.AvaloniaDock
 {
     public class DockTabItemContainerGenerator : ItemContainerGenerator<TabItem>
     {

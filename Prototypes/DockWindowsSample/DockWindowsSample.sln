@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Avalonia.Visuals", "..\.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Concepts.Behavior", "..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behavior.csproj", "{647C0207-928E-46F0-B65F-3637E076889B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.AvaloniaDock", "..\..\src\NP.AvaloniaDock.csproj", "{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{647C0207-928E-46F0-B65F-3637E076889B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{647C0207-928E-46F0-B65F-3637E076889B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{647C0207-928E-46F0-B65F-3637E076889B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
