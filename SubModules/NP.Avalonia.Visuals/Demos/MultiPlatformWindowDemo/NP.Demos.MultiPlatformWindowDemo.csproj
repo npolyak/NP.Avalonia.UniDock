@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\LinuxIcon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\LinuxIcon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.04" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.04" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.04" />
+   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)..\..\src\NP.Avalonia.Visuals.csproj" />
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj" />
+  </ItemGroup>
+</Project>

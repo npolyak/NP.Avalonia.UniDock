@@ -1,0 +1,186 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="NP.Demos.MultiPlatformWindowDemo.App"             
+             xmlns:local="clr-namespace:NP.Demos.MultiPlatformWindowDemo"
+             xmlns:np="https://np.com/visuals">
+  <Application.Resources>
+    <local:CustomWindowViewModel x:Key="WindowContentAndHeaderViewModel" />
+  </Application.Resources>
+  <Application.Styles>
+    <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+    <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+    <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml"/>
+
+    <Style Selector="local|StartupTestWindow">
+      <Setter Property="Title"
+              Value="Main Window"/>
+      <Setter Property="Width"
+              Value="800"/>
+      <Setter Property="Height"
+              Value="600"/>
+      <Setter Property="Content"
+              Value=""/>
+      <Setter Property="ContentTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=np:CustomWindow}}">
+              <Button x:Name="StartWindowWithCustomHeaderAndContent"
+                      Content="Start Window With Custom Header And Content"
+                      Padding="10,5"
+                      np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+                      np:CallAction.MethodName="StartWindowWithCustomHeaderAndViewModel"
+                      Margin="5"/>
+
+              <Button x:Name="StartWindowWithCompleteHeaderRestyling"
+                      Content="Start Window With Complete Header Restyling"
+                      Padding="10,5"
+                      np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+                      np:CallAction.MethodName="StartWindowWithCompleteHeaderRestyling"
+                      Margin="5"/>
+            </StackPanel>
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style Selector="TextBlock.MyCustomWindowTitleStyle">
+      <Setter Property="Foreground"
+              Value="Black"/>
+      <Setter Property="FontFamily"
+              Value="Calibri"/>
+      <Setter Property="FontWeight"
+              Value="Bold"/>
+      <Setter Property="FontSize"
+              Value="20"/>
+      <Setter Property="VerticalAlignment"
+              Value="Center"/>
+      <Setter Property="HorizontalAlignment"
+              Value="Left"/>
+    </Style>
+
+    <Style Selector="np|CustomWindow.WindowContentHeaderAndViewModel">
+      <Setter Property="Width"
+              Value="1000"/>
+      <Setter Property="Height"
+              Value="500"/>
+      <Setter Property="Title"
+              Value="View Model Test"/>
+      <Setter Property="HeaderContent"
+              Value="{Binding Source={StaticResource WindowContentAndHeaderViewModel}}"/>
+      <Setter Property="HeaderHeight"
+              Value="60"/>
+      <Setter Property="HeaderBackground"
+              Value="LightBlue"/>
+      <Setter Property="CustomHeaderIcon"
+              Value="/Assets/LinuxIcon.jpg"/>
+      <Setter Property="HeaderSeparatorHeight"
+              Value="5"/>
+      <Setter Property="CustomHeaderIconMargin"
+              Value="2,2,15,2"/>
+      <Setter Property="TitleClasses"
+              Value="MyCustomWindowTitleStyle"/>
+      <Setter Property="HeaderSeparatorBrush"
+              Value="DarkGreen"/>
+      <Setter Property="HeaderContentTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="20,0,0,0">
+              <TextBlock Text="Enter Text: "
+                         VerticalAlignment="Center"/>
+              <TextBox Text="{Binding Path=TheText, Mode=TwoWay}"
+                       MinWidth="200"/>
+            </StackPanel>
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Content"
+              Value="{Binding Source={StaticResource WindowContentAndHeaderViewModel}}"/>
+      <Setter Property="ContentTemplate">
+        <DataTemplate>
+          <Grid Background="LightGray">
+            <TextBlock Text="{Binding Path=TheText}"
+                       FontWeight="Bold"
+                       FontSize="40"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+          </Grid>
+        </DataTemplate>
+      </Setter>
+    </Style>
+
+    <Style Selector="np|CustomWindow.CompleteHeaderRestyling">
+      <Setter Property="Width"
+              Value="400"/>
+      <Setter Property="ResizeMargin"
+              Value="5"/>
+      <Setter Property="Height"
+              Value="300"/>
+      <Setter Property="BorderThickness"
+              Value="2"/>
+      <Setter Property="TransparencyLevelHint"
+              Value="Transparent"/>
+      <Setter Property="Background"
+              Value="Beige"/>
+      <Setter Property="BorderThickness"
+              Value="1"/>
+      <Setter Property="BorderBrush"
+              Value="Black"/>
+      <Setter Property="HeaderSeparatorHeight"
+              Value="3"/>
+      <Setter Property="HeaderSeparatorBrush"
+              Value="Blue"/>
+      <Setter Property="HeaderTemplate">
+        <ControlTemplate>
+          <Grid Height="100"
+                Margin="0,0,0,-3"
+                DataContext="{Binding RelativeSource={RelativeSource AncestorType=np:CustomWindow}}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="Aquamarine"
+                    CornerRadius="5,5,0,0"
+                    Grid.ColumnSpan="3"/>
+            <TextBlock Text="My Goofy Window"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+              <TextBlock.RenderTransform>
+                <RotateTransform Angle="-45"/>
+              </TextBlock.RenderTransform>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Grid.Column="1">
+              <Image Source="/Assets/LinuxIcon.jpg"
+                     VerticalAlignment="Center"
+                     Stretch="Uniform"
+                     np:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
+                     np:CallAction.MethodName="Close"
+                     Margin="2"/>
+              <Button Content="Close"
+                      VerticalAlignment="Center"
+                      Margin="2"
+                      np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+                      np:CallAction.MethodName="Close"/>
+            </StackPanel>
+
+            <TextBlock Text="My Goofy Window"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+              <TextBlock.RenderTransform>
+                <RotateTransform Angle="45"/>
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </Application.Styles>
+</Application>

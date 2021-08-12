@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Demos/MultiPlatformWindowDemo/.vs/MultiPlatformWindowDemo/v16
+/Demos/MultiPlatformWindowDemo/bin/Debug/net5.0
+/Demos/MultiPlatformWindowDemo/obj
+/src/bin/Debug/net5.0
+/src/obj
+/Demos/MultiPlatformWindowDemo/.vs/MultiPlatformWindowDemo/DesignTimeBuild

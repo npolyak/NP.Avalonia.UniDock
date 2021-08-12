@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>NP.Avalonia.Visuals</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Remove="Themes\ButtonStyles.axaml" />
+    <AvaloniaXaml Remove="Themes\CustomWindowStyles.axaml" />
+    <AvaloniaXaml Remove="Themes\Geometries.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".git" />
+    <None Remove="Assets\avalonia-32.png" />
+    <None Remove="LICENSE" />
+    <None Remove="NP.Avalonia.Visuals.0.82.1.nupkg" />
+    <None Remove="NP.Avalonia.Visuals.nuspec" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\avalonia-32.png" />
+    <AvaloniaResource Include="Themes\ButtonStyles.axaml" />
+    <AvaloniaResource Include="Themes\CustomWindowStyles.axaml" />
+    <AvaloniaResource Include="Themes\Geometries.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>NP.Avalonia.Visuals</id>
+    <version>0.82.4</version>
+    <title>NP.Avalonia.Visuals</title>
+    <authors>Nick Polyak, Ph. D.</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/npolyak/NP.Avalonia.Visuals</projectUrl>
+    <description>Visual Controls, Utilities and Behaviors for AvaloniaUI</description>
+    <releaseNotes>Contains Avalonia basic behaviors, converters and Custom Window.</releaseNotes>
+    <copyright>Nick Polyak 2021</copyright>
+    <summary>Multiplatform Avalonia UI Converters, Behaviors, Custom Controls</summary>
+    <tags>Avalonia Converters, Behaviors, CustomWindow</tags>
+    <dependencies>
+        <dependency id="Avalonia" version="0.10.4"/>
+        <dependency id="Avalonia.Desktop" version="0.10.4"/>
+        <dependency id="Avalonia.Diagnostics" version="0.10.4"/>
+    </dependencies>
+  </metadata>
+</package>
