@@ -1,0 +1,279 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviors="clr-namespace:NP.Avalonia.Visuals.Behaviors"
+        xmlns:converters="clr-namespace:NP.Avalonia.Visuals.Converters"
+        xmlns:controls="clr-namespace:NP.Avalonia.Visuals.Controls">
+  
+  <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
+
+  <Style Selector="TextBlock.DefaultWindowTitle">
+    <Setter Property="Foreground"
+            Value="Black"/>
+    <Setter Property="FontFamily"
+            Value="Calibri"/>
+    <Setter Property="FontSize"
+            Value="16"/>
+    <Setter Property="VerticalAlignment"
+            Value="Center"/>
+    <Setter Property="HorizontalAlignment"
+            Value="Left"/>
+  </Style>
+  
+  <Style Selector=":is(controls|CustomWindow)">
+    <Setter Property="ResizeMargin"
+        Value="5"/>
+    <Setter Property="BorderThickness"
+            Value="1"/>
+    <Setter Property="SystemDecorations"
+            Value="None"/>
+    <Setter Property="MinWidth"
+        Value="100"/>
+    <Setter Property="MinHeight"
+            Value="100"/>
+    <Setter Property="TitleClasses"
+            Value="DefaultWindowTitle"/>
+    <Setter Property="Icon"
+            Value="{Binding Path=CustomHeaderIcon,
+                            Converter={x:Static converters:ToWindowIconConverter.Instance},
+                            RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="HeaderTemplate">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid x:Name="PART_HeaderContainer"
+                Height="{Binding Path=HeaderHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
+            <Grid.Resources>
+              <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                  <ResourceInclude Source="/Themes/Geometries.axaml"/>
+                </ResourceDictionary.MergedDictionaries>
+              </ResourceDictionary>
+            </Grid.Resources>
+            <Grid VerticalAlignment="Center">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel x:Name="PART_IconAndTitleContainer"
+                          Orientation="Horizontal"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch"
+                          Background="Transparent"
+                          DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
+                <StackPanel.ContextMenu>
+                  <ContextMenu IsEnabled="True"
+                               DataContext="{Binding Path=Parent.Parent.DataContext, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="Restore"
+                              IsEnabled="{Binding Path=CanRestore}"
+                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                              behaviors:CallAction.MethodName="Restore">
+                      <MenuItem.Icon>
+                        <Path Data="{StaticResource RestoreIcon}"
+                              Fill="Black"
+                              Stretch="Uniform"
+                              Width="11"
+                              Height="11"/>
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Maximize"
+                              IsEnabled="{Binding Path=CanMaximize}"
+                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                              behaviors:CallAction.MethodName="Maximize">
+                      <MenuItem.Icon>
+                        <Path Data="{StaticResource MaximizeIcon}"
+                              Fill="Black"
+                              Stretch="Uniform"
+                              Width="11"
+                              Height="11"/>
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Minimize"
+                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                              behaviors:CallAction.MethodName="Minimize">
+                      <MenuItem.Icon>
+                        <Path Data="{StaticResource MinimizeIcon}"
+                              Fill="Black"
+                              Stretch="Uniform"
+                              VerticalAlignment="Center"
+                              Width="11"
+                              Height="3"/>
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Close"
+                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                              behaviors:CallAction.MethodName="Close"
+                              FontWeight="Bold">
+                      <MenuItem.Icon>
+                        <Path Data="{StaticResource CloseIcon}"
+                              Fill="Black"
+                              Stretch="Uniform"
+                              Width="11"
+                              Height="11"/>
+                      </MenuItem.Icon>
+                    </MenuItem>
+                  </ContextMenu>
+                </StackPanel.ContextMenu>
+                <Image Source="{Binding Path=CustomHeaderIcon, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                       VerticalAlignment="Center"
+                       Stretch="Uniform"
+                       behaviors:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
+                       behaviors:CallAction.MethodName="Close"
+                       Width="{Binding Path=CustomHeaderIconWidth, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                       Height="{Binding Path=CustomHeaderIconHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                       Margin="{Binding Path=CustomHeaderIconMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+                <TextBlock x:Name="TheTitle"
+                           Text="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                           behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+              </StackPanel>
+
+              <ContentPresenter HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Grid.Column="1"
+                                Content="{Binding Path=HeaderContent, 
+                                                  RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
+                                                  TargetNullValue='', 
+                                                  FallbackValue=''}"
+                                ContentTemplate="{Binding Path=HeaderContentTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+              <StackPanel x:Name="WindowButtonsPanel"
+                          Orientation="Horizontal"
+                          HorizontalAlignment="Right"
+                          Grid.Column="2"
+                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
+                <Button x:Name="MinimiziButton"
+                        Classes="WindowIconButton IconButton"
+                        controls:AttachedProperties.IconData="{StaticResource MinimizeIcon}"
+                        controls:AttachedProperties.IconHeight="2.1"
+                        controls:AttachedProperties.IconStretch="Fill"
+                        behaviors:CallAction.MethodName="Minimize"/>
+                <Button x:Name="RestoreButton"
+                        Classes="WindowIconButton IconButton"
+                        IsVisible="{Binding Path=CanRestore}"
+                        controls:AttachedProperties.IconData="{StaticResource RestoreIcon}"
+                        behaviors:CallAction.MethodName="Restore"/>
+                <Button x:Name="MaximizeButton"
+                        Classes="WindowIconButton IconButton"
+                        IsVisible="{Binding Path=CanMaximize}"
+                        controls:AttachedProperties.IconData="{StaticResource MaximizeIcon}"
+                        behaviors:CallAction.MethodName="Maximize"/>
+                <Button x:Name="CloseButton"
+                        Classes="WindowIconButton IconButton"
+                        controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
+                        behaviors:CallAction.MethodName="Close"/>
+              </StackPanel>
+            </Grid>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_TransparencyFallback"
+                  IsHitTestVisible="False" />
+          <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
+          <VisualLayerManager>
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <TemplatedControl x:Name="PART_HeaderControl"
+                                Template="{Binding Path=HeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsVisible="{Binding Path=IsCustomHeaderVisible, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+              <Panel x:Name="HeaderSeparator"
+                     HorizontalAlignment="Stretch"
+                     Grid.Row="1"
+                     Height="{Binding Path=HeaderSeparatorHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                     Background="{Binding Path=HeaderSeparatorBrush, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+
+
+              <Grid Grid.Row="2">
+                <Border x:Name="BackgroundBorder"
+                        Background="{TemplateBinding Background}"
+                        IsHitTestVisible="False"
+                        BorderThickness="{Binding Path=BorderThickness, 
+                                                  Converter={x:Static converters:NoTopBorderThicknessConverter.Instance},
+                                                  RelativeSource={RelativeSource TemplatedParent}}"
+                        BorderBrush="{x:Null}"/>
+
+                <Grid Margin="{Binding Path=BorderThickness,
+                                         Converter={x:Static converters:NoTopBorderThicknessConverter.Instance},
+                                         RelativeSource={RelativeSource TemplatedParent}}">
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Content="{TemplateBinding Content}"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Grid>
+              </Grid>
+
+              <Border x:Name="WindowBorder"
+                      Grid.RowSpan="3"
+                      Background="{x:Null}"
+                      IsHitTestVisible="False"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+              
+              <Grid x:Name="ResizeGrid"
+                    Grid.RowSpan="3" Margin="{Binding Path=BorderThickness,
+                                         Converter={x:Static converters:NoTopBorderThicknessConverter.Instance},
+                                         RelativeSource={RelativeSource TemplatedParent}}">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="{Binding Path=ResizeMargin, 
+                                                    Converter={x:Static converters:ToGridLengthConverter.Instance},
+                                                    RelativeSource={RelativeSource TemplatedParent}}"/>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="{Binding Path=ResizeMargin, 
+                                                    Converter={x:Static converters:ToGridLengthConverter.Instance},
+                                                    RelativeSource={RelativeSource TemplatedParent}}"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="{Binding Path=ResizeMargin, 
+                                                      Converter={x:Static converters:ToGridLengthConverter.Instance},
+                                                      RelativeSource={RelativeSource TemplatedParent}}"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="{Binding Path=ResizeMargin, 
+                                                      Converter={x:Static converters:ToGridLengthConverter.Instance},
+                                                      RelativeSource={RelativeSource TemplatedParent}}"/>
+                </Grid.ColumnDefinitions>
+                <Border Name="TopLeft" Background="Transparent"/>
+                <Border Name="TopRight" Background="Transparent" Grid.Column="2" />
+                <Border Name="BottomLeft" Background="Transparent" Grid.Row="2" />
+                <Border Name="BottomRight" Background="Transparent"  Grid.Row="2" Grid.Column="2"/>
+                <Border Name="Top" Background="Transparent" Grid.Column="1" />
+                <Border Name="Right" Background="Transparent" Grid.Row="1"  Grid.Column="2" />
+                <Border Name="Bottom" Background="Transparent" Grid.Row="2" Grid.Column="1"  />
+                <Border Name="Left" Background="Transparent"  Grid.Row="1" />
+              </Grid>
+            </Grid>
+          </VisualLayerManager>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector=":is(controls|CustomWindow).PlainCustomWindow">
+    <Setter Property="Title"
+            Value="My Test Window"/>
+    <Setter Property="HeaderBackground"
+            Value="Transparent"/>
+    <Setter Property="HeaderHeight"
+            Value="30"/>
+    <Setter Property="HeaderSeparatorHeight"
+            Value="2"/>
+    <Setter Property="HeaderSeparatorBrush"
+            Value="Black"/>
+    <Setter Property="CustomHeaderIcon"
+            Value="/Assets/avalonia-32.png"/>
+    <Setter Property="CustomHeaderIconMargin"
+            Value="5"/>
+    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
+    <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+  </Style>
+</Styles>

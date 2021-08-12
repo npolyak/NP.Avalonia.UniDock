@@ -38,7 +38,7 @@
     <Setter Property="Height"
             Value="120"/>
     <Setter Property="Background"
-            Value="#DFD3D3D3"/>
+            Value="#AFD3D3D3"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="local:DockCompass">
@@ -125,16 +125,30 @@
               VerticalAlignment="{TemplateBinding VerticalAlignment}">
             <DockPanel>
               <local:DockTabsPresenter x:Name="PART_ItemsPresenter"
-                                       np:DragTabBehavior.IsSet="True"
+                                       local:DragTabBehavior.IsSet="True"
+                                       local:DockAttachedProperties.TheDockManager="{Binding Path=(local:DockAttachedProperties.TheDockManager),
+                                                                                             RelativeSource={RelativeSource TemplatedParent}}"
                                        DockPanel.Dock="{TemplateBinding TabStripPlacement}"
                                        Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
-              <ContentPresenter
-                  Name="PART_SelectedContentHost"
-                  Margin="{TemplateBinding Padding}"
-                  Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                  ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+              <Grid>
+                <ContentPresenter
+                    Name="PART_SelectedContentHost"
+                    Margin="{TemplateBinding Padding}"
+                    Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                    ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                <Grid x:Name="CompassPanel"
+                      RowDefinitions="*,*"
+                      ColumnDefinitions="*,*"
+                      IsVisible="{Binding Path=ShowCompass, 
+                                          RelativeSource= {RelativeSource TemplatedParent}}">
+                  <local:DockCompass HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Grid.RowSpan="2"
+                                     Grid.ColumnSpan="2" />
+                </Grid>
+              </Grid>
             </DockPanel>
           </Border>
         </ControlTemplate>

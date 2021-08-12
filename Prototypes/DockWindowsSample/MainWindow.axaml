@@ -16,6 +16,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
+      <np:DockManager x:Key="TheDockManager"/>
     </ResourceDictionary>
   </Window.Resources>
   <Window.Styles>
@@ -24,7 +25,7 @@
   </Window.Styles>
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
-      <np:DockTabbedGroup>
+      <np:DockTabbedGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
         <np:DockTabbedGroup.Items>
           <np:DockItem Header="Tab1">
             <TextBlock Text="Hello World!"/>
@@ -39,7 +40,8 @@
       </np:DockTabbedGroup>
 
       <np:DockTabbedGroup
-            Grid.Column="1">
+            Grid.Column="1"
+            np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
         <np:DockTabbedGroup.Items>
           <np:DockItem Header="Tab1" Content="Hello World!">
             <np:DockItem.ContentTemplate>

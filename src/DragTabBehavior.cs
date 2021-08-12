@@ -139,6 +139,8 @@ namespace NP.AvaloniaDock
 
             ItemsPresenter tabContainer = (ItemsPresenter)sender;
 
+            DockManager dockManager = DockAttachedProperties.GetTheDockManager(tabContainer);
+
             Point2D currentPoint = e.GetPosition(tabContainer).ToPoint2D();
 
             if (currentPoint.Minus(_startMousePoint).ToAbs().GreaterOrEqual(PointHelper.MinimumDragDistance).Any)
@@ -185,29 +187,21 @@ namespace NP.AvaloniaDock
                 // create the window
                 ClearHandlers(sender);
 
-                CustomWindow customWindow = new CustomWindow
-                {
-                    Classes = new Classes("PlainCustomWindow")
-                };
+                DockWindow dockWindow = new DockWindow();
+
+                DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 
                 var pointerScreenPosition = tabContainer.PointToScreen(pointerPositionWithinTabContainer);
 
-                customWindow.Width = 400;
-                customWindow.Height = 300;
+                dockWindow.Width = 400;
+                dockWindow.Height = 300;
 
-                customWindow.DataContext = _draggedDockItem;
+                dockWindow.Items.Add(_draggedDockItem);
 
-                customWindow.DragOnBeginMove = false;
+                dockWindow.SetMovePtr();
 
-                customWindow.HasCustomWindowFeatures = true;
-                customWindow.Content = _draggedDockItem.Content;
-                customWindow.ContentTemplate = _draggedDockItem.ContentTemplate;
-
-                customWindow.SetMovePtr();
-
-
-                customWindow.Show();
-                customWindow.Activate();
+                dockWindow.Show();
+                dockWindow.Activate();
             }
         }
 

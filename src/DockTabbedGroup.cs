@@ -18,6 +18,9 @@ namespace NP.AvaloniaDock
         SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionFirstByDefaultBehavior<DockItem>();
 
+        public DockManager TheDockManager =>
+            DockAttachedProperties.GetTheDockManager(this);
+
         public DockTabbedGroup()
         {
             AffectsMeasure<DockTabsPresenter>(TabStripPlacementProperty);
@@ -130,6 +133,20 @@ namespace NP.AvaloniaDock
                 nameof(VerticalContentAlignment)
             );
         #endregion VerticalContentAlignment Styled Avalonia Property
+
+        #region ShowCompass Styled Avalonia Property
+        public bool ShowCompass
+        {
+            get { return GetValue(ShowCompassProperty); }
+            set { SetValue(ShowCompassProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowCompassProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, bool>
+            (
+                nameof(ShowCompass)
+            );
+        #endregion ShowCompass Styled Avalonia Property
 
 
         private void SetBehavior()
