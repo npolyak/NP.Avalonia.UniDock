@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.VisualTree;
+using NP.Utilities;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
@@ -12,10 +13,10 @@ namespace NP.Avalonia.Visuals.Behaviors
 {
     public static class CurrentScreenPointBehavior
     {
-        private static Subject<PixelPoint> _currentScreenPoint = new Subject<PixelPoint>();
-        public static IObservable<PixelPoint> CurrentScreenPoint => _currentScreenPoint;
+        private static Subject<Point2D> _currentScreenPoint = new Subject<Point2D>();
+        public static IObservable<Point2D> CurrentScreenPoint => _currentScreenPoint;
 
-        public static PixelPoint CurrentScreenPointValue { get; private set; } = new PixelPoint();
+        public static Point2D CurrentScreenPointValue { get; private set; } = new Point2D();
 
         static CurrentScreenPointBehavior()
         {
@@ -39,8 +40,8 @@ namespace NP.Avalonia.Visuals.Behaviors
             // var transform = _capturedWindow.TransformToVisual(_capturedWindow);
             // CurrentScreenPoint = _capturedWindow.PointToScreen(rootPoint * transform!.Value);
 
-            CurrentScreenPointValue = position;
-            _currentScreenPoint.OnNext(position);
+            CurrentScreenPointValue = position.ToPoint2D();
+            _currentScreenPoint.OnNext(CurrentScreenPointValue);
         }
 
         public static Window _capturedWindow;

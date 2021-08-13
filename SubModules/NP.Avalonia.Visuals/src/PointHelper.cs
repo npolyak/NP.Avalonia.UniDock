@@ -63,7 +63,7 @@ namespace NP.Avalonia.Visuals
             return bounds.ContainsPoint(p.ToPoint2D());
         }
 
-        public static Rect2D GetScreenBounds(this Control c)
+        public static Rect2D GetScreenBounds(this IInputElement c)
         {
             PixelPoint startPoint = c.PointToScreen(new Point(0, 0));
             PixelPoint endPoint = c.PointToScreen(new Point(c.Bounds.Width, c.Bounds.Height));

@@ -231,22 +231,6 @@ namespace NP.Avalonia.Visuals.Controls
             BeginMoveDrag(e);
         }
 
-
-        #region PointerShift Styled Avalonia Property
-        public PixelPoint PointerShift
-        {
-            get { return GetValue(PointerShiftProperty); }
-            set { SetValue(PointerShiftProperty, value); }
-        }
-
-        public static readonly StyledProperty<PixelPoint> PointerShiftProperty =
-            AvaloniaProperty.Register<CustomWindow, PixelPoint>
-            (
-                nameof(PointerShift)
-            );
-        #endregion PointerShift Styled Avalonia Property
-
-
         #region HeaderTemplate Avalonia Property
         public ControlTemplate HeaderTemplate
         {

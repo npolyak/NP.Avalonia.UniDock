@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Avalonia.Visuals.Controls;
 using NP.Utilities;
@@ -45,8 +46,25 @@ namespace NP.AvaloniaDock
         public IList<DockItem> Items => _dockTabbedGroup.Items;
 
 
-        protected PixelPoint StartPointerPosition { get; set; }
-        protected PixelPoint StartWindowPosition { get; set; }
+        protected Point2D StartPointerPosition { get; set; }
+        protected Point2D StartWindowPosition { get; set; }
+
+
+
+        #region PointerShift Styled Avalonia Property
+        public Point2D PointerShift
+        {
+            get { return GetValue(PointerShiftProperty); }
+            set { SetValue(PointerShiftProperty, value); }
+        }
+
+        public static readonly StyledProperty<Point2D> PointerShiftProperty =
+            AvaloniaProperty.Register<CustomWindow, Point2D>
+            (
+                nameof(PointerShift)
+            );
+        #endregion PointerShift Styled Avalonia Property
+
 
         public void SetMovePtr()
         {
@@ -57,8 +75,8 @@ namespace NP.AvaloniaDock
         {
             this.Activated -= CustomWindow_Activated!;
             StartPointerPosition = CurrentScreenPointBehavior.CurrentScreenPointValue;
-            StartWindowPosition = StartPointerPosition - new PixelPoint(60, 10);
-            Position = StartWindowPosition;
+            StartWindowPosition = StartPointerPosition.Minus(new Point2D(60, 10));
+            Position = StartWindowPosition.ToPixelPoint();
 
             SetDragOnMovePointer();
         }
@@ -76,8 +94,8 @@ namespace NP.AvaloniaDock
             }
 
             StartPointerPosition = GetCurrentPointInScreen(e);
-            StartWindowPosition = this.Position;
-            PointerShift = new PixelPoint();
+            StartWindowPosition = this.Position.ToPoint2D();
+            PointerShift = new Point2D();
 
             SetDragOnMovePointer();
         }
@@ -99,18 +117,18 @@ namespace NP.AvaloniaDock
             }
         }
 
-        public PixelPoint GetCurrentPointInScreen(PointerEventArgs e)
+        public Point2D GetCurrentPointInScreen(PointerEventArgs e)
         {
             var result = HeaderControl.PointToScreen(e.GetPosition(HeaderControl));
 
-            return result;
+            return result.ToPoint2D();
         }
 
         private void UpdatePosition(PointerEventArgs e)
         {
-            PointerShift = GetCurrentPointInScreen(e) - StartPointerPosition;
+            PointerShift = GetCurrentPointInScreen(e).Minus(StartPointerPosition);
 
-            this.Position = StartWindowPosition + PointerShift;
+            this.Position = StartWindowPosition.Plus(PointerShift).ToPixelPoint();
         }
 
         protected void OnPointerReleased(object sender, PointerReleasedEventArgs e)

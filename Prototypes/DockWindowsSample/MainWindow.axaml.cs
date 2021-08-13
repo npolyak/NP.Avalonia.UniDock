@@ -26,7 +26,7 @@ namespace DockWindowsSample
             //CurrentScreenPointBehavior.Capture(this);
         }
 
-        private void OnCurrentScreenPointChanged(PixelPoint screenPoint)
+        private void OnCurrentScreenPointChanged(Point2D screenPoint)
         {
             AttachedProperties.SetCurrentScreenPoint(this, screenPoint);
         }

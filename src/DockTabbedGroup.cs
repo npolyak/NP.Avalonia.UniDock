@@ -134,6 +134,7 @@ namespace NP.AvaloniaDock
             );
         #endregion VerticalContentAlignment Styled Avalonia Property
 
+
         #region ShowCompass Styled Avalonia Property
         public bool ShowCompass
         {

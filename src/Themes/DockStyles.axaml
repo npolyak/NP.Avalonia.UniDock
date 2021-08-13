@@ -53,7 +53,7 @@
                   VerticalAlignment="Center"/>
             <np:DockSideControl Grid.Row="1"
                                 Grid.Column="1"
-                                DockSide="{x:Null}"/>
+                                DockSide="Tabs"/>
             <np:DockSideControl Grid.Row="1"
                                 DockSide="Left"/>
             <np:DockSideControl Grid.Column="1"

@@ -53,33 +53,55 @@ namespace NP.AvaloniaDock
         }
 
         DockTabbedGroup? _currentGroup = null;
+        DockTabbedGroup? CurrentGroup
+        {
+            get => _currentGroup;
 
-        private void OnPointerMoved(PixelPoint pointerScreenLocation)
+            set
+            {
+                if (ReferenceEquals(_currentGroup, value))
+                    return;
+
+                if (_currentGroup != null)
+                {
+                    _currentGroup.ShowCompass = false;
+                }
+
+                _currentGroup = value;
+
+                if (_currentGroup != null)
+                {
+                    _currentGroup.ShowCompass = true;
+                }
+            }
+        }
+
+        private void OnPointerMoved(Point2D pointerScreenLocation)
         {
             if (_currentTabbedGroups == null)
-                return;
-
-            Point2D ponterScreenLocation2D = pointerScreenLocation.ToPoint2D();
-
-            var pointerAboveGroups =
-                _currentTabbedGroups.Where(gr => gr.Rect.ContainsPoint(ponterScreenLocation2D)).Select(gr => gr.Group);
-
-            var pointerAboveWindows =
-                pointerAboveGroups.Select(g => g.GetVisualAncestors().OfType<Window>().FirstOrDefault()).ToList();
-
-            if (_currentGroup != null)
             {
-                _currentGroup.ShowCompass = false;
+                return;
             }
 
-            _currentGroup = pointerAboveGroups.FirstOrDefault();
+            var pointerAboveGroups =
+                _currentTabbedGroups.Where(gr => gr.Rect.ContainsPoint(pointerScreenLocation)).Select(gr => gr.Group);
 
-            if (_currentGroup == null)
+            var pointerAboveWindows =
+                pointerAboveGroups
+                    .Select
+                    (
+                        g => g.GetVisualAncestors()
+                              .OfType<Window>()
+                              .FirstOrDefault()).ToList();
+
+            CurrentGroup = pointerAboveGroups.FirstOrDefault();
+
+            if (CurrentGroup == null)
+            {
                 return;
+            }
 
-            _currentGroup.ShowCompass = true;
-
-            Window w = _currentGroup.GetVisualAncestors().OfType<Window>().First();
+            Window w = CurrentGroup.GetVisualAncestors().OfType<Window>().First();
 
             w.Activate();
         }
