@@ -108,16 +108,50 @@ namespace NP.AvaloniaDock
 
         public void CompleteDragDropAction()
         {
-            _pointerMovedSubscription?.Dispose();
-            _pointerMovedSubscription = null;
-
-            if (_currentGroup != null)
+            try
             {
-                _currentGroup.ShowCompass = false;
-                _currentGroup = null;
-            }
+                _pointerMovedSubscription?.Dispose();
+                _pointerMovedSubscription = null;
 
-            DraggedWindow = null;
+                if (DraggedWindow != null)
+                {
+                    switch (CurrentGroup?.CurrentGroupDock)
+                    {
+                        case GroupDock.Tabs:
+                        {
+                            var allItems = DraggedWindow.Groups.SelectMany(g => g.Items).ToList();
+
+                            var groupsToRemove = DraggedWindow.Groups.ToList();
+
+                            DraggedWindow.Groups.DoForEach(g => g.ClearAllItems());
+
+                            CurrentGroup.ClearSelectedItem();
+
+                            CurrentGroup.Items.InsertRange(0, allItems);
+
+                            CurrentGroup.SelectFirst();
+
+                            groupsToRemove.DoForEach(g => g.ClearValue(DockAttachedProperties.TheDockManagerProperty));
+
+                            DraggedWindow?.Close();
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (CurrentGroup != null)
+                {
+                    CurrentGroup = null;
+                }
+
+                DraggedWindow = null;
+            }
         }
     }
 }

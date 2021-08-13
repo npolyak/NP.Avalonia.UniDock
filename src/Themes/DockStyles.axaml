@@ -53,17 +53,17 @@
                   VerticalAlignment="Center"/>
             <np:DockSideControl Grid.Row="1"
                                 Grid.Column="1"
-                                DockSide="Tabs"/>
+                                local:DockAttachedProperties.DockSide="Tabs"/>
             <np:DockSideControl Grid.Row="1"
-                                DockSide="Left"/>
+                                local:DockAttachedProperties.DockSide="Left"/>
             <np:DockSideControl Grid.Column="1"
-                                DockSide="Top"/>
+                                local:DockAttachedProperties.DockSide="Top"/>
             <np:DockSideControl Grid.Row="1"
                                 Grid.Column="2"
-                                DockSide="Right"/>
+                                local:DockAttachedProperties.DockSide="Right"/>
             <np:DockSideControl Grid.Row="2"
                                 Grid.Column="1"
-                                DockSide="Bottom"/>
+                                local:DockAttachedProperties.DockSide="Bottom"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -112,6 +112,64 @@
       </ControlTemplate>
     </Setter>
   </Style>
+
+  <Style Selector="local|DropDockSideControl">
+    <Setter Property="IsHitTestVisible"
+            Value="False"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=Self}}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="local:DropDockSideControl">
+          <Grid Background="{TemplateBinding Background}"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Background"
+            Value="#2000D0FF"/>
+  </Style>
+  
+  <Style Selector="local|DropPanelWithCompass">
+    <Setter Property="Template">
+      <ControlTemplate TargetType="local:DropPanelWithCompass">
+        <Grid x:Name="CompassPanel"
+              RowDefinitions="*,*"
+              ColumnDefinitions="*,*">
+          <local:DropDockSideControl SelectDockSide="Tabs"
+                                     Grid.RowSpan="2"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Top"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Bottom"
+                                     Grid.Row="1"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Left"
+                                     Grid.RowSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Right"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="1"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DockCompass HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Grid.RowSpan="2"
+                             Grid.ColumnSpan="2"
+                             local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
+                                                                             Mode=TwoWay, 
+                                                                             RelativeSource={RelativeSource TemplatedParent}}"/>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|DropPanelWithCompass[DockSide=Tabs]">
+    <Setter Property="SelectBackground"
+            Value="Green"/>
+  </Style>
+  
   <Style Selector="local|DockTabbedGroup">
     <Setter Property="Template">
       <Setter.Value>
@@ -138,16 +196,9 @@
                     ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                <Grid x:Name="CompassPanel"
-                      RowDefinitions="*,*"
-                      ColumnDefinitions="*,*"
+                <local:DropPanelWithCompass 
                       IsVisible="{Binding Path=ShowCompass, 
-                                          RelativeSource= {RelativeSource TemplatedParent}}">
-                  <local:DockCompass HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"
-                                     Grid.RowSpan="2"
-                                     Grid.ColumnSpan="2" />
-                </Grid>
+                                          RelativeSource= {RelativeSource TemplatedParent}}"/>
               </Grid>
             </DockPanel>
           </Border>

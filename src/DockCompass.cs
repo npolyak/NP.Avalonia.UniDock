@@ -14,20 +14,6 @@ namespace NP.AvaloniaDock
     {
         private IList<DockSideControl>? SideControls { get; set; }
 
-        #region DockSide Styled Avalonia Property
-        public GroupDock? DockSide
-        {
-            get { return GetValue(DockSideProperty); }
-            private set { SetValue(DockSideProperty, value); }
-        }
-
-        public static readonly StyledProperty<GroupDock?> DockSideProperty =
-            AvaloniaProperty.Register<DockCompass, GroupDock?>
-            (
-                nameof(DockSide)
-            );
-        #endregion DockSide Styled Avalonia Property
-
         private IDisposable? _subscriptionDisposable = null;
         public void StartPointerDetection()
         {
@@ -48,12 +34,24 @@ namespace NP.AvaloniaDock
                     (
                         c => PointHelper.GetScreenBounds(c).ContainsPoint(pointerScreenLocation));
 
-            DockSide = currentSideControl?.DockSide;
+            if (currentSideControl == null)
+            {
+                this.ClearValue(DockAttachedProperties.DockSideProperty);
+                return;
+            }
+
+            var currentDockSide = DockAttachedProperties.GetDockSide(this);
+            var dockSide = DockAttachedProperties.GetDockSide(currentSideControl);
+
+            if (dockSide != currentDockSide)
+            {
+                DockAttachedProperties.SetDockSide(this, dockSide);
+            }
         }
 
         public void FinishPointerDetection()
         {
-            DockSide = null;
+            this.ClearValue(DockAttachedProperties.DockSideProperty);
         }
     }
 }

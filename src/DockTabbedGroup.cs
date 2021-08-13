@@ -4,8 +4,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Metadata;
+using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
+using NP.Utilities;
 using System;
+using System.Linq;
 
 namespace NP.AvaloniaDock
 {
@@ -43,6 +46,16 @@ namespace NP.AvaloniaDock
         private void SetSelectedItem()
         {
             SelectedItem = _singleSelectionBehavior.TheSelectedItem;
+        }
+
+        public void ClearSelectedItem()
+        {
+            _singleSelectionBehavior.TheSelectedItem = null;
+        }
+
+        public void SelectFirst()
+        {
+            _singleSelectionBehavior.SelectFirst();
         }
 
         /// <summary>
@@ -150,6 +163,12 @@ namespace NP.AvaloniaDock
         #endregion ShowCompass Styled Avalonia Property
 
 
+        public DropPanelWithCompass? DropPanel =>
+            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
+
+        public GroupDock? CurrentGroupDock =>
+            DropPanel?.DockSide;
+
         private void SetBehavior()
         {
             _behavior = _items?.AddBehavior(OnItemAdded, OnItemRemoved);
@@ -178,6 +197,14 @@ namespace NP.AvaloniaDock
         private void OnItemRemoved(DockItem item)
         {
             item.RemoveEvent -= Item_RemoveEvent;
+        }
+
+        public void ClearAllItems()
+        {
+            if (Items == null)
+                return;
+
+            CollectionUtils.RemoveAll(Items);
         }
     }
 }

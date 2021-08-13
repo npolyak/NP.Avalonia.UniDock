@@ -61,7 +61,24 @@ namespace NP.AvaloniaDock
                     dockManager.TabbedGroups.Add(group);
                 }
             }
-
         }
+
+        #region DockSide Attached Avalonia Property
+        public static GroupDock? GetDockSide(AvaloniaObject obj)
+        {
+            return obj.GetValue(DockSideProperty);
+        }
+
+        public static void SetDockSide(AvaloniaObject obj, GroupDock? value)
+        {
+            obj.SetValue(DockSideProperty, value);
+        }
+
+        public static readonly AttachedProperty<GroupDock?> DockSideProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, GroupDock?>
+            (
+                "DockSide"
+            );
+        #endregion DockSide Attached Avalonia Property
     }
 }

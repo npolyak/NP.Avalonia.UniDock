@@ -133,16 +133,16 @@ namespace NP.AvaloniaDock
 
         protected void OnPointerReleased(object sender, PointerReleasedEventArgs e)
         {
-            UpdatePosition(e);
-
-            TheDockManager.CompleteDragDropAction();
-
             if (HeaderControl != null)
             {
                 HeaderControl.PointerMoved -= OnPointerMoved!;
 
                 HeaderControl.PointerReleased -= OnPointerReleased!;
             }
+
+            UpdatePosition(e);
+
+            TheDockManager.CompleteDragDropAction();
         }
 
         protected void OnPointerMoved(object sender, PointerEventArgs e)
