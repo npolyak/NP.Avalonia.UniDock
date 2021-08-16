@@ -10,10 +10,11 @@ using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System.Collections;
 
-namespace NP.GroupPanelSample
+namespace NP.AvaloniaDock
 {
-    public class StackGroup : Grid
+    public class StackGroup : Control
     {
+        [Content]
         public Controls PanelChildren { get; } = new Controls();
 
         #region SeparatorWidth Styled Avalonia Property
@@ -46,7 +47,6 @@ namespace NP.GroupPanelSample
                 new SolidColorBrush(Colors.Black)
             );
         #endregion SeparatorBackground Styled Avalonia Property
-
 
 
         #region TheOrientation Styled Avalonia Property
@@ -262,9 +262,16 @@ namespace NP.GroupPanelSample
             this.InsertAfterPanelChild(LastPanelChild, child);
         }
 
+        Grid _grid = new Grid();
         IDisposable _disposableBehavior;
+
+        private Controls Children => _grid.Children;
+        private ColumnDefinitions ColumnDefinitions => _grid.ColumnDefinitions;
+        private RowDefinitions RowDefinitions => _grid.RowDefinitions;
         public StackGroup()
         {
+            this.VisualChildren.Add(_grid);
+            this.LogicalChildren.Add(_grid);
             _disposableBehavior = PanelChildren.AddDetailedBehavior(OnPanelChildAdded, OnPanelChildRemoved);
         }
 

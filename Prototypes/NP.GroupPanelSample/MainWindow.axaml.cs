@@ -1,16 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Input;
-using Avalonia.Input.Raw;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using NP.Avalonia.Visuals;
-using NP.Avalonia.Visuals.Behaviors;
 using NP.Avalonia.Visuals.Controls;
-using NP.GroupPanelSample;
+using NP.AvaloniaDock;
 using NP.Utilities;
-using System;
 
 namespace NP.GroupPanelSample
 {
