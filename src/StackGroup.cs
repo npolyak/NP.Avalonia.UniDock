@@ -9,13 +9,17 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace NP.AvaloniaDock
 {
-    public class StackGroup : Control
+    public class StackGroup<T> : Control
+        where T : Control, IControl
     {
         [Content]
-        public Controls PanelChildren { get; } = new Controls();
+        public IList<T> Items { get; } = new ObservableCollection<T>();
+
+        public int Count => Items.Count;
 
         #region SeparatorWidth Styled Avalonia Property
         public double SeparatorWidth
@@ -25,7 +29,7 @@ namespace NP.AvaloniaDock
         }
 
         public static readonly StyledProperty<double> SeparatorWidthProperty =
-            AvaloniaProperty.Register<StackGroup, double>
+            AvaloniaProperty.Register<StackGroup<T>, double>
             (
                 nameof(SeparatorWidth),
                 2d
@@ -41,7 +45,7 @@ namespace NP.AvaloniaDock
         }
 
         public static readonly StyledProperty<IBrush> SeparatorBackgroundProperty =
-            AvaloniaProperty.Register<StackGroup, IBrush>
+            AvaloniaProperty.Register<StackGroup<T>, IBrush>
             (
                 nameof(SeparatorBackground),
                 new SolidColorBrush(Colors.Black)
@@ -57,34 +61,34 @@ namespace NP.AvaloniaDock
         }
 
         public static readonly StyledProperty<Orientation> TheOrientationProperty =
-            AvaloniaProperty.Register<StackGroup, Orientation>
+            AvaloniaProperty.Register<StackGroup<T>, Orientation>
             (
                 nameof(TheOrientation)
             );
         #endregion TheOrientation Styled Avalonia Property
 
         public int NumberChildren =>
-            this.Children.Count;
+            this.GridChildren.Count;
 
         public void UpdateLayout()
         {
             var children =
-                this.PanelChildren.ToList();
+                this.Items.ToList();
 
-            this.PanelChildren.DeleteAllOneByOne();
+            this.Items.RemoveAllOneByOne();
 
-            foreach(Control child in children)
+            foreach(T child in children)
             {
-                AddLastPanelChild(child);
+                AddLastItem(child);
             }
         }
 
-        public Control? FirstPanelChild =>
-            this.Children.FirstOrDefault() as Control;
+        public T? FirstItem =>
+            (T?) this.GridChildren.FirstOrDefault();
 
 
-        public Control? LastPanelChild =>
-            this.Children.LastOrDefault() as Control;
+        public T? LastItem =>
+            (T?) this.GridChildren.LastOrDefault();
 
         private static int NextIdx(int idx, bool isAfter)
         {
@@ -98,15 +102,15 @@ namespace NP.AvaloniaDock
             }
         }
 
-        private void InsertBeforeOrAfterPanelChild(Control? panelChild, Control panelChildToInsert, bool isAfter)
+        private void InsertBeforeOrAfterItem(T? currentItem, T itemToInsert, bool isAfter)
         {
-            if (panelChild == null)
+            if (currentItem == null)
             {
-                AddFirstChild(panelChildToInsert);
+                AddFirstChild(itemToInsert);
             }
             else
             {
-                int currentChildIdx = this.Children.IndexOf(panelChild);
+                int currentChildIdx = this.GridChildren.IndexOf(currentItem);
 
                 int insertSeparatorIdx = NextIdx(currentChildIdx, isAfter);
                 int insertChildIdx = NextIdx(insertSeparatorIdx, isAfter);
@@ -117,8 +121,8 @@ namespace NP.AvaloniaDock
                 AddDefinition(insertChildIdx, false);
 
 
-                this.Children.Insert(insertSeparatorIdx, separator);
-                this.Children.Insert(insertChildIdx, panelChildToInsert);
+                this.GridChildren.Insert(insertSeparatorIdx, separator);
+                this.GridChildren.Insert(insertChildIdx, itemToInsert);
 
                 ResetChildIndexes();
             }
@@ -130,22 +134,22 @@ namespace NP.AvaloniaDock
                 TheOrientation == Orientation.Horizontal ? Grid.SetColumn : Grid.SetRow;
 
             int i = 0;
-            foreach(Control child in Children)
+            foreach(Control child in GridChildren)
             {
                 idxSetter(child, i);
                 i++;
             }
         }
 
-        private void InsertChildAtIdx(int idx, Control panelChildToInsert)
+        private void InsertChildAtIdx(int idx, T itemToInsert)
         {
             if (idx == 0)
             {
-                AddChildAtIndexZero(panelChildToInsert);
+                AddChildAtIndexZero(itemToInsert);
             }
             else
             {
-                InsertAfterPanelChild(PanelChildren[idx - 1] as Control, panelChildToInsert);
+                InsertAfterItem(Items[idx - 1], itemToInsert);
             }
         }
 
@@ -160,7 +164,7 @@ namespace NP.AvaloniaDock
                     definition.MinWidth = 50;
                 }
 
-                this.ColumnDefinitions.Insert(idx, definition);
+                this.GridColumnDefinitions.Insert(idx, definition);
             }
             else
             {
@@ -172,18 +176,18 @@ namespace NP.AvaloniaDock
                 }
 
 
-                this.RowDefinitions.Insert(idx, definition);
+                this.GridRowDefinitions.Insert(idx, definition);
             }
         }
 
-        private void InsertBeforePanelChild(Control? panelChild, Control panelChildToInsert)
+        private void InsertBeforeItem(T? currentItem, T itemToInsert)
         {
-            InsertBeforeOrAfterPanelChild(panelChild, panelChildToInsert, false);
+            InsertBeforeOrAfterItem(currentItem, itemToInsert, false);
         }
 
-        private void InsertAfterPanelChild(Control? panelChild, Control panelChildToInsert)
+        private void InsertAfterItem(T? currentItem, T itemToInsert)
         {
-            InsertBeforeOrAfterPanelChild(panelChild, panelChildToInsert, true);
+            InsertBeforeOrAfterItem(currentItem, itemToInsert, true);
         }
 
         private Control GetSeparator()
@@ -206,26 +210,26 @@ namespace NP.AvaloniaDock
             return gridSplitter;
         }
 
-        private void AddFirstChild(Control panelChildToInsert)
+        private void AddFirstChild(T itemToInsert)
         {
             if (NumberChildren > 0)
             {
-                throw new Exception("Programming errorin StackGroup.AddFirstChild - the panel children collection is not empty.");
+                throw new Exception("Programming errorin StackGroup.AddFirstChild - the item collection is not empty.");
             }
 
             AddDefinition(0, false);
-            this.Children.Insert(0, panelChildToInsert);
+            this.GridChildren.Insert(0, itemToInsert);
         }
 
-        private void RemovePanelChild(Control panelChild)
+        private void RemoveItem(T item)
         {
             if (NumberChildren == 1)
             {
-                this.Children.Remove(panelChild);
+                this.GridChildren.Remove(item);
             }
             else
             {
-                int idx = Children.IndexOf(panelChild);
+                int idx = GridChildren.IndexOf(item);
 
                 RemoveChildAt(idx);
 
@@ -244,45 +248,45 @@ namespace NP.AvaloniaDock
 
         private void RemoveChildAt(int idx)
         {
-            Children.RemoveAt(idx);
+            GridChildren.RemoveAt(idx);
 
             IList definitions =
-                TheOrientation == Orientation.Horizontal ? this.ColumnDefinitions : this.RowDefinitions;
+                TheOrientation == Orientation.Horizontal ? this.GridColumnDefinitions : this.GridRowDefinitions;
 
             definitions.RemoveAt(idx);
         }
 
-        private void AddChildAtIndexZero(Control panelChildToInsert)
+        private void AddChildAtIndexZero(T itemToInsert)
         {
-            InsertBeforePanelChild(FirstPanelChild, panelChildToInsert);
+            InsertBeforeItem(FirstItem, itemToInsert);
         }
 
-        private void AddLastPanelChild(Control child)
+        private void AddLastItem(T item)
         {
-            this.InsertAfterPanelChild(LastPanelChild, child);
+            this.InsertAfterItem(LastItem, item);
         }
 
         Grid _grid = new Grid();
         IDisposable _disposableBehavior;
 
-        private Controls Children => _grid.Children;
-        private ColumnDefinitions ColumnDefinitions => _grid.ColumnDefinitions;
-        private RowDefinitions RowDefinitions => _grid.RowDefinitions;
+        private Controls GridChildren => _grid.Children;
+        private ColumnDefinitions GridColumnDefinitions => _grid.ColumnDefinitions;
+        private RowDefinitions GridRowDefinitions => _grid.RowDefinitions;
         public StackGroup()
         {
             this.VisualChildren.Add(_grid);
             this.LogicalChildren.Add(_grid);
-            _disposableBehavior = PanelChildren.AddDetailedBehavior(OnPanelChildAdded, OnPanelChildRemoved);
+            _disposableBehavior = Items.AddDetailedBehavior(OnItemAdded, OnItemRemoved);
         }
 
-        private void OnPanelChildAdded(IEnumerable<IControl> controls, IControl panelChild, int idx)
+        private void OnItemAdded(IEnumerable<T> controls, T item, int idx)
         {
-            InsertChildAtIdx(idx, (Control) panelChild);
+            InsertChildAtIdx(idx, item);
         }
 
-        private void OnPanelChildRemoved(IEnumerable<IControl> controls, IControl panelChild, int idx)
+        private void OnItemRemoved(IEnumerable<T> controls, T item, int idx)
         {
-            RemovePanelChild((Control) panelChild);
+            RemoveItem(item);
         }
     }
 }

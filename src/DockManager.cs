@@ -127,7 +127,7 @@ namespace NP.AvaloniaDock
 
                             CurrentGroup.ClearSelectedItem();
 
-                            CurrentGroup.Items.InsertRange(0, allItems);
+                            CurrentGroup.Items.InsertCollectionAtStart(allItems);
 
                             CurrentGroup.SelectFirst();
 

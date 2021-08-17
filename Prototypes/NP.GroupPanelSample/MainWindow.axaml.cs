@@ -9,7 +9,7 @@ namespace NP.GroupPanelSample
 {
     public partial class MainWindow : Window
     {
-        StackGroup _stackGroup;
+        StackControlsGroup _stackGroup;
 
         public MainWindow()
         {
@@ -17,16 +17,13 @@ namespace NP.GroupPanelSample
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _stackGroup = this.FindControl<StackGroup>("TheStackGroup");
+            _stackGroup = this.FindControl<StackControlsGroup>("TheStackGroup");
 
-            //_stackGroup.PanelChildren.Add(new Grid { Background = new SolidColorBrush(Colors.Red) });
-            //_stackGroup.PanelChildren.Add(new Grid { Background = new SolidColorBrush(Colors.Green) });
-
-            //_stackGroup.PanelChildren.Insert(0, new Grid { Background = new SolidColorBrush(Colors.Yellow) });
-
-            //_stackGroup.PanelChildren.Insert(2, new Grid { Background = new SolidColorBrush(Colors.Blue) });
-
-            //_stackGroup.PanelChildren.Insert(3, new Grid { Background = new SolidColorBrush(Colors.Purple) });
+            //_stackGroup.Items.Add(new Grid { Background = new SolidColorBrush(Colors.Red) });
+            //_stackGroup.Items.Add(new Grid { Background = new SolidColorBrush(Colors.Green) });
+            //_stackGroup.Items.Insert(0, new Grid { Background = new SolidColorBrush(Colors.Yellow) });
+            //_stackGroup.Items.Insert(2, new Grid { Background = new SolidColorBrush(Colors.Blue) });
+            //_stackGroup.Items.Insert(3, new Grid { Background = new SolidColorBrush(Colors.Purple) });
         }
 
         private void OnCurrentScreenPointChanged(Point2D screenPoint)
@@ -41,17 +38,17 @@ namespace NP.GroupPanelSample
 
         public void RemoveFirst()
         {
-            _stackGroup.PanelChildren.RemoveAt(0);
+            _stackGroup.Items.RemoveAt(0);
         }
 
         public void RemoveLast()
         {
-            _stackGroup.PanelChildren.RemoveAt(_stackGroup.PanelChildren.Count() - 1);
+            _stackGroup.Items.RemoveAt(_stackGroup.Items.Count() - 1);
         }
 
         public void RemoveSecond()
         {
-            _stackGroup.PanelChildren.RemoveAt(1);
+            _stackGroup.Items.RemoveAt(1);
         }
     }
 }

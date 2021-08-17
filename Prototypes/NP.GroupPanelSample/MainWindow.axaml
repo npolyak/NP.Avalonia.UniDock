@@ -30,15 +30,15 @@
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
-    <np:StackGroup x:Name="TheStackGroup"
+    <np:StackControlsGroup x:Name="TheStackGroup"
                       TheOrientation="Horizontal"
                       Margin="20">
-        <Grid Background="Yellow"/>
-        <Grid Background="Red"/>
-        <Grid Background="Green"/>
-        <Grid Background="Blue"/>
-        <Grid Background="Purple"/>
-    </np:StackGroup>
+      <Grid Background="Yellow"/>
+      <Grid Background="Red"/>
+      <Grid Background="Green"/>
+      <Grid Background="Blue"/>
+      <Grid Background="Purple"/>
+    </np:StackControlsGroup>
 
     <StackPanel Orientation="Horizontal"
                 Grid.Row="1">

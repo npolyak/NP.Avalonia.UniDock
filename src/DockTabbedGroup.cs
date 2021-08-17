@@ -8,6 +8,7 @@ using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace NP.AvaloniaDock
@@ -16,14 +17,13 @@ namespace NP.AvaloniaDock
     {
         IDisposable? _behavior;
 
-        private AvaloniaList<DockItem> _items = new AvaloniaList<DockItem>();
-
+        private ObservableCollection<DockItem> _items = new ObservableCollection<DockItem>();
 
         /// <summary>
         /// Defines the <see cref="Items"/> property.
         /// </summary>
-        public static readonly DirectProperty<DockTabbedGroup, AvaloniaList<DockItem>> ItemsProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, AvaloniaList<DockItem>>
+        public static readonly DirectProperty<DockTabbedGroup, ObservableCollection<DockItem>> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<DockTabbedGroup, ObservableCollection<DockItem>>
             (
                 nameof(Items),
                 o => o.Items,
@@ -33,7 +33,7 @@ namespace NP.AvaloniaDock
         /// Gets or sets the items to display.
         /// </summary>
         [Content]
-        public AvaloniaList<DockItem> Items
+        public ObservableCollection<DockItem> Items
         {
             get
             {
@@ -82,7 +82,7 @@ namespace NP.AvaloniaDock
 
         public void ClearSelectedItem()
         {
-            _singleSelectionBehavior.TheSelectedItem = null;
+            _singleSelectionBehavior.TheSelectedItem = null!;
         }
 
         public void SelectFirst()
