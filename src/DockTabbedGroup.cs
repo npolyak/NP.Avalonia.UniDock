@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
@@ -168,7 +167,7 @@ namespace NP.AvaloniaDock
         public DropPanelWithCompass? DropPanel =>
             this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
 
-        public GroupDock? CurrentGroupDock =>
+        public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
 
         private void SetBehavior()

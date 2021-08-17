@@ -117,7 +117,7 @@ namespace NP.AvaloniaDock
                 {
                     switch (CurrentGroup?.CurrentGroupDock)
                     {
-                        case GroupDock.Tabs:
+                        case DockKind.Tabs:
                         {
                             var allItems = DraggedWindow.Groups.SelectMany(g => g.Items).ToList();
 
@@ -136,7 +136,7 @@ namespace NP.AvaloniaDock
                             DraggedWindow?.Close();
                             break;
                         }
-                        case GroupDock.Top:
+                        case DockKind.Top:
                         {
 
                             break;

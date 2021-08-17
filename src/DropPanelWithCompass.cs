@@ -10,14 +10,14 @@ namespace NP.AvaloniaDock
     public class DropPanelWithCompass : TemplatedControl
     {
         #region DockSide Styled Avalonia Property
-        public GroupDock? DockSide
+        public DockKind? DockSide
         {
             get { return GetValue(DockSideProperty); }
             set { SetValue(DockSideProperty, value); }
         }
 
-        public static readonly StyledProperty<GroupDock?> DockSideProperty =
-            AvaloniaProperty.Register<DropPanelWithCompass, GroupDock?>
+        public static readonly StyledProperty<DockKind?> DockSideProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, DockKind?>
             (
                 nameof(DockSide)
             );

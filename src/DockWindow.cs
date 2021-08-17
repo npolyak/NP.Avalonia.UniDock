@@ -36,10 +36,7 @@ namespace NP.AvaloniaDock
             DockAttachedProperties.SetTheDockManager(_dockTabbedGroup, dockManager);
 
             //DockManager oldDockManager = dockManagerChange.NewValue.Value;
-
             //var groupsToChange = GetGroups(oldDockManager);
-
-
             //groupsToChange.DoForEach(g => DockAttachedProperties.SetTheDockManager(g, dockManager));
         }
 

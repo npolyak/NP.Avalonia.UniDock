@@ -64,18 +64,18 @@ namespace NP.AvaloniaDock
         }
 
         #region DockSide Attached Avalonia Property
-        public static GroupDock? GetDockSide(AvaloniaObject obj)
+        public static DockKind? GetDockSide(AvaloniaObject obj)
         {
             return obj.GetValue(DockSideProperty);
         }
 
-        public static void SetDockSide(AvaloniaObject obj, GroupDock? value)
+        public static void SetDockSide(AvaloniaObject obj, DockKind? value)
         {
             obj.SetValue(DockSideProperty, value);
         }
 
-        public static readonly AttachedProperty<GroupDock?> DockSideProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, GroupDock?>
+        public static readonly AttachedProperty<DockKind?> DockSideProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, DockKind?>
             (
                 "DockSide"
             );

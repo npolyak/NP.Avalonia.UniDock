@@ -1,6 +1,6 @@
 ﻿namespace NP.AvaloniaDock
 {
-    public enum GroupDock
+    public enum DockKind
     {
         Tabs,
         Left,

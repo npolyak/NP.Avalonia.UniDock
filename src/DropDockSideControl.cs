@@ -8,7 +8,7 @@ namespace NP.AvaloniaDock
 {
     public class DropDockSideControl : TemplatedControl
     {
-        public GroupDock SelectDockSide { get; set; }
+        public DockKind SelectDockSide { get; set; }
 
         private IDisposable? _disposableSubscription = null;
         public DropDockSideControl()
@@ -17,7 +17,7 @@ namespace NP.AvaloniaDock
                  DockAttachedProperties.DockSideProperty.Changed.Subscribe(OnDockSideChanged);
         }
 
-        private void OnDockSideChanged(AvaloniaPropertyChangedEventArgs<GroupDock?> dockSideChange)
+        private void OnDockSideChanged(AvaloniaPropertyChangedEventArgs<DockKind?> dockSideChange)
         {
             if (dockSideChange.Sender != this)
                 return;
