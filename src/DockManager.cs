@@ -138,7 +138,8 @@ namespace NP.AvaloniaDock
                         }
                         case GroupDock.Top:
                         {
-                            breat;
+
+                            break;
                         }
                         default:
                         {
