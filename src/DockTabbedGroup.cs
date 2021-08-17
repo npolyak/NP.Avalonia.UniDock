@@ -7,12 +7,13 @@ using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class DockTabbedGroup : TemplatedControl
+    public class DockTabbedGroup : TemplatedControl, IDockGroup
     {
         IDisposable? _behavior;
 
@@ -169,6 +170,10 @@ namespace NP.AvaloniaDock
 
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
+
+        public IDockGroup? DockParent { get; set; }
+
+        public IList<IDockGroup>? DockChildren => null;
 
         private void SetBehavior()
         {

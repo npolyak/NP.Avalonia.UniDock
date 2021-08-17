@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 namespace NP.AvaloniaDock
 {
     public class StackGroup<T> : Control
-        where T : Control, IControl
+        where T : IControl
     {
         [Content]
         public IList<T> Items { get; } = new ObservableCollection<T>();

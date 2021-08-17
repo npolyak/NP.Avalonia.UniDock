@@ -51,6 +51,8 @@ namespace NP.AvaloniaDock
 
         public void FinishPointerDetection()
         {
+            _subscriptionDisposable?.Dispose();
+            _subscriptionDisposable = null;
             this.ClearValue(DockAttachedProperties.DockSideProperty);
         }
     }
