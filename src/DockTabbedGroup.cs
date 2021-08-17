@@ -18,6 +18,38 @@ namespace NP.AvaloniaDock
 
         private AvaloniaList<DockItem> _items = new AvaloniaList<DockItem>();
 
+
+        /// <summary>
+        /// Defines the <see cref="Items"/> property.
+        /// </summary>
+        public static readonly DirectProperty<DockTabbedGroup, AvaloniaList<DockItem>> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<DockTabbedGroup, AvaloniaList<DockItem>>
+            (
+                nameof(Items),
+                o => o.Items,
+                (o, v) => o.Items = v);
+
+        /// <summary>
+        /// Gets or sets the items to display.
+        /// </summary>
+        [Content]
+        public AvaloniaList<DockItem> Items
+        {
+            get
+            {
+                return _items;
+            }
+
+            set
+            {
+                DisposeBehavior();
+
+                SetAndRaise(ItemsProperty, ref _items, value);
+
+                SetBehavior();
+            }
+        }
+
         SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionFirstByDefaultBehavior<DockItem>();
 
@@ -58,36 +90,6 @@ namespace NP.AvaloniaDock
             _singleSelectionBehavior.SelectFirst();
         }
 
-        /// <summary>
-        /// Defines the <see cref="Items"/> property.
-        /// </summary>
-        public static readonly DirectProperty<DockTabbedGroup, AvaloniaList<DockItem>> ItemsProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, AvaloniaList<DockItem>>
-            (
-                nameof(Items), 
-                o => o.Items, 
-                (o, v) => o.Items = v);
-
-        /// <summary>
-        /// Gets or sets the items to display.
-        /// </summary>
-        [Content]
-        public AvaloniaList<DockItem> Items
-        {
-            get 
-            { 
-                return _items; 
-            }
-
-            set 
-            {
-                DisposeBehavior();
-
-                SetAndRaise(ItemsProperty, ref _items, value);
-
-                SetBehavior();
-            }
-        }
 
         #region SelectedItem Styled Avalonia Property
         public object SelectedItem

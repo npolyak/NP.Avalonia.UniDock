@@ -46,8 +46,8 @@ namespace NP.AvaloniaDock
         public IList<DockItem> Items => _dockTabbedGroup.Items;
 
 
-        protected Point2D StartPointerPosition { get; set; }
-        protected Point2D StartWindowPosition { get; set; }
+        protected Point2D? StartPointerPosition { get; set; }
+        protected Point2D? StartWindowPosition { get; set; }
 
 
 

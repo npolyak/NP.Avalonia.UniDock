@@ -136,6 +136,10 @@ namespace NP.AvaloniaDock
                             DraggedWindow?.Close();
                             break;
                         }
+                        case GroupDock.Top:
+                        {
+                            breat;
+                        }
                         default:
                         {
                             break;

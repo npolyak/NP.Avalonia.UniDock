@@ -11,9 +11,9 @@
     <AvaloniaResource Include="Assets\LinuxIcon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.04" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.04" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.04" />
+    <PackageReference Include="Avalonia" Version="0.10.06" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.06" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.06" />
    </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)..\..\src\NP.Avalonia.Visuals.csproj" />
