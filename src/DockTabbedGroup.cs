@@ -9,12 +9,16 @@ using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class DockTabbedGroup : TemplatedControl, IDockGroup
+    public class DockTabbedGroup : TemplatedControl, IDockGroupDockManagerContainer
     {
+        DockManagerContainer IDockGroupDockManagerContainer.TheDockManagerContainer { get; } =
+            new DockManagerContainer();
+
         IDisposable? _behavior;
 
         private ObservableCollection<DockItem> _items = new ObservableCollection<DockItem>();
@@ -53,11 +57,10 @@ namespace NP.AvaloniaDock
         SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionFirstByDefaultBehavior<DockItem>();
 
-        public DockManager TheDockManager =>
-            DockAttachedProperties.GetTheDockManager(this);
-
+        SetDockManagerBehavior? _setManagerBehavior;
         public DockTabbedGroup()
         {
+            _setManagerBehavior = new SetDockManagerBehavior(this);
             AffectsMeasure<DockTabsPresenter>(TabStripPlacementProperty);
             SetBehavior();
 
@@ -65,6 +68,33 @@ namespace NP.AvaloniaDock
                 _singleSelectionBehavior_PropertyChanged;
 
             SetSelectedItem();
+
+            (this as IDockGroupDockManagerContainer).TheDockManagerContainer.PropertyChanging += TheDockManagerContainer_PropertyChanging;
+
+            (this as IDockGroupDockManagerContainer).TheDockManagerContainer.PropertyChanged += TheDockManagerContainer_PropertyChanged;
+        }
+
+        private void TheDockManagerContainer_PropertyChanging(object? sender, PropertyChangingEventArgs e)
+        {
+            DockManager? dockManager = (this as IDockGroupDockManagerContainer).TheDockManager;
+
+            if (dockManager != null)
+            {
+                dockManager.TabbedGroups.Remove(this);
+            }
+        }
+
+        private void TheDockManagerContainer_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            DockManager? dockManager = (this as IDockGroupDockManagerContainer).TheDockManager;
+
+            if (dockManager != null)
+            {
+                dockManager.TabbedGroups.Add(this);
+            }
+
+            // need it for binding
+            DockAttachedProperties.SetTheDockManager(this, dockManager!);
         }
 
         private void _singleSelectionBehavior_PropertyChanged
@@ -187,7 +217,10 @@ namespace NP.AvaloniaDock
 
             _behavior = null;
 
-            _singleSelectionBehavior.TheCollection = null; 
+            _singleSelectionBehavior.TheCollection = null;
+
+            _setManagerBehavior?.Dispose();
+            _setManagerBehavior = null;
         }
 
         private void OnItemAdded(DockItem item)

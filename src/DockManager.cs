@@ -36,7 +36,7 @@ namespace NP.AvaloniaDock
             }
         }
 
-        private IList<(DockTabbedGroup Group, Rect2D Rect)>? _currentTabbedGroups;
+        private IList<(DockTabbedGroup Group, Rect2D Rect)>? _currentDockGroups;
 
         IDisposable? _pointerMovedSubscription;
         private void BeginDragAction()
@@ -44,7 +44,7 @@ namespace NP.AvaloniaDock
             if (_draggedWindow == null)
                 return;
 
-            _currentTabbedGroups = 
+            _currentDockGroups = 
                 TabbedGroups
                 .Except(_draggedWindow.Groups)
                 .Select(g => (g, g.GetScreenBounds())).ToList();
@@ -78,13 +78,13 @@ namespace NP.AvaloniaDock
 
         private void OnPointerMoved(Point2D pointerScreenLocation)
         {
-            if (_currentTabbedGroups == null)
+            if (_currentDockGroups == null)
             {
                 return;
             }
 
             var pointerAboveGroups =
-                _currentTabbedGroups.Where(gr => gr.Rect.ContainsPoint(pointerScreenLocation)).Select(gr => gr.Group);
+                _currentDockGroups.Where(gr => gr.Rect.ContainsPoint(pointerScreenLocation)).Select(gr => gr.Group);
 
             var pointerAboveWindows =
                 pointerAboveGroups

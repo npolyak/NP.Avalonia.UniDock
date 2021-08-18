@@ -14,15 +14,50 @@ namespace NP.AvaloniaDock
 {
     public class DockWindow : CustomWindow
     {
-        DockTabbedGroup _dockTabbedGroup = new DockTabbedGroup();
+        SimpleDockGroup _dockGroup = new SimpleDockGroup();
 
-        public DockWindow()
+        public DockManager TheDockManager
+        {
+            get => (_dockGroup as IDockGroup).TheDockManager!;
+            set
+            {
+                DockManager dockManager = TheDockManager;
+
+                if (ReferenceEquals(dockManager, value))
+                {
+                    return;
+                }
+
+                if (dockManager != null)
+                {
+                    dockManager.DockWindows.Remove(this);
+                }
+
+                (_dockGroup as IDockGroup).TheDockManager = value;
+
+                dockManager = TheDockManager;
+
+                if (dockManager != null)
+                {
+                    dockManager.DockWindows.Add(this);
+                }
+            }
+        }
+
+        public DockWindow(DockManager dockManager)
         {
             Classes = new Classes(new[] { "PlainCustomWindow" });
             HasCustomWindowFeatures = true;
-            Content = _dockTabbedGroup;
+            Content = _dockGroup;
+            _dockGroup.DockChild = new DockTabbedGroup();
+            TheDockManager = dockManager;
 
-            DockAttachedProperties.TheDockManagerProperty.Changed.Subscribe(OnDockManagerChanged);
+            this.Closing += DockWindow_Closing;
+        }
+
+        private void DockWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.TheDockManager = null!;
         }
 
         private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs<DockManager> dockManagerChange)
@@ -33,14 +68,16 @@ namespace NP.AvaloniaDock
             }
 
             DockManager dockManager = dockManagerChange.NewValue.Value;
-            DockAttachedProperties.SetTheDockManager(_dockTabbedGroup, dockManager);
 
             //DockManager oldDockManager = dockManagerChange.NewValue.Value;
             //var groupsToChange = GetGroups(oldDockManager);
             //groupsToChange.DoForEach(g => DockAttachedProperties.SetTheDockManager(g, dockManager));
         }
 
-        public IList<DockItem> Items => _dockTabbedGroup.Items;
+        public IEnumerable<DockTabbedGroup> TabbedGroups =>
+            _dockGroup.DockGroupDescendants().OfType<DockTabbedGroup>();
+
+        public DockTabbedGroup? TheTabbedGroup => TabbedGroups?.FirstOrDefault();
 
 
         protected Point2D? StartPointerPosition { get; set; }
@@ -97,9 +134,6 @@ namespace NP.AvaloniaDock
             SetDragOnMovePointer();
         }
 
-        public DockManager TheDockManager =>
-            DockAttachedProperties.GetTheDockManager(this);
-
         private void SetDragOnMovePointer()
         {
             TheDockManager.DraggedWindow = this;
@@ -151,7 +185,7 @@ namespace NP.AvaloniaDock
         {
             return this.GetVisualDescendants()
                         .OfType<DockTabbedGroup>()
-                        .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
+                        .Where(g => ReferenceEquals((g as IDockGroup).TheDockManager, dockManager));
         }
 
         public IEnumerable<DockTabbedGroup> Groups

@@ -187,16 +187,14 @@ namespace NP.AvaloniaDock
                 // create the window
                 ClearHandlers(sender);
 
-                DockWindow dockWindow = new DockWindow();
-
-                DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
+                DockWindow dockWindow = new DockWindow(dockManager);
 
                 var pointerScreenPosition = tabContainer.PointToScreen(pointerPositionWithinTabContainer);
 
                 dockWindow.Width = 400;
                 dockWindow.Height = 300;
 
-                dockWindow.Items.Add(_draggedDockItem);
+                dockWindow.TheTabbedGroup?.Items.Add(_draggedDockItem!);
 
                 dockWindow.SetMovePtr();
 
