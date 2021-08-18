@@ -37,9 +37,57 @@ namespace NP.Avalonia.Visuals.Behaviors
             );
         #endregion TheClasses Attached Avalonia Property
 
+
+        #region InsertClasses Attached Avalonia Property
+        public static string GetInsertClasses(AvaloniaObject obj)
+        {
+            return obj.GetValue(InsertClassesProperty);
+        }
+
+        public static void SetInsertClasses(AvaloniaObject obj, string value)
+        {
+            obj.SetValue(InsertClassesProperty, value);
+        }
+
+        public static readonly AttachedProperty<string> InsertClassesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>
+            (
+                "InsertClasses"
+            );
+        #endregion InsertClasses Attached Avalonia Property
+
+
         static ClassesBehavior()
         {
             TheClassesProperty.Changed.Subscribe(OnClassesChanged);
+
+            InsertClassesProperty.Changed.Subscribe(OnInsertClassesChanged);
+        }
+
+        private static string[] GetClasses(this string classesStr)
+        {
+            return classesStr.Split(StrUtils.WHITESPACE_CHARS, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private static void OnInsertClassesChanged(AvaloniaPropertyChangedEventArgs<string> change)
+        {
+            string oldClassesStr = change.OldValue.Value;
+
+            IStyledElement sender = change.Sender as IStyledElement;
+
+            if (oldClassesStr != null)
+            {
+                var oldClasses = oldClassesStr.GetClasses();
+                sender.Classes.RemoveAll(oldClasses);
+            }
+
+            string newClassesStr = change.NewValue.Value;
+
+            if (newClassesStr != null)
+            {
+                var newClasses = newClassesStr.GetClasses();
+                sender.Classes.InsertRange(0, newClasses);
+            }
         }
 
         private static void OnClassesChanged(AvaloniaPropertyChangedEventArgs<string> change)
@@ -50,13 +98,16 @@ namespace NP.Avalonia.Visuals.Behaviors
 
             if (classesStr != null)
             {
-                var classes = classesStr.Split(StrUtils.WHITESPACE_CHARS, StringSplitOptions.RemoveEmptyEntries);
-                sender.Classes = new Classes(classes);
+                var classes = classesStr.GetClasses();
+
+                if (classes != null)
+                {
+                    sender.Classes = new Classes(classes);
+                    return;
+                }
             }
-            else
-            {
-                sender.Classes = new Classes();
-            }
+
+            sender.Classes = new Classes();
         }
     }
 }

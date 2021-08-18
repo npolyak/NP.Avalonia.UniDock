@@ -13,6 +13,13 @@ namespace NP.AvaloniaDock
         DockManagerContainer IDockGroupDockManagerContainer.TheDockManagerContainer { get; } =
             new DockManagerContainer();
 
+        public event Action<IRemovable>? RemoveEvent;
+
+        public void Remove()
+        {
+            RemoveEvent?.Invoke(this);
+        }
+
         public IDockGroup? DockParent => null;
 
         public IList<IDockGroup> DockChildren { get; } = 

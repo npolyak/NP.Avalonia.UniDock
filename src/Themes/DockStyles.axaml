@@ -12,6 +12,21 @@
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
+  <Style Selector="Button.CloseButton">
+    <Setter Property="np:ClassesBehavior.InsertClasses"
+            Value="WindowIconButton IconButton"/>
+    <Setter Property="Width"
+            Value="20"/>
+    <Setter Property="Height"
+            Value="20"/>
+    <Setter Property="np:AttachedProperties.IconData"
+            Value="{StaticResource CloseIcon}"/>
+    <Setter Property="np:CallAction.TheEvent"
+            Value="{x:Static Button.ClickEvent}"/>
+    <Setter Property="np:CallAction.MethodName"
+            Value="Remove"/>
+  </Style>
+  
   <Style Selector="local|DockSideControl">
     <Setter Property="BorderBrush"
             Value="Gray"/>
@@ -70,6 +85,48 @@
     </Setter>
   </Style>
 
+
+  <Style Selector="np|DockItem">
+    <Setter Property="Padding"
+            Value="5"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="np:DockItem">
+          <Grid RowDefinitions="30, Auto, *"
+                Background="White">
+            <Grid Height="25">
+              <ContentPresenter x:Name="Header"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                TextBlock.FontWeight="Bold"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="5,3"/>
+              
+              <Button x:Name="CloseButton"
+                      Classes="CloseButton"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center"
+                      Margin="5,3"
+                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+            </Grid>
+            <Rectangle HorizontalAlignment="Stretch"
+                       Height="2"
+                       Grid.Row="1"
+                       Fill="Black"/>
+            <ContentPresenter x:Name="Body"
+                              Grid.Row="2"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalAlignment="Stretch"
+                              VerticalContentAlignment="Stretch"
+                              Margin="{TemplateBinding Padding}"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
   <Style Selector="TabItem">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}"/>
@@ -102,11 +159,8 @@
               Margin="{TemplateBinding Margin}"
               Padding="{TemplateBinding Padding}"/>
           <Button x:Name="CloseButton"
-                  Classes="WindowIconButton IconButton"
+                  Classes="CloseButton"
                   Grid.Column="1"
-                  np:AttachedProperties.IconData="{StaticResource CloseIcon}"
-                  np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
-                  np:CallAction.MethodName="Remove"
                   Margin="10"/>
         </Grid>
       </ControlTemplate>

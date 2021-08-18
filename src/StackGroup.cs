@@ -16,8 +16,48 @@ namespace NP.AvaloniaDock
     public class StackGroup<T> : Control
         where T : IControl
     {
+        private ObservableCollection<T> _items = new ObservableCollection<T>();
+        /// <summary>
+        /// Defines the <see cref="Items"/> property.
+        /// </summary>
+        public static readonly DirectProperty<StackGroup<T>, ObservableCollection<T>> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<StackGroup<T>, ObservableCollection<T>>
+            (
+                nameof(Items),
+                o => o.Items,
+                (o, v) => o.Items = v);
+
+
+        /// <summary>
+        /// Gets or sets the items to display.
+        /// </summary>
         [Content]
-        public IList<T> Items { get; } = new ObservableCollection<T>();
+        public ObservableCollection<T> Items
+        {
+            get
+            {
+                return _items;
+            }
+
+            set
+            {
+                DisposeBehavior();
+
+                SetAndRaise(ItemsProperty, ref _items, value);
+
+                SetBehavior();
+            }
+        }
+
+        protected virtual void BeforeItemsSet()
+        {
+
+        }
+
+        protected virtual void AfterItemsSet()
+        {
+
+        }
 
         public int Count => Items.Count;
 
@@ -267,16 +307,29 @@ namespace NP.AvaloniaDock
         }
 
         Grid _grid = new Grid();
-        IDisposable _disposableBehavior;
+        IDisposable? _disposableBehavior;
 
         private Controls GridChildren => _grid.Children;
         private ColumnDefinitions GridColumnDefinitions => _grid.ColumnDefinitions;
         private RowDefinitions GridRowDefinitions => _grid.RowDefinitions;
+
         public StackGroup()
         {
             this.VisualChildren.Add(_grid);
             this.LogicalChildren.Add(_grid);
-            _disposableBehavior = Items.AddDetailedBehavior(OnItemAdded, OnItemRemoved);
+            SetBehavior();
+            AfterItemsSet();
+        }
+
+        private void DisposeBehavior()
+        {
+            _disposableBehavior?.Dispose();
+            _disposableBehavior = null;
+        }
+
+        private void SetBehavior()
+        {
+            _disposableBehavior = Items?.AddDetailedBehavior(OnItemAdded, OnItemRemoved)!;
         }
 
         private void OnItemAdded(IEnumerable<T> controls, T item, int idx)

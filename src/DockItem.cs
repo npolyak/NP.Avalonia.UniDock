@@ -2,10 +2,11 @@
 using Avalonia.Controls.Primitives;
 using NP.Concepts.Behaviors;
 using System;
+using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
 {
-    public class DockItem : HeaderedContentControl, IRemovable, ISelectableItem<DockItem>
+    public class DockItem : HeaderedContentControl, IRemovable, ISelectableItem<DockItem>, IDockGroup
     {
         #region IsSelectedProperty Direct Avalonia Property
         public static readonly DirectProperty<DockItem, bool> IsSelectedProperty =
@@ -26,6 +27,13 @@ namespace NP.AvaloniaDock
                 SetAndRaise(IsSelectedProperty, ref _isSelected, value);
             }
         }
+
+        public DockManager? TheDockManager { get; set; }
+
+        public IDockGroup? DockParent { get; set; }
+
+        // dock item is the end item, so it has no dock children.
+        public IList<IDockGroup>? DockChildren => null;
 
         public event Action<IRemovable>? RemoveEvent;
         public event Action<DockItem>? IsSelectedChanged;
@@ -58,6 +66,7 @@ namespace NP.AvaloniaDock
             DockItem dockItem = (DockItem)change.Sender;
 
             dockItem.FireSelectionChanged();
+
         }
     }
 }

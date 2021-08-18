@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NP.Concepts.Behaviors;
+using System;
 using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
@@ -12,16 +13,36 @@ namespace NP.AvaloniaDock
 
         public IList<IDockGroup>? DockChildren => Items;
 
-        SetDockManagerBehavior? _behavior;
+        public event Action<IRemovable>? RemoveEvent;
+
+        public void Remove()
+        {
+            RemoveEvent?.Invoke(this);
+        }
+
+        RemoveItemBehavior<IDockGroup>? _removeItemBehavior;
+        SetDockManagerBehavior? _setDockManagerBehavior;
         public DockStackGroup()
         {
-            _behavior = new SetDockManagerBehavior(this);
+            _setDockManagerBehavior = new SetDockManagerBehavior(this);
         }
 
         public void Dispose()
         {
-            _behavior?.Dispose();
-            _behavior = null;
+            _setDockManagerBehavior?.Dispose();
+            _setDockManagerBehavior = null;
+            BeforeItemsSet();
+        }
+
+        protected override void BeforeItemsSet()
+        {
+            _removeItemBehavior?.Dispose();
+            _removeItemBehavior = null;
+        }
+
+        protected override void AfterItemsSet()
+        {
+            _removeItemBehavior = new RemoveItemBehavior<IDockGroup>(Items);
         }
     }
 }

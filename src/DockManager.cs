@@ -7,6 +7,7 @@ using Avalonia;
 using NP.Avalonia.Visuals;
 using NP.Utilities;
 using Avalonia.VisualTree;
+using Avalonia.Layout;
 
 namespace NP.AvaloniaDock
 {
@@ -138,6 +139,17 @@ namespace NP.AvaloniaDock
                         }
                         case DockKind.Top:
                         {
+
+                            CurrentGroup.ClearSelectedItem();
+
+                            IDockGroup parentGroup = CurrentGroup.DockParent!;
+
+                            if (parentGroup is DockStackGroup dockStackGroup)
+                            {
+                                if (dockStackGroup.TheOrientation == Orientation.Vertical)
+                                {
+                                }
+                            }    
 
                             break;
                         }

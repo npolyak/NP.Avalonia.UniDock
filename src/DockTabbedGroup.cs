@@ -19,7 +19,14 @@ namespace NP.AvaloniaDock
         DockManagerContainer IDockGroupDockManagerContainer.TheDockManagerContainer { get; } =
             new DockManagerContainer();
 
-        IDisposable? _behavior;
+        RemoveItemBehavior<DockItem>? _behavior;
+
+        public event Action<IRemovable>? RemoveEvent;
+
+        public void Remove()
+        {
+            RemoveEvent?.Invoke(this);
+        }
 
         private ObservableCollection<DockItem> _items = new ObservableCollection<DockItem>();
 
@@ -100,7 +107,7 @@ namespace NP.AvaloniaDock
         private void _singleSelectionBehavior_PropertyChanged
         (
             object? sender, 
-            System.ComponentModel.PropertyChangedEventArgs e)
+            PropertyChangedEventArgs e)
         {
             SetSelectedItem();
         }
@@ -207,7 +214,7 @@ namespace NP.AvaloniaDock
 
         private void SetBehavior()
         {
-            _behavior = _items?.AddBehavior(OnItemAdded, OnItemRemoved);
+            _behavior = new RemoveItemBehavior<DockItem>(_items);
             _singleSelectionBehavior.TheCollection = _items;
         }
 
@@ -221,21 +228,6 @@ namespace NP.AvaloniaDock
 
             _setManagerBehavior?.Dispose();
             _setManagerBehavior = null;
-        }
-
-        private void OnItemAdded(DockItem item)
-        {
-            item.RemoveEvent += Item_RemoveEvent;
-        }
-
-        private void Item_RemoveEvent(IRemovable item)
-        {
-            this.Items.Remove((DockItem) item);
-        }
-
-        private void OnItemRemoved(DockItem item)
-        {
-            item.RemoveEvent -= Item_RemoveEvent;
         }
 
         public void ClearAllItems()
