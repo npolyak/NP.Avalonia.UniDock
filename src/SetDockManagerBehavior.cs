@@ -1,4 +1,6 @@
-﻿namespace NP.AvaloniaDock
+﻿using NP.Concepts.Behaviors;
+
+namespace NP.AvaloniaDock
 {
     public class SetDockManagerBehavior : SetItemsBehavior<DockManagerContainer, IDockGroup, DockManager>
     {
