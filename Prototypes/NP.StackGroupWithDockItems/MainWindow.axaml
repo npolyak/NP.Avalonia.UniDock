@@ -27,9 +27,9 @@
         DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         Background="Gray">
     <np:DockStackGroup x:Name="TheStackGroup"
-                      TheOrientation="Horizontal"
-                       
-                      Margin="20">
+                       TheOrientation="Vertical"
+                       np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+                       Margin="20">
       <np:DockItem Header="Tab1">
         <TextBlock Text="Hello World!"/>
       </np:DockItem>

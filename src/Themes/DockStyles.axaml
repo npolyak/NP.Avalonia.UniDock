@@ -114,13 +114,16 @@
                        Height="2"
                        Grid.Row="1"
                        Fill="Black"/>
-            <ContentPresenter x:Name="Body"
-                              Grid.Row="2"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                              HorizontalAlignment="Stretch"
-                              VerticalContentAlignment="Stretch"
-                              Margin="{TemplateBinding Padding}"/>
+            <Grid Grid.Row="2">
+              <ContentPresenter x:Name="Body"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Margin="{TemplateBinding Padding}"/>
+              <local:DropPanelWithCompass IsVisible="{Binding Path=ShowCompass, 
+                                                              RelativeSource= {RelativeSource TemplatedParent}}"/>
+            </Grid>
           </Grid>
         </ControlTemplate>
       </Setter.Value>

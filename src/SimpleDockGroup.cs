@@ -56,6 +56,8 @@ namespace NP.AvaloniaDock
         {
             _behavior?.Dispose();
             _behavior = null;
+            _setBehavior?.Dispose();
+            _setBehavior = null;
         }
 
         private SetDockGroupBehavior _setBehavior;

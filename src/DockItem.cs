@@ -66,7 +66,21 @@ namespace NP.AvaloniaDock
             DockItem dockItem = (DockItem)change.Sender;
 
             dockItem.FireSelectionChanged();
-
         }
+
+
+        #region ShowCompass Styled Avalonia Property
+        public bool ShowCompass
+        {
+            get { return GetValue(ShowCompassProperty); }
+            set { SetValue(ShowCompassProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowCompassProperty =
+            AvaloniaProperty.Register<DockItem, bool>
+            (
+                nameof(ShowCompass)
+            );
+        #endregion ShowCompass Styled Avalonia Property
     }
 }
