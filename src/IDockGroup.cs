@@ -7,22 +7,10 @@ namespace NP.AvaloniaDock
 {
     public interface IDockGroup : IControl, IRemovable
     {
-        DockManager? TheDockManager { get; set; }
+        DockManager? TheDockManager { get; }
 
-        IDockGroup? DockParent { get; }
+        IDockGroup? DockParent { get; set; }
 
         IList<IDockGroup>? DockChildren { get; }
-    }
-
-    public interface IDockGroupDockManagerContainer : IDockGroup
-    {
-        DockManagerContainer TheDockManagerContainer { get; }
-
-        DockManager? IDockGroup.TheDockManager
-        {
-            get => TheDockManagerContainer.TheDockManager;
-
-            set => TheDockManagerContainer.TheDockManager = value;
-        }
     }
 }

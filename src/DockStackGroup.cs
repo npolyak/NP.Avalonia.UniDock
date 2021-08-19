@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
 {
-    public class DockStackGroup : StackGroup<IDockGroup>, IDockGroupDockManagerContainer, IDisposable
+    public class DockStackGroup : StackGroup<IDockGroup>, IDockGroup, IDisposable
     {
-        DockManagerContainer IDockGroupDockManagerContainer.TheDockManagerContainer { get; } = 
-            new DockManagerContainer();
+        public DockManager TheDockManager
+        {
+            get => DockAttachedProperties.GetTheDockManager(this);
+            set => DockAttachedProperties.SetTheDockManager(this, value);
+        }
 
         public IDockGroup? DockParent { get; set; }
 
@@ -20,29 +23,25 @@ namespace NP.AvaloniaDock
             RemoveEvent?.Invoke(this);
         }
 
-        RemoveItemBehavior<IDockGroup>? _removeItemBehavior;
-        SetDockManagerBehavior? _setDockManagerBehavior;
         public DockStackGroup()
         {
-            _setDockManagerBehavior = new SetDockManagerBehavior(this);
         }
 
         public void Dispose()
         {
-            _setDockManagerBehavior?.Dispose();
-            _setDockManagerBehavior = null;
             BeforeItemsSet();
         }
 
+        IDisposable? _behavior;
         protected override void BeforeItemsSet()
         {
-            _removeItemBehavior?.Dispose();
-            _removeItemBehavior = null;
+            _behavior?.Dispose();
+            _behavior = null;
         }
 
         protected override void AfterItemsSet()
         {
-            _removeItemBehavior = new RemoveItemBehavior<IDockGroup>(Items);
+            _behavior = new SetDockGroupBehavior(this, DockChildren!);
         }
     }
 }

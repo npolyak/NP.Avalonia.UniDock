@@ -8,11 +8,8 @@ using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class SimpleDockGroup : Control, IDockGroupDockManagerContainer, IDisposable
+    public class SimpleDockGroup : Control, IDockGroup, IDisposable
     {
-        DockManagerContainer IDockGroupDockManagerContainer.TheDockManagerContainer { get; } =
-            new DockManagerContainer();
-
         public event Action<IRemovable>? RemoveEvent;
 
         public void Remove()
@@ -20,7 +17,17 @@ namespace NP.AvaloniaDock
             RemoveEvent?.Invoke(this);
         }
 
-        public IDockGroup? DockParent => null;
+        public DockManager TheDockManager
+        {
+            get => DockAttachedProperties.GetTheDockManager(this);
+            set => DockAttachedProperties.SetTheDockManager(this, value);
+        }
+
+        public IDockGroup? DockParent
+        {
+            get => null;
+            set => throw new NotImplementedException();
+        }
 
         public IList<IDockGroup> DockChildren { get; } = 
             new ObservableCollection<IDockGroup>();
@@ -49,16 +56,14 @@ namespace NP.AvaloniaDock
         {
             _behavior?.Dispose();
             _behavior = null;
-            _setManagerBehavior?.Dispose();
-            _setManagerBehavior = null;
         }
 
+        private SetDockGroupBehavior _setBehavior;
         IDisposable? _behavior;
-        SetDockManagerBehavior? _setManagerBehavior;
         public SimpleDockGroup()
         {
-            _setManagerBehavior = new SetDockManagerBehavior(this);
             _behavior = DockChildren?.AddBehavior(OnItemAdded, OnItemRemoved);
+            _setBehavior = new SetDockGroupBehavior(this, DockChildren!);
         }
 
         private void OnItemRemoved(IDockGroup item)

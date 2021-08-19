@@ -33,7 +33,7 @@ namespace NP.AvaloniaDock
                     dockManager.DockWindows.Remove(this);
                 }
 
-                (_dockGroup as IDockGroup).TheDockManager = value;
+                _dockGroup.TheDockManager = value;
 
                 dockManager = TheDockManager;
 

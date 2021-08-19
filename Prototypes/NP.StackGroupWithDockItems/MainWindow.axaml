@@ -28,6 +28,7 @@
         Background="Gray">
     <np:DockStackGroup x:Name="TheStackGroup"
                       TheOrientation="Horizontal"
+                       
                       Margin="20">
       <np:DockItem Header="Tab1">
         <TextBlock Text="Hello World!"/>
