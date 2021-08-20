@@ -1,12 +1,21 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.VisualTree;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
+using NP.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class DockItem : HeaderedContentControl, IRemovable, ISelectableItem<DockItem>, IDockGroup
+    public class DockItem :
+        HeaderedContentControl, 
+        ILeafDockObj,
+        ISelectableItem<DockItem>
     {
         #region IsSelectedProperty Direct Avalonia Property
         public static readonly DirectProperty<DockItem, bool> IsSelectedProperty =
@@ -28,8 +37,17 @@ namespace NP.AvaloniaDock
             }
         }
 
-        public DockManager? TheDockManager { get; set; }
+        public DropPanelWithCompass? DropPanel =>
+            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
 
+        public DockKind? CurrentGroupDock =>
+            DropPanel?.DockSide;
+
+        public DockManager TheDockManager
+        {
+            get => DockAttachedProperties.GetTheDockManager(this);
+            set => DockAttachedProperties.SetTheDockManager(this, value);
+        }
         public IDockGroup? DockParent { get; set; }
 
         // dock item is the end item, so it has no dock children.
@@ -82,5 +100,27 @@ namespace NP.AvaloniaDock
                 nameof(ShowCompass)
             );
         #endregion ShowCompass Styled Avalonia Property
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+        }
+
+        public void CleanSelfOnRemove()
+        {
+            if (Header is IControl headerControl)
+            {
+                headerControl.DisconnectVisualParentContentPresenter();
+            }
+
+            if (Content is IControl contentControl)
+            {
+                contentControl.DisconnectVisualParentContentPresenter();
+            }
+
+            IsSelected = false;
+        }
+
+        public IEnumerable<DockItem> LeafItems => this.ToCollection();
     }
 }

@@ -78,7 +78,7 @@ namespace NP.Avalonia.Visuals.Behaviors
 
         private static void ResetEvent(AvaloniaPropertyChangedEventArgs<RoutedEvent> e)
         {
-            Interactive? sender = e.Sender as Interactive;
+            Interactive sender = e.Sender as Interactive;
 
             if (e.OldValue.HasValue)
             {
@@ -107,7 +107,7 @@ namespace NP.Avalonia.Visuals.Behaviors
         }
 
 
-        private static void ConnectEventHandling(Interactive? sender, RoutedEvent routedEvent)
+        private static void ConnectEventHandling(Interactive sender, RoutedEvent routedEvent)
         {
             if (sender == null)
                 return;

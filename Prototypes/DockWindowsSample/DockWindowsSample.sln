@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Utilities", "..\..\SubMo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Avalonia.Visuals", "..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj", "{06657FCB-BA0E-4332-AAA4-870A87268DCC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Concepts.Behavior", "..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behavior.csproj", "{647C0207-928E-46F0-B65F-3637E076889B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Concepts.Behaviors", "..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj", "{647C0207-928E-46F0-B65F-3637E076889B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.AvaloniaDock", "..\..\src\NP.AvaloniaDock.csproj", "{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}"
 EndProject

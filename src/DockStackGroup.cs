@@ -6,6 +6,8 @@ namespace NP.AvaloniaDock
 {
     public class DockStackGroup : StackGroup<IDockGroup>, IDockGroup, IDisposable
     {
+        public bool ShowChildHeaders { get; } = true;
+
         public DockManager TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);

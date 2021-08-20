@@ -117,12 +117,18 @@
                 <Image Source="{Binding Path=CustomHeaderIcon, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                        VerticalAlignment="Center"
                        Stretch="Uniform"
+                       IsVisible="{Binding Path=CustomHeaderIcon, 
+                                           RelativeSource={RelativeSource AncestorType=controls:CustomWindow},
+                                           Converter={x:Static ObjectConverters.IsNotNull}}"
                        behaviors:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
                        behaviors:CallAction.MethodName="Close"
                        Width="{Binding Path=CustomHeaderIconWidth, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                        Height="{Binding Path=CustomHeaderIconHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                        Margin="{Binding Path=CustomHeaderIconMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
                 <TextBlock x:Name="TheTitle"
+                           IsVisible="{Binding Path=Title, 
+                                               RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
+                                               Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                            Text="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                            behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
               </StackPanel>

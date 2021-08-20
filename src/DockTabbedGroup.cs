@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class DockTabbedGroup : TemplatedControl, IDockGroup
+    public class DockTabbedGroup : TemplatedControl, ILeafDockObj
     {
         public DockManager TheDockManager
         {
@@ -31,23 +31,22 @@ namespace NP.AvaloniaDock
             RemoveEvent?.Invoke(this);
         }
 
-        private ObservableCollection<DockItem> _items = new ObservableCollection<DockItem>();
-
         /// <summary>
         /// Defines the <see cref="Items"/> property.
         /// </summary>
-        public static readonly DirectProperty<DockTabbedGroup, ObservableCollection<DockItem>> ItemsProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, ObservableCollection<DockItem>>
+        public static readonly DirectProperty<DockTabbedGroup, IList<IDockGroup>> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<DockTabbedGroup, IList<IDockGroup>>
             (
                 nameof(Items),
                 o => o.Items,
                 (o, v) => o.Items = v);
 
+        private IList<IDockGroup> _items = new ObservableCollection<IDockGroup>();
         /// <summary>
         /// Gets or sets the items to display.
         /// </summary>
         [Content]
-        public ObservableCollection<DockItem> Items
+        public IList<IDockGroup> Items
         {
             get
             {
@@ -64,8 +63,21 @@ namespace NP.AvaloniaDock
             }
         }
 
-        SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
+        public IList<IDockGroup>? DockChildren => Items;
+
+        public DropPanelWithCompass? DropPanel =>
+            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
+
+        public DockKind? CurrentGroupDock =>
+            DropPanel?.DockSide;
+
+        public IDockGroup? DockParent { get; set; }
+
+        private readonly SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionFirstByDefaultBehavior<DockItem>();
+
+        private readonly MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>> _mimicCollectionBehavior =
+            new MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>>(dockGroup => (DockItem)dockGroup);
 
         public DockTabbedGroup()
         {
@@ -176,20 +188,12 @@ namespace NP.AvaloniaDock
         #endregion ShowCompass Styled Avalonia Property
 
 
-        public DropPanelWithCompass? DropPanel =>
-            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
-
-        public DockKind? CurrentGroupDock =>
-            DropPanel?.DockSide;
-
-        public IDockGroup? DockParent { get; set; }
-
-        public IList<IDockGroup>? DockChildren => null;
-
         private void SetBehavior()
         {
-            _behavior = new SetDockGroupBehavior<DockItem>(this, Items);
-            _singleSelectionBehavior.TheCollection = _items;
+            _behavior = new SetDockGroupBehavior<IDockGroup>(this, Items);
+
+            _mimicCollectionBehavior.InputCollection = Items;
+            _singleSelectionBehavior.TheCollection = _mimicCollectionBehavior.OutputCollection;
         }
 
         private void DisposeBehavior()
@@ -199,14 +203,13 @@ namespace NP.AvaloniaDock
             _behavior = null;
 
             _singleSelectionBehavior.TheCollection = null;
+
+            _mimicCollectionBehavior.InputCollection = null;
         }
 
-        public void ClearAllItems()
-        {
-            if (Items == null)
-                return;
 
-            CollectionUtils.RemoveAll(Items);
-        }
+        public IEnumerable<DockItem> LeafItems => Items.NullToEmpty().Cast<DockItem>().ToList();
+
+        public IDockGroup? GetContainingGroup() => this;
     }
 }

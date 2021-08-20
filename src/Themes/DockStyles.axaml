@@ -85,45 +85,23 @@
     </Setter>
   </Style>
 
-
-  <Style Selector="np|DockItem">
-    <Setter Property="Padding"
-            Value="5"/>
+  <Style Selector="np|DockItemHeaderControl">
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="np:DockItem">
-          <Grid RowDefinitions="30, Auto, *"
-                Background="White">
-            <Grid Height="25">
-              <ContentPresenter x:Name="Header"
-                                Content="{TemplateBinding Header}"
-                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                TextBlock.FontWeight="Bold"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Margin="5,3"/>
-              
-              <Button x:Name="CloseButton"
-                      Classes="CloseButton"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center"
-                      Margin="5,3"
-                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-            </Grid>
-            <Rectangle HorizontalAlignment="Stretch"
-                       Height="2"
-                       Grid.Row="1"
-                       Fill="Black"/>
-            <Grid Grid.Row="2">
-              <ContentPresenter x:Name="Body"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                HorizontalAlignment="Stretch"
-                                VerticalContentAlignment="Stretch"
-                                Margin="{TemplateBinding Padding}"/>
-              <local:DropPanelWithCompass IsVisible="{Binding Path=ShowCompass, 
-                                                              RelativeSource= {RelativeSource TemplatedParent}}"/>
-            </Grid>
+        <ControlTemplate TargetType="np:DockItemHeaderControl">
+          <Grid>
+            <ContentPresenter x:Name="Header"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              Margin="5,3"/>
+
+            <Button x:Name="CloseButton"
+                    Classes="CloseButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="5,3"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -259,6 +237,42 @@
               </Grid>
             </DockPanel>
           </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="np|DockItemPresenter">
+    <Setter Property="Padding"
+            Value="5"/>
+    <Setter Property="DataContext"
+            Value="{Binding Path=(np:DockAttachedProperties.DockContext), RelativeSource={RelativeSource Mode=Self}}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="np:DockItem">
+          <Grid RowDefinitions="Auto, *"
+                Background="White">
+            <Grid RowDefinitions="Auto, Auto"
+                  IsVisible="{Binding Path=ShowChildHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
+              <np:DockItemHeaderControl x:Name="Header"
+                                        Content="{Binding Path=Header}"
+                                        ContentTemplate="{Binding Path=HeaderTemplate}"
+                                        Height="28"/>
+              <Rectangle HorizontalAlignment="Stretch"
+                         Height="2"
+                         Grid.Row="1"
+                         Fill="Black"/>
+            </Grid>
+            <Grid Grid.Row="1">
+              <ContentPresenter x:Name="Body"
+                                Content="{Binding Path=(np:DockAttachedProperties.DockContext).Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplate="{Binding Path=(np:DockAttachedProperties.DockContext).ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                HorizontalAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Margin="{Binding Path=(np:DockAttachedProperties.DockContext).Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
+              <local:DropPanelWithCompass IsVisible="{Binding Path=(np:DockAttachedProperties.DockContext).ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </Grid>
+          </Grid>
         </ControlTemplate>
       </Setter.Value>
     </Setter>

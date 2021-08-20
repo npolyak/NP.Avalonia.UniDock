@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml.Styling;
 using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
@@ -14,75 +15,30 @@ namespace NP.AvaloniaDock
 {
     public class DockWindow : CustomWindow
     {
-        SimpleDockGroup _dockGroup = new SimpleDockGroup();
+        public SimpleDockGroup TheDockGroup { get; } = 
+            new SimpleDockGroup();
 
-        public DockManager TheDockManager
-        {
-            get => (_dockGroup as IDockGroup).TheDockManager!;
-            set
-            {
-                DockManager dockManager = TheDockManager;
-
-                if (ReferenceEquals(dockManager, value))
-                {
-                    return;
-                }
-
-                if (dockManager != null)
-                {
-                    dockManager.DockWindows.Remove(this);
-                }
-
-                _dockGroup.TheDockManager = value;
-
-                dockManager = TheDockManager;
-
-                if (dockManager != null)
-                {
-                    dockManager.DockWindows.Add(this);
-                }
-            }
-        }
+        public DockManager TheDockManager =>
+            DockAttachedProperties.GetTheDockManager(this);
 
         public DockWindow(DockManager dockManager)
         {
             Classes = new Classes(new[] { "PlainCustomWindow" });
             HasCustomWindowFeatures = true;
-            Content = _dockGroup;
-            _dockGroup.DockChild = new DockTabbedGroup();
-            TheDockManager = dockManager;
+            Content = TheDockGroup;
+            DockAttachedProperties.SetTheDockManager(this, dockManager);
+            TheDockGroup.TheDockManager = dockManager;
 
             this.Closing += DockWindow_Closing;
         }
 
         private void DockWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.TheDockManager = null!;
+            DockAttachedProperties.SetTheDockManager(this, null!);
         }
-
-        private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs<DockManager> dockManagerChange)
-        {
-            if (dockManagerChange.Sender != this)
-            {
-                return;
-            }
-
-            DockManager dockManager = dockManagerChange.NewValue.Value;
-
-            //DockManager oldDockManager = dockManagerChange.NewValue.Value;
-            //var groupsToChange = GetGroups(oldDockManager);
-            //groupsToChange.DoForEach(g => DockAttachedProperties.SetTheDockManager(g, dockManager));
-        }
-
-        public IEnumerable<DockTabbedGroup> TabbedGroups =>
-            _dockGroup.DockGroupDescendants().OfType<DockTabbedGroup>();
-
-        public DockTabbedGroup? TheTabbedGroup => TabbedGroups?.FirstOrDefault();
-
 
         protected Point2D? StartPointerPosition { get; set; }
         protected Point2D? StartWindowPosition { get; set; }
-
 
 
         #region PointerShift Styled Avalonia Property
@@ -181,18 +137,19 @@ namespace NP.AvaloniaDock
             UpdatePosition(e);
         }
 
-        private IEnumerable<DockTabbedGroup> GetGroups(DockManager dockManager)
+        private IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
         {
-            return this.GetVisualDescendants()
-                        .OfType<DockTabbedGroup>()
-                        .Where(g => ReferenceEquals((g as IDockGroup).TheDockManager, dockManager));
+            return this.TheDockGroup
+                        .GetDockGroupSelfAndDescendants()
+                        .OfType<ILeafDockObj>()
+                        .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
         }
 
-        public IEnumerable<DockTabbedGroup> Groups
+        public IEnumerable<DockItem> LeafItems
         {
             get
             {
-                return GetGroups(TheDockManager);
+                return GetLeafGroups(TheDockManager).SelectMany(g => g.LeafItems);
             }
         }
     }

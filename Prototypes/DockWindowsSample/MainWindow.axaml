@@ -43,7 +43,7 @@
             Grid.Column="1"
             np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
         <np:DockTabbedGroup.Items>
-          <np:DockItem Header="Tab1" Content="Hello World!">
+          <np:DockItem Header="Tab4" Content="Hello World!">
             <np:DockItem.ContentTemplate>
               <DataTemplate>
                 <Grid RowDefinitions="Auto, *">
@@ -54,7 +54,7 @@
               </DataTemplate>
             </np:DockItem.ContentTemplate>
           </np:DockItem>
-          <np:DockItem Header="Tab2" Content="Hi World!"/>
+          <np:DockItem Header="Tab5" Content="Hi World!"/>
         </np:DockTabbedGroup.Items>
       </np:DockTabbedGroup>
     </Grid>

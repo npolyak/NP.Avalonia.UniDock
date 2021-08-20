@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
 {
@@ -17,7 +18,7 @@ namespace NP.AvaloniaDock
         private static DockItem? GetDockItem(TabItem tabItem) =>
             tabItem.Content as DockItem;
 
-        private static IList? GetDockItemsCollection(DockItem dockItem) =>
+        private static IList<IDockGroup>? GetDockItemsCollection(DockItem dockItem) =>
             (dockItem.DockParent as DockTabbedGroup)?.Items;
 
         public DragTabBehavior() : base(GetDockItem!, GetDockItemsCollection!)

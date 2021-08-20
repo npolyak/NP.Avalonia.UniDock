@@ -16,8 +16,8 @@ namespace NP.AvaloniaDock
         public IList<DockWindow> DockWindows { get; } =
             new List<DockWindow>();
 
-        public IList<DockTabbedGroup> TabbedGroups { get; } =
-            new List<DockTabbedGroup>();
+        public IList<ILeafDockObj> DockLeafObjs { get; } =
+            new List<ILeafDockObj>();
 
         DockWindow? _draggedWindow;
         public DockWindow? DraggedWindow
@@ -37,7 +37,7 @@ namespace NP.AvaloniaDock
             }
         }
 
-        private IList<(DockTabbedGroup Group, Rect2D Rect)>? _currentDockGroups;
+        private IList<(ILeafDockObj Group, Rect2D Rect)>? _currentDockGroups;
 
         IDisposable? _pointerMovedSubscription;
         private void BeginDragAction()
@@ -46,33 +46,36 @@ namespace NP.AvaloniaDock
                 return;
 
             _currentDockGroups = 
-                TabbedGroups
-                .Except(_draggedWindow.Groups)
+                DockLeafObjs
+                .Except(_draggedWindow.LeafItems)
                 .Select(g => (g, g.GetScreenBounds())).ToList();
 
             _pointerMovedSubscription = CurrentScreenPointBehavior.CurrentScreenPoint.Subscribe(OnPointerMoved);
         }
 
-        DockTabbedGroup? _currentGroup = null;
-        DockTabbedGroup? CurrentGroup
+        /// <summary>
+        /// group into which we insert dragged item(s)
+        /// </summary>
+        ILeafDockObj? _currentLeafObjToInsertWithRespectTo = null;
+        ILeafDockObj? CurrentLeafObjToInsertWithRespectTo
         {
-            get => _currentGroup;
+            get => _currentLeafObjToInsertWithRespectTo;
 
             set
             {
-                if (ReferenceEquals(_currentGroup, value))
+                if (ReferenceEquals(_currentLeafObjToInsertWithRespectTo, value))
                     return;
 
-                if (_currentGroup != null)
+                if (_currentLeafObjToInsertWithRespectTo != null)
                 {
-                    _currentGroup.ShowCompass = false;
+                    _currentLeafObjToInsertWithRespectTo.ShowCompass = false;
                 }
 
-                _currentGroup = value;
+                _currentLeafObjToInsertWithRespectTo = value;
 
-                if (_currentGroup != null)
+                if (_currentLeafObjToInsertWithRespectTo != null)
                 {
-                    _currentGroup.ShowCompass = true;
+                    _currentLeafObjToInsertWithRespectTo.ShowCompass = true;
                 }
             }
         }
@@ -95,14 +98,14 @@ namespace NP.AvaloniaDock
                               .OfType<Window>()
                               .FirstOrDefault()).ToList();
 
-            CurrentGroup = pointerAboveGroups.FirstOrDefault();
+            CurrentLeafObjToInsertWithRespectTo = pointerAboveGroups.FirstOrDefault();
 
-            if (CurrentGroup == null)
+            if (CurrentLeafObjToInsertWithRespectTo == null)
             {
                 return;
             }
 
-            Window w = CurrentGroup.GetVisualAncestors().OfType<Window>().First();
+            Window w = CurrentLeafObjToInsertWithRespectTo.GetVisualAncestors().OfType<Window>().First();
 
             w.Activate();
         }
@@ -116,23 +119,22 @@ namespace NP.AvaloniaDock
 
                 if (DraggedWindow != null)
                 {
-                    switch (CurrentGroup?.CurrentGroupDock)
+                    switch (CurrentLeafObjToInsertWithRespectTo?.CurrentGroupDock)
                     {
                         case DockKind.Tabs:
                         {
-                            var allItems = DraggedWindow.Groups.SelectMany(g => g.Items).ToList();
+                            var leafItems = DraggedWindow.LeafItems.ToList();
 
-                            var groupsToRemove = DraggedWindow.Groups.ToList();
+                            leafItems.DoForEach(item => item.RemoveItselfFromParent());
 
-                            DraggedWindow.Groups.DoForEach(g => g.ClearAllItems());
+                            IDockGroup groupToInsertInto =
+                                CurrentLeafObjToInsertWithRespectTo?.GetContainingGroup()!;
 
-                            CurrentGroup.ClearSelectedItem();
+                            groupToInsertInto.DockChildren.InsertCollectionAtStart(leafItems);
 
-                            CurrentGroup.Items.InsertCollectionAtStart(allItems);
+                            var firstLeafItem = leafItems.FirstOrDefault();
 
-                            CurrentGroup.SelectFirst();
-
-                            groupsToRemove.DoForEach(g => g.ClearValue(DockAttachedProperties.TheDockManagerProperty));
+                            firstLeafItem?.Select();
 
                             DraggedWindow?.Close();
                             break;
@@ -140,9 +142,9 @@ namespace NP.AvaloniaDock
                         case DockKind.Top:
                         {
 
-                            CurrentGroup.ClearSelectedItem();
+                            //CurrentGroupToInsertInto.ClearSelectedItem();
 
-                            IDockGroup parentGroup = CurrentGroup.DockParent!;
+                            IDockGroup parentGroup = CurrentLeafObjToInsertWithRespectTo.DockParent!;
 
                             if (parentGroup is DockStackGroup dockStackGroup)
                             {
@@ -162,9 +164,9 @@ namespace NP.AvaloniaDock
             }
             finally
             {
-                if (CurrentGroup != null)
+                if (CurrentLeafObjToInsertWithRespectTo != null)
                 {
-                    CurrentGroup = null;
+                    CurrentLeafObjToInsertWithRespectTo = null;
                 }
 
                 DraggedWindow = null;

@@ -1,0 +1,21 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:np="https://np.com/visuals">
+  <Style Selector="TextBlock.Base">
+    <Setter Property="HorizontalAlignment"
+            Value="Left"/>
+    <Setter Property="VerticalAlignment"
+            Value="Center"/>
+  </Style>
+  
+  <Style Selector="TextBlock.WindowTitle">
+    <Setter Property="np:ClassesBehavior.InsertClasses"
+            Value="Base"/>
+    <Setter Property="FontWeight"
+            Value="Bold"/>
+    <Setter Property="FontSize"
+            Value="16"/>
+    <Setter Property="Margin"
+            Value="5,0,0,0"/>
+  </Style>
+</Styles>

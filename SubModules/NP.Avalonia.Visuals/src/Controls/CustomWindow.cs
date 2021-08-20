@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
@@ -412,14 +413,14 @@ namespace NP.Avalonia.Visuals.Controls
         #endregion HeaderContent Styled Avalonia Property
 
         #region HeaderContentTemplate Styled Avalonia Property
-        public DataTemplate HeaderContentTemplate
+        public IDataTemplate HeaderContentTemplate
         {
             get { return GetValue(HeaderContentTemplateProperty); }
             set { SetValue(HeaderContentTemplateProperty, value); }
         }
 
-        public static readonly StyledProperty<DataTemplate> HeaderContentTemplateProperty =
-            AvaloniaProperty.Register<CustomWindow, DataTemplate>
+        public static readonly StyledProperty<IDataTemplate> HeaderContentTemplateProperty =
+            AvaloniaProperty.Register<CustomWindow, IDataTemplate>
             (
                 nameof(HeaderContentTemplate)
             );

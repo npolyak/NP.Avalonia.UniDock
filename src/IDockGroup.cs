@@ -12,5 +12,39 @@ namespace NP.AvaloniaDock
         IDockGroup? DockParent { get; set; }
 
         IList<IDockGroup>? DockChildren { get; }
+
+        bool ShowChildHeader => true;
+
+        void CleanSelfOnRemove()
+        {
+
+        }
+    }
+
+    public interface ILeafDockObj : IDockGroup
+    {
+        bool ShowCompass { get; set; }
+
+        DockKind? CurrentGroupDock { get; }
+
+        IEnumerable<DockItem> LeafItems { get; }
+
+        IDockGroup? GetContainingGroup() => DockParent;
+    }
+
+    public static class DockGroupHelper
+    {
+        public static void RemoveItselfFromParent(this IDockGroup item)
+        {
+            IDockGroup? parent = item.DockParent;
+
+            if (parent != null)
+            {
+                parent.DockChildren!.Remove(item);
+                item.DockParent = null;
+            }
+
+            item.CleanSelfOnRemove();
+        }
     }
 }

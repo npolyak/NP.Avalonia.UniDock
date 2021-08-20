@@ -4,6 +4,7 @@
     <Application.Styles>
       <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
       <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+      <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml"/>
       <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml"/>
       <StyleInclude Source="avares://NP.AvaloniaDock/Themes/DockStyles.axaml"/>
     </Application.Styles>

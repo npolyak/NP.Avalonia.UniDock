@@ -6,9 +6,11 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
+using NP.Avalonia.Visuals.Controls;
 using NP.Utilities;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NP.AvaloniaDock
@@ -60,9 +62,9 @@ namespace NP.AvaloniaDock
         private DockItem? _draggedDockItem;
 
         private Func<TItem, DockItem> _dockItemGetter;
-        private Func<DockItem, IList> _itemsListGetter;
+        private Func<DockItem, IList<IDockGroup>> _itemsListGetter;
 
-        public DragItemBehavior(Func<TItem, DockItem> dockItemGetter, Func<DockItem, IList> itemsListGetter)
+        public DragItemBehavior(Func<TItem, DockItem> dockItemGetter, Func<DockItem, IList<IDockGroup>> itemsListGetter)
         {
             _dockItemGetter = dockItemGetter;
 
@@ -140,7 +142,7 @@ namespace NP.AvaloniaDock
 
             Point pointerPositionWithinItemsContainer = e.GetPosition(itemsContainer);
 
-            IList itemsList = _itemsListGetter.Invoke(_draggedDockItem!);
+            IList<IDockGroup> itemsList = _itemsListGetter.Invoke(_draggedDockItem!);
 
             if (itemsContainer.IsPointWithinControl(pointerPositionWithinItemsContainer))
             {
@@ -179,7 +181,12 @@ namespace NP.AvaloniaDock
                 dockWindow.Width = 400;
                 dockWindow.Height = 300;
 
-                dockWindow.TheTabbedGroup?.Items.Add(_draggedDockItem!);
+                ((ISetLogicalParent)_draggedDockItem!).SetParent(null);
+                dockWindow.TheDockGroup.DockChildren.Add(_draggedDockItem!);
+
+                dockWindow.CustomHeaderIcon = null;
+                dockWindow.Title = _draggedDockItem.Header?.ToString();
+                dockWindow.TitleClasses = "WindowTitle";
 
                 dockWindow.SetMovePtr();
 

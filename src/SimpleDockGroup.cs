@@ -1,4 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Styling;
+using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -17,6 +21,13 @@ namespace NP.AvaloniaDock
             RemoveEvent?.Invoke(this);
         }
 
+        public bool ShowChildHeader => false;
+
+        private IDockVisualItemGenerator TheDockVisualItemGenerator { get; } =
+            new DockVisualItemGenerator();
+
+        public bool ShowChildHeaders { get; } = false;
+
         public DockManager TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
@@ -29,55 +40,60 @@ namespace NP.AvaloniaDock
             set => throw new NotImplementedException();
         }
 
+        public IDockGroup? TheChild =>
+            DockChildren?.FirstOrDefault();
+
         public IList<IDockGroup> DockChildren { get; } = 
             new ObservableCollection<IDockGroup>();
 
-        public IDockGroup? DockChild 
+
+        private IDisposable? _addRemoveChildBehavior;
+        private SetDockGroupBehavior? _setBehavior;
+        public SimpleDockGroup()
         {
-            get => DockChildren.FirstOrDefault();
+            _setBehavior = new SetDockGroupBehavior(this, DockChildren!);
 
-            set
-            {
-                EmptyChildren();
-
-                if (value != null)
-                {
-                    DockChildren.Add(value);
-                }
-            }
+            _addRemoveChildBehavior = 
+                DockChildren.AddBehavior(OnChildAdded, OnChildRemoved);
         }
 
-        private void EmptyChildren()
+        private void OnChildAdded(IDockGroup newChildToInsert)
         {
-            DockChildren.RemoveAllOneByOne();
+            // have to remove previous children before adding the new one.
+            // Only one child is allowed
+            var childrenToRemove = DockChildren.Except(newChildToInsert.ToCollection()).ToList();
+
+            childrenToRemove.DoForEach(child => DockChildren.Remove(child));
+
+            IControl newVisualChildToInsert =
+                TheDockVisualItemGenerator.Generate(newChildToInsert);
+
+            ((ISetLogicalParent)newVisualChildToInsert).SetParent(this);
+            VisualChildren.Add(newVisualChildToInsert);
+            LogicalChildren.Add(newVisualChildToInsert);
+        }
+
+        private Control FindVisualChild(IDockGroup dockChild)
+        {
+            return (Control) LogicalChildren.OfType<IControl>().FirstOrDefault(item => ReferenceEquals(item.DataContext, dockChild))!;
+        }
+
+        private void OnChildRemoved(IDockGroup childToRemove)
+        {
+            Control visualChildToRemove = FindVisualChild(childToRemove);
+
+            ((ISetLogicalParent)visualChildToRemove).SetParent(null);
+            VisualChildren.Remove(visualChildToRemove);
+            LogicalChildren.Remove(visualChildToRemove);
         }
 
         public void Dispose()
         {
-            _behavior?.Dispose();
-            _behavior = null;
             _setBehavior?.Dispose();
             _setBehavior = null;
-        }
 
-        private SetDockGroupBehavior _setBehavior;
-        IDisposable? _behavior;
-        public SimpleDockGroup()
-        {
-            _behavior = DockChildren?.AddBehavior(OnItemAdded, OnItemRemoved);
-            _setBehavior = new SetDockGroupBehavior(this, DockChildren!);
-        }
-
-        private void OnItemRemoved(IDockGroup item)
-        {
-            this.VisualChildren.Remove(item);
-            this.LogicalChildren.Remove(item);
-        }
-
-        private void OnItemAdded(IDockGroup item)
-        {
-            this.VisualChildren.Add(item);
-            this.LogicalChildren.Add(item);
+            _addRemoveChildBehavior?.Dispose();
+            _addRemoveChildBehavior = null;
         }
     }
 }

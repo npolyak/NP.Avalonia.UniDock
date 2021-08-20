@@ -53,12 +53,12 @@ namespace NP.AvaloniaDock
             {
                 if (oldDockManager != null)
                 {
-                    oldDockManager.TabbedGroups.Remove(group);
+                    oldDockManager.DockLeafObjs.Remove(group);
                 }
 
                 if (dockManager != null)
                 {
-                    dockManager.TabbedGroups.Add(group);
+                    dockManager.DockLeafObjs.Add(group);
                 }
             }
         }
@@ -80,5 +80,25 @@ namespace NP.AvaloniaDock
                 "DockSide"
             );
         #endregion DockSide Attached Avalonia Property
+
+
+        #region DockContext Attached Avalonia Property
+        public static object GetDockContext(AvaloniaObject obj)
+        {
+            return obj.GetValue(DockContextProperty);
+        }
+
+        public static void SetDockContext(AvaloniaObject obj, object value)
+        {
+            obj.SetValue(DockContextProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DockContextProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>
+            (
+                "DockContext"
+            );
+        #endregion DockContext Attached Avalonia Property
+
     }
 }
