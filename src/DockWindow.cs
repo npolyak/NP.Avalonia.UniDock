@@ -18,8 +18,15 @@ namespace NP.AvaloniaDock
         public SimpleDockGroup TheDockGroup { get; } = 
             new SimpleDockGroup();
 
-        public DockManager TheDockManager =>
-            DockAttachedProperties.GetTheDockManager(this);
+        public DockManager? TheDockManager
+        {
+            get => DockAttachedProperties.GetTheDockManager(this);
+            private set
+            {
+                DockAttachedProperties.SetTheDockManager(this, value!);
+                TheDockGroup.TheDockManager = value!;
+            }
+        }
 
         public DockWindow(DockManager dockManager)
         {
@@ -34,7 +41,11 @@ namespace NP.AvaloniaDock
 
         private void DockWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            DockAttachedProperties.SetTheDockManager(this, null!);
+            TheDockManager = null;
+
+            var allGroups = TheDockGroup.GetDockGroupSelfAndAncestors().Reverse().ToList();
+
+            allGroups?.DoForEach(item => item.RemoveItselfFromParent());
         }
 
         protected Point2D? StartPointerPosition { get; set; }
@@ -140,8 +151,9 @@ namespace NP.AvaloniaDock
         private IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
         {
             return this.TheDockGroup
-                        .GetDockGroupSelfAndDescendants()
+                        .GetDockGroupSelfAndDescendants(stopCondition:item => item is ILeafDockObj)
                         .OfType<ILeafDockObj>()
+                        .Distinct()
                         .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
         }
 

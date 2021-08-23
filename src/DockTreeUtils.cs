@@ -1,4 +1,5 @@
 ﻿using NP.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
@@ -25,8 +26,8 @@ namespace NP.AvaloniaDock
             return g.GetRootNode(ToParent!);
         }
 
-        public static IEnumerable<IDockGroup> GetDockGroupSelfAndDescendants(this IDockGroup g) =>
-            g.SelfAndDescendants(ToChildren!);
+        public static IEnumerable<IDockGroup> GetDockGroupSelfAndDescendants(this IDockGroup g, Func<IDockGroup, bool>? stopCondition = null) =>
+            g.SelfAndDescendants(ToChildren!, stopCondition);
 
         public static IEnumerable<IDockGroup> GetDockGroupDescendants(this IDockGroup g) =>
            g.Descendants(ToChildren!);

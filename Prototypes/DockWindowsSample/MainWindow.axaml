@@ -19,26 +19,23 @@
       <np:DockManager x:Key="TheDockManager"/>
     </ResourceDictionary>
   </Window.Resources>
-  <Window.Styles>
-    <StyleInclude Source="avares://NP.AvaloniaDock/Themes/DockStyles.axaml"/>
-
-  </Window.Styles>
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
-      <np:DockTabbedGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-        <np:DockTabbedGroup.Items>
-          <np:DockItem Header="Tab1">
-            <TextBlock Text="Hello World!"/>
-          </np:DockItem>
-          <np:DockItem Header="Tab2">
-            <TextBlock Text="Hi World!"/>
-          </np:DockItem>
-          <np:DockItem Header="Tab3">
-            <TextBlock Text="Hi World 1234!"/>
-          </np:DockItem>
-        </np:DockTabbedGroup.Items>
-      </np:DockTabbedGroup>
-
+      <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
+        <np:DockTabbedGroup>
+          <np:DockTabbedGroup.Items>
+            <np:DockItem Header="Tab1">
+              <TextBlock Text="Hello World!"/>
+            </np:DockItem>
+            <np:DockItem Header="Tab2">
+              <TextBlock Text="Hi World!"/>
+            </np:DockItem>
+            <np:DockItem Header="Tab3">
+              <TextBlock Text="Hi World 1234!"/>
+            </np:DockItem>
+          </np:DockTabbedGroup.Items>
+        </np:DockTabbedGroup>
+      </np:SimpleDockGroup>
       <np:DockTabbedGroup
             Grid.Column="1"
             np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">

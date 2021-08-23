@@ -11,7 +11,7 @@ namespace NP.AvaloniaDock
 
         IDockGroup? DockParent { get; set; }
 
-        IList<IDockGroup>? DockChildren { get; }
+        IList<IDockGroup> DockChildren { get; }
 
         bool ShowChildHeader => true;
 
@@ -30,6 +30,8 @@ namespace NP.AvaloniaDock
         IEnumerable<DockItem> LeafItems { get; }
 
         IDockGroup? GetContainingGroup() => DockParent;
+
+        IControl GetVisual() => this;
     }
 
     public static class DockGroupHelper

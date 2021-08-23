@@ -11,19 +11,16 @@ namespace NP.AvaloniaDock
     {
         public IControl Generate(IDockGroup dockObj)
         {
-            IControl result;
             if (dockObj is DockItem dockItem)
             {
-                result = new DockItemPresenter();
-            }
-            else
-            {
-                result = dockObj;
+                DockItemPresenter result = new DockItemPresenter();
+
+                result.DockContext = dockItem;
+
+                return result;
             }
 
-            DockAttachedProperties.SetDockContext((Control) result, dockObj);
-
-            return result;
+            return dockObj;
         }
     }
 }

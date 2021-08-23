@@ -171,6 +171,8 @@ namespace NP.AvaloniaDock
                 // remove from the current items
                 itemsList?.Remove(_draggedDockItem);
 
+                _draggedDockItem.CleanSelfOnRemove();
+
                 // create the window
                 ClearHandlers(sender);
 
@@ -181,7 +183,6 @@ namespace NP.AvaloniaDock
                 dockWindow.Width = 400;
                 dockWindow.Height = 300;
 
-                ((ISetLogicalParent)_draggedDockItem!).SetParent(null);
                 dockWindow.TheDockGroup.DockChildren.Add(_draggedDockItem!);
 
                 dockWindow.CustomHeaderIcon = null;

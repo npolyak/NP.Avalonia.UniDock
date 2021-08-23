@@ -27,6 +27,10 @@ namespace NP.AvaloniaDock
             );
         #endregion IsSelectedProperty Direct Avalonia Property
 
+        public DockItemPresenter? TheVisual { get; internal set; }
+
+        public IControl GetVisual() => (TheVisual as IControl) ?? this;
+
         private bool _isSelected = false;
         public bool IsSelected 
         {
@@ -38,15 +42,15 @@ namespace NP.AvaloniaDock
         }
 
         public DropPanelWithCompass? DropPanel =>
-            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
+            this?.TheVisual?.GetVisualDescendants()?.OfType<DropPanelWithCompass>().FirstOrDefault();
 
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
 
-        public DockManager TheDockManager
+        public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
-            set => DockAttachedProperties.SetTheDockManager(this, value);
+            set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
         public IDockGroup? DockParent { get; set; }
 
@@ -101,11 +105,6 @@ namespace NP.AvaloniaDock
             );
         #endregion ShowCompass Styled Avalonia Property
 
-        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-        {
-            base.OnApplyTemplate(e);
-        }
-
         public void CleanSelfOnRemove()
         {
             if (Header is IControl headerControl)
@@ -116,6 +115,16 @@ namespace NP.AvaloniaDock
             if (Content is IControl contentControl)
             {
                 contentControl.DisconnectVisualParentContentPresenter();
+            }
+
+            this.TheDockManager = null;
+
+            this.DropPanel?.FinishPointerDetection();
+
+            if (this.TheVisual != null)
+            {
+                TheVisual.DockContext = null;
+                this.TheVisual = null;
             }
 
             IsSelected = false;

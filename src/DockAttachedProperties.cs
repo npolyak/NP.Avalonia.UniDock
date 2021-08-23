@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using NP.Utilities;
 using System;
+using System.Linq;
 
 namespace NP.AvaloniaDock
 {
@@ -49,16 +51,25 @@ namespace NP.AvaloniaDock
                     dockManager.DockWindows.Add(window);
                 }
             }
-            else if (sender is DockTabbedGroup group)
+            else if (sender is ILeafDockObj group)
             {
                 if (oldDockManager != null)
                 {
                     oldDockManager.DockLeafObjs.Remove(group);
+
+                    group.GetDockGroupDescendants()
+                         .OfType<ILeafDockObj>()
+                         .Where(item => item.TheDockManager == oldDockManager)
+                         .ToList()
+                         .DoForEach(item => oldDockManager.DockLeafObjs.Remove(item));
                 }
 
                 if (dockManager != null)
                 {
-                    dockManager.DockLeafObjs.Add(group);
+                    if (!group.GetDockGroupAncestors().Any(item => item is ILeafDockObj))
+                    {
+                        dockManager.DockLeafObjs.Add(group);
+                    }
                 }
             }
         }
@@ -80,25 +91,5 @@ namespace NP.AvaloniaDock
                 "DockSide"
             );
         #endregion DockSide Attached Avalonia Property
-
-
-        #region DockContext Attached Avalonia Property
-        public static object GetDockContext(AvaloniaObject obj)
-        {
-            return obj.GetValue(DockContextProperty);
-        }
-
-        public static void SetDockContext(AvaloniaObject obj, object value)
-        {
-            obj.SetValue(DockContextProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> DockContextProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>
-            (
-                "DockContext"
-            );
-        #endregion DockContext Attached Avalonia Property
-
     }
 }

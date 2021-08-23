@@ -16,7 +16,7 @@ namespace NP.AvaloniaDock
 {
     public class DockTabbedGroup : TemplatedControl, ILeafDockObj
     {
-        public DockManager TheDockManager
+        public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
             set => DockAttachedProperties.SetTheDockManager(this, value);
@@ -106,6 +106,12 @@ namespace NP.AvaloniaDock
         public void ClearSelectedItem()
         {
             _singleSelectionBehavior.TheSelectedItem = null!;
+        }
+
+        public void ClearSelfOnRemove()
+        {
+            ClearSelectedItem();
+            this.TheDockManager = null;
         }
 
         public void SelectFirst()
