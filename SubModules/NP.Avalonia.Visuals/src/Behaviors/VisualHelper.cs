@@ -16,7 +16,7 @@ namespace NP.Avalonia.Visuals.Behaviors
 
             TItem tabMouseOver =
                     itemContainer
-                        .GetVisualDescendants()
+                        .GetSelfAndVisualDescendants()
                         .OfType<TItem>()
                         .FirstOrDefault(tab => tab.IsPointerWithinControl(e));
 

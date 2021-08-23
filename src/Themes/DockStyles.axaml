@@ -89,7 +89,8 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="np:DockItemHeaderControl">
-          <Grid>
+          <Grid x:Name="PART_HeaderPanel"
+                Background="Transparent">
             <ContentPresenter x:Name="Header"
                               Content="{TemplateBinding Content}"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -259,6 +260,7 @@
             <Grid RowDefinitions="Auto, Auto"
                   IsVisible="{Binding Path=ShowChildHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
               <np:DockItemHeaderControl x:Name="Header"
+                                        np:DragHeaderBehavior.IsSet="True"
                                         Content="{Binding Path=Header}"
                                         ContentTemplate="{Binding Path=HeaderTemplate}"
                                         Height="28"/>

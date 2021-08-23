@@ -1,12 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NP.AvaloniaDock
 {
-    public class DragTabBehavior : DragItemBehavior<TabItem>
+    public class DragTabBehavior : DragTabItemBehavior<TabItem>
     {
         #region IsSet Attached Avalonia Property
         public static void SetIsSet(AvaloniaObject obj, bool value)

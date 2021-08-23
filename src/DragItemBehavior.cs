@@ -1,24 +1,19 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
-using NP.Avalonia.Visuals.Controls;
 using NP.Utilities;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class DragItemBehavior<TItem>
+    public abstract class DragItemBehavior<TItem>
         where TItem : Control, IControl
     {
         protected static DragItemBehavior<TItem>? Instance { get; set; }
+
         public static bool GetIsSet(AvaloniaObject obj)
         {
             return obj.GetValue(IsSetProperty);
@@ -57,18 +52,15 @@ namespace NP.AvaloniaDock
 
         private bool _allowDrag = false;
 
-        private TItem? _startItem;
+        protected TItem? _startItem;
 
-        private DockItem? _draggedDockItem;
+        protected DockItem? _draggedDockItem;
 
-        private Func<TItem, DockItem> _dockItemGetter;
-        private Func<DockItem, IList<IDockGroup>> _itemsListGetter;
+        protected Func<TItem, DockItem> _dockItemGetter;
 
-        public DragItemBehavior(Func<TItem, DockItem> dockItemGetter, Func<DockItem, IList<IDockGroup>> itemsListGetter)
+        public DragItemBehavior(Func<TItem, DockItem> dockItemGetter)
         {
             _dockItemGetter = dockItemGetter;
-
-            _itemsListGetter = itemsListGetter;
         }
 
         private void Control_PointerPressed(object sender, PointerPressedEventArgs e)
@@ -89,16 +81,16 @@ namespace NP.AvaloniaDock
             itemsContainer.AddHandler
             (
                 Control.PointerMovedEvent,
-                DragControl_PointerMoved!,
+                OnDragPointerMoved!,
                 RoutingStrategies.Bubble,
-                true);
+                false);
 
             itemsContainer.AddHandler
             (
                 Control.PointerReleasedEvent,
                 ClearHandlers!,
                 RoutingStrategies.Bubble,
-                true);
+                false);
 
             _allowDrag = false;
         }
@@ -113,11 +105,12 @@ namespace NP.AvaloniaDock
             Control control = (Control)sender;
 
             control.RemoveHandler(Control.PointerReleasedEvent, ClearHandlers!);
-            control.RemoveHandler(Control.PointerMovedEvent, DragControl_PointerMoved!);
+            control.RemoveHandler(Control.PointerMovedEvent, OnDragPointerMoved!);
         }
 
+        protected abstract bool MoveItemWithinContainer(Control itemsContainer, PointerEventArgs e);
 
-        private void DragControl_PointerMoved(object sender, PointerEventArgs e)
+        protected virtual void OnDragPointerMoved(object sender, PointerEventArgs e)
         {
             if (_startItem == null)
             {
@@ -126,7 +119,7 @@ namespace NP.AvaloniaDock
 
             Control itemsContainer = (Control)sender;
 
-            DockManager dockManager = DockAttachedProperties.GetTheDockManager(itemsContainer);
+            DockManager dockManager = _draggedDockItem!.TheDockManager!;
 
             Point2D currentPoint = e.GetPosition(itemsContainer).ToPoint2D();
 
@@ -140,60 +133,21 @@ namespace NP.AvaloniaDock
             if (CurrentScreenPointBehavior.CapturedControl != itemsContainer || !_allowDrag)
                 return;
 
-            Point pointerPositionWithinItemsContainer = e.GetPosition(itemsContainer);
+            bool allDone = MoveItemWithinContainer(itemsContainer, e);
 
-            IList<IDockGroup> itemsList = _itemsListGetter.Invoke(_draggedDockItem!);
-
-            if (itemsContainer.IsPointWithinControl(pointerPositionWithinItemsContainer))
+            if (allDone)
             {
-                var siblingTabs =
-                    itemsContainer.GetVisualDescendants().OfType<TItem>().ToList();
-
-                TItem? tabMouseOver =
-                    siblingTabs?.FirstOrDefault(tab => tab.IsPointerWithinControl(e));
-
-                if (tabMouseOver != null && tabMouseOver != _startItem)
-                {
-                    int draggedDockItemIdx = itemsList.IndexOf(_draggedDockItem);
-
-                    DockItem dropDockItem = _dockItemGetter(tabMouseOver);
-                    int dropIdx = itemsList!.IndexOf(dropDockItem);
-
-                    itemsList?.Remove(_draggedDockItem);
-
-                    itemsList?.Insert(dropIdx, _draggedDockItem);
-
-                    _draggedDockItem!.IsSelected = true;
-                }
+                return;
             }
-            else
-            {
-                // remove from the current items
-                itemsList?.Remove(_draggedDockItem);
 
-                _draggedDockItem.CleanSelfOnRemove();
+            // remove from the current items
+            _draggedDockItem?.RemoveItselfFromParent();
 
-                // create the window
-                ClearHandlers(sender);
+            // create the window
+            ClearHandlers(sender);
 
-                DockWindow dockWindow = new DockWindow(dockManager);
-
-                var pointerScreenPosition = itemsContainer.PointToScreen(pointerPositionWithinItemsContainer);
-
-                dockWindow.Width = 400;
-                dockWindow.Height = 300;
-
-                dockWindow.TheDockGroup.DockChildren.Add(_draggedDockItem!);
-
-                dockWindow.CustomHeaderIcon = null;
-                dockWindow.Title = _draggedDockItem.Header?.ToString();
-                dockWindow.TitleClasses = "WindowTitle";
-
-                dockWindow.SetMovePtr();
-
-                dockWindow.Show();
-                dockWindow.Activate();
-            }
+            // create the window
+            dockManager.CreateDockItemWindow(_draggedDockItem!);
         }
     }
 }
