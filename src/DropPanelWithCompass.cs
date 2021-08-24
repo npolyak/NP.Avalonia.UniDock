@@ -37,13 +37,33 @@ namespace NP.AvaloniaDock
 
             if (isVisibleChange.NewValue.Value == true)
             {
-                StartPointerDetection();
+                if (CanStartPointerDetection)
+                {
+                    StartPointerDetection();
+                }
             }
             else
             {
                 FinishPointerDetection();
             }
         }
+
+
+        #region CanStartPointerDetection Styled Avalonia Property
+        public bool CanStartPointerDetection
+        {
+            get { return GetValue(CanStartPointerDetectionProperty); }
+            set { SetValue(CanStartPointerDetectionProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanStartPointerDetectionProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, bool>
+            (
+                nameof(CanStartPointerDetection), 
+                true
+            );
+        #endregion CanStartPointerDetection Styled Avalonia Property
+
 
         private DockCompass? TheCompass => 
             this.GetVisualDescendants()

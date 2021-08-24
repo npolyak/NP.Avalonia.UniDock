@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Generators;
+using NP.Avalonia.Visuals.Controls;
 
 namespace NP.AvaloniaDock
 {
@@ -8,6 +9,15 @@ namespace NP.AvaloniaDock
         public DockTabItemContainerGenerator(DockTabsPresenter owner) : 
             base(owner, ContentControl.ContentProperty, ContentControl.ContentTemplateProperty)
         {
+        }
+
+        protected override IControl CreateContainer(object item)
+        {
+            IControl control = base.CreateContainer(item);
+
+            control.Classes = new Classes("Dock");
+
+            return control;
         }
     }
 }

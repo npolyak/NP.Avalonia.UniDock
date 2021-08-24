@@ -107,6 +107,13 @@ namespace NP.AvaloniaDock
 
         public void CleanSelfOnRemove()
         {
+            this.DropPanel?.FinishPointerDetection();
+
+            if (this.DropPanel != null)
+            {
+                this.DropPanel.CanStartPointerDetection = false;
+            }
+
             if (Header is IControl headerControl)
             {
                 headerControl.DisconnectVisualParentContentPresenter();
@@ -118,8 +125,6 @@ namespace NP.AvaloniaDock
             }
 
             this.TheDockManager = null;
-
-            this.DropPanel?.FinishPointerDetection();
 
             if (this.TheVisual != null)
             {

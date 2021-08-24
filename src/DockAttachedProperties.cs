@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using NP.Utilities;
 using System;
 using System.Linq;
@@ -91,5 +92,26 @@ namespace NP.AvaloniaDock
                 "DockSide"
             );
         #endregion DockSide Attached Avalonia Property
+
+
+        #region IconButtonForeground Attached Avalonia Property
+        public static IBrush GetIconButtonForeground(AvaloniaObject obj)
+        {
+            return obj.GetValue(IconButtonForegroundProperty);
+        }
+
+        public static void SetIconButtonForeground(AvaloniaObject obj, IBrush value)
+        {
+            obj.SetValue(IconButtonForegroundProperty, value);
+        }
+
+        public static readonly AttachedProperty<IBrush> IconButtonForegroundProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>
+            (
+                "IconButtonForeground"
+            );
+        #endregion IconButtonForeground Attached Avalonia Property
+
+
     }
 }

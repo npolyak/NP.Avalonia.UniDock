@@ -8,6 +8,17 @@
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
         <ResourceInclude Source="avares://NP.AvaloniaDock/Themes/DockGeometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
+      
+      <Color x:Key="DockMouseOverColor">#FF1C97EA</Color>
+      <Color x:Key="DockSelectedColor">#FF007ACC</Color>
+      <Color x:Key="DockHeaderColor">#FFEEEEF2</Color>
+
+      <SolidColorBrush x:Key="DockMouseOverBrush"
+                       Color="{StaticResource DockMouseOverColor}"/>
+      <SolidColorBrush x:Key="DockSelectedBrush"
+                       Color="{StaticResource DockSelectedColor}"/>
+      <SolidColorBrush x:Key="DockHeaderBrush"
+                     Color="{StaticResource DockHeaderColor}"/>
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
@@ -16,15 +27,21 @@
     <Setter Property="np:ClassesBehavior.InsertClasses"
             Value="WindowIconButton IconButton"/>
     <Setter Property="Width"
-            Value="20"/>
+            Value="15"/>
     <Setter Property="Height"
-            Value="20"/>
+            Value="15"/>
     <Setter Property="np:AttachedProperties.IconData"
             Value="{StaticResource CloseIcon}"/>
     <Setter Property="np:CallAction.TheEvent"
             Value="{x:Static Button.ClickEvent}"/>
     <Setter Property="np:CallAction.MethodName"
             Value="Remove"/>
+    <Setter Property="np:AttachedProperties.IconMargin"
+            Value="3"/>
+    <Setter Property="np:AttachedProperties.IconWidth"
+            Value="10"/>
+    <Setter Property="np:AttachedProperties.IconHeight"
+            Value="10"/>
   </Style>
   
   <Style Selector="local|DockSideControl">
@@ -90,7 +107,7 @@
       <Setter.Value>
         <ControlTemplate TargetType="np:DockItemHeaderControl">
           <Grid x:Name="PART_HeaderPanel"
-                Background="Transparent">
+                Background="{TemplateBinding Background}">
             <ContentPresenter x:Name="Header"
                               Content="{TemplateBinding Content}"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -109,12 +126,14 @@
     </Setter>
   </Style>
 
-  <Style Selector="TabItem">
+  <Style Selector="TabItem.Dock">
     <Setter Property="Background" Value="Transparent"/>
-    <Setter Property="FontSize" Value="{DynamicResource FontSizeLarge}"/>
-    <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundLowBrush}"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Foreground" Value="Black"/>
     <Setter Property="HorizontalContentAlignment" Value="Left"/>
-    <Setter Property="Padding" Value="8"/>
+    <Setter Property="Padding" Value="6,2,3,2"/>
+    <Setter Property="np:DockAttachedProperties.IconButtonForeground"
+            Value="Transparent"/>
     <Setter Property="IsSelected"
             Value="{Binding Path=Content.IsSelected, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
     <Setter Property="np:CallAction.TheEvent"
@@ -142,11 +161,31 @@
               Padding="{TemplateBinding Padding}"/>
           <Button x:Name="CloseButton"
                   Classes="CloseButton"
+                  Foreground="{Binding Path=(np:DockAttachedProperties.IconButtonForeground), RelativeSource={RelativeSource Mode=TemplatedParent}}"
                   Grid.Column="1"
-                  Margin="10"/>
+                  Margin="6,2,2,2"/>
         </Grid>
       </ControlTemplate>
     </Setter>
+  </Style>
+
+  <Style Selector="TabItem.Dock:pointerover">
+    <Setter Property="Background"
+            Value="{StaticResource DockMouseOverBrush}"/>
+    <Setter Property="Foreground"
+            Value="White"/>
+    <Setter Property="np:DockAttachedProperties.IconButtonForeground"
+            Value="#DFFFFFFF"/>
+  </Style>
+
+
+  <Style Selector="TabItem.Dock[IsSelected=True]">
+    <Setter Property="Background"
+            Value="{StaticResource DockSelectedBrush}"/>
+    <Setter Property="Foreground"
+            Value="White"/>
+    <Setter Property="np:DockAttachedProperties.IconButtonForeground"
+            Value="White"/>
   </Style>
 
   <Style Selector="local|DropDockSideControl">
@@ -227,9 +266,20 @@
                                        local:DockAttachedProperties.TheDockManager="{Binding Path=(local:DockAttachedProperties.TheDockManager),
                                                                                              RelativeSource={RelativeSource TemplatedParent}}"
                                        DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                                       VerticalAlignment="Top"
                                        Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
               <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Height="2"
+                      Background="{StaticResource DockSelectedColor}"
+                      IsVisible="{Binding Path=NumberDockChildren, 
+                                          Converter={x:Static np:IntConverters.IsPositiveConverter},
+                                          RelativeSource={RelativeSource TemplatedParent}}"/>
                 <ContentPresenter
+                    Grid.Row="1"
                     Name="PART_SelectedContentHost"
                     Margin="{TemplateBinding Padding}"
                     Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
@@ -237,6 +287,7 @@
                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                 <local:DropPanelWithCompass 
+                      Grid.Row="1"
                       IsVisible="{Binding Path=ShowCompass, 
                                           RelativeSource= {RelativeSource TemplatedParent}}"/>
               </Grid>
@@ -260,12 +311,13 @@
             <Grid RowDefinitions="Auto, Auto"
                   IsVisible="{Binding Path=ShowChildHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
               <np:DockItemHeaderControl x:Name="Header"
+                                        Background="{StaticResource DockHeaderBrush}"
                                         np:DragHeaderBehavior.IsSet="True"
                                         Content="{Binding Path=Header}"
                                         ContentTemplate="{Binding Path=HeaderTemplate}"
                                         Height="28"/>
               <Rectangle HorizontalAlignment="Stretch"
-                         Height="2"
+                         Height="0"
                          Grid.Row="1"
                          Fill="Black"/>
             </Grid>
@@ -276,7 +328,9 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
                                 Margin="{Binding Path=DockContext.Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
-              <local:DropPanelWithCompass IsVisible="{Binding Path=DockContext.ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"/>
+              <local:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
+                                          CanStartPointerDetection="{TemplateBinding CanStartPointerDetection}"
+                                          IsVisible="{Binding Path=DockContext.ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"/>
             </Grid>
           </Grid>
         </ControlTemplate>

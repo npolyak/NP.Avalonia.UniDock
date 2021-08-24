@@ -15,6 +15,7 @@ namespace NP.AvaloniaDock
         private IList<DockSideControl>? SideControls { get; set; }
 
         private IDisposable? _subscriptionDisposable = null;
+
         public void StartPointerDetection()
         {
             SideControls = 

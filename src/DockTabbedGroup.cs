@@ -22,7 +22,7 @@ namespace NP.AvaloniaDock
             set => DockAttachedProperties.SetTheDockManager(this, value);
         }
 
-        IDisposable? _behavior;
+        IDisposable? _setItemsBehavior;
 
         public event Action<IRemovable>? RemoveEvent;
 
@@ -65,6 +65,25 @@ namespace NP.AvaloniaDock
 
         public IList<IDockGroup>? DockChildren => Items;
 
+        #region NumberDockChildren Direct Avalonia Property
+        public static readonly DirectProperty<DockTabbedGroup, int> NumberDockChildrenProperty =
+            AvaloniaProperty.RegisterDirect<DockTabbedGroup, int>
+            (
+                nameof(NumberDockChildren),
+                o => o.NumberDockChildren,
+                (o, c) => o.NumberDockChildren = c
+            );
+        #endregion NumberDockChildren Direct Avalonia Property
+
+        private int _numChildren = 0;
+        public int NumberDockChildren
+        {
+            get => _numChildren;
+            private set
+            {
+                SetAndRaise(NumberDockChildrenProperty, ref _numChildren, value);
+            }
+        }
         public DropPanelWithCompass? DropPanel =>
             this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
 
@@ -193,20 +212,37 @@ namespace NP.AvaloniaDock
             );
         #endregion ShowCompass Styled Avalonia Property
 
-
+        IDisposable? _behavior;
         private void SetBehavior()
         {
-            _behavior = new SetDockGroupBehavior<IDockGroup>(this, Items);
+            _setItemsBehavior = new SetDockGroupBehavior<IDockGroup>(this, Items);
 
             _mimicCollectionBehavior.InputCollection = Items;
             _singleSelectionBehavior.TheCollection = _mimicCollectionBehavior.OutputCollection;
+
+            _behavior = Items?.AddBehavior(OnItemAdded, OnItemRemoved);
+        }
+
+        private void SetNumberItems()
+        {
+            NumberDockChildren = Items?.Count ?? 0;
+        }
+
+        private void OnItemAdded(IDockGroup obj)
+        {
+            SetNumberItems();
+        }
+
+        private void OnItemRemoved(IDockGroup obj)
+        {
+            SetNumberItems();
         }
 
         private void DisposeBehavior()
         {
-            _behavior?.Dispose();
+            _setItemsBehavior?.Dispose();
 
-            _behavior = null;
+            _setItemsBehavior = null;
 
             _singleSelectionBehavior.TheCollection = null;
 

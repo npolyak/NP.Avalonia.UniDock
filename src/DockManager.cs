@@ -121,9 +121,9 @@ namespace NP.AvaloniaDock
             }
 
             draggedGroup.RemoveItselfFromParent();
-            IDockGroup parentGroup = CurrentLeafObjToInsertWithRespectTo.DockParent!;
+            IDockGroup parentGroup = CurrentLeafObjToInsertWithRespectTo!.DockParent!;
 
-            Orientation orientation = (Orientation) dock.ToOrientation();
+            Orientation orientation = (Orientation) dock.ToOrientation()!;
 
             int childIdx =
                 parentGroup

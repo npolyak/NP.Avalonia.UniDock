@@ -35,7 +35,7 @@ namespace NP.AvaloniaDock
                     Control.PointerPressedEvent,
                     Instance!.Control_PointerPressed!,
                     RoutingStrategies.Bubble,
-                    true);
+                    false);
             }
             else
             {
@@ -144,10 +144,8 @@ namespace NP.AvaloniaDock
             _draggedDockItem?.RemoveItselfFromParent();
 
             // create the window
-            ClearHandlers(sender);
-
-            // create the window
             dockManager.CreateDockItemWindow(_draggedDockItem!);
+            ClearHandlers(sender);
         }
     }
 }
