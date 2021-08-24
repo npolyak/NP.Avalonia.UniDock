@@ -2,11 +2,16 @@
 using NP.Concepts.Behaviors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NP.AvaloniaDock
 {
     public interface IDockGroup : IControl, IRemovable
     {
+        public string DockId { get; set; }
+
+        event Action<IDockGroup> DockIdChanged;
+
         DockManager? TheDockManager { get; }
 
         IDockGroup? DockParent { get; set; }
@@ -14,6 +19,8 @@ namespace NP.AvaloniaDock
         IList<IDockGroup> DockChildren { get; }
 
         bool ShowChildHeader => true;
+
+        bool IsPermanent => false;
 
         void CleanSelfOnRemove()
         {
@@ -47,6 +54,13 @@ namespace NP.AvaloniaDock
             }
 
             item.CleanSelfOnRemove();
+        }
+
+        public static bool HasLeafAncestor(this ILeafDockObj item)
+        {
+            return 
+                item.GetDockGroupAncestors()
+                    .Any(ancestor => ancestor is ILeafDockObj);
         }
     }
 }

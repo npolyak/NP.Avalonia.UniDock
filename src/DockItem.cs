@@ -17,6 +17,38 @@ namespace NP.AvaloniaDock
         ILeafDockObj,
         ISelectableItem<DockItem>
     {
+        public event Action<IDockGroup>? DockIdChanged;
+
+        #region DockId Styled Avalonia Property
+        public string DockId
+        {
+            get { return GetValue(DockIdProperty); }
+            set { SetValue(DockIdProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> DockIdProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, string>
+            (
+                nameof(DockId)
+            );
+        #endregion Id Styled Avalonia Property
+
+        private void FireDockIdChanged()
+        {
+            DockIdChanged?.Invoke(this);
+        }
+
+        static DockItem()
+        {
+            DockIdProperty.Changed.AddClassHandler<DockItem>((g, e) => g.OnDockIdChanged(e));
+            IsSelectedProperty.Changed.Subscribe(OnIsSelectedChanged);
+        }
+
+        private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            FireDockIdChanged();
+        }
+
         #region IsSelectedProperty Direct Avalonia Property
         public static readonly DirectProperty<DockItem, bool> IsSelectedProperty =
             AvaloniaProperty.RegisterDirect<DockItem, bool>
@@ -71,16 +103,11 @@ namespace NP.AvaloniaDock
         }
 
         public override string ToString() =>
-            $"TheDockItem: {Header?.ToString()} IsSelected={IsSelected}";
+            $"TheDockItem: {DockId} {Header?.ToString()} IsSelected={IsSelected}";
 
         private void FireSelectionChanged()
         {
             IsSelectedChanged?.Invoke(this);
-        }
-
-        static DockItem()
-        {
-            IsSelectedProperty.Changed.Subscribe(OnIsSelectedChanged);
         }
 
         private static void OnIsSelectedChanged(AvaloniaPropertyChangedEventArgs<bool> change)

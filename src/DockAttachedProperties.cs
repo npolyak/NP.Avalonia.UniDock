@@ -52,24 +52,25 @@ namespace NP.AvaloniaDock
                     dockManager.DockWindows.Add(window);
                 }
             }
-            else if (sender is ILeafDockObj group)
+            else if (sender is IDockGroup group)
             {
                 if (oldDockManager != null)
                 {
-                    oldDockManager.DockLeafObjs.Remove(group);
+                    if (group is ILeafDockObj leafObj)
+                    {
+                        oldDockManager.DockLeafObjs.Remove(leafObj);
+                    }
 
-                    group.GetDockGroupDescendants()
-                         .OfType<ILeafDockObj>()
-                         .Where(item => item.TheDockManager == oldDockManager)
-                         .ToList()
-                         .DoForEach(item => oldDockManager.DockLeafObjs.Remove(item));
+                    oldDockManager.RemoveGroup(group);
                 }
 
                 if (dockManager != null)
                 {
-                    if (!group.GetDockGroupAncestors().Any(item => item is ILeafDockObj))
+                    dockManager.AddGroup(group);
+
+                    if (group is ILeafDockObj leafObj)
                     {
-                        dockManager.DockLeafObjs.Add(group);
+                        dockManager.DockLeafObjs.Add(leafObj);
                     }
                 }
             }

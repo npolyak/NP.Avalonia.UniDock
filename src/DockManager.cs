@@ -9,16 +9,29 @@ using NP.Utilities;
 using Avalonia.VisualTree;
 using Avalonia.Layout;
 using Avalonia.Media;
+using System.Collections.ObjectModel;
+using NP.Concepts.Behaviors;
 
 namespace NP.AvaloniaDock
 {
     public class DockManager
     {
+        public string? Id { get; set; }
+
         public IList<DockWindow> DockWindows { get; } =
             new List<DockWindow>();
 
+        private IList<IDockGroup> _allGroups = new ObservableCollection<IDockGroup>();
+        public IEnumerable<IDockGroup> AllGroups => _allGroups;
+        internal void AddGroup(IDockGroup group) => _allGroups.Add(group);
+        internal void RemoveGroup(IDockGroup group) => _allGroups.Remove(group);
+
+
         public IList<ILeafDockObj> DockLeafObjs { get; } =
             new List<ILeafDockObj>();
+
+        public IEnumerable<ILeafDockObj> DockLeafObjsWithoutLeafParents =>
+            DockLeafObjs.Where(leaf => !leaf.HasLeafAncestor()).ToList();
 
         DockWindow? _draggedWindow;
         public DockWindow? DraggedWindow
@@ -47,7 +60,7 @@ namespace NP.AvaloniaDock
                 return;
 
             _currentDockGroups = 
-                DockLeafObjs
+                DockLeafObjsWithoutLeafParents
                 .Except(_draggedWindow.LeafItems)
                 .Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
 
@@ -147,6 +160,46 @@ namespace NP.AvaloniaDock
             }
 
             DraggedWindow?.Close();
+        }
+
+        IDisposable _behavior;
+        public DockManager()
+        {
+            _behavior = AllGroups.AddBehavior(OnItemAdded, OnItemRemoved);
+        }
+
+        private void VerifyDockIdUnique(IDockGroup group)
+        {
+            if (AllGroups.Count(g => g.DockId == group.DockId) > 1)
+            {
+                throw new Exception($"Programming Error - two or more groups cannot have the same Id {group.DockId}. Id should be unique within the DockManager.");
+            }
+        }
+
+        private void AddedGroup_DockIdChanged(IDockGroup group)
+        {
+            VerifyDockIdUnique(group);
+        }
+
+        private void OnItemAdded(IDockGroup addedGroup)
+        {
+            if (addedGroup.DockId == null)
+            {
+                string prefix = addedGroup.GetType().Name;
+
+                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix);
+            }
+            else
+            {
+                VerifyDockIdUnique(addedGroup);
+            }
+
+            addedGroup.DockIdChanged += AddedGroup_DockIdChanged;
+        }
+
+        private void OnItemRemoved(IDockGroup removedGroup)
+        {
+            removedGroup.DockIdChanged -= AddedGroup_DockIdChanged;
         }
 
         public void CompleteDragDropAction()

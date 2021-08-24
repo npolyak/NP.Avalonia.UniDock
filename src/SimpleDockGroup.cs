@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace NP.AvaloniaDock
 {
-    public class SimpleDockGroup : Control, IDockGroup, IDisposable
+    public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
         #region NumberDockChildren Direct Avalonia Property
         public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
@@ -80,6 +80,10 @@ namespace NP.AvaloniaDock
         public IList<IDockGroup> DockChildren { get; } = 
             new ObservableCollection<IDockGroup>();
 
+        static SimpleDockGroup()
+        {
+            DockIdProperty.Changed.AddClassHandler<SimpleDockGroup>((g, e) => g.OnDockIdChanged(e));
+        }
 
         private IDisposable? _addRemoveChildBehavior;
         private SetDockGroupBehavior? _setBehavior;

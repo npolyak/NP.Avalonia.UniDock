@@ -16,6 +16,37 @@ namespace NP.AvaloniaDock
 {
     public class DockTabbedGroup : TemplatedControl, ILeafDockObj
     {
+        public event Action<IDockGroup>? DockIdChanged;
+
+        #region DockId Styled Avalonia Property
+        public string DockId
+        {
+            get { return GetValue(DockIdProperty); }
+            set { SetValue(DockIdProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> DockIdProperty =
+            AvaloniaProperty.Register<DockTabbedGroup, string>
+            (
+                nameof(DockId)
+            );
+        #endregion Id Styled Avalonia Property
+
+        private void FireDockIdChanged()
+        {
+            DockIdChanged?.Invoke(this);
+        }
+
+        static DockTabbedGroup()
+        {
+            DockIdProperty.Changed.AddClassHandler<DockTabbedGroup>((g, e) => g.OnDockIdChanged(e));
+        }
+
+        private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            FireDockIdChanged();
+        }
+
         public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);

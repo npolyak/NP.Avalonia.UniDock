@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace NP.AvaloniaDock
 {
-    public class DockStackGroup : Control, IDockGroup, IDisposable
+    public class DockStackGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
@@ -57,6 +57,11 @@ namespace NP.AvaloniaDock
         public void Remove()
         {
             RemoveEvent?.Invoke(this);
+        }
+
+        static DockStackGroup()
+        {
+            DockIdProperty.Changed.AddClassHandler<DockStackGroup>((g, e) => g.OnDockIdChanged(e));
         }
 
         IDisposable? _behavior;

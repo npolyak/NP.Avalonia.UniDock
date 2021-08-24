@@ -22,9 +22,10 @@
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
       <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-        <np:DockTabbedGroup>
+        <np:DockTabbedGroup DockId="Bla">
           <np:DockTabbedGroup.Items>
-            <np:DockItem Header="Tab1">
+            <np:DockItem Header="Tab1"
+                         DockId="Bla1">
               <TextBlock Text="Hello World!"/>
             </np:DockItem>
             <np:DockItem Header="Tab2">
