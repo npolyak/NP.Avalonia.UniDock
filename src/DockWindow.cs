@@ -30,7 +30,7 @@ namespace NP.AvaloniaDock
 
         public DockWindow(DockManager dockManager)
         {
-            Classes = new Classes(new[] { "PlainCustomWindow" });
+            Classes = new Classes(new[] { "PlainDockWindow" });
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
             DockAttachedProperties.SetTheDockManager(this, dockManager);

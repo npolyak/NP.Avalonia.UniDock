@@ -36,24 +36,25 @@
           </np:DockTabbedGroup.Items>
         </np:DockTabbedGroup>
       </np:SimpleDockGroup>
-      <np:DockTabbedGroup
-            Grid.Column="1"
-            np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-        <np:DockTabbedGroup.Items>
-          <np:DockItem Header="Tab4" Content="Hello World!">
-            <np:DockItem.ContentTemplate>
-              <DataTemplate>
-                <Grid RowDefinitions="Auto, *">
-                  <TextBlock Foreground="Red"
-                             FontSize="20"
-                             Text="{Binding}"/>
-                </Grid>
-              </DataTemplate>
-            </np:DockItem.ContentTemplate>
-          </np:DockItem>
-          <np:DockItem Header="Tab5" Content="Hi World!"/>
-        </np:DockTabbedGroup.Items>
-      </np:DockTabbedGroup>
+      <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+                          Grid.Column="1">
+        <np:DockTabbedGroup>
+          <np:DockTabbedGroup.Items>
+            <np:DockItem Header="Tab4" Content="Hello World!">
+              <np:DockItem.ContentTemplate>
+                <DataTemplate>
+                  <Grid RowDefinitions="Auto, *">
+                    <TextBlock Foreground="Red"
+                               FontSize="20"
+                               Text="{Binding}"/>
+                  </Grid>
+                </DataTemplate>
+              </np:DockItem.ContentTemplate>
+            </np:DockItem>
+            <np:DockItem Header="Tab5" Content="Hi World!"/>
+          </np:DockTabbedGroup.Items>
+        </np:DockTabbedGroup>
+      </np:SimpleDockGroup>
     </Grid>
     <StackPanel Grid.Row="1">
       <Grid Width="100"

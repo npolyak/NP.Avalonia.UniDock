@@ -8,7 +8,7 @@
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
         <ResourceInclude Source="avares://NP.AvaloniaDock/Themes/DockGeometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      
+
       <Color x:Key="DockMouseOverColor">#FF1C97EA</Color>
       <Color x:Key="DockSelectedColor">#FF007ACC</Color>
       <Color x:Key="DockHeaderColor">#FFEEEEF2</Color>
@@ -367,5 +367,18 @@
   </Style>
   <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right]">
     <Setter Property="Padding" Value="0 0 4 0"/>
+  </Style>
+
+  <Style Selector=":is(np|CustomWindow).PlainDockWindow">
+    <Setter Property="HeaderBackground"
+            Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="HeaderHeight"
+            Value="30"/>
+    <Setter Property="HeaderSeparatorHeight"
+            Value="2"/>
+    <Setter Property="HeaderSeparatorBrush"
+            Value="Transparent"/>
+    <Setter Property="CustomHeaderIconMargin"
+            Value="5"/>
   </Style>
 </Styles>
