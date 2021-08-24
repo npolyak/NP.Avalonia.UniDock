@@ -88,7 +88,7 @@ namespace NP.AvaloniaDock
             AvaloniaProperty.Register<StackGroup<T>, IBrush>
             (
                 nameof(SeparatorBackground),
-                new SolidColorBrush(Colors.Black)
+                new SolidColorBrush(new Color(0xFF, 0xCC, 0xCE, 0xDB))
             );
         #endregion SeparatorBackground Styled Avalonia Property
 

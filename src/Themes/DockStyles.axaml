@@ -12,6 +12,7 @@
       <Color x:Key="DockMouseOverColor">#FF1C97EA</Color>
       <Color x:Key="DockSelectedColor">#FF007ACC</Color>
       <Color x:Key="DockHeaderColor">#FFEEEEF2</Color>
+      <Color x:Key="DockSeparatorColor">#FFCCCEDB</Color>
 
       <SolidColorBrush x:Key="DockMouseOverBrush"
                        Color="{StaticResource DockMouseOverColor}"/>
@@ -19,10 +20,13 @@
                        Color="{StaticResource DockSelectedColor}"/>
       <SolidColorBrush x:Key="DockHeaderBrush"
                      Color="{StaticResource DockHeaderColor}"/>
+      <SolidColorBrush x:Key="DockSeparatorBrush"
+               Color="{StaticResource DockSeparatorColor}"/>
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
-
+ 
+  
   <Style Selector="Button.CloseButton">
     <Setter Property="np:ClassesBehavior.InsertClasses"
             Value="WindowIconButton IconButton"/>
@@ -315,7 +319,7 @@
                                         np:DragHeaderBehavior.IsSet="True"
                                         Content="{Binding Path=Header}"
                                         ContentTemplate="{Binding Path=HeaderTemplate}"
-                                        Height="28"/>
+                                        Height="22"/>
               <Rectangle HorizontalAlignment="Stretch"
                          Height="0"
                          Grid.Row="1"
@@ -377,7 +381,7 @@
     <Setter Property="HeaderSeparatorHeight"
             Value="2"/>
     <Setter Property="HeaderSeparatorBrush"
-            Value="Transparent"/>
+            Value="{StaticResource DockSeparatorBrush}"/>
     <Setter Property="CustomHeaderIconMargin"
             Value="5"/>
   </Style>
