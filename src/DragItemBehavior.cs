@@ -140,8 +140,12 @@ namespace NP.AvaloniaDock
                 return;
             }
 
+            IDockGroup? parentItem = _draggedDockItem.DockParent;
+
             // remove from the current items
             _draggedDockItem?.RemoveItselfFromParent();
+
+            parentItem?.Simplify();
 
             // create the window
             dockManager.CreateDockItemWindow(_draggedDockItem!);

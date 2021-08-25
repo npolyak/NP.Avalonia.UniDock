@@ -49,8 +49,12 @@ namespace NP.AvaloniaDock
 
         public IList<IDockGroup> DockChildren { get; } = new ObservableCollection<IDockGroup>();
 
-        private IDockVisualItemGenerator TheDockVisualItemGenerator { get; } =
-            new DockVisualItemGenerator();
+        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } 
+
+        protected virtual void SetDockVisualItemGenerator()
+        {
+            TheDockVisualItemGenerator = new DockVisualItemGenerator();
+        }
 
         public event Action<IRemovable>? RemoveEvent;
 
@@ -77,6 +81,8 @@ namespace NP.AvaloniaDock
 
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
+
+            SetDockVisualItemGenerator();
         }
 
         public void Dispose()
@@ -98,7 +104,7 @@ namespace NP.AvaloniaDock
             SetNumberDockChildren();
 
             IControl newVisualChildToInsert =
-               TheDockVisualItemGenerator.Generate(dockChild);
+               TheDockVisualItemGenerator!.Generate(dockChild);
 
             _stackGroup.Items.Insert(idx, newVisualChildToInsert);
         }
@@ -110,5 +116,12 @@ namespace NP.AvaloniaDock
 
             _stackGroup.Items.RemoveAt(idx);
         }
+
+        void IDockGroup.SimplifySelf()
+        {
+            this.SimplifySelfImpl();
+        }
+
+        public bool AutoDestroy { get; set; } = true;
     }
 }

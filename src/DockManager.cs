@@ -3,23 +3,26 @@ using NP.Avalonia.Visuals.Behaviors;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using Avalonia;
 using NP.Avalonia.Visuals;
 using NP.Utilities;
 using Avalonia.VisualTree;
 using Avalonia.Layout;
-using Avalonia.Media;
 using System.Collections.ObjectModel;
 using NP.Concepts.Behaviors;
+using System.ComponentModel;
 
 namespace NP.AvaloniaDock
 {
     public class DockManager
     {
+        // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
 
-        public IList<DockWindow> DockWindows { get; } =
-            new List<DockWindow>();
+        IList<Window> _windows = new ObservableCollection<Window>();
+        public IEnumerable<Window> Windows => _windows;
+        internal void AddWindow(Window window) => _windows.Add(window);
+        internal void RemoveWindow(Window window) => _windows.Remove(window);
+        
 
         private IList<IDockGroup> _allGroups = new ObservableCollection<IDockGroup>();
         public IEnumerable<IDockGroup> AllGroups => _allGroups;
@@ -162,10 +165,46 @@ namespace NP.AvaloniaDock
             DraggedWindow?.Close();
         }
 
-        IDisposable _behavior;
+        IDisposable _groupsBehavior;
+        IDisposable _windowsBehavior;
         public DockManager()
         {
-            _behavior = AllGroups.AddBehavior(OnItemAdded, OnItemRemoved);
+            _groupsBehavior = 
+                AllGroups.AddBehavior(OnItemAdded, OnItemRemoved);
+
+            _windowsBehavior = 
+                Windows.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Window window = (Window) sender;
+
+            IEnumerable<IDockGroup> dockGroups;
+
+            if (window is DockWindow dockWindow)
+            {
+                dockGroups = dockWindow.TheDockGroup.ToCollection();
+            }
+            else
+            {
+                dockGroups =
+                    window.GetVisualDescendants()
+                      .OfType<IDockGroup>()
+                      .Where(group => group.IsRoot).ToList();
+            }
+
+            dockGroups.DoForEach(group => group.TheDockManager = null);
+        }
+
+        private void OnWindowItemAdded(Window window)
+        {
+            window.Closing += Window_Closing!;
+        }
+
+        private void OnWindowItemRemoved(Window window)
+        {
+            window.Closing -= Window_Closing!;
         }
 
         private void VerifyDockIdUnique(IDockGroup group)

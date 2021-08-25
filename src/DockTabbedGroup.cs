@@ -259,14 +259,16 @@ namespace NP.AvaloniaDock
             NumberDockChildren = Items?.Count ?? 0;
         }
 
-        private void OnItemAdded(IDockGroup obj)
+        private void OnItemAdded(IDockGroup child)
         {
             SetNumberItems();
         }
 
-        private void OnItemRemoved(IDockGroup obj)
+        private void OnItemRemoved(IDockGroup child)
         {
             SetNumberItems();
+
+            child.TheDockManager = null;
         }
 
         private void DisposeBehavior()
@@ -284,5 +286,15 @@ namespace NP.AvaloniaDock
         public IEnumerable<DockItem> LeafItems => Items.NullToEmpty().Cast<DockItem>().ToList();
 
         public IDockGroup? GetContainingGroup() => this;
+
+        public bool AutoDestroy
+        {
+            get; set;
+        } = true;
+
+        void IDockGroup.SimplifySelf()
+        {
+            this.SimplifySelfImpl();
+        }
     }
 }

@@ -36,7 +36,17 @@ namespace NP.AvaloniaDock
             DockAttachedProperties.SetTheDockManager(this, dockManager);
             TheDockGroup.TheDockManager = dockManager;
 
+            TheDockGroup.HasNoChildrenEvent += TheDockGroup_HasNoChildrenEvent;
+
             this.Closing += DockWindow_Closing;
+        }
+
+        private void TheDockGroup_HasNoChildrenEvent(SimpleDockGroup obj)
+        {
+            if ((TheDockGroup as IDockGroup).AutoDestroy)
+            {
+                this.Close();
+            }
         }
 
         private void DockWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)

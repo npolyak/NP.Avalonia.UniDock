@@ -9,6 +9,7 @@
         d:DesignHeight="550"
         Width="700"
         Height="700"
+        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
         x:Class="DockWindowsSample.MainWindow"
         Title="DockWindowsSample">
   <Window.Resources>
@@ -22,7 +23,8 @@
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
       <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-        <np:DockTabbedGroup DockId="Bla">
+        <np:DockTabbedGroup DockId="Bla"
+                            AutoDestroy="False">
           <np:DockTabbedGroup.Items>
             <np:DockItem Header="Tab1"
                          DockId="Bla1">

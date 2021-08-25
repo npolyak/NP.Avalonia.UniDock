@@ -12,7 +12,7 @@ namespace NP.AvaloniaDock
 
         event Action<IDockGroup> DockIdChanged;
 
-        DockManager? TheDockManager { get; }
+        DockManager? TheDockManager { get; set; }
 
         IDockGroup? DockParent { get; set; }
 
@@ -20,11 +20,22 @@ namespace NP.AvaloniaDock
 
         bool ShowChildHeader => true;
 
-        bool IsPermanent => false;
+        bool AutoDestroy { get; }
+
+        bool IsRoot => DockParent == null;
 
         void CleanSelfOnRemove()
         {
+            this.TheDockManager = null;
+        }
 
+        protected void SimplifySelf();
+
+        void Simplify() 
+        {
+            IDockGroup? dockParent = DockParent;
+            SimplifySelf();
+            dockParent?.Simplify();
         }
     }
 
@@ -56,11 +67,46 @@ namespace NP.AvaloniaDock
             item.CleanSelfOnRemove();
         }
 
+        public static int GetNumberChildren(this IDockGroup item)
+        {
+            return item?.DockChildren.Count ?? 0;
+        }
+
         public static bool HasLeafAncestor(this ILeafDockObj item)
         {
             return 
                 item.GetDockGroupAncestors()
                     .Any(ancestor => ancestor is ILeafDockObj);
+        }
+
+        public static void SimplifySelfImpl(this IDockGroup group)
+        {
+            if (!group.AutoDestroy)
+            {
+                return;
+            }
+
+            if (group.GetNumberChildren() == 0)
+            {
+                group.RemoveItselfFromParent();
+            }
+
+            IDockGroup? dockParent = group.DockParent;
+            if (dockParent == null)
+            {
+                return;
+            }
+
+            if (group.GetNumberChildren() == 1)
+            {
+                int idx = dockParent.DockChildren.IndexOf(group);
+                group.RemoveItselfFromParent();
+
+                IDockGroup child = group.DockChildren.First();
+                child.RemoveItselfFromParent();
+
+                dockParent.DockChildren.Insert(idx, child);
+            }
         }
     }
 }

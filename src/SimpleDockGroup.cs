@@ -15,6 +15,8 @@ namespace NP.AvaloniaDock
 {
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
+        public event Action<SimpleDockGroup> HasNoChildrenEvent;
+
         #region NumberDockChildren Direct Avalonia Property
         public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
             AvaloniaProperty.RegisterDirect<SimpleDockGroup, int>
@@ -44,12 +46,16 @@ namespace NP.AvaloniaDock
 
         public bool ShowChildHeader => false;
 
-        private IDockVisualItemGenerator TheDockVisualItemGenerator { get; } =
-            new DockVisualItemGenerator();
+        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; }
+
+        protected virtual void SetDockVisualItemGenerator()
+        {
+            TheDockVisualItemGenerator = new DockVisualItemGenerator();
+        }
 
         public bool ShowChildHeaders { get; } = false;
 
-        public DockManager TheDockManager
+        public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
             set => DockAttachedProperties.SetTheDockManager(this, value);
@@ -96,24 +102,7 @@ namespace NP.AvaloniaDock
             _addRemoveChildBehavior = 
                 DockChildren.AddBehavior(OnChildAdded, OnChildRemoved);
 
-        }
-
-        private void OnChildAdded(IDockGroup newChildToInsert)
-        {
-            // have to remove previous children before adding the new one.
-            // Only one child is allowed
-            var childrenToRemove = DockChildren.Except(newChildToInsert.ToCollection()).ToList();
-
-            childrenToRemove.DoForEach(child => DockChildren.Remove(child));
-
-            IControl newVisualChildToInsert =
-                TheDockVisualItemGenerator.Generate(newChildToInsert);
-
-            ((ISetLogicalParent)newVisualChildToInsert).SetParent(this);
-            VisualChildren.Add(newVisualChildToInsert);
-            LogicalChildren.Add(newVisualChildToInsert);
-
-            NumberDockChildren = DockChildren?.Count() ?? 0;
+            SetDockVisualItemGenerator();
         }
 
         private Control FindVisualChild(IDockGroup dockChild)
@@ -124,8 +113,28 @@ namespace NP.AvaloniaDock
                 control = leafDockChild.GetVisual();
             }
 
-            return (Control) LogicalChildren.OfType<IControl>().FirstOrDefault(item => ReferenceEquals(item, control))!;
+            return (Control)LogicalChildren.OfType<IControl>().FirstOrDefault(item => ReferenceEquals(item, control))!;
         }
+
+
+        private void OnChildAdded(IDockGroup newChildToInsert)
+        {
+            // have to remove previous children before adding the new one.
+            // Only one child is allowed
+            var childrenToRemove = DockChildren.Except(newChildToInsert.ToCollection()).ToList();
+
+            childrenToRemove.DoForEach(child => DockChildren.Remove(child));
+
+            IControl newVisualChildToInsert =
+                TheDockVisualItemGenerator!.Generate(newChildToInsert);
+
+            ((ISetLogicalParent)newVisualChildToInsert).SetParent(this);
+            VisualChildren.Add(newVisualChildToInsert);
+            LogicalChildren.Add(newVisualChildToInsert);
+
+            NumberDockChildren = DockChildren?.Count() ?? 0;
+        }
+
 
         private void OnChildRemoved(IDockGroup childToRemove)
         {
@@ -146,5 +155,15 @@ namespace NP.AvaloniaDock
             _addRemoveChildBehavior?.Dispose();
             _addRemoveChildBehavior = null;
         }
+
+        void IDockGroup.SimplifySelf()
+        {
+            if (NumberDockChildren == 0)
+            {
+                HasNoChildrenEvent?.Invoke(this);
+            }    
+        }
+
+        public bool AutoDestroy { get; set; } = true;
     }
 }

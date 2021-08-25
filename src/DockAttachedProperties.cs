@@ -15,9 +15,9 @@ namespace NP.AvaloniaDock
             return obj.GetValue(TheDockManagerProperty);
         }
 
-        public static void SetTheDockManager(AvaloniaObject obj, DockManager value)
+        public static void SetTheDockManager(AvaloniaObject obj, DockManager? value)
         {
-            obj.SetValue(TheDockManagerProperty, value);
+            obj.SetValue(TheDockManagerProperty!, value);
         }
 
         public static readonly AttachedProperty<DockManager> TheDockManagerProperty =
@@ -44,12 +44,12 @@ namespace NP.AvaloniaDock
             {
                 if (oldDockManager != null)
                 {
-                    oldDockManager.DockWindows.Remove(window);
+                    oldDockManager.RemoveWindow(window);
                 }
 
                 if (dockManager != null)
                 {
-                    dockManager.DockWindows.Add(window);
+                    dockManager.AddWindow(window);
                 }
             }
             else if (sender is IDockGroup group)

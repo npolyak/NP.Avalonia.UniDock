@@ -92,9 +92,15 @@ namespace NP.AvaloniaDock
         public event Action<IRemovable>? RemoveEvent;
         public event Action<DockItem>? IsSelectedChanged;
 
+        public bool AutoDestroy => false;
+
         public void Remove()
         {
+            IDockGroup? parent = DockParent;
+
             RemoveEvent?.Invoke(this);
+
+            parent?.Simplify();
         }
 
         public void Select()
@@ -163,5 +169,10 @@ namespace NP.AvaloniaDock
         }
 
         public IEnumerable<DockItem> LeafItems => this.ToCollection();
+
+        void IDockGroup.SimplifySelf()
+        {
+
+        }
     }
 }
