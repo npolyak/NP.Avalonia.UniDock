@@ -28,7 +28,7 @@ namespace NP.AvaloniaDock.Serialization
         /// child gets.
         /// </summary>
         [XmlAttribute]
-        public double SizeCoefficient { get; set; }
+        public double? SizeCoefficient { get; set; }
 
         #endregion Width or Height Coefficients
 

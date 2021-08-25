@@ -10,6 +10,7 @@ using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System.Collections;
 using System.Collections.ObjectModel;
+using Avalonia.Data;
 
 namespace NP.AvaloniaDock
 {
@@ -144,9 +145,17 @@ namespace NP.AvaloniaDock
 
         private void InsertBeforeOrAfterItem(T? currentItem, T itemToInsert, bool isAfter)
         {
+
+            Binding binding;
             if (currentItem == null)
             {
-                AddFirstChild(itemToInsert);
+                if (NumberChildren > 0)
+                {
+                    throw new Exception("Programming errorin StackGroup.AddFirstChild - the item collection is not empty.");
+                }
+
+                binding = AddDefinition(0, false);
+                this.GridChildren.Insert(0, itemToInsert);
             }
             else
             {
@@ -158,14 +167,16 @@ namespace NP.AvaloniaDock
                 Control separator = GetSeparator();
 
                 AddDefinition(insertSeparatorIdx, true);
-                AddDefinition(insertChildIdx, false);
-
+                binding = AddDefinition(insertChildIdx, false);
 
                 this.GridChildren.Insert(insertSeparatorIdx, separator);
                 this.GridChildren.Insert(insertChildIdx, itemToInsert);
 
                 ResetChildIndexes();
             }
+
+            binding.Mode = BindingMode.OneWay;
+            itemToInsert.Bind(DockAttachedProperties.SizeGridLengthProperty, binding);
         }
 
         private void ResetChildIndexes()
@@ -193,11 +204,14 @@ namespace NP.AvaloniaDock
             }
         }
 
-        private void AddDefinition(int idx, bool isSeparator)
+        private Binding AddDefinition(int idx, bool isSeparator)
         {
+            Binding binding = new Binding();
+
             if (TheOrientation == Orientation.Horizontal)
             {
-                ColumnDefinition definition = new ColumnDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
+                ColumnDefinition definition = 
+                    new ColumnDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
 
                 if (!isSeparator)
                 {
@@ -205,19 +219,26 @@ namespace NP.AvaloniaDock
                 }
 
                 this.GridColumnDefinitions.Insert(idx, definition);
+                binding.Source = definition;
+                binding.Path = "Width";
             }
             else
             {
-                RowDefinition definition = new RowDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
+                RowDefinition definition = 
+                    new RowDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
 
                 if (!isSeparator)
                 {
                     definition.MinHeight = 50;
                 }
 
-
                 this.GridRowDefinitions.Insert(idx, definition);
+
+                binding.Source = definition;
+                binding.Path = "Height";
             }
+
+            return binding;
         }
 
         private void InsertBeforeItem(T? currentItem, T itemToInsert)
@@ -250,19 +271,10 @@ namespace NP.AvaloniaDock
             return gridSplitter;
         }
 
-        private void AddFirstChild(T itemToInsert)
-        {
-            if (NumberChildren > 0)
-            {
-                throw new Exception("Programming errorin StackGroup.AddFirstChild - the item collection is not empty.");
-            }
-
-            AddDefinition(0, false);
-            this.GridChildren.Insert(0, itemToInsert);
-        }
-
         private void RemoveItem(T item)
         {
+            item.ClearValue(DockAttachedProperties.SizeGridLengthProperty);
+
             if (NumberChildren == 1)
             {
                 this.GridChildren.Remove(item);

@@ -188,5 +188,24 @@ namespace NP.AvaloniaDock
                 "TemporaryDockChildWindowOwnerId"
             );
         #endregion TemporaryDockChildWindowOwnerId Attached Avalonia Property
+
+
+        #region SizeGridLength Attached Avalonia Property
+        public static GridLength? GetSizeGridLength(AvaloniaObject obj)
+        {
+            return obj.GetValue(SizeGridLengthProperty);
+        }
+
+        public static void SetSizeGridLength(AvaloniaObject obj, GridLength? value)
+        {
+            obj.SetValue(SizeGridLengthProperty, value);
+        }
+
+        public static readonly AttachedProperty<GridLength?> SizeGridLengthProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, GridLength?>
+            (
+                "SizeGridLength"
+            );
+        #endregion SizeGridLength Attached Avalonia Property
     }
 }
