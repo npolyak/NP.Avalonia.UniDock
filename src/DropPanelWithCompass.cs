@@ -23,46 +23,17 @@ namespace NP.AvaloniaDock
             );
         #endregion DockSide Styled Avalonia Property
 
-        public DropPanelWithCompass()
-        {
-            IsVisibleProperty.Changed.Subscribe(OnIsVisibleChanged);
-        }
-
-        private void OnIsVisibleChanged
-        (
-            AvaloniaPropertyChangedEventArgs<bool> isVisibleChange)
-        {
-            if (isVisibleChange.Sender != this)
-                return;
-
-            if (isVisibleChange.NewValue.Value == true)
-            {
-                if (CanStartPointerDetection)
-                {
-                    StartPointerDetection();
-                }
-            }
-            else
-            {
-                FinishPointerDetection();
-            }
-        }
-
-
-        #region CanStartPointerDetection Styled Avalonia Property
         public bool CanStartPointerDetection
         {
-            get { return GetValue(CanStartPointerDetectionProperty); }
-            set { SetValue(CanStartPointerDetectionProperty, value); }
+            get => TheCompass?.CanStartPointerDetection ?? false;
+            set
+            {
+                if (TheCompass != null)
+                {
+                    TheCompass.CanStartPointerDetection = value;
+                }
+            }
         }
-
-        public static readonly StyledProperty<bool> CanStartPointerDetectionProperty =
-            AvaloniaProperty.Register<DropPanelWithCompass, bool>
-            (
-                nameof(CanStartPointerDetection), 
-                true
-            );
-        #endregion CanStartPointerDetection Styled Avalonia Property
 
 
         private DockCompass? TheCompass => 
@@ -70,10 +41,6 @@ namespace NP.AvaloniaDock
                 .OfType<DockCompass>()
                 .FirstOrDefault();
 
-        public void StartPointerDetection()
-        {
-            TheCompass?.StartPointerDetection();
-        }
 
         public void FinishPointerDetection()
         {

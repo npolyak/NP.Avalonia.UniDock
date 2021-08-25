@@ -26,22 +26,6 @@ namespace NP.AvaloniaDock
             );
         #endregion DockContext Styled Avalonia Property
 
-        #region CanStartPointerDetection Styled Avalonia Property
-        public bool CanStartPointerDetection
-        {
-            get { return GetValue(CanStartPointerDetectionProperty); }
-            set { SetValue(CanStartPointerDetectionProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> CanStartPointerDetectionProperty =
-            AvaloniaProperty.Register<DockItemPresenter, bool>
-            (
-                nameof(CanStartPointerDetection),
-                true
-            );
-        #endregion CanStartPointerDetection Styled Avalonia Property
-
-
         private void OnDockContextChanged(AvaloniaPropertyChangedEventArgs e)
         {
             DockItem? oldDockItem = (DockItem?)e.OldValue;

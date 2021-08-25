@@ -40,7 +40,7 @@ namespace NP.AvaloniaDock
 
             var dockManager = dockManagerChangeArgs.NewValue.Value;
 
-            if (sender is DockWindow window)
+            if (sender is Window window)
             {
                 if (oldDockManager != null)
                 {
@@ -114,5 +114,79 @@ namespace NP.AvaloniaDock
         #endregion IconButtonForeground Attached Avalonia Property
 
 
+        #region WindowId Attached Avalonia Property
+        public static string? GetWindowId(AvaloniaObject obj)
+        {
+            return obj.GetValue(WindowIdProperty);
+        }
+
+        public static void SetWindowId(AvaloniaObject obj, string? value)
+        {
+            obj.SetValue(WindowIdProperty, value);
+        }
+
+        public static readonly AttachedProperty<string?> WindowIdProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string?>
+            (
+                "WindowId"
+            );
+        #endregion WindowId Attached Avalonia Property
+
+        #region DockChildWindowOwner Attached Avalonia Property
+        // specifies if the floating windows that have been pulled out of this window
+        // or out of its floating descendants, should be owned by this window.
+        public static Window GetDockChildWindowOwner(AvaloniaObject obj)
+        {
+            return obj.GetValue(DockChildWindowOwnerProperty);
+        }
+
+        public static void SetDockChildWindowOwner(AvaloniaObject obj, Window value)
+        {
+            obj.SetValue(DockChildWindowOwnerProperty, value);
+        }
+
+        public static readonly AttachedProperty<Window> DockChildWindowOwnerProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, Window>
+            (
+                "DockChildWindowOwner"
+            );
+        #endregion DockChildWindowOwner Attached Avalonia Property
+
+
+        #region TemporaryOwnerWindowId Attached Avalonia Property
+        internal static string? GetTemporaryOwnerWindowId(AvaloniaObject obj)
+        {
+            return obj.GetValue(TemporaryOwnerWindowIdProperty);
+        }
+
+        internal static void SetTemporaryOwnerWindowId(AvaloniaObject obj, string? value)
+        {
+            obj.SetValue(TemporaryOwnerWindowIdProperty, value);
+        }
+
+        internal static readonly AttachedProperty<string?> TemporaryOwnerWindowIdProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string?>
+            (
+                "TemporaryOwnerWindowId"
+            );
+        #endregion TemporaryOwnerWindowId Attached Avalonia Property
+
+        #region TemporaryDockChildWindowOwnerId Attached Avalonia Property
+        internal static string? GetTemporaryDockChildWindowOwnerId(AvaloniaObject obj)
+        {
+            return obj.GetValue(TemporaryDockChildWindowOwnerIdProperty);
+        }
+
+        internal static void SetTemporaryDockChildWindowOwnerId(AvaloniaObject obj, string? value)
+        {
+            obj.SetValue(TemporaryDockChildWindowOwnerIdProperty, value);
+        }
+
+        internal static readonly AttachedProperty<string?> TemporaryDockChildWindowOwnerIdProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string?>
+            (
+                "TemporaryDockChildWindowOwnerId"
+            );
+        #endregion TemporaryDockChildWindowOwnerId Attached Avalonia Property
     }
 }

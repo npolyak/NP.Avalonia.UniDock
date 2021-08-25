@@ -10,6 +10,7 @@
         Width="700"
         Height="700"
         np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
+        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         x:Class="DockWindowsSample.MainWindow"
         Title="DockWindowsSample">
   <Window.Resources>
@@ -60,7 +61,16 @@
       </np:SimpleDockGroup>
     </Grid>
     <StackPanel Grid.Row="1">
-      <Grid Width="100"
+      <Button Width="200"
+              Height="50"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Content="Prepare For Serialization"
+              np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+              np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+              np:CallAction.MethodName="PrepareForSerialization"
+              Margin="0,20"/>
+      <!--<Grid Width="100"
             Height="50">
         <Button x:Name="TheButton"
                 Content="Set Button Bounds"
@@ -84,7 +94,7 @@
                    
         <TextBlock Margin="0,10"
                    Text="{Binding Path=(np:AttachedProperties.CurrentScreenPoint), RelativeSource={RelativeSource AncestorType=Window}}"/>
-      </StackPanel>
+      </StackPanel>-->
     </StackPanel>
   </Grid>
 </Window>

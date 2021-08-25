@@ -21,9 +21,6 @@
 
             dockWindow.SetMovePtr();
 
-            dockWindow.Show();
-            dockWindow.Activate();
-
             return dockWindow;
         }
     }

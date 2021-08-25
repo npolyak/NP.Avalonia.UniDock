@@ -1,12 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Input;
-using Avalonia.Input.Raw;
 using Avalonia.Markup.Xaml;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Avalonia.Visuals.Controls;
+using NP.AvaloniaDock;
+using NP.AvaloniaDock.Serialization;
 using NP.Utilities;
 using System;
 
@@ -58,5 +57,14 @@ namespace DockWindowsSample
             );
         #endregion ButtonBounds Styled Avalonia Property
 
+        public void PrepareForSerialization()
+        {
+            DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
+
+            var dockManagerParams = dockManager.ToParams();
+
+            string serialization = 
+                XmlSerializationUtils.Serialize(dockManagerParams);
+        }
     }
 }

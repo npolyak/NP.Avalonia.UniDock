@@ -170,7 +170,7 @@ namespace NP.AvaloniaDock
         public DockManager()
         {
             _groupsBehavior = 
-                AllGroups.AddBehavior(OnItemAdded, OnItemRemoved);
+                AllGroups.AddBehavior(OnGroupItemAdded, OnGroupItemRemoved);
 
             _windowsBehavior = 
                 Windows.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
@@ -200,6 +200,17 @@ namespace NP.AvaloniaDock
         private void OnWindowItemAdded(Window window)
         {
             window.Closing += Window_Closing!;
+
+            string? windowId = DockAttachedProperties.GetWindowId(window);
+
+            if (windowId == null)
+            {
+                string prefix = window.GetType().Name;
+                windowId =
+                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix);
+
+                DockAttachedProperties.SetWindowId(window, windowId);
+            }
         }
 
         private void OnWindowItemRemoved(Window window)
@@ -220,7 +231,7 @@ namespace NP.AvaloniaDock
             VerifyDockIdUnique(group);
         }
 
-        private void OnItemAdded(IDockGroup addedGroup)
+        private void OnGroupItemAdded(IDockGroup addedGroup)
         {
             if (addedGroup.DockId == null)
             {
@@ -236,7 +247,7 @@ namespace NP.AvaloniaDock
             addedGroup.DockIdChanged += AddedGroup_DockIdChanged;
         }
 
-        private void OnItemRemoved(IDockGroup removedGroup)
+        private void OnGroupItemRemoved(IDockGroup removedGroup)
         {
             removedGroup.DockIdChanged -= AddedGroup_DockIdChanged;
         }

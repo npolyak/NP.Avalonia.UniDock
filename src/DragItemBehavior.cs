@@ -2,10 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
 using System;
+using System.Linq;
 
 namespace NP.AvaloniaDock
 {
@@ -145,10 +147,28 @@ namespace NP.AvaloniaDock
             // remove from the current items
             _draggedDockItem?.RemoveItselfFromParent();
 
+            Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
+
             parentItem?.Simplify();
 
             // create the window
-            dockManager.CreateDockItemWindow(_draggedDockItem!);
+            var dockWindow = dockManager.CreateDockItemWindow(_draggedDockItem!);
+
+            Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
+
+            DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
+
+            if (ownerWindow != null)
+            {
+                dockWindow.Show(parentWindow);
+            }
+            else
+            {
+                dockWindow.Show();
+            }
+
+            dockWindow.Activate();
+
             ClearHandlers(sender);
         }
     }
