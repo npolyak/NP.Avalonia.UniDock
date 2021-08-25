@@ -29,6 +29,9 @@ namespace NP.AvaloniaDock.Serialization
 
         [XmlAttribute]
         public string? DockChildWindowOwnerId { get; set; }
+
+        [XmlAttribute]
+        public string? TopLevelGroupId { get; set; }
     }
 
     public static class WindowParamsHelper
@@ -61,6 +64,11 @@ namespace NP.AvaloniaDock.Serialization
             {
                 wp.DockChildWindowOwnerId =
                     DockAttachedProperties.GetWindowId(dockChildWindowOwnerWindow);
+            }
+
+            if (w is DockWindow dockWindow)
+            {
+                wp.TopLevelGroupId = dockWindow.TheDockGroup.DockId;
             }
 
             return wp;

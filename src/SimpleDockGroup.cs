@@ -15,7 +15,7 @@ namespace NP.AvaloniaDock
 {
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
-        public event Action<SimpleDockGroup> HasNoChildrenEvent;
+        public event Action<SimpleDockGroup>? HasNoChildrenEvent;
 
         #region NumberDockChildren Direct Avalonia Property
         public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
