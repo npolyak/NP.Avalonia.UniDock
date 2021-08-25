@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DockManagerParams xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <WindowsSerializationParams>
+        <WindowParams
+            FullWindowType="DockWindowsSample.MainWindow"
+            Title="DockWindowsSample"
+            TheWindowState="Normal"
+            WindowId="MainWindow_1"
+            DockChildWindowOwnerId="MainWindow_1">
+            <TopLeft
+                X="224"
+                Y="224" />
+            <Size
+                X="700"
+                Y="700" />
+        </WindowParams>
+        <WindowParams
+            FullWindowType="NP.AvaloniaDock.DockWindow"
+            Title="Tab1"
+            TheWindowState="Normal"
+            OwnerWindowId="MainWindow_1"
+            WindowId="DockWindow_2"
+            DockChildWindowOwnerId="MainWindow_1">
+            <TopLeft
+                X="1393"
+                Y="139" />
+            <Size
+                X="606.4"
+                Y="582.4" />
+        </WindowParams>
+    </WindowsSerializationParams>
+</DockManagerParams>

@@ -63,8 +63,14 @@ namespace DockWindowsSample
 
             var dockManagerParams = dockManager.ToParams();
 
-            string serialization = 
+            string serializationStr = 
                 XmlSerializationUtils.Serialize(dockManagerParams);
+
+            using System.IO.StreamWriter writer = new System.IO.StreamWriter("../../../../SerializationResult.xml");
+
+            writer.Write(serializationStr);
+
+            writer.Flush();
         }
     }
 }
