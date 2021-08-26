@@ -396,5 +396,7 @@
             Value="{StaticResource DockSeparatorBrush}"/>
     <Setter Property="CustomHeaderIconMargin"
             Value="5"/>
+    <Setter Property="TitleMargin"
+            Value="5"/>
   </Style>
 </Styles>

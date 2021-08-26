@@ -44,6 +44,10 @@
             Value="100"/>
     <Setter Property="TitleClasses"
             Value="DefaultWindowTitle"/>
+    <Setter Property="BorderBrush"
+            Value="LightGray"/>
+    <Setter Property="BorderThickness"
+            Value="1"/>
     <Setter Property="Icon"
             Value="{Binding Path=CustomHeaderIcon,
                             Converter={x:Static converters:ToWindowIconConverter.Instance},
@@ -142,6 +146,7 @@
                                                RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
                                                Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                            Text="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                           Margin="{Binding Path=TitleMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                            behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
               </StackPanel>
 
@@ -188,7 +193,9 @@
       <ControlTemplate>
         <Panel>
           <Border Name="PART_TransparencyFallback"
-                  IsHitTestVisible="False" />
+                  IsHitTestVisible="False" 
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"/>
           <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
           <VisualLayerManager>
             <Grid>
@@ -287,6 +294,8 @@
     <Setter Property="CustomHeaderIcon"
             Value="/Assets/avalonia-32.png"/>
     <Setter Property="CustomHeaderIconMargin"
+            Value="5,5,0,5"/>
+    <Setter Property="TitleMargin"
             Value="5"/>
     <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
     <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource SystemControlBackgroundAltHighBrush}" />

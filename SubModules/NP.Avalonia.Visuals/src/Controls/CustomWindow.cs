@@ -336,6 +336,19 @@ namespace NP.Avalonia.Visuals.Controls
             );
         #endregion CustomHeaderIcon Avalonia Property
 
+        #region TitleMargin Styled Avalonia Property
+        public Thickness TitleMargin
+        {
+            get { return GetValue(TitleMarginProperty); }
+            set { SetValue(TitleMarginProperty, value); }
+        }
+
+        public static readonly StyledProperty<Thickness> TitleMarginProperty =
+            AvaloniaProperty.Register<CustomWindow, Thickness>
+            (
+                nameof(TitleMargin)
+            );
+        #endregion TitleMargin Styled Avalonia Property
 
         #region CustomHeaderIconWidth Avalonia Property
         public double CustomHeaderIconWidth
