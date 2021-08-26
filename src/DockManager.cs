@@ -58,8 +58,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        DockWindow? _draggedWindow;
-        public DockWindow? DraggedWindow
+        FloatingWindow? _draggedWindow;
+        public FloatingWindow? DraggedWindow
         {
             get => _draggedWindow;
             internal set
@@ -204,7 +204,7 @@ namespace NP.Avalonia.UniDock
 
             IEnumerable<IDockGroup> dockGroups;
 
-            if (window is DockWindow dockWindow)
+            if (window is FloatingWindow dockWindow)
             {
                 dockGroups = dockWindow.TheDockGroup.ToCollection();
             }

@@ -12,8 +12,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml.Styling;
-using Avalonia.VisualTree;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Avalonia.Visuals.Controls;
@@ -24,7 +22,7 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockWindow : CustomWindow
+    public class FloatingWindow : CustomWindow
     {
         public SimpleDockGroup TheDockGroup { get; } = 
             new SimpleDockGroup();
@@ -35,12 +33,12 @@ namespace NP.Avalonia.UniDock
             set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
 
-        static DockWindow()
+        static FloatingWindow()
         {
             DockAttachedProperties
                 .TheDockManagerProperty
                 .Changed
-                .AddClassHandler<DockWindow>((dw, e) => dw.OnDockManagerChanged(e));
+                .AddClassHandler<FloatingWindow>((dw, e) => dw.OnDockManagerChanged(e));
         }
 
         private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs e)
@@ -48,18 +46,18 @@ namespace NP.Avalonia.UniDock
             TheDockGroup.TheDockManager = TheDockManager;
         }
 
-        public DockWindow()
+        public FloatingWindow()
         {
-            Classes = new Classes(new[] { "PlainDockWindow" });
+            Classes = new Classes(new[] { "PlainFloatingWindow" });
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
 
             TheDockGroup.HasNoChildrenEvent += TheDockGroup_HasNoChildrenEvent;
 
-            this.Closing += DockWindow_Closing;
+            this.Closing += FloatingWindow_Closing;
         }
 
-        public DockWindow(DockManager dockManager) : this()
+        public FloatingWindow(DockManager dockManager) : this()
         {
             DockAttachedProperties.SetTheDockManager(this, dockManager);
         }
@@ -72,7 +70,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void DockWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        private void FloatingWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             TheDockManager = null;
 

@@ -209,7 +209,7 @@ namespace NP.Avalonia.UniDock.Serialization
             // set the groups
             foreach(Window w in dm.Windows)
             {
-                if (w is DockWindow dw)
+                if (w is FloatingWindow dw)
                 {
                     string dockId = dw.TheDockGroup.DockId;
 

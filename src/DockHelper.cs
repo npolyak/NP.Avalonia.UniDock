@@ -13,13 +13,13 @@ namespace NP.Avalonia.UniDock
 {
     public static class DockHelper
     {
-        public static DockWindow CreateDockItemWindow(this DockManager dockManager, DockItem dockItem)
+        public static FloatingWindow CreateDockItemWindow(this DockManager dockManager, DockItem dockItem)
         {
             dockItem!.CleanSelfOnRemove();
 
             // create the window
 
-            DockWindow dockWindow = new DockWindow(dockManager);
+            FloatingWindow dockWindow = new FloatingWindow(dockManager);
 
             dockWindow.Width = 400;
             dockWindow.Height = 300;

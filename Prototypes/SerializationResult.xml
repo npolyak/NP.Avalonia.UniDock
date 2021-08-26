@@ -8,38 +8,38 @@
             WindowId="TheMainWindow"
             DockChildWindowOwnerId="TheMainWindow">
             <TopLeft
-                X="502"
-                Y="709" />
+                X="345"
+                Y="730" />
             <Size
                 X="700"
                 Y="700" />
         </WindowParams>
         <WindowParams
-            FullWindowType="NP.Avalonia.UniDock.DockWindow"
+            FullWindowType="NP.Avalonia.UniDock.FloatingWindow"
             Title="Tab4"
             TheWindowState="Normal"
             OwnerWindowId="TheMainWindow"
-            WindowId="DockWindow_1_52166331"
+            WindowId="FloatingWindow_1_52175611"
             DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="SimpleDockGroup_1_52166331">
+            TopLevelGroupId="SimpleDockGroup_1_52175611">
             <TopLeft
-                X="1180"
-                Y="346" />
+                X="1268"
+                Y="265" />
             <Size
                 X="400"
-                Y="476.8" />
+                Y="300" />
         </WindowParams>
     </WindowsSerializationParams>
     <DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
             DockId="Group1"
-            ChildrenDockIds="DockTabbedGroup_1_52166328"
+            ChildrenDockIds="DockTabbedGroup_1_52175605"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockTabbedGroup"
-            DockId="DockTabbedGroup_1_52166328"
+            DockId="DockTabbedGroup_1_52175605"
             ParentDockId="Group1"
             ChildrenDockIds="DockItem2 DockItem3"
             AutoDestroy="false"
@@ -47,7 +47,7 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem2"
-            ParentDockId="DockTabbedGroup_1_52166328"
+            ParentDockId="DockTabbedGroup_1_52175605"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab2</HeaderRestorationInfo>
@@ -55,7 +55,7 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem3"
-            ParentDockId="DockTabbedGroup_1_52166328"
+            ParentDockId="DockTabbedGroup_1_52175605"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab3</HeaderRestorationInfo>
@@ -76,21 +76,21 @@
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
-            DockId="SimpleDockGroup_1_52166331"
-            ChildrenDockIds="DockStackGroup_1_52166336"
+            DockId="SimpleDockGroup_1_52175611"
+            ChildrenDockIds="DockStackGroup_1_52175616"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockStackGroup"
-            DockId="DockStackGroup_1_52166336"
-            ParentDockId="SimpleDockGroup_1_52166331"
-            ChildrenDockIds="DockItem4 DockItem1"
+            DockId="DockStackGroup_1_52175616"
+            ParentDockId="SimpleDockGroup_1_52175611"
+            ChildrenDockIds="DockItem1 DockItem4"
             AutoDestroy="true"
             TheOrientation="Vertical" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem4"
-            ParentDockId="DockStackGroup_1_52166336"
+            ParentDockId="DockStackGroup_1_52175616"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab4</HeaderRestorationInfo>
@@ -98,7 +98,7 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem1"
-            ParentDockId="DockStackGroup_1_52166336"
+            ParentDockId="DockStackGroup_1_52175616"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab1</HeaderRestorationInfo>

@@ -385,7 +385,7 @@
     <Setter Property="Padding" Value="0 0 4 0"/>
   </Style>
 
-  <Style Selector=":is(np|CustomWindow).PlainDockWindow">
+  <Style Selector=":is(np|CustomWindow).PlainFloatingWindow">
     <Setter Property="HeaderBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderHeight"

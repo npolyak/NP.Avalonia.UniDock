@@ -77,7 +77,7 @@ namespace NP.Avalonia.UniDock.Serialization
                     DockAttachedProperties.GetWindowId(dockChildWindowOwnerWindow);
             }
 
-            if (w is DockWindow dockWindow)
+            if (w is FloatingWindow dockWindow)
             {
                 wp.TopLevelGroupId = dockWindow.TheDockGroup.DockId;
             }
@@ -113,13 +113,13 @@ namespace NP.Avalonia.UniDock.Serialization
         {
             Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
 
-            // only DockWindows (floating windows) can be restored
-            if (!typeof(DockWindow).IsAssignableFrom(windowType))
+            // only floating windows can be restored
+            if (!typeof(FloatingWindow).IsAssignableFrom(windowType))
             {
                 return null;
             }
 
-            DockWindow w = (DockWindow) Activator.CreateInstance(windowType)!;
+            FloatingWindow w = (FloatingWindow) Activator.CreateInstance(windowType)!;
 
             w.SetWindowFromParams(wp);
 
