@@ -36,6 +36,17 @@ namespace NP.AvaloniaDock
         public IEnumerable<ILeafDockObj> DockLeafObjsWithoutLeafParents =>
             DockLeafObjs.Where(leaf => !leaf.HasLeafAncestor()).ToList();
 
+        public void ClearGroups()
+        {
+            foreach(IDockGroup group in _allGroups.ToList())
+            {
+                if (!group.IsRoot)
+                {
+                    group.RemoveItselfFromParent();
+                }
+            }
+        }
+
         DockWindow? _draggedWindow;
         public DockWindow? DraggedWindow
         {
@@ -207,7 +218,7 @@ namespace NP.AvaloniaDock
             {
                 string prefix = window.GetType().Name;
                 windowId =
-                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix);
+                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix, true);
 
                 DockAttachedProperties.SetWindowId(window, windowId);
             }
@@ -237,7 +248,7 @@ namespace NP.AvaloniaDock
             {
                 string prefix = addedGroup.GetType().Name;
 
-                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix);
+                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix, true);
             }
             else
             {

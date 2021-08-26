@@ -8,6 +8,7 @@ using NP.AvaloniaDock;
 using NP.AvaloniaDock.Serialization;
 using NP.Utilities;
 using System;
+using System.IO;
 
 namespace DockWindowsSample
 {
@@ -22,7 +23,7 @@ namespace DockWindowsSample
 
             CurrentScreenPointBehavior.CurrentScreenPoint.Subscribe(OnCurrentScreenPointChanged);
 
-            //CurrentScreenPointBehavior.Capture(this);
+
         }
 
         private void OnCurrentScreenPointChanged(Point2D screenPoint)
@@ -42,6 +43,7 @@ namespace DockWindowsSample
             ButtonBounds = button.GetScreenBounds();
         }
 
+        const string SerializationFilePath = "../../../../SerializationResult.xml";
 
         #region ButtonBounds Styled Avalonia Property
         public Rect2D ButtonBounds
@@ -57,7 +59,7 @@ namespace DockWindowsSample
             );
         #endregion ButtonBounds Styled Avalonia Property
 
-        public void PrepareForSerialization()
+        public void Serialize()
         {
             DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
 
@@ -66,11 +68,34 @@ namespace DockWindowsSample
             string serializationStr = 
                 XmlSerializationUtils.Serialize(dockManagerParams);
 
-            using System.IO.StreamWriter writer = new System.IO.StreamWriter("../../../../SerializationResult.xml");
+            using StreamWriter writer = new StreamWriter(SerializationFilePath);
 
             writer.Write(serializationStr);
 
             writer.Flush();
         }
+
+
+        public void Restore()
+        {
+            DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
+
+            using StreamReader reader = new StreamReader(SerializationFilePath);
+
+            string serializationStr = reader.ReadToEnd();
+
+            DockManagerParams dmp = 
+                XmlSerializationUtils.Deserialize<DockManagerParams>(serializationStr);
+
+            dockManager.SetDockManagerFromParams(dmp);
+        }
+
+        public void ClearGroups()
+        {
+            DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
+
+            dockManager.ClearGroups();
+        }
+
     }
 }

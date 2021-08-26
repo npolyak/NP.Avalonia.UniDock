@@ -11,6 +11,7 @@
         Height="700"
         np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        np:DockAttachedProperties.WindowId="TheMainWindow"
         x:Class="DockWindowsSample.MainWindow"
         Title="DockWindowsSample">
   <Window.Resources>
@@ -23,28 +24,33 @@
   </Window.Resources>
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
-      <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-        <np:DockTabbedGroup DockId="Bla"
-                            AutoDestroy="False">
+      <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+                           DockId="Group1">
+        <np:DockTabbedGroup AutoDestroy="False">
           <np:DockTabbedGroup.Items>
             <np:DockItem Header="Tab1"
-                         DockId="Bla1">
+                         DockId="DockItem1">
               <TextBlock Text="Hello World!"/>
             </np:DockItem>
-            <np:DockItem Header="Tab2">
+            <np:DockItem Header="Tab2"
+                         DockId="DockItem2">
               <TextBlock Text="Hi World!"/>
             </np:DockItem>
-            <np:DockItem Header="Tab3">
+            <np:DockItem Header="Tab3"
+                         DockId="DockItem3">
               <TextBlock Text="Hi World 1234!"/>
             </np:DockItem>
           </np:DockTabbedGroup.Items>
         </np:DockTabbedGroup>
       </np:SimpleDockGroup>
       <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+                          DockId="Group2"
                           Grid.Column="1">
         <np:DockTabbedGroup>
           <np:DockTabbedGroup.Items>
-            <np:DockItem Header="Tab4" Content="Hello World!">
+            <np:DockItem Header="Tab4" 
+                         Content="Hello World!"
+                         DockId="DockItem4">
               <np:DockItem.ContentTemplate>
                 <DataTemplate>
                   <Grid RowDefinitions="Auto, *">
@@ -55,21 +61,42 @@
                 </DataTemplate>
               </np:DockItem.ContentTemplate>
             </np:DockItem>
-            <np:DockItem Header="Tab5" Content="Hi World!"/>
+            <np:DockItem Header="Tab5" 
+                         DockId="DockItem5"
+                         Content="Hi World!"/>
           </np:DockTabbedGroup.Items>
         </np:DockTabbedGroup>
       </np:SimpleDockGroup>
     </Grid>
-    <StackPanel Grid.Row="1">
-      <Button Width="200"
+    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                HorizontalAlignment="Right">
+      <Button Width="100"
               Height="50"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Content="Prepare For Serialization"
+              Content="Serialize"
               np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
               np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-              np:CallAction.MethodName="PrepareForSerialization"
-              Margin="0,20"/>
+              np:CallAction.MethodName="Serialize"
+              Margin="10,20"/>
+      <!--<Button Width="200"
+              Height="50"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Content="Clear Groups"
+              np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+              np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+              np:CallAction.MethodName="ClearGroups"
+              Margin="10,20"/>-->
+      <Button Width="100"
+              Height="50"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Content="Restore"
+              np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
+              np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+              np:CallAction.MethodName="Restore"
+              Margin="10,20"/>
       <!--<Grid Width="100"
             Height="50">
         <Button x:Name="TheButton"

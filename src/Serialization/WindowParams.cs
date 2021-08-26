@@ -74,12 +74,14 @@ namespace NP.AvaloniaDock.Serialization
             return wp;
         }
 
-        public static Window ToWindow(this WindowParams wp)
+        public static void  SetWindowFromParams(this Window w, WindowParams wp)
         {
             Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
 
-            Window w =
-                (Window) Activator.CreateInstance(windowType)!;
+            if (windowType != w.GetType())
+            {
+                throw new Exception($"ERROR window types doe not match for the window titled {w.Title}.");
+            }
 
             w.Position = wp.TopLeft.ToPixelPoint();
             w.Width = wp.Size!.X;
@@ -94,21 +96,23 @@ namespace NP.AvaloniaDock.Serialization
             {
                 DockAttachedProperties.SetWindowId(w, windowId);
             }
+        }
 
-            string? ownerWindowId = wp.OwnerWindowId;
+        public static Window? RestoreWindow(this WindowParams wp)
+        {
+            Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
 
-            if (ownerWindowId != null)
+            // only DockWindows (floating windows) can be restored
+            if (!typeof(DockWindow).IsAssignableFrom(windowType))
             {
-                DockAttachedProperties.SetTemporaryOwnerWindowId(w, ownerWindowId);
+                return null;
             }
 
-            string? dockChildWindowOwnerId = wp.DockChildWindowOwnerId;
+            DockWindow w = (DockWindow) Activator.CreateInstance(windowType)!;
 
-            if (dockChildWindowOwnerId != null)
-            {
-                DockAttachedProperties
-                    .SetTemporaryDockChildWindowOwnerId(w, dockChildWindowOwnerId);
-            }
+            w.SetWindowFromParams(wp);
+
+            w.TheDockGroup.DockId = wp.TopLevelGroupId!;
 
             return w;
         }

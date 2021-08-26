@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using NP.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NP.AvaloniaDock
@@ -151,43 +152,6 @@ namespace NP.AvaloniaDock
                 "DockChildWindowOwner"
             );
         #endregion DockChildWindowOwner Attached Avalonia Property
-
-
-        #region TemporaryOwnerWindowId Attached Avalonia Property
-        internal static string? GetTemporaryOwnerWindowId(AvaloniaObject obj)
-        {
-            return obj.GetValue(TemporaryOwnerWindowIdProperty);
-        }
-
-        internal static void SetTemporaryOwnerWindowId(AvaloniaObject obj, string? value)
-        {
-            obj.SetValue(TemporaryOwnerWindowIdProperty, value);
-        }
-
-        internal static readonly AttachedProperty<string?> TemporaryOwnerWindowIdProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, string?>
-            (
-                "TemporaryOwnerWindowId"
-            );
-        #endregion TemporaryOwnerWindowId Attached Avalonia Property
-
-        #region TemporaryDockChildWindowOwnerId Attached Avalonia Property
-        internal static string? GetTemporaryDockChildWindowOwnerId(AvaloniaObject obj)
-        {
-            return obj.GetValue(TemporaryDockChildWindowOwnerIdProperty);
-        }
-
-        internal static void SetTemporaryDockChildWindowOwnerId(AvaloniaObject obj, string? value)
-        {
-            obj.SetValue(TemporaryDockChildWindowOwnerIdProperty, value);
-        }
-
-        internal static readonly AttachedProperty<string?> TemporaryDockChildWindowOwnerIdProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, string?>
-            (
-                "TemporaryDockChildWindowOwnerId"
-            );
-        #endregion TemporaryDockChildWindowOwnerId Attached Avalonia Property
 
 
         #region SizeGridLength Attached Avalonia Property

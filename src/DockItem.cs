@@ -92,7 +92,14 @@ namespace NP.AvaloniaDock
         public event Action<IRemovable>? RemoveEvent;
         public event Action<DockItem>? IsSelectedChanged;
 
-        public bool AutoDestroy => false;
+        public bool AutoDestroy
+        {
+            get => false;
+            set
+            {
+
+            }
+        }
 
         public void Remove()
         {

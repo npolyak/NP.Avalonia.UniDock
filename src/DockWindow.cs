@@ -21,24 +21,36 @@ namespace NP.AvaloniaDock
         public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
-            private set
-            {
-                DockAttachedProperties.SetTheDockManager(this, value!);
-                TheDockGroup.TheDockManager = value!;
-            }
+            set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
 
-        public DockWindow(DockManager dockManager)
+        static DockWindow()
+        {
+            DockAttachedProperties
+                .TheDockManagerProperty
+                .Changed
+                .AddClassHandler<DockWindow>((dw, e) => dw.OnDockManagerChanged(e));
+        }
+
+        private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            TheDockGroup.TheDockManager = TheDockManager;
+        }
+
+        public DockWindow()
         {
             Classes = new Classes(new[] { "PlainDockWindow" });
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
-            DockAttachedProperties.SetTheDockManager(this, dockManager);
-            TheDockGroup.TheDockManager = dockManager;
 
             TheDockGroup.HasNoChildrenEvent += TheDockGroup_HasNoChildrenEvent;
 
             this.Closing += DockWindow_Closing;
+        }
+
+        public DockWindow(DockManager dockManager) : this()
+        {
+            DockAttachedProperties.SetTheDockManager(this, dockManager);
         }
 
         private void TheDockGroup_HasNoChildrenEvent(SimpleDockGroup obj)
@@ -113,7 +125,7 @@ namespace NP.AvaloniaDock
 
         private void SetDragOnMovePointer()
         {
-            TheDockManager.DraggedWindow = this;
+            TheDockManager!.DraggedWindow = this;
 
             CurrentScreenPointBehavior.Capture(HeaderControl);
 
@@ -150,7 +162,7 @@ namespace NP.AvaloniaDock
 
             UpdatePosition(e);
 
-            TheDockManager.CompleteDragDropAction();
+            TheDockManager?.CompleteDragDropAction();
         }
 
         protected void OnPointerMoved(object sender, PointerEventArgs e)
@@ -171,7 +183,7 @@ namespace NP.AvaloniaDock
         {
             get
             {
-                return GetLeafGroups(TheDockManager).SelectMany(g => g.LeafItems);
+                return GetLeafGroups(TheDockManager!).SelectMany(g => g.LeafItems);
             }
         }
     }

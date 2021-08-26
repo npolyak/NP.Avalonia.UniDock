@@ -20,7 +20,7 @@ namespace NP.AvaloniaDock
 
         bool ShowChildHeader => true;
 
-        bool AutoDestroy { get; }
+        bool AutoDestroy { get; set; }
 
         bool IsRoot => DockParent == null;
 
@@ -69,7 +69,7 @@ namespace NP.AvaloniaDock
 
         public static int GetNumberChildren(this IDockGroup item)
         {
-            return item?.DockChildren.Count ?? 0;
+            return item?.DockChildren?.Count ?? 0;
         }
 
         public static bool HasLeafAncestor(this ILeafDockObj item)
