@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public interface IDockVisualItemGenerator
     {

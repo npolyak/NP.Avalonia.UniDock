@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DragHeaderBehavior : DragItemBehavior<DockItemHeaderControl>
     {

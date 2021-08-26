@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockStackGroup : DockIdContainingControl, IDockGroup, IDisposable
     {

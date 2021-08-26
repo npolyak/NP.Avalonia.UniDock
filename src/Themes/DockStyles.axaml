@@ -1,12 +1,12 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:NP.AvaloniaDock"
+        xmlns:local="clr-namespace:NP.Avalonia.UniDock"
         xmlns:np="https://np.com/visuals">
   <Styles.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
-        <ResourceInclude Source="avares://NP.AvaloniaDock/Themes/DockGeometries.axaml"/>
+        <ResourceInclude Source="avares://NP.Avalonia.UniDock/Themes/DockGeometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
 
       <Color x:Key="DockMouseOverColor">#FF1C97EA</Color>

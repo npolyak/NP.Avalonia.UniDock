@@ -5,7 +5,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockTabsPresenter : ItemsPresenter
     {

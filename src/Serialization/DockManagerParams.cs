@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace NP.AvaloniaDock.Serialization
+namespace NP.Avalonia.UniDock.Serialization
 {
     public class DockManagerParams
     {

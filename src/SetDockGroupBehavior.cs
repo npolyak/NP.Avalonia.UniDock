@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NP.Concepts.Behaviors;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class SetDockGroupBehavior<T> : IDisposable
         where T : IDockGroup

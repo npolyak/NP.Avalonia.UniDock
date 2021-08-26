@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using NP.Concepts.Behaviors;
 using System.ComponentModel;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockManager
     {

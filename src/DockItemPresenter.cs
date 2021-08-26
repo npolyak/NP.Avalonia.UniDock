@@ -3,7 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
 using System.Linq;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockItemPresenter : TemplatedControl
     {

@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockTabbedGroup : TemplatedControl, ILeafDockObj
     {

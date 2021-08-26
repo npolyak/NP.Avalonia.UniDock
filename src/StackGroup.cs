@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using Avalonia.Data;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class StackGroup<T> : Control
         where T : IControl

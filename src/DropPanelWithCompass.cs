@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 using Avalonia.Media;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DropPanelWithCompass : TemplatedControl
     {

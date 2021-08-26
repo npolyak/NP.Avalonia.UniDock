@@ -1,4 +1,4 @@
-﻿namespace NP.AvaloniaDock
+﻿namespace NP.Avalonia.UniDock
 {
     public static class DockHelper
     {

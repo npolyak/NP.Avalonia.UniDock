@@ -10,7 +10,7 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
    </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NP.AvaloniaDock.csproj" />
+    <ProjectReference Include="..\..\src\NP.Avalonia.UniDock.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj" />

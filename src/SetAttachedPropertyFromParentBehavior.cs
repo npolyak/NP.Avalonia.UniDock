@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using NP.Utilities;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class SetAttachedPropertyFromParentBehavior<T, TProp> : ForEachItemOverrideBehavior<T>
         where T : IDockGroup

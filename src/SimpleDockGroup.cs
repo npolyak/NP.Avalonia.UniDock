@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {

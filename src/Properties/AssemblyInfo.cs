@@ -17,4 +17,4 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("40f7d475-98cb-461b-b4ea-7a7dc843c46e")]
 
-[assembly: XmlnsDefinition("https://np.com/visuals", "NP.AvaloniaDock")]
+[assembly: XmlnsDefinition("https://np.com/visuals", "NP.Avalonia.UniDock")]

@@ -9,7 +9,7 @@ using NP.Utilities;
 using System;
 using System.Linq;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public abstract class DragItemBehavior<TItem>
         where TItem : Control, IControl

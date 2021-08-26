@@ -4,7 +4,7 @@ using NP.Utilities;
 using System;
 using System.Xml.Serialization;
 
-namespace NP.AvaloniaDock.Serialization
+namespace NP.Avalonia.UniDock.Serialization
 {
     public class WindowParams
     {

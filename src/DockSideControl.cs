@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls.Primitives;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public class DockSideControl : TemplatedControl
     {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Layout;
 
-namespace NP.AvaloniaDock
+namespace NP.Avalonia.UniDock
 {
     public enum DockKind
     {
