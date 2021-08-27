@@ -227,7 +227,7 @@ namespace NP.Avalonia.UniDock.Serialization
             // set the coefficients for the DockStackGroups
             foreach(var group in dm.AllGroups)
             {
-                if (group is DockStackGroup dockStackGroup)
+                if (group is StackDockGroup dockStackGroup)
                 {
                     DockGroupParams? p = dmp.FindGroupParamsById(group.DockId);
 

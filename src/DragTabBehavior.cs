@@ -33,7 +33,7 @@ namespace NP.Avalonia.UniDock
             tabItem.Content as DockItem;
 
         private static IList<IDockGroup>? GetDockItemsCollection(DockItem dockItem) =>
-            (dockItem.DockParent as DockTabbedGroup)?.Items;
+            (dockItem.DockParent as TabbedDockGroup)?.Items;
 
         protected override bool MoveItemWithinContainer(Control itemsContainer, PointerEventArgs e)
         {

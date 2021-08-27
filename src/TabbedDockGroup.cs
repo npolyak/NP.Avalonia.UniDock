@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockTabbedGroup : TemplatedControl, ILeafDockObj
+    public class TabbedDockGroup : TemplatedControl, ILeafDockObj
     {
         public event Action<IDockGroup>? DockIdChanged;
 
@@ -37,7 +37,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, string>
+            AvaloniaProperty.Register<TabbedDockGroup, string>
             (
                 nameof(DockId)
             );
@@ -48,9 +48,9 @@ namespace NP.Avalonia.UniDock
             DockIdChanged?.Invoke(this);
         }
 
-        static DockTabbedGroup()
+        static TabbedDockGroup()
         {
-            DockIdProperty.Changed.AddClassHandler<DockTabbedGroup>((g, e) => g.OnDockIdChanged(e));
+            DockIdProperty.Changed.AddClassHandler<TabbedDockGroup>((g, e) => g.OnDockIdChanged(e));
         }
 
         private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
@@ -76,8 +76,8 @@ namespace NP.Avalonia.UniDock
         /// <summary>
         /// Defines the <see cref="Items"/> property.
         /// </summary>
-        public static readonly DirectProperty<DockTabbedGroup, IList<IDockGroup>> ItemsProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, IList<IDockGroup>>
+        public static readonly DirectProperty<TabbedDockGroup, IList<IDockGroup>> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<TabbedDockGroup, IList<IDockGroup>>
             (
                 nameof(Items),
                 o => o.Items,
@@ -108,8 +108,8 @@ namespace NP.Avalonia.UniDock
         public IList<IDockGroup>? DockChildren => Items;
 
         #region NumberDockChildren Direct Avalonia Property
-        public static readonly DirectProperty<DockTabbedGroup, int> NumberDockChildrenProperty =
-            AvaloniaProperty.RegisterDirect<DockTabbedGroup, int>
+        public static readonly DirectProperty<TabbedDockGroup, int> NumberDockChildrenProperty =
+            AvaloniaProperty.RegisterDirect<TabbedDockGroup, int>
             (
                 nameof(NumberDockChildren),
                 o => o.NumberDockChildren,
@@ -140,7 +140,7 @@ namespace NP.Avalonia.UniDock
         private readonly MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>> _mimicCollectionBehavior =
             new MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>>(dockGroup => (DockItem)dockGroup);
 
-        public DockTabbedGroup()
+        public TabbedDockGroup()
         {
             AffectsMeasure<DockTabsPresenter>(TabStripPlacementProperty);
             SetBehavior();
@@ -189,7 +189,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<object> SelectedItemProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, object>
+            AvaloniaProperty.Register<TabbedDockGroup, object>
             (
                 nameof(SelectedItem)
             );
@@ -203,7 +203,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<Dock> TabStripPlacementProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, Dock>
+            AvaloniaProperty.Register<TabbedDockGroup, Dock>
             (
                 nameof(TabStripPlacement),
                 Dock.Top
@@ -218,7 +218,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, HorizontalAlignment>
+            AvaloniaProperty.Register<TabbedDockGroup, HorizontalAlignment>
             (
                 nameof(HorizontalContentAlignment)
             );
@@ -233,7 +233,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, VerticalAlignment>
+            AvaloniaProperty.Register<TabbedDockGroup, VerticalAlignment>
             (
                 nameof(VerticalContentAlignment)
             );
@@ -248,7 +248,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<bool> ShowCompassProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, bool>
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
             (
                 nameof(ShowCompass)
             );

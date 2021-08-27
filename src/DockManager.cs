@@ -169,7 +169,7 @@ namespace NP.Avalonia.UniDock
                 parentGroup
                     .DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo);
 
-            if (parentGroup is DockStackGroup dockStackGroup && dockStackGroup.TheOrientation == orientation)
+            if (parentGroup is StackDockGroup dockStackGroup && dockStackGroup.TheOrientation == orientation)
             {
                 int insertIdx = childIdx.ToInsertIdx(dock);
                 parentGroup.DockChildren.Insert(insertIdx, draggedGroup);
@@ -181,7 +181,7 @@ namespace NP.Avalonia.UniDock
                 double sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
 
                 CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
-                DockStackGroup insertGroup = new DockStackGroup { TheOrientation = orientation };
+                StackDockGroup insertGroup = new StackDockGroup { TheOrientation = orientation };
                 
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
 
@@ -310,11 +310,11 @@ namespace NP.Avalonia.UniDock
                             IDockGroup currentGroup =
                                 CurrentLeafObjToInsertWithRespectTo?.GetContainingGroup()!;
 
-                            var groupToInsertItemsInto = currentGroup as DockTabbedGroup;
+                            var groupToInsertItemsInto = currentGroup as TabbedDockGroup;
 
                             if (groupToInsertItemsInto == null)
                             {
-                                groupToInsertItemsInto = new DockTabbedGroup();
+                                groupToInsertItemsInto = new TabbedDockGroup();
 
                                 int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
                                 currentGroup.DockChildren?.Remove(CurrentLeafObjToInsertWithRespectTo!);

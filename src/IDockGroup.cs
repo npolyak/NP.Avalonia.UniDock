@@ -92,7 +92,7 @@ namespace NP.Avalonia.UniDock
 
         public static double GetSizeCoeff(this IDockGroup group, int idx)
         {
-            if (group is DockStackGroup dockStackGroup)
+            if (group is StackDockGroup dockStackGroup)
             {
                 return dockStackGroup.GetSizeCoefficient(idx);
             }
@@ -107,7 +107,7 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            if (group is DockStackGroup dockStackGroup)
+            if (group is StackDockGroup dockStackGroup)
             {
                 dockStackGroup.SetSizeCoefficient(idx, coeff);
             }

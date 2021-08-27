@@ -20,7 +20,7 @@ using System.Collections.ObjectModel;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockStackGroup : DockIdContainingControl, IDockGroup, IDisposable
+    public class StackDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
@@ -38,8 +38,8 @@ namespace NP.Avalonia.UniDock
             set => _stackGroup.TheOrientation = value;
         }
         #region NumberDockChildren Direct Avalonia Property
-        public static readonly DirectProperty<DockStackGroup, int> NumberDockChildrenProperty =
-            AvaloniaProperty.RegisterDirect<DockStackGroup, int>
+        public static readonly DirectProperty<StackDockGroup, int> NumberDockChildrenProperty =
+            AvaloniaProperty.RegisterDirect<StackDockGroup, int>
             (
                 nameof(NumberDockChildren),
                 o => o.NumberDockChildren,
@@ -75,15 +75,15 @@ namespace NP.Avalonia.UniDock
             RemoveEvent?.Invoke(this);
         }
 
-        static DockStackGroup()
+        static StackDockGroup()
         {
-            DockIdProperty.Changed.AddClassHandler<DockStackGroup>((g, e) => g.OnDockIdChanged(e));
+            DockIdProperty.Changed.AddClassHandler<StackDockGroup>((g, e) => g.OnDockIdChanged(e));
         }
 
         IDisposable? _behavior;
         IDisposable? _setDockGroupBehavior;
 
-        public DockStackGroup()
+        public StackDockGroup()
         {
             AffectsMeasure<SimpleDockGroup>(NumberDockChildrenProperty);
 

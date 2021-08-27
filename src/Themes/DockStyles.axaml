@@ -262,14 +262,14 @@
             Value="Green"/>
   </Style>
   
-  <Style Selector="local|DockTabbedGroup">
+  <Style Selector="local|TabbedDockGroup">
     <Setter Property="HorizontalAlignment"
             Value="Stretch"/>
     <Setter Property="VerticalAlignment"
             Value="Stretch"/>
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="local:DockTabbedGroup">
+        <ControlTemplate TargetType="local:TabbedDockGroup">
           <Border
               Margin="{TemplateBinding Margin}"
               BorderBrush="{TemplateBinding BorderBrush}"
@@ -354,34 +354,34 @@
     </Setter>
   </Style>
 
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Top]">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Top]">
     <Setter Property="Padding" Value="0 4 0 0"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Top"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Bottom"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Bottom]">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Bottom]">
     <Setter Property="Padding" Value="0 0 0 4"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Left"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
     <Setter Property="Orientation" Value="Vertical"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Left]">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left]">
     <Setter Property="Padding" Value="4 0 0 0"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Right"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
     <Setter Property="Orientation" Value="Vertical"/>
   </Style>
-  <Style Selector="local|DockTabbedGroup[TabStripPlacement=Right]">
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right]">
     <Setter Property="Padding" Value="0 0 4 0"/>
   </Style>
 

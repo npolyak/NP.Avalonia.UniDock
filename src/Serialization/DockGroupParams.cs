@@ -93,12 +93,12 @@ namespace NP.Avalonia.UniDock.Serialization
             }
 
 
-            if (dg is DockStackGroup dockStackGroup)
+            if (dg is StackDockGroup dockStackGroup)
             {
                 p.SizeCoefficients = dockStackGroup.GetSizeCoefficients();
             }
 
-            if (dg is DockStackGroup stackGroup)
+            if (dg is StackDockGroup stackGroup)
             {
                 p.TheOrientation = stackGroup.TheOrientation;
             }
@@ -116,7 +116,7 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.DockId = p.DockId!;
             dg.AutoDestroy = p.AutoDestroy;
 
-            if (dg is DockStackGroup stackGroup)
+            if (dg is StackDockGroup stackGroup)
             {
                 stackGroup.TheOrientation = (Orientation)p.TheOrientation!;
             }

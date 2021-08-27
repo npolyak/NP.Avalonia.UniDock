@@ -38,7 +38,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            AvaloniaProperty.Register<DockTabbedGroup, string>
+            AvaloniaProperty.Register<TabbedDockGroup, string>
             (
                 nameof(DockId)
             );

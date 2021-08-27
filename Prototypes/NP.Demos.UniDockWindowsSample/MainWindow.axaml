@@ -38,8 +38,8 @@
     <Grid ColumnDefinitions="*, *">
       <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                            DockId="Group1">
-        <np:DockTabbedGroup AutoDestroy="False">
-          <np:DockTabbedGroup.Items>
+        <np:TabbedDockGroup AutoDestroy="False">
+          <np:TabbedDockGroup.Items>
             <np:DockItem Header="Tab1"
                          DockId="DockItem1">
               <TextBlock Text="Hello World!"/>
@@ -52,14 +52,14 @@
                          DockId="DockItem3">
               <TextBlock Text="Hi World 1234!"/>
             </np:DockItem>
-          </np:DockTabbedGroup.Items>
-        </np:DockTabbedGroup>
+          </np:TabbedDockGroup.Items>
+        </np:TabbedDockGroup>
       </np:SimpleDockGroup>
       <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                           DockId="Group2"
                           Grid.Column="1">
-        <np:DockTabbedGroup AutoDestroy="False">
-          <np:DockTabbedGroup.Items>
+        <np:TabbedDockGroup AutoDestroy="False">
+          <np:TabbedDockGroup.Items>
             <np:DockItem Header="Tab4" 
                          Content="Hello World!"
                          DockId="DockItem4">
@@ -76,8 +76,8 @@
             <np:DockItem Header="Tab5" 
                          DockId="DockItem5"
                          Content="Hi World!"/>
-          </np:DockTabbedGroup.Items>
-        </np:DockTabbedGroup>
+          </np:TabbedDockGroup.Items>
+        </np:TabbedDockGroup>
       </np:SimpleDockGroup>
     </Grid>
     <StackPanel Grid.Row="1" Orientation="Horizontal"
