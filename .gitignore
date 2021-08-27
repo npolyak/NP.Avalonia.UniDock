@@ -34,3 +34,9 @@
 /Prototypes/NP.LinqToXmlSample/.vs/DockWindowsSample/DesignTimeBuild
 /Prototypes/NP.Demos.DockWindowsSample/bin/Debug/net5.0
 /Prototypes/NP.Demos.DockWindowsSample/obj
+/Prototypes/NP.Demos.UniDockCustomizationDemo/bin/Debug/net5.0
+/Prototypes/NP.Demos.UniDockCustomizationDemo/obj
+*.suo
+/Prototypes/NP.Demos.UniDockWindowsSample/.vs/NP.Demos.DockWindowsSample/DesignTimeBuild
+/Prototypes/NP.Demos.UniDockWindowsSample/bin/Debug/net5.0
+/Prototypes/NP.Demos.UniDockWindowsSample/obj

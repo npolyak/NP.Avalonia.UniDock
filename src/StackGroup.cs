@@ -84,7 +84,7 @@ namespace NP.Avalonia.UniDock
             AvaloniaProperty.Register<StackGroup<T>, double>
             (
                 nameof(SeparatorWidth),
-                2d
+                4d
             );
         #endregion SeparatorWidth Styled Avalonia Property
 
