@@ -21,6 +21,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
 using System;
 using System.ComponentModel;
@@ -316,7 +317,16 @@ namespace NP.Avalonia.Visuals.Controls
 
             if (_startMoving)
             {
-                this.Position = StartWindowPosition + PointerShift;
+                if (this.CanRestore)
+                {
+                    this.Restore();
+                    StartWindowPosition = CurrentScreenPointBehavior.CurrentScreenPointValue.ToPixelPoint();
+                    Position = StartWindowPosition;
+                }
+                else
+                {
+                    this.Position = StartWindowPosition + PointerShift;
+                }
             }
         }
 
