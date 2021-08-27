@@ -100,17 +100,22 @@ namespace NP.Avalonia.UniDock
 
         public void SetMovePtr()
         {
+            SetInitialPosition();
             this.Activated += CustomWindow_Activated!;
         }
 
         private void CustomWindow_Activated(object sender, EventArgs e)
         {
             this.Activated -= CustomWindow_Activated!;
+            SetInitialPosition();
+            SetDragOnMovePointer();
+        }
+
+        private void SetInitialPosition()
+        {
             StartPointerPosition = CurrentScreenPointBehavior.CurrentScreenPointValue;
             StartWindowPosition = StartPointerPosition.Minus(new Point2D(60, 10));
             Position = StartWindowPosition.ToPixelPoint();
-
-            SetDragOnMovePointer();
         }
 
         protected override void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -149,14 +154,19 @@ namespace NP.Avalonia.UniDock
         public Point2D GetCurrentPointInScreen(PointerEventArgs e)
         {
             var result = HeaderControl.PointToScreen(e.GetPosition(HeaderControl));
-
             return result.ToPoint2D();
         }
 
         private void UpdatePosition(PointerEventArgs e)
         {
-            PointerShift = GetCurrentPointInScreen(e).Minus(StartPointerPosition);
+            try
+            {
+                PointerShift = GetCurrentPointInScreen(e).Minus(StartPointerPosition);
+            }
+            catch
+            {
 
+            }
             this.Position = StartWindowPosition.Plus(PointerShift).ToPixelPoint();
         }
 

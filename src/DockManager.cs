@@ -99,8 +99,8 @@ namespace NP.Avalonia.UniDock
         /// <summary>
         /// group into which we insert dragged item(s)
         /// </summary>
-        ILeafDockObj? _currentLeafObjToInsertWithRespectTo = null;
-        ILeafDockObj? CurrentLeafObjToInsertWithRespectTo
+        private ILeafDockObj? _currentLeafObjToInsertWithRespectTo = null;
+        private ILeafDockObj? CurrentLeafObjToInsertWithRespectTo
         {
             get => _currentLeafObjToInsertWithRespectTo;
 
@@ -148,9 +148,11 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            Window w = CurrentLeafObjToInsertWithRespectTo.GetVisual().GetVisualAncestors().OfType<Window>().First();
+            //Window w = CurrentLeafObjToInsertWithRespectTo.GetVisual().GetVisualAncestors().OfType<Window>().First();
 
-            w.Activate();
+            //w.Activate();
+
+            //_draggedWindow?.Activate();
         }
 
         private void DropWithOrientation(DockKind? dock, IDockGroup draggedGroup)

@@ -8,124 +8,112 @@
             WindowId="TheMainWindow"
             DockChildWindowOwnerId="TheMainWindow">
             <TopLeft
-                X="271"
-                Y="591" />
+                X="480"
+                Y="480" />
             <Size
                 X="700"
                 Y="700" />
         </WindowParams>
         <WindowParams
             FullWindowType="NP.Avalonia.UniDock.FloatingWindow"
-            Title="Tab1"
+            Title="Tab4"
             TheWindowState="Normal"
             OwnerWindowId="TheMainWindow"
-            WindowId="FloatingWindow_1.52208444"
+            WindowId="FloatingWindow_1.52248263"
             DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="SimpleDockGroup_3.52208444">
+            TopLevelGroupId="SimpleDockGroup_3.52248263">
             <TopLeft
-                X="1360"
-                Y="249" />
+                X="1336"
+                Y="616" />
             <Size
                 X="400"
-                Y="611.2" />
+                Y="300" />
         </WindowParams>
     </WindowsSerializationParams>
     <DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
             DockId="Group1"
-            ChildrenDockIds="TabbedDockGroup_1.52208437"
-            AutoDestroy="true"
-            TheOrientation="Horizontal" />
-        <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
-            DockId="Group2"
-            ChildrenDockIds="TabbedDockGroup_2.52208437"
-            AutoDestroy="true"
-            TheOrientation="Horizontal" />
-        <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
-            DockId="SimpleDockGroup_3.52208444"
-            ChildrenDockIds="StackDockGroup_7.52208454"
+            ChildrenDockIds="TabbedDockGroup_1.52248258"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
-            DockId="TabbedDockGroup_1.52208437"
+            DockId="TabbedDockGroup_1.52248258"
             ParentDockId="Group1"
-            ChildrenDockIds="DockItem3"
+            ChildrenDockIds="DockItem2 DockItem3"
             AutoDestroy="false"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
+            DockId="DockItem2"
+            ParentDockId="TabbedDockGroup_1.52248258"
+            AutoDestroy="false"
+            TheOrientation="Horizontal">
+            <HeaderRestorationInfo>Tab2</HeaderRestorationInfo>
+        </DockGroupParams>
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem3"
-            ParentDockId="TabbedDockGroup_1.52208437"
+            ParentDockId="TabbedDockGroup_1.52248258"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab3</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
+            DockId="Group2"
+            ChildrenDockIds="TabbedDockGroup_2.52248258"
+            AutoDestroy="true"
+            TheOrientation="Horizontal" />
+        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
-            DockId="TabbedDockGroup_2.52208437"
+            DockId="TabbedDockGroup_2.52248258"
             ParentDockId="Group2"
             ChildrenDockIds="DockItem5"
             AutoDestroy="false"
             TheOrientation="Horizontal" />
         <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
+            DockId="SimpleDockGroup_3.52248263"
+            ChildrenDockIds="StackDockGroup_5.52248274"
+            AutoDestroy="true"
+            TheOrientation="Horizontal" />
+        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem5"
-            ParentDockId="TabbedDockGroup_2.52208437"
+            ParentDockId="TabbedDockGroup_2.52248258"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab5</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_7.52208454"
-            ParentDockId="SimpleDockGroup_3.52208444"
-            ChildrenDockIds="DockItem4 StackDockGroup_9.52208465"
+            DockId="StackDockGroup_5.52248274"
+            ParentDockId="SimpleDockGroup_3.52248263"
+            ChildrenDockIds="DockItem4 DockItem1"
             AutoDestroy="true"
-            TheOrientation="Vertical">
+            TheOrientation="Horizontal">
             <SizeCoefficients>
-                <double>467.20000000000005</double>
-                <double>107.19999999999993</double>
+                <double>251.2</double>
+                <double>143.2</double>
             </SizeCoefficients>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem4"
-            ParentDockId="StackDockGroup_7.52208454"
+            ParentDockId="StackDockGroup_5.52248274"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab4</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_9.52208465"
-            ParentDockId="StackDockGroup_7.52208454"
-            ChildrenDockIds="DockItem1 DockItem2"
-            AutoDestroy="true"
-            TheOrientation="Horizontal">
-            <SizeCoefficients>
-                <double>329.6</double>
-                <double>64.79999999999995</double>
-            </SizeCoefficients>
-        </DockGroupParams>
-        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem1"
-            ParentDockId="StackDockGroup_9.52208465"
+            ParentDockId="StackDockGroup_5.52248274"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab1</HeaderRestorationInfo>
-        </DockGroupParams>
-        <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="DockItem2"
-            ParentDockId="StackDockGroup_9.52208465"
-            AutoDestroy="false"
-            TheOrientation="Horizontal">
-            <HeaderRestorationInfo>Tab2</HeaderRestorationInfo>
         </DockGroupParams>
     </DockGroupParams>
 </DockManagerParams>

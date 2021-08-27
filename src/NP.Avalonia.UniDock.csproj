@@ -10,7 +10,7 @@
     <PackageReference Include="Avalonia" Version="0.10.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
-   </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
     <ProjectReference Include="..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />

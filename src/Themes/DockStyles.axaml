@@ -392,6 +392,8 @@
             Value="30"/>
     <Setter Property="HeaderSeparatorHeight"
             Value="2"/>
+    <!--<Setter Property="ResizeMargin"
+            Value="10"/>-->
     <Setter Property="HeaderSeparatorBrush"
             Value="{StaticResource DockSeparatorBrush}"/>
     <Setter Property="CustomHeaderIconMargin"

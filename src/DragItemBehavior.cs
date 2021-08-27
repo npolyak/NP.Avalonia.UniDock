@@ -19,6 +19,7 @@ using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NP.Avalonia.UniDock
 {
@@ -123,7 +124,7 @@ namespace NP.Avalonia.UniDock
 
         protected abstract bool MoveItemWithinContainer(Control itemsContainer, PointerEventArgs e);
 
-        protected virtual void OnDragPointerMoved(object sender, PointerEventArgs e)
+        protected virtual async void OnDragPointerMoved(object sender, PointerEventArgs e)
         {
             if (_startItem == null)
             {
@@ -169,18 +170,23 @@ namespace NP.Avalonia.UniDock
 
             DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
 
+            ClearHandlers(sender);
+
+            await Task.Delay(200);
+
             if (ownerWindow != null)
             {
-                dockWindow.Show(parentWindow);
+                dockWindow.Show(ownerWindow);
             }
             else
             {
                 dockWindow.Show();
             }
 
-            dockWindow.Activate();
-
-            ClearHandlers(sender);
+            if (!dockWindow.IsActive)
+            {
+                dockWindow.Activate();
+            }
         }
     }
 }
