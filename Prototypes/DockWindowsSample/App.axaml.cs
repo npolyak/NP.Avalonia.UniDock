@@ -13,7 +13,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace DockWindowsSample
+namespace NP.Demos.DockWindowsSample
 {
     public class App : Application
     {

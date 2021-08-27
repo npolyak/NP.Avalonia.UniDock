@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using System;
 
-namespace DockWindowsSample
+namespace NP.Demos.DockWindowsSample
 {
     class Program
     {

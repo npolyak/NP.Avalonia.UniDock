@@ -15,7 +15,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:np="https://np.com/visuals"
-        xmlns:local="clr-namespace:DockWindowsSample"
+        xmlns:local="clr-namespace:NP.Demos.DockWindowsSample"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="550"
@@ -24,8 +24,8 @@
         np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         np:DockAttachedProperties.WindowId="TheMainWindow"
-        x:Class="DockWindowsSample.MainWindow"
-        Title="DockWindowsSample">
+        x:Class="NP.Demos.DockWindowsSample.MainWindow"
+        Title="NP.Demos.DockWindowsSample">
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>

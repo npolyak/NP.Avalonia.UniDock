@@ -91,7 +91,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (windowType != w.GetType())
             {
-                throw new Exception($"ERROR window types doe not match for the window titled {w.Title}.");
+                throw new Exception($"ERROR window types do not match for the window titled {w.Title}.");
             }
 
             w.Position = wp.TopLeft.ToPixelPoint();

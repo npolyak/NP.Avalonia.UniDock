@@ -21,7 +21,7 @@ using NP.Utilities;
 using System;
 using System.IO;
 
-namespace DockWindowsSample
+namespace NP.Demos.DockWindowsSample
 {
     public partial class MainWindow : Window
     {
