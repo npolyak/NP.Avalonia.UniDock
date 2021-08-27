@@ -21,6 +21,8 @@ using Avalonia.Layout;
 using System.Collections.ObjectModel;
 using NP.Concepts.Behaviors;
 using System.ComponentModel;
+using System.IO;
+using NP.Avalonia.UniDock.Serialization;
 
 namespace NP.Avalonia.UniDock
 {
@@ -366,6 +368,33 @@ namespace NP.Avalonia.UniDock
 
                 DraggedWindow = null;
             }
+        }
+
+        public void SaveToFile(string filePath)
+        {
+
+            var dockManagerParams = this.ToParams();
+
+            string serializationStr =
+                XmlSerializationUtils.Serialize(dockManagerParams);
+
+            using StreamWriter writer = new StreamWriter(filePath);
+
+            writer.Write(serializationStr);
+
+            writer.Flush();
+        }
+
+        public void RestoreFromFile(string filePath)
+        {
+            using StreamReader reader = new StreamReader(filePath);
+
+            string serializationStr = reader.ReadToEnd();
+
+            DockManagerParams dmp =
+                XmlSerializationUtils.Deserialize<DockManagerParams>(serializationStr);
+
+            this.SetDockManagerFromParams(dmp);
         }
     }
 }

@@ -74,16 +74,7 @@ namespace NP.Demos.DockWindowsSample
         {
             DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
 
-            var dockManagerParams = dockManager.ToParams();
-
-            string serializationStr = 
-                XmlSerializationUtils.Serialize(dockManagerParams);
-
-            using StreamWriter writer = new StreamWriter(SerializationFilePath);
-
-            writer.Write(serializationStr);
-
-            writer.Flush();
+            dockManager.SaveToFile(SerializationFilePath);
         }
 
 
@@ -91,14 +82,7 @@ namespace NP.Demos.DockWindowsSample
         {
             DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
 
-            using StreamReader reader = new StreamReader(SerializationFilePath);
-
-            string serializationStr = reader.ReadToEnd();
-
-            DockManagerParams dmp = 
-                XmlSerializationUtils.Deserialize<DockManagerParams>(serializationStr);
-
-            dockManager.SetDockManagerFromParams(dmp);
+            dockManager.RestoreFromFile(SerializationFilePath);
         }
 
         public void ClearGroups()
