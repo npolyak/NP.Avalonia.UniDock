@@ -13,9 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Templates;
@@ -23,11 +21,11 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
-using NP.Avalonia.Visuals.Behaviors;
+using NP.Utilities;
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace NP.Avalonia.Visuals.Controls
 {
@@ -47,7 +45,7 @@ namespace NP.Avalonia.Visuals.Controls
 
         private Control? _headerControl = null;
 
-        public Control? HeaderControl => _headerControl;
+        protected Control? HeaderControl => _headerControl;
 
         IDisposable _windowStateChangeDisposer;
 
@@ -66,7 +64,6 @@ namespace NP.Avalonia.Visuals.Controls
             _windowCustomFeatureDisposer =
                 HasCustomWindowFeaturesProperty.Changed.Subscribe(OnHasCustomFeaturesChanged);
         }
-
 
         private void OnHasCustomFeaturesChanged(AvaloniaPropertyChangedEventArgs<bool> hasCustomFeaturesContainer)
         {
@@ -201,6 +198,9 @@ namespace NP.Avalonia.Visuals.Controls
 
         Type IStyleable.StyleKey => typeof(CustomWindow);
 
+        protected PixelPoint StartPointerPosition;
+        protected PixelPoint StartWindowPosition;
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
@@ -219,18 +219,122 @@ namespace NP.Avalonia.Visuals.Controls
 
             _headerControl.PointerPressed += OnHeaderPointerPressed;
 
-            _headerControl.DoubleTapped += _headerControl_DoubleTapped;
+            _headerControl.DoubleTapped += OnHeaderDoubleTapped;
         }
 
-        private void _headerControl_DoubleTapped(object? sender, RoutedEventArgs e)
+        private void OnHeaderDoubleTapped(object? sender, RoutedEventArgs e)
         {
             MaximizeOrRestore();
         }
 
-        protected virtual void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
+        private void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
         {
-            BeginMoveDrag(e);
+            if (DragOnBeginMove)
+            {
+                BeginMoveDrag(e);
+            }
+            else
+            {
+                SetDragWindowOnMovePointer(e);
+            }
         }
+
+
+        #region PointerShift Styled Avalonia Property
+        public PixelPoint PointerShift
+        {
+            get { return GetValue(PointerShiftProperty); }
+            set { SetValue(PointerShiftProperty, value); }
+        }
+
+        public static readonly StyledProperty<PixelPoint> PointerShiftProperty =
+            AvaloniaProperty.Register<CustomWindow, PixelPoint>
+            (
+                nameof(PointerShift)
+            );
+        #endregion PointerShift Styled Avalonia Property
+
+        bool _startMoving = false;
+        protected virtual void SetDragWindowOnMovePointer(PointerEventArgs e)
+        {
+            if (!e.GetCurrentPoint(_headerControl).Properties.IsLeftButtonPressed)
+            {
+                return;
+            }
+
+            _startMoving = false;
+            StartPointerPosition = GetCurrentPointInScreen(e);
+            StartWindowPosition = this.Position;
+            PointerShift = new PixelPoint();
+            SetDragOnMovePointer();
+        }
+
+        protected virtual void SetDragOnMovePointer()
+        {
+            if (HeaderControl != null)
+            {
+                HeaderControl.PointerMoved += OnPointerMoved;
+
+                HeaderControl.PointerReleased += OnPointerReleased;
+            }
+        }
+
+        public PixelPoint GetCurrentPointInScreen(PointerEventArgs e)
+        {
+            return _headerControl.PointToScreen(e.GetPosition(_headerControl));
+        }
+
+        protected virtual void OnPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            _headerControl.PointerMoved -= OnPointerMoved;
+            _headerControl.PointerReleased -= OnPointerReleased;
+            UpdatePosition(e);
+            _startMoving = false;
+        }
+
+        protected virtual void OnPointerMoved(object sender, PointerEventArgs e)
+        {
+            UpdatePosition(e);
+        }
+
+        protected void UpdatePosition(PointerEventArgs e)
+        {
+            try
+            {
+                PointerShift = GetCurrentPointInScreen(e) - StartPointerPosition;
+            }
+            catch
+            {
+                return;
+            }
+            Point2D pointerShift = PointerShift.ToPoint2D();
+
+            if (!_startMoving && pointerShift.AbsSquared() > 9)
+            {
+                _startMoving = true;
+            }
+
+            if (_startMoving)
+            {
+                this.Position = StartWindowPosition + PointerShift;
+            }
+        }
+
+        #region DragOnBeginMove Styled Avalonia Property
+        public bool DragOnBeginMove
+        {
+            get { return GetValue(DragOnBeginMoveProperty); }
+            set { SetValue(DragOnBeginMoveProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> DragOnBeginMoveProperty =
+            AvaloniaProperty.Register<CustomWindow, bool>
+            (
+                nameof(DragOnBeginMove),
+                true
+            );
+        #endregion DragOnBeginMove Styled Avalonia Property
+
 
         #region HeaderTemplate Avalonia Property
         public ControlTemplate HeaderTemplate
@@ -426,14 +530,14 @@ namespace NP.Avalonia.Visuals.Controls
         #endregion HeaderContent Styled Avalonia Property
 
         #region HeaderContentTemplate Styled Avalonia Property
-        public IDataTemplate HeaderContentTemplate
+        public DataTemplate HeaderContentTemplate
         {
             get { return GetValue(HeaderContentTemplateProperty); }
             set { SetValue(HeaderContentTemplateProperty, value); }
         }
 
-        public static readonly StyledProperty<IDataTemplate> HeaderContentTemplateProperty =
-            AvaloniaProperty.Register<CustomWindow, IDataTemplate>
+        public static readonly StyledProperty<DataTemplate> HeaderContentTemplateProperty =
+            AvaloniaProperty.Register<CustomWindow, DataTemplate>
             (
                 nameof(HeaderContentTemplate)
             );
@@ -466,7 +570,7 @@ namespace NP.Avalonia.Visuals.Controls
         public static readonly StyledProperty<bool> HasCustomWindowFeaturesProperty =
             AvaloniaProperty.Register<CustomWindow, bool>
             (
-                nameof(HasCustomWindowFeatures), 
+                nameof(HasCustomWindowFeatures),
                 true
             );
         #endregion HasCustomWindowFeatures Styled Avalonia Property

@@ -48,6 +48,8 @@ namespace NP.Avalonia.UniDock
 
         public FloatingWindow()
         {
+            DragOnBeginMove = false;
+
             Classes = new Classes(new[] { "PlainFloatingWindow" });
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
@@ -79,25 +81,6 @@ namespace NP.Avalonia.UniDock
             allGroups?.DoForEach(item => item.RemoveItselfFromParent());
         }
 
-        protected Point2D? StartPointerPosition { get; set; }
-        protected Point2D? StartWindowPosition { get; set; }
-
-
-        #region PointerShift Styled Avalonia Property
-        public Point2D PointerShift
-        {
-            get { return GetValue(PointerShiftProperty); }
-            set { SetValue(PointerShiftProperty, value); }
-        }
-
-        public static readonly StyledProperty<Point2D> PointerShiftProperty =
-            AvaloniaProperty.Register<CustomWindow, Point2D>
-            (
-                nameof(PointerShift)
-            );
-        #endregion PointerShift Styled Avalonia Property
-
-
         public void SetMovePtr()
         {
             SetInitialPosition();
@@ -113,80 +96,25 @@ namespace NP.Avalonia.UniDock
 
         private void SetInitialPosition()
         {
-            StartPointerPosition = CurrentScreenPointBehavior.CurrentScreenPointValue;
-            StartWindowPosition = StartPointerPosition.Minus(new Point2D(60, 10));
-            Position = StartWindowPosition.ToPixelPoint();
+            StartPointerPosition = CurrentScreenPointBehavior.CurrentScreenPointValue.ToPixelPoint();
+            StartWindowPosition = StartPointerPosition - new PixelPoint(60, 10);
+            Position = StartWindowPosition;
         }
 
-        protected override void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
-        {
-            SetDragOnMovePointer(e);
-        }
-
-        private void SetDragOnMovePointer(PointerEventArgs e)
-        {
-            if (!e.GetCurrentPoint(HeaderControl).Properties.IsLeftButtonPressed)
-            {
-                return;
-            }
-
-            StartPointerPosition = GetCurrentPointInScreen(e);
-            StartWindowPosition = this.Position.ToPoint2D();
-            PointerShift = new Point2D();
-
-            SetDragOnMovePointer();
-        }
-
-        private void SetDragOnMovePointer()
+        protected override void SetDragOnMovePointer()
         {
             TheDockManager!.DraggedWindow = this;
 
             CurrentScreenPointBehavior.Capture(HeaderControl);
 
-            if (HeaderControl != null)
-            {
-                HeaderControl.PointerMoved += OnPointerMoved!;
-
-                HeaderControl.PointerReleased += OnPointerReleased!;
-            }
+            base.SetDragOnMovePointer();
         }
 
-        public Point2D GetCurrentPointInScreen(PointerEventArgs e)
+        protected override void OnPointerReleased(object sender, PointerReleasedEventArgs e)
         {
-            var result = HeaderControl.PointToScreen(e.GetPosition(HeaderControl));
-            return result.ToPoint2D();
-        }
-
-        private void UpdatePosition(PointerEventArgs e)
-        {
-            try
-            {
-                PointerShift = GetCurrentPointInScreen(e).Minus(StartPointerPosition);
-            }
-            catch
-            {
-
-            }
-            this.Position = StartWindowPosition.Plus(PointerShift).ToPixelPoint();
-        }
-
-        protected void OnPointerReleased(object sender, PointerReleasedEventArgs e)
-        {
-            if (HeaderControl != null)
-            {
-                HeaderControl.PointerMoved -= OnPointerMoved!;
-
-                HeaderControl.PointerReleased -= OnPointerReleased!;
-            }
-
-            UpdatePosition(e);
+            base.OnPointerReleased(sender, e);
 
             TheDockManager?.CompleteDragDropAction();
-        }
-
-        protected void OnPointerMoved(object sender, PointerEventArgs e)
-        {
-            UpdatePosition(e);
         }
 
         private IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)

@@ -83,7 +83,7 @@ namespace NP.Avalonia.Visuals.Behaviors
             {
                 CapturedControl.PointerReleased -= Control_PointerReleased;
             }
-
+            
             Mouse?.Capture(null);
             _capturedWindow = null;
         }
