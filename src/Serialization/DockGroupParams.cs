@@ -53,8 +53,8 @@ namespace NP.Avalonia.UniDock.Serialization
         /// they signify the proportion of the horizontal or vertical space that the
         /// child gets.
         /// </summary>
-        //[XmlAttribute]
-        //public double? SizeCoefficient { get; set; }
+        [XmlArray]
+        public double[]? SizeCoefficients { get; set; }
 
         #endregion Width or Height Coefficients
 
@@ -90,6 +90,12 @@ namespace NP.Avalonia.UniDock.Serialization
                     p.ChildrenDockIds.Add(child.DockId);
                     p.AutoDestroy = dg.AutoDestroy;
                 }
+            }
+
+
+            if (dg is DockStackGroup dockStackGroup)
+            {
+                p.SizeCoefficients = dockStackGroup.GetSizeCoefficients();
             }
 
             if (dg is DockStackGroup stackGroup)

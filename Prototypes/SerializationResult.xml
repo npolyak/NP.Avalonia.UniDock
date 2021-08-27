@@ -8,8 +8,8 @@
             WindowId="TheMainWindow"
             DockChildWindowOwnerId="TheMainWindow">
             <TopLeft
-                X="345"
-                Y="730" />
+                X="700"
+                Y="761" />
             <Size
                 X="700"
                 Y="700" />
@@ -19,39 +19,39 @@
             Title="Tab4"
             TheWindowState="Normal"
             OwnerWindowId="TheMainWindow"
-            WindowId="FloatingWindow_1_52175611"
+            WindowId="FloatingWindow_1.52182756"
             DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="SimpleDockGroup_1_52175611">
+            TopLevelGroupId="SimpleDockGroup_3.52182756">
             <TopLeft
-                X="1213"
-                Y="631" />
+                X="1620"
+                Y="526" />
             <Size
                 X="400"
-                Y="657.6" />
+                Y="611.2" />
         </WindowParams>
     </WindowsSerializationParams>
     <DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
             DockId="Group1"
-            ChildrenDockIds="DockTabbedGroup_1_52175605"
+            ChildrenDockIds="DockTabbedGroup_1.52182749"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
             DockId="Group2"
-            ChildrenDockIds="DockItem5"
+            ChildrenDockIds="DockTabbedGroup_2.52182749"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
-            DockId="SimpleDockGroup_1_52175611"
-            ChildrenDockIds="DockStackGroup_1_52175616"
+            DockId="SimpleDockGroup_3.52182756"
+            ChildrenDockIds="DockStackGroup_5.52182760"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockTabbedGroup"
-            DockId="DockTabbedGroup_1_52175605"
+            DockId="DockTabbedGroup_1.52182749"
             ParentDockId="Group1"
             ChildrenDockIds="DockItem2 DockItem3"
             AutoDestroy="false"
@@ -59,7 +59,7 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem2"
-            ParentDockId="DockTabbedGroup_1_52175605"
+            ParentDockId="DockTabbedGroup_1.52182749"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab2</HeaderRestorationInfo>
@@ -67,41 +67,64 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem3"
-            ParentDockId="DockTabbedGroup_1_52175605"
+            ParentDockId="DockTabbedGroup_1.52182749"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab3</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockTabbedGroup"
+            DockId="DockTabbedGroup_2.52182749"
+            ParentDockId="Group2"
+            AutoDestroy="false"
+            TheOrientation="Horizontal" />
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockStackGroup"
+            DockId="DockStackGroup_5.52182760"
+            ParentDockId="SimpleDockGroup_3.52182756"
+            ChildrenDockIds="DockStackGroup_7.52183622 DockItem1"
+            AutoDestroy="true"
+            TheOrientation="Vertical">
+            <SizeCoefficients>
+                <double>476.8</double>
+                <double>99.99999999999994</double>
+            </SizeCoefficients>
+        </DockGroupParams>
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockStackGroup"
+            DockId="DockStackGroup_7.52183622"
+            ParentDockId="DockStackGroup_5.52182760"
+            ChildrenDockIds="DockItem4 DockItem5"
+            AutoDestroy="true"
+            TheOrientation="Horizontal">
+            <SizeCoefficients>
+                <double>256.8</double>
+                <double>140</double>
+            </SizeCoefficients>
+        </DockGroupParams>
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
+            DockId="DockItem4"
+            ParentDockId="DockStackGroup_7.52183622"
+            AutoDestroy="false"
+            TheOrientation="Horizontal">
+            <HeaderRestorationInfo>Tab4</HeaderRestorationInfo>
+        </DockGroupParams>
+        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem5"
-            ParentDockId="Group2"
+            ParentDockId="DockStackGroup_7.52183622"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab5</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.DockStackGroup"
-            DockId="DockStackGroup_1_52175616"
-            ParentDockId="SimpleDockGroup_1_52175611"
-            ChildrenDockIds="DockItem1 DockItem4"
-            AutoDestroy="true"
-            TheOrientation="Vertical" />
-        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="DockItem1"
-            ParentDockId="DockStackGroup_1_52175616"
+            ParentDockId="DockStackGroup_5.52182760"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>Tab1</HeaderRestorationInfo>
-        </DockGroupParams>
-        <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="DockItem4"
-            ParentDockId="DockStackGroup_1_52175616"
-            AutoDestroy="false"
-            TheOrientation="Horizontal">
-            <HeaderRestorationInfo>Tab4</HeaderRestorationInfo>
         </DockGroupParams>
     </DockGroupParams>
 </DockManagerParams>

@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Layout;
 using NP.Concepts.Behaviors;
 using System;
@@ -134,5 +135,25 @@ namespace NP.Avalonia.UniDock
         }
 
         public bool AutoDestroy { get; set; } = true;
+
+        public double GetSizeCoefficient(int idx)
+        {
+            return _stackGroup.GetSizeCoefficient(idx);
+        }
+
+        public void SetSizeCoefficient(int idx, double coeff)
+        {
+            _stackGroup.SetSizeCoefficient(idx, coeff);
+        }
+
+        public double[] GetSizeCoefficients()
+        {
+            return _stackGroup.GetSizeCoefficients();
+        }
+
+        public void SetSizeCoefficients(double[]? coeffs)
+        {
+            _stackGroup.SetSizeCoefficients(coeffs);
+        }
     }
 }

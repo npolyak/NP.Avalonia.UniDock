@@ -11,8 +11,6 @@
 
 using Avalonia;
 using Avalonia.Controls.Primitives;
-using Avalonia.VisualTree;
-using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {

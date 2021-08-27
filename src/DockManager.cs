@@ -172,11 +172,18 @@ namespace NP.Avalonia.UniDock
                 int insertIdx = childIdx.ToInsertIdx(dock);
                 parentGroup.DockChildren.Insert(insertIdx, draggedGroup);
             }
-            else
+            else // create an extra DockStackGroup insert the dragged object and the 
+                 // the object it is dropped on (drop object) into that group and insert
+                 // this new group in place of the drop object.
             {
+                double sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
+
                 CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
                 DockStackGroup insertGroup = new DockStackGroup { TheOrientation = orientation };
+                
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
+
+                parentGroup.SetSizeCoeff(childIdx, sizeCoeff);
 
                 insertGroup.DockChildren?.Insert(0, CurrentLeafObjToInsertWithRespectTo);
 

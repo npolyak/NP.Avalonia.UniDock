@@ -90,6 +90,29 @@ namespace NP.Avalonia.UniDock
                     .Any(ancestor => ancestor is ILeafDockObj);
         }
 
+        public static double GetSizeCoeff(this IDockGroup group, int idx)
+        {
+            if (group is DockStackGroup dockStackGroup)
+            {
+                return dockStackGroup.GetSizeCoefficient(idx);
+            }
+
+            return -1;
+        }
+
+        public static void SetSizeCoeff(this IDockGroup group, int idx, double coeff)
+        {
+            if (coeff < 0)
+            {
+                return;
+            }
+
+            if (group is DockStackGroup dockStackGroup)
+            {
+                dockStackGroup.SetSizeCoefficient(idx, coeff);
+            }
+        }
+
         public static void SimplifySelfImpl(this IDockGroup group)
         {
             if (!group.AutoDestroy)
@@ -111,12 +134,17 @@ namespace NP.Avalonia.UniDock
             if (group.GetNumberChildren() == 1)
             {
                 int idx = dockParent.DockChildren.IndexOf(group);
+
+                double sizeCoeff = dockParent.GetSizeCoeff(idx);
+
                 group.RemoveItselfFromParent();
 
                 IDockGroup child = group.DockChildren.First();
                 child.RemoveItselfFromParent();
 
                 dockParent.DockChildren.Insert(idx, child);
+
+                dockParent.SetSizeCoeff(idx, sizeCoeff);
             }
         }
     }

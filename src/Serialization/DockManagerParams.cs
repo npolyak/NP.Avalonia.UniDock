@@ -223,6 +223,20 @@ namespace NP.Avalonia.UniDock.Serialization
                     winGroups.DoForEach(g => dm.BuildGroup(dmp, g.DockId, dockItems));
                 }
             }
+
+            // set the coefficients for the DockStackGroups
+            foreach(var group in dm.AllGroups)
+            {
+                if (group is DockStackGroup dockStackGroup)
+                {
+                    DockGroupParams? p = dmp.FindGroupParamsById(group.DockId);
+
+                    if (p != null)
+                    {
+                        dockStackGroup.SetSizeCoefficients(p.SizeCoefficients);
+                    }
+                }
+            }
         }
     }
 }

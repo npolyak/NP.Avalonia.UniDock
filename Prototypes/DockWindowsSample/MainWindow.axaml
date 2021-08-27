@@ -58,7 +58,7 @@
       <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                           DockId="Group2"
                           Grid.Column="1">
-        <np:DockTabbedGroup>
+        <np:DockTabbedGroup AutoDestroy="False">
           <np:DockTabbedGroup.Items>
             <np:DockItem Header="Tab4" 
                          Content="Hello World!"

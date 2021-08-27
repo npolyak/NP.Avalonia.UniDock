@@ -129,18 +129,18 @@ namespace NP.Avalonia.UniDock
 
             this.Items.RemoveAllOneByOne();
 
-            foreach(T child in children)
+            foreach (T child in children)
             {
                 AddLastItem(child);
             }
         }
 
         public T? FirstItem =>
-            (T?) this.GridChildren.FirstOrDefault();
+            (T?)this.GridChildren.FirstOrDefault();
 
 
         public T? LastItem =>
-            (T?) this.GridChildren.LastOrDefault();
+            (T?)this.GridChildren.LastOrDefault();
 
         private static int NextIdx(int idx, bool isAfter)
         {
@@ -156,8 +156,6 @@ namespace NP.Avalonia.UniDock
 
         private void InsertBeforeOrAfterItem(T? currentItem, T itemToInsert, bool isAfter)
         {
-
-            Binding binding;
             if (currentItem == null)
             {
                 if (NumberChildren > 0)
@@ -165,7 +163,7 @@ namespace NP.Avalonia.UniDock
                     throw new Exception("Programming errorin StackGroup.AddFirstChild - the item collection is not empty.");
                 }
 
-                binding = AddDefinition(0, false);
+                AddDefinition(0, false);
                 this.GridChildren.Insert(0, itemToInsert);
             }
             else
@@ -178,16 +176,13 @@ namespace NP.Avalonia.UniDock
                 Control separator = GetSeparator();
 
                 AddDefinition(insertSeparatorIdx, true);
-                binding = AddDefinition(insertChildIdx, false);
+                AddDefinition(insertChildIdx, false);
 
                 this.GridChildren.Insert(insertSeparatorIdx, separator);
                 this.GridChildren.Insert(insertChildIdx, itemToInsert);
 
                 ResetChildIndexes();
             }
-
-            binding.Mode = BindingMode.OneWay;
-            itemToInsert.Bind(DockAttachedProperties.SizeGridLengthProperty, binding);
         }
 
         private void ResetChildIndexes()
@@ -196,7 +191,7 @@ namespace NP.Avalonia.UniDock
                 TheOrientation == Orientation.Horizontal ? Grid.SetColumn : Grid.SetRow;
 
             int i = 0;
-            foreach(Control child in GridChildren)
+            foreach (Control child in GridChildren)
             {
                 idxSetter(child, i);
                 i++;
@@ -215,13 +210,11 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private Binding AddDefinition(int idx, bool isSeparator)
+        private void AddDefinition(int idx, bool isSeparator)
         {
-            Binding binding = new Binding();
-
             if (TheOrientation == Orientation.Horizontal)
             {
-                ColumnDefinition definition = 
+                ColumnDefinition definition =
                     new ColumnDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
 
                 if (!isSeparator)
@@ -230,12 +223,10 @@ namespace NP.Avalonia.UniDock
                 }
 
                 this.GridColumnDefinitions.Insert(idx, definition);
-                binding.Source = definition;
-                binding.Path = "Width";
             }
             else
             {
-                RowDefinition definition = 
+                RowDefinition definition =
                     new RowDefinition(isSeparator ? GridLength.Auto : GridLength.Parse("*"));
 
                 if (!isSeparator)
@@ -244,12 +235,7 @@ namespace NP.Avalonia.UniDock
                 }
 
                 this.GridRowDefinitions.Insert(idx, definition);
-
-                binding.Source = definition;
-                binding.Path = "Height";
             }
-
-            return binding;
         }
 
         private void InsertBeforeItem(T? currentItem, T itemToInsert)
@@ -363,6 +349,88 @@ namespace NP.Avalonia.UniDock
         private void OnItemRemoved(IEnumerable<T> controls, T item, int idx)
         {
             RemoveItem(item);
+        }
+
+        private int GetGridIdx(T item)
+        {
+            Func<Control, int> idxGetter =
+                TheOrientation == Orientation.Horizontal ?
+                    Grid.GetColumn : Grid.GetRow;
+
+            return idxGetter((Control)(object)item);
+        }
+
+        private int GetGridIdx(int itemIdx)
+        {
+            return GetGridIdx(Items[itemIdx]);
+        }
+
+        private List<int> GetGridIndexes()
+        {
+            return Items.Select(item => GetGridIdx(item)).ToList(); ;
+        }
+
+        public double GetSizeCoefficient(int itemIdx)
+        {
+            if (Items.Count <= 1)
+                return 1d;
+
+            int gridIdx = GetGridIdx(itemIdx);
+
+            double result = 1d;
+            if (TheOrientation == Orientation.Horizontal)
+            {
+                result = _grid.ColumnDefinitions[gridIdx].Width.Value;
+            }
+            else
+            {
+                result = _grid.RowDefinitions[gridIdx].Height.Value;
+            }
+
+            return result;
+        }
+
+        public void SetSizeCoefficient(int itemIdx, double coeff)
+        {
+            if (Items.Count <= 1)
+                return;
+
+            int gridIdx = GetGridIdx(itemIdx);
+
+            if (TheOrientation == Orientation.Horizontal)
+            {
+                _grid.ColumnDefinitions[gridIdx].Width = new GridLength(coeff, GridUnitType.Star);
+            }
+            else
+            {
+                _grid.RowDefinitions[gridIdx].Height = new GridLength(coeff, GridUnitType.Star);
+            }
+        }
+
+
+        public double[] GetSizeCoefficients()
+        {
+            if (Items.Count <= 1)
+            {
+                return new[] { 1d };
+            }
+
+            return Items.Select((item, i) => GetSizeCoefficient(i)).ToArray();
+        }
+
+        public void SetSizeCoefficients(double[]? coeffs)
+        {
+            if (coeffs == null || Items.Count <= 1)
+            {
+                return;
+            }
+
+            if (coeffs.Length != Items.Count)
+            {
+                throw new Exception($"Error: number of Items ({Items.Count}) is not the same as the number of passed coeffs ({coeffs.Length}).");
+            }
+
+            Items.DoForEach((item, i) => SetSizeCoefficient(i, coeffs[i]));
         }
     }
 }
