@@ -33,7 +33,7 @@ namespace NP.Demos.UniDockWindowsSample
 
         const string SerializationFilePath = "../../../SerializationResult.xml";
 
-        public void Serialize()
+        public void Save()
         {
             DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
 

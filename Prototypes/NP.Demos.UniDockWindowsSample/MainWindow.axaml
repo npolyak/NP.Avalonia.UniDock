@@ -122,7 +122,7 @@
               Content="Serialize"
               np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
               np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-              np:CallAction.MethodName="Serialize"
+              np:CallAction.MethodName="Save"
               Margin="10,20"/>
       <Button Width="100"
               Height="50"
