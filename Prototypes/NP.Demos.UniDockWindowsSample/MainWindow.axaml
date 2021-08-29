@@ -12,13 +12,7 @@
 
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:np="https://np.com/visuals"
-        xmlns:local="clr-namespace:NP.Demos.UniDockWindowsSample"
-        mc:Ignorable="d"
-        d:DesignWidth="800"
-        d:DesignHeight="550"
         Width="700"
         Height="700"
         np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
@@ -28,9 +22,6 @@
         Title="NP.Demos.UniDockWindowsSample">
   <Window.Resources>
     <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
-      </ResourceDictionary.MergedDictionaries>
       <np:DockManager x:Key="TheDockManager"/>
     </ResourceDictionary>
   </Window.Resources>
@@ -87,7 +78,7 @@
           </np:DockItem>
         </np:TabbedDockGroup>
         <np:StackDockGroup TheOrientation="Vertical">
-          <np:TabbedDockGroup TabStripPlacement="Bottom">
+          <np:StackDockGroup TheOrientation="Horizontal">
             <np:DockItem Header="RightTop 1"
                          DockId="RightTop1">
               <TextBlock Text="Right Top 1"
@@ -100,8 +91,8 @@
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"/>
             </np:DockItem>
-          </np:TabbedDockGroup>
-          <np:TabbedDockGroup TabStripPlacement="Bottom">
+          </np:StackDockGroup>
+          <np:StackDockGroup TheOrientation="Horizontal">
             <np:DockItem Header="RightBottom 1"
                          DockId="RightBottom1">
               <TextBlock Text="Right Bottom 1"
@@ -114,7 +105,7 @@
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"/>
             </np:DockItem>
-          </np:TabbedDockGroup>
+          </np:StackDockGroup>
         </np:StackDockGroup>
       </np:StackDockGroup>
     </np:SimpleDockGroup>
