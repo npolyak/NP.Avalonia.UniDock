@@ -319,7 +319,12 @@ namespace NP.Avalonia.UniDock
                                 groupToInsertItemsInto = new TabbedDockGroup();
 
                                 int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
+                                double sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);
+
                                 currentGroup.DockChildren?.Remove(CurrentLeafObjToInsertWithRespectTo!);
+
+                                currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
+                                currentGroup.SetSizeCoeff(currentLeafObjIdx, sizeCoeff);
 
                                 CurrentLeafObjToInsertWithRespectTo?.CleanSelfOnRemove();
 
@@ -331,8 +336,6 @@ namespace NP.Avalonia.UniDock
                                 {
                                     leafItems = leafItems.Union(additionaLeafItems).ToList();
                                 }
-                                
-                                currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
 
                                 groupToInsertItemsInto.ApplyTemplate();
                             }

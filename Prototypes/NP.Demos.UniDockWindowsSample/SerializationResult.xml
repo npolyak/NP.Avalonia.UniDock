@@ -8,8 +8,8 @@
             WindowId="TheMainWindow"
             DockChildWindowOwnerId="TheMainWindow">
             <TopLeft
-                X="224"
-                Y="224" />
+                X="480"
+                Y="480" />
             <Size
                 X="700"
                 Y="700" />
@@ -19,12 +19,12 @@
             Title="LeftTop 1"
             TheWindowState="Normal"
             OwnerWindowId="TheMainWindow"
-            WindowId="FloatingWindow_1.52371734"
+            WindowId="FloatingWindow_1.52374528"
             DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="SimpleDockGroup_9.52371734">
+            TopLevelGroupId="SimpleDockGroup_9.52374528">
             <TopLeft
-                X="1247"
-                Y="125" />
+                X="404"
+                Y="14" />
             <Size
                 X="400"
                 Y="300" />
@@ -34,14 +34,14 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
             DockId="RootGroup"
-            ChildrenDockIds="StackDockGroup_1.52371692"
+            ChildrenDockIds="StackDockGroup_1.52374523"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_1.52371692"
+            DockId="StackDockGroup_1.52374523"
             ParentDockId="RootGroup"
-            ChildrenDockIds="StackDockGroup_2.52371692 Document2 StackDockGroup_6.52371692"
+            ChildrenDockIds="TabbedDockGroup_4.52374523 TabbedDockGroup_5.52374523 StackDockGroup_6.52374523"
             AutoDestroy="true"
             TheOrientation="Horizontal">
             <SizeCoefficients>
@@ -51,45 +51,33 @@
             </SizeCoefficients>
         </DockGroupParams>
         <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_2.52371692"
-            ParentDockId="StackDockGroup_1.52371692"
-            ChildrenDockIds="LeftTop2 TabbedDockGroup_4.52371692"
-            AutoDestroy="true"
-            TheOrientation="Vertical">
-            <SizeCoefficients>
-                <double>1</double>
-                <double>1</double>
-            </SizeCoefficients>
-        </DockGroupParams>
-        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
-            DockId="TabbedDockGroup_4.52371692"
-            ParentDockId="StackDockGroup_2.52371692"
-            ChildrenDockIds="LeftBottom1 LeftBottom2"
+            DockId="TabbedDockGroup_5.52374523"
+            ParentDockId="StackDockGroup_1.52374523"
+            ChildrenDockIds="Document1 Document2"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="LeftBottom1"
-            ParentDockId="TabbedDockGroup_4.52371692"
+            DockId="Document1"
+            ParentDockId="TabbedDockGroup_5.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
-            <HeaderRestorationInfo>LeftBottom 1</HeaderRestorationInfo>
+            <HeaderRestorationInfo>Document 1</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="LeftBottom2"
-            ParentDockId="TabbedDockGroup_4.52371692"
+            DockId="Document2"
+            ParentDockId="TabbedDockGroup_5.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
-            <HeaderRestorationInfo>LeftBottom 2</HeaderRestorationInfo>
+            <HeaderRestorationInfo>Document 2</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_6.52371692"
-            ParentDockId="StackDockGroup_1.52371692"
-            ChildrenDockIds="TabbedDockGroup_7.52371692 TabbedDockGroup_8.52371692"
+            DockId="StackDockGroup_6.52374523"
+            ParentDockId="StackDockGroup_1.52374523"
+            ChildrenDockIds="TabbedDockGroup_7.52374523 TabbedDockGroup_8.52374523"
             AutoDestroy="true"
             TheOrientation="Vertical">
             <SizeCoefficients>
@@ -99,15 +87,15 @@
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
-            DockId="TabbedDockGroup_7.52371692"
-            ParentDockId="StackDockGroup_6.52371692"
+            DockId="TabbedDockGroup_7.52374523"
+            ParentDockId="StackDockGroup_6.52374523"
             ChildrenDockIds="RightTop1 RightTop2"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="RightTop1"
-            ParentDockId="TabbedDockGroup_7.52371692"
+            ParentDockId="TabbedDockGroup_7.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>RightTop 1</HeaderRestorationInfo>
@@ -115,22 +103,22 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="RightTop2"
-            ParentDockId="TabbedDockGroup_7.52371692"
+            ParentDockId="TabbedDockGroup_7.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>RightTop 2</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
-            DockId="TabbedDockGroup_8.52371692"
-            ParentDockId="StackDockGroup_6.52371692"
+            DockId="TabbedDockGroup_8.52374523"
+            ParentDockId="StackDockGroup_6.52374523"
             ChildrenDockIds="RightBottom1 RightBottom2"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="RightBottom1"
-            ParentDockId="TabbedDockGroup_8.52371692"
+            ParentDockId="TabbedDockGroup_8.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>RightBottom 1</HeaderRestorationInfo>
@@ -138,38 +126,45 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="RightBottom2"
-            ParentDockId="TabbedDockGroup_8.52371692"
+            ParentDockId="TabbedDockGroup_8.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>RightBottom 2</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
-            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="LeftTop2"
-            ParentDockId="StackDockGroup_2.52371692"
-            AutoDestroy="false"
-            TheOrientation="Horizontal">
-            <HeaderRestorationInfo>LeftTop 2</HeaderRestorationInfo>
-        </DockGroupParams>
-        <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.SimpleDockGroup"
-            DockId="SimpleDockGroup_9.52371734"
-            ChildrenDockIds="StackDockGroup_11.52371742"
+            DockId="SimpleDockGroup_9.52374528"
+            ChildrenDockIds="StackDockGroup_11.52374533"
+            AutoDestroy="true"
+            TheOrientation="Horizontal" />
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
+            DockId="TabbedDockGroup_4.52374523"
+            ParentDockId="StackDockGroup_1.52374523"
+            ChildrenDockIds="LeftBottom1 LeftBottom2"
             AutoDestroy="true"
             TheOrientation="Horizontal" />
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="Document2"
-            ParentDockId="StackDockGroup_1.52371692"
+            DockId="LeftBottom1"
+            ParentDockId="TabbedDockGroup_4.52374523"
             AutoDestroy="false"
             TheOrientation="Horizontal">
-            <HeaderRestorationInfo>Document 2</HeaderRestorationInfo>
+            <HeaderRestorationInfo>LeftBottom 1</HeaderRestorationInfo>
+        </DockGroupParams>
+        <DockGroupParams
+            GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
+            DockId="LeftBottom2"
+            ParentDockId="TabbedDockGroup_4.52374523"
+            AutoDestroy="false"
+            TheOrientation="Horizontal">
+            <HeaderRestorationInfo>LeftBottom 2</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_11.52371742"
-            ParentDockId="SimpleDockGroup_9.52371734"
-            ChildrenDockIds="LeftTop1 Document1"
+            DockId="StackDockGroup_11.52374533"
+            ParentDockId="SimpleDockGroup_9.52374528"
+            ChildrenDockIds="LeftTop1 LeftTop2"
             AutoDestroy="true"
             TheOrientation="Vertical">
             <SizeCoefficients>
@@ -180,18 +175,18 @@
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="LeftTop1"
-            ParentDockId="StackDockGroup_11.52371742"
+            ParentDockId="StackDockGroup_11.52374533"
             AutoDestroy="false"
             TheOrientation="Horizontal">
             <HeaderRestorationInfo>LeftTop 1</HeaderRestorationInfo>
         </DockGroupParams>
         <DockGroupParams
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
-            DockId="Document1"
-            ParentDockId="StackDockGroup_11.52371742"
+            DockId="LeftTop2"
+            ParentDockId="StackDockGroup_11.52374533"
             AutoDestroy="false"
             TheOrientation="Horizontal">
-            <HeaderRestorationInfo>Document 1</HeaderRestorationInfo>
+            <HeaderRestorationInfo>LeftTop 2</HeaderRestorationInfo>
         </DockGroupParams>
     </DockGroupParams>
 </DockManagerParams>

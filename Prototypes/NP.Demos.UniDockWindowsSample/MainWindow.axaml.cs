@@ -12,14 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using NP.Avalonia.Visuals;
-using NP.Avalonia.Visuals.Behaviors;
-using NP.Avalonia.Visuals.Controls;
 using NP.Avalonia.UniDock;
-using NP.Avalonia.UniDock.Serialization;
-using NP.Utilities;
-using System;
-using System.IO;
 
 namespace NP.Demos.UniDockWindowsSample
 {
@@ -31,15 +24,6 @@ namespace NP.Demos.UniDockWindowsSample
 #if DEBUG
             this.AttachDevTools();
 #endif
-
-            CurrentScreenPointBehavior.CurrentScreenPoint.Subscribe(OnCurrentScreenPointChanged);
-
-
-        }
-
-        private void OnCurrentScreenPointChanged(Point2D screenPoint)
-        {
-            AttachedProperties.SetCurrentScreenPoint(this, screenPoint);
         }
 
         private void InitializeComponent()
@@ -47,28 +31,7 @@ namespace NP.Demos.UniDockWindowsSample
             AvaloniaXamlLoader.Load(this);
         }
 
-        public void SetButtonBounds()
-        {
-            Button button = this.FindControl<Button>("TheButton");
-
-            ButtonBounds = button.GetScreenBounds();
-        }
-
-        const string SerializationFilePath = "../../../../SerializationResult.xml";
-
-        #region ButtonBounds Styled Avalonia Property
-        public Rect2D ButtonBounds
-        {
-            get { return GetValue(ButtonBoundsProperty); }
-            private set { SetValue(ButtonBoundsProperty, value); }
-        }
-
-        public static readonly StyledProperty<Rect2D> ButtonBoundsProperty =
-            AvaloniaProperty.Register<MainWindow, Rect2D>
-            (
-                nameof(ButtonBounds)
-            );
-        #endregion ButtonBounds Styled Avalonia Property
+        const string SerializationFilePath = "../../../SerializationResult.xml";
 
         public void Serialize()
         {
@@ -84,13 +47,5 @@ namespace NP.Demos.UniDockWindowsSample
 
             dockManager.RestoreFromFile(SerializationFilePath);
         }
-
-        public void ClearGroups()
-        {
-            DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
-
-            dockManager.ClearGroups();
-        }
-
     }
 }

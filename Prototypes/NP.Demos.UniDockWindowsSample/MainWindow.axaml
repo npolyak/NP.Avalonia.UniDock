@@ -34,53 +34,95 @@
       <np:DockManager x:Key="TheDockManager"/>
     </ResourceDictionary>
   </Window.Resources>
-  <Grid RowDefinitions="*, Auto">
-    <Grid ColumnDefinitions="*, *">
-      <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
-                           DockId="Group1">
-        <np:TabbedDockGroup AutoDestroy="False">
-          <np:TabbedDockGroup.Items>
-            <np:DockItem Header="Tab1"
-                         DockId="DockItem1">
-              <TextBlock Text="Hello World!"/>
+  <Grid RowDefinitions="*, Auto, Auto">
+    <np:SimpleDockGroup DockId="RootGroup"
+                        np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
+      <np:StackDockGroup TheOrientation="Horizontal">
+        <np:StackDockGroup TheOrientation="Vertical">
+          <np:TabbedDockGroup TabStripPlacement="Bottom">
+            <np:DockItem Header="LeftTop 1"
+                         DockId="LeftTop1">
+              <TextBlock Text="Left Top 1"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
             </np:DockItem>
-            <np:DockItem Header="Tab2"
-                         DockId="DockItem2">
-              <TextBlock Text="Hi World!"/>
+            <np:DockItem Header="LeftTop 2"
+                         DockId="LeftTop2">
+              <TextBlock Text="Left Top 2"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
             </np:DockItem>
-            <np:DockItem Header="Tab3"
-                         DockId="DockItem3">
-              <TextBlock Text="Hi World 1234!"/>
+          </np:TabbedDockGroup>
+          <np:TabbedDockGroup TabStripPlacement="Bottom">
+            <np:DockItem Header="LeftBottom 1"
+                         DockId="LeftBottom1">
+              <TextBlock Text="Left Bottom 1"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
             </np:DockItem>
-          </np:TabbedDockGroup.Items>
+            <np:DockItem Header="LeftBottom 2"
+                         DockId="LeftBottom2">
+              <TextBlock Text="Left Bottom 2"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </np:DockItem>
+          </np:TabbedDockGroup>
+        </np:StackDockGroup>
+        <np:TabbedDockGroup>
+          <np:DockItem Header="Document 1"
+                       DockId="Document1">
+            <Grid Background="Gray">
+              <TextBlock Text="Document 1"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Grid>
+          </np:DockItem>
+          <np:DockItem Header="Document 2"
+                       DockId="Document2">
+            <Grid Background="Gray">
+              <TextBlock Text="Document 2"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Grid>
+          </np:DockItem>
         </np:TabbedDockGroup>
-      </np:SimpleDockGroup>
-      <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
-                          DockId="Group2"
-                          Grid.Column="1">
-        <np:TabbedDockGroup AutoDestroy="False">
-          <np:TabbedDockGroup.Items>
-            <np:DockItem Header="Tab4" 
-                         Content="Hello World!"
-                         DockId="DockItem4">
-              <np:DockItem.ContentTemplate>
-                <DataTemplate>
-                  <Grid RowDefinitions="Auto, *">
-                    <TextBlock Foreground="Red"
-                               FontSize="20"
-                               Text="{Binding}"/>
-                  </Grid>
-                </DataTemplate>
-              </np:DockItem.ContentTemplate>
+        <np:StackDockGroup TheOrientation="Vertical">
+          <np:TabbedDockGroup TabStripPlacement="Bottom">
+            <np:DockItem Header="RightTop 1"
+                         DockId="RightTop1">
+              <TextBlock Text="Right Top 1"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
             </np:DockItem>
-            <np:DockItem Header="Tab5" 
-                         DockId="DockItem5"
-                         Content="Hi World!"/>
-          </np:TabbedDockGroup.Items>
-        </np:TabbedDockGroup>
-      </np:SimpleDockGroup>
-    </Grid>
-    <StackPanel Grid.Row="1" Orientation="Horizontal"
+            <np:DockItem Header="RightTop 2"
+                         DockId="RightTop2">
+              <TextBlock Text="Right Top 2"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </np:DockItem>
+          </np:TabbedDockGroup>
+          <np:TabbedDockGroup TabStripPlacement="Bottom">
+            <np:DockItem Header="RightBottom 1"
+                         DockId="RightBottom1">
+              <TextBlock Text="Right Bottom 1"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </np:DockItem>
+            <np:DockItem Header="RightBottom 2"
+                         DockId="RightBottom2">
+              <TextBlock Text="Right Bottom 2"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </np:DockItem>
+          </np:TabbedDockGroup>
+        </np:StackDockGroup>
+      </np:StackDockGroup>
+    </np:SimpleDockGroup>
+    <Grid x:Name="Separator" 
+          Grid.Row="1"
+          Height="3"
+          Background="LightGray"/>
+    <StackPanel Grid.Row="2" Orientation="Horizontal"
                 HorizontalAlignment="Right">
       <Button Width="100"
               Height="50"
@@ -91,15 +133,6 @@
               np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
               np:CallAction.MethodName="Serialize"
               Margin="10,20"/>
-      <!--<Button Width="200"
-              Height="50"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center"
-              Content="Clear Groups"
-              np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
-              np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-              np:CallAction.MethodName="ClearGroups"
-              Margin="10,20"/>-->
       <Button Width="100"
               Height="50"
               HorizontalAlignment="Center"
@@ -109,31 +142,6 @@
               np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
               np:CallAction.MethodName="Restore"
               Margin="10,20"/>
-      <!--<Grid Width="100"
-            Height="50">
-        <Button x:Name="TheButton"
-                Content="Set Button Bounds"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Background="Green"
-                np:CallAction.TheEvent="{x:Static Button.ClickEvent}"
-                np:CallAction.TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                np:CallAction.MethodName="SetButtonBounds">
-          <Button.RenderTransform>
-            <ScaleTransform  ScaleX="0.5"
-                             ScaleY="0.5"/>
-          </Button.RenderTransform>
-        </Button>
-      </Grid>
-      <StackPanel Orientation="Horizontal"
-                  HorizontalAlignment="Center"
-                  Margin="20" >
-        <TextBlock Margin="0,10"
-                   Text="{Binding Path=ButtonBounds, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                   
-        <TextBlock Margin="0,10"
-                   Text="{Binding Path=(np:AttachedProperties.CurrentScreenPoint), RelativeSource={RelativeSource AncestorType=Window}}"/>
-      </StackPanel>-->
     </StackPanel>
   </Grid>
 </Window>

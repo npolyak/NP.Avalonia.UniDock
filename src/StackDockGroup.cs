@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,7 @@ namespace NP.Avalonia.UniDock
 
         public IDockGroup? DockParent { get; set; }
 
+        [Content]
         public IList<IDockGroup> DockChildren { get; } = new ObservableCollection<IDockGroup>();
 
         private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } 
