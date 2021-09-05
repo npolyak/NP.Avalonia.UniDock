@@ -9,6 +9,8 @@
 // Also, please, mention this software in any documentation for the 
 // products that use it.
 
+using Avalonia;
+
 namespace NP.Avalonia.UniDock
 {
     public static class DockHelper
@@ -21,8 +23,10 @@ namespace NP.Avalonia.UniDock
 
             FloatingWindow dockWindow = new FloatingWindow(dockManager);
 
-            dockWindow.Width = 400;
-            dockWindow.Height = 300;
+            Point defaultFloatingWindowSize = dockItem.FloatingSize;
+
+            dockWindow.Width = defaultFloatingWindowSize.X;
+            dockWindow.Height = defaultFloatingWindowSize.Y;
 
             dockWindow.TheDockGroup.DockChildren.Add(dockItem!);
 

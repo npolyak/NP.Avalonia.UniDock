@@ -11,7 +11,6 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
 using NP.Avalonia.Visuals.Behaviors;
@@ -73,6 +72,21 @@ namespace NP.Avalonia.UniDock
         public DockItemPresenter? TheVisual { get; internal set; }
 
         public IControl GetVisual() => (TheVisual as IControl) ?? this;
+
+        #region FloatingSize Styled Avalonia Property
+        public Point FloatingSize
+        {
+            get { return GetValue(FloatingSizeProperty); }
+            set { SetValue(FloatingSizeProperty, value); }
+        }
+
+        public static readonly StyledProperty<Point> FloatingSizeProperty =
+            AvaloniaProperty.Register<DockItem, Point>
+            (
+                nameof(FloatingSize),
+                new Point(400, 300)
+            );
+        #endregion FloatingSize Styled Avalonia Property
 
         private bool _isSelected = false;
         public bool IsSelected 
