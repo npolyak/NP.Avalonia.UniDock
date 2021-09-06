@@ -21,6 +21,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using NLog;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
 using System;
@@ -52,11 +53,15 @@ namespace NP.Avalonia.Visuals.Controls
 
         IDisposable _windowCustomFeatureDisposer;
 
+        private ILogger _logger;
+
         public CustomWindow()
         {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            _logger = LogManager.GetCurrentClassLogger();
+
             (this as INotifyPropertyChanged).PropertyChanged += CustomWindow_PropertyChanged;
 
             _windowStateChangeDisposer =
@@ -175,6 +180,8 @@ namespace NP.Avalonia.Visuals.Controls
 
             handler = (i, e) =>
             {
+                _logger.Info($"Inside PointerPressed Handler - Cursor is {cursorType}.");
+
                 Cursor? oldWindowCursor = this.Cursor;
                 this.Cursor = new Cursor(cursorType);
 
