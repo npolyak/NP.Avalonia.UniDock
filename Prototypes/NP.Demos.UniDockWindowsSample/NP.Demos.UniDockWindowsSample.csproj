@@ -5,9 +5,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="bin.zip" />
     <None Remove="nuget.config" />
     <None Remove="SerializationResult.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NP.Avalonia.UniDock.csproj" />

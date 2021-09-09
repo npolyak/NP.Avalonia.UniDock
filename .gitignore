@@ -44,3 +44,6 @@
 /Prototypes/NP.Demos.UniDockCustomizationDemo/NP.Demos.DockWindowsSample.1.0.0.nupkg
 /SubModules/NP.Avalonia.Visuals/src/bin/Debug/NP.Avalonia.Visuals.0.90.1.nupkg
 /Prototypes/NP.Demos.UniDockCustomizationDemo/.vs/NP.Demos.DockWindowsSample/DesignTimeBuild/.dtbcache.v2
+/Prototypes/NP.Demos.UniDockWindowsSample/.vs/NP.Demos.UniDockWindowsSample/DesignTimeBuild
+/Prototypes/NP.Demos.UniDockWindowsSample/nlog.config
+/Prototypes/NP.Demos.UniDockWindowsSample/NP.Demos.UniDockWindowsSample.csproj.user

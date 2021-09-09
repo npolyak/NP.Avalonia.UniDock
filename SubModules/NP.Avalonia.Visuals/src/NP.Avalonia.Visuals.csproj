@@ -21,7 +21,6 @@
     <None Remove=".git" />
     <None Remove="Assets\avalonia-32.png" />
     <None Remove="LICENSE" />
-    <None Remove="nlog.config" />
     <None Remove="NP.Avalonia.Visuals.0.82.1.nupkg" />
     <None Remove="NP.Avalonia.Visuals.nuspec" />
     <None Remove="README.md" />
@@ -32,12 +31,6 @@
     <AvaloniaResource Include="Themes\ButtonStyles.axaml" />
     <AvaloniaResource Include="Themes\CustomWindowStyles.axaml" />
     <AvaloniaResource Include="Themes\Geometries.axaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="nlog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
