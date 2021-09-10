@@ -16,7 +16,7 @@ namespace NP.Demos.UniDockWindowsSample
 
         public void Log(LogKind logKind, string component, string msg)
         {
-            LogEventInfo logEventInfo = new LogEventInfo(logKind.ToLogLevel(), "DefaultLogger", msg);
+            LogEventInfo logEventInfo = new LogEventInfo(logKind.ToLogLevel(), "DefaultLogger", $"{msg}");
 
             logEventInfo.Properties.Add("Component", component);
 
