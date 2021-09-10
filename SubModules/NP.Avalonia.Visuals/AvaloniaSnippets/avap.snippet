@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define an Attached AvaloniaProperty</Title>
+            <Shortcut>avap</Shortcut>
+            <Description>Code snippet for an Avalonia Property</Description>
+            <Author>Nick Polyak</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>type</ID>
+                    <ToolTip>Property Type</ToolTip>
+                    <Default>double</Default>
+                </Literal>
+                <Literal>
+                    <ID>property</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Default>MyProperty</Default>
+                </Literal>
+                <Literal>
+                    <ID>ownerclass</ID>
+                    <ToolTip>The owning class of this Property.</ToolTip>
+					<Default>Control</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[
+#region $property$ Attached Avalonia Property
+public static $type$ Get$property$(AvaloniaObject obj)
+{
+    return obj.GetValue($property$Property);
+}
+
+public static void Set$property$(AvaloniaObject obj, $type$ value)
+{
+    obj.SetValue($property$Property, value);
+}
+
+public static readonly AttachedProperty<$type$> $property$Property =
+    AvaloniaProperty.RegisterAttached<object, $ownerclass$, $type$>
+    (
+        "$property$"
+    );
+#endregion $property$ Attached Avalonia Property
+$end$]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
