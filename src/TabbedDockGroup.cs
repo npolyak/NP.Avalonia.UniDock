@@ -51,6 +51,22 @@ namespace NP.Avalonia.UniDock
         static TabbedDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<TabbedDockGroup>((g, e) => g.OnDockIdChanged(e));
+
+
+            TabStripPlacementProperty.Changed.AddClassHandler<TabbedDockGroup>((sender, e) => sender.OnTabStringPlacementChanged(e));
+        }
+
+        private void OnTabStringPlacementChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            OnTabStringPlacementChanged();
+        }
+
+        private void OnTabStringPlacementChanged()
+        {
+            this.TabOrientation =
+                (TabStripPlacement == Dock.Top || TabStripPlacement == Dock.Bottom) 
+                    ? 
+                    Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
@@ -149,6 +165,8 @@ namespace NP.Avalonia.UniDock
                 _singleSelectionBehavior_PropertyChanged;
 
             SetSelectedItem();
+
+            OnTabStringPlacementChanged();
         }
 
         private void _singleSelectionBehavior_PropertyChanged
@@ -209,6 +227,30 @@ namespace NP.Avalonia.UniDock
                 Dock.Top
             );
         #endregion TabStripPlacement Styled Avalonia Property
+
+
+        #region TabOrientation Direct Avalonia Property
+        private Orientation _TabOrientation = Orientation.Vertical;
+
+        public static readonly DirectProperty<TabbedDockGroup, Orientation> TabOrientationProperty =
+            AvaloniaProperty.RegisterDirect<TabbedDockGroup, Orientation>
+            (
+                nameof(TabOrientation),
+                o => o.TabOrientation,
+                (o, v) => o.TabOrientation = v
+            );
+
+        public Orientation TabOrientation
+        {
+            get => _TabOrientation;
+            private set
+            {
+                SetAndRaise(TabOrientationProperty, ref _TabOrientation, value);
+            }
+        }
+
+        #endregion TabOrientation Direct Avalonia Property
+
 
         #region HorizontalContentAlignment Styled Avalonia Property
         public HorizontalAlignment HorizontalContentAlignment

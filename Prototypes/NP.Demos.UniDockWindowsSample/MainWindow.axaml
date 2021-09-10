@@ -30,7 +30,7 @@
                         np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:StackDockGroup TheOrientation="Horizontal">
         <np:StackDockGroup TheOrientation="Vertical">
-          <np:TabbedDockGroup TabStripPlacement="Bottom">
+          <np:TabbedDockGroup TabStripPlacement="Right">
             <np:DockItem Header="LeftTop 1"
                          DockId="LeftTop1"
                          FloatingSize="500, 500">
@@ -45,7 +45,7 @@
                          VerticalAlignment="Center"/>
             </np:DockItem>
           </np:TabbedDockGroup>
-          <np:TabbedDockGroup TabStripPlacement="Bottom">
+          <np:TabbedDockGroup TabStripPlacement="Left">
             <np:DockItem Header="LeftBottom 1"
                          DockId="LeftBottom1">
               <TextBlock Text="Left Bottom 1"

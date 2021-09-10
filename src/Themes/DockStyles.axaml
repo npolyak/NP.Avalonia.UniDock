@@ -284,7 +284,13 @@
                                                                                              RelativeSource={RelativeSource TemplatedParent}}"
                                        DockPanel.Dock="{TemplateBinding TabStripPlacement}"
                                        VerticalAlignment="Top"
-                                       Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                       Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}">
+                <local:DockTabsPresenter.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel Orientation="{TemplateBinding TabOrientation}"/>
+                  </ItemsPanelTemplate>
+                </local:DockTabsPresenter.ItemsPanel>
+              </local:DockTabsPresenter>
               <Grid>
                 <Grid.RowDefinitions>
                   <RowDefinition Height="Auto"/>
@@ -297,8 +303,6 @@
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="PART_TabSeparator" 
-                      Height="2"
-                      Grid.Column="1"
                       Background="{StaticResource DockSelectedColor}"
                       IsVisible="{Binding Path=NumberDockChildren, 
                                           Converter={x:Static np:IntConverters.IsPositiveConverter},
@@ -328,27 +332,39 @@
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Top"/>
   </Style>
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Top] /template/ Grid#PART_TabSeparator">
+    <Setter Property="Height"
+        Value="2"/>
+    <Setter Property="Grid.Column"
+            Value="1"/>
+  </Style>
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Bottom] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Bottom"/>
   </Style>
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Bottom] /template/ Grid#PART_TabSeparator">
+    <Setter Property="Grid.Column"
+            Value="1"/>
     <Setter Property="Grid.Row" Value="2"/>
+    <Setter Property="Height"
+        Value="2"/>
   </Style>
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Left"/>
   </Style>
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left] /template/ Grid#PART_TabSeparator">
     <Setter Property="Grid.Row" Value="1"/>
-    <Setter Property="Grid.Column" Value="2"/>
-  </Style>
-  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
-    <Setter Property="Orientation" Value="Vertical"/>
+    <Setter Property="Grid.Column" Value="0"/>
+    <Setter Property="Height" Value="NaN"/>
+    <Setter Property="Width" Value="2"/>
   </Style>
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Right"/>
   </Style>
-  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
-    <Setter Property="Orientation" Value="Vertical"/>
+  <Style Selector="local|TabbedDockGroup[TabStripPlacement=Right] /template/ Grid#PART_TabSeparator">
+    <Setter Property="Grid.Row" Value="1"/>
+    <Setter Property="Grid.Column" Value="2"/>
+    <Setter Property="Height" Value="NaN"/>
+    <Setter Property="Width" Value="2"/>
   </Style>
 
   <Style Selector="np|DockItemPresenter">

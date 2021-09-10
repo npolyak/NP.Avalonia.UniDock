@@ -25,12 +25,12 @@ namespace NP.Avalonia.UniDock
             return new DockTabItemContainerGenerator(this);
         }
 
-        private static readonly FuncTemplate<IPanel> DefaultPanel =
-            new FuncTemplate<IPanel>(() => new WrapPanel() { Orientation = Orientation.Horizontal });
+        //private static readonly FuncTemplate<IPanel> DefaultPanel =
+        //    new FuncTemplate<IPanel>(() => new WrapPanel() { Orientation = Orientation.Horizontal });
 
-        static DockTabsPresenter()
-        {
-            ItemsPanelProperty.OverrideDefaultValue<DockTabsPresenter>(DefaultPanel);
-        }
+        //static DockTabsPresenter()
+        //{
+        //    ItemsPanelProperty.OverrideDefaultValue<DockTabsPresenter>(DefaultPanel);
+        //}
     }
 }
