@@ -17,11 +17,13 @@
     <ProjectReference Include="..\..\src\NP.Avalonia.UniDock.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />
+    <ProjectReference Include="..\..\SubModules\NP.IoCy\src\NP.IoCy.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+    <PackageReference Include="NLog" Version="4.7.11" />
   </ItemGroup>
 </Project>
