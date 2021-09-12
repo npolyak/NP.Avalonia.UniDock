@@ -240,7 +240,9 @@ namespace NP.Avalonia.UniDock
             {
                 string prefix = window.GetType().Name;
                 windowId =
-                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix);
+                    _windowIdGenerator.GetUniqueName
+                    (
+                        Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)), prefix);
 
                 DockAttachedProperties.SetWindowId(window, windowId);
             }
@@ -264,13 +266,15 @@ namespace NP.Avalonia.UniDock
             VerifyDockIdUnique(group);
         }
 
+        UniqueNameGeneratorWithMaxMemory _dockIdGenerator = new UniqueNameGeneratorWithMaxMemory();
+        UniqueNameGeneratorWithMaxMemory _windowIdGenerator = new UniqueNameGeneratorWithMaxMemory();
         private void OnGroupItemAdded(IDockGroup addedGroup)
         {
             if (addedGroup.DockId == null)
             {
                 string prefix = addedGroup.GetType().Name;
 
-                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix);
+                addedGroup.DockId = _dockIdGenerator.GetUniqueName(AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId), prefix);
             }
             else
             {
