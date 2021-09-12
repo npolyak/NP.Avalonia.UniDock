@@ -27,7 +27,7 @@ namespace NP.Avalonia.UniDock
 
         public bool ShowChildHeaders { get; } = true;
 
-        public DockManager TheDockManager
+        public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
             set => DockAttachedProperties.SetTheDockManager(this, value);

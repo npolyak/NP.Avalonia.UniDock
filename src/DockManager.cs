@@ -338,14 +338,14 @@ namespace NP.Avalonia.UniDock
 
                                 if (additionaLeafItems != null)
                                 {
-                                    leafItems = leafItems.Union(additionaLeafItems).ToList();
+                                    leafItems = leafItems?.Union(additionaLeafItems).ToList();
                                 }
 
                                 groupToInsertItemsInto.ApplyTemplate();
                             }
 
                             groupToInsertItemsInto.DockChildren.InsertCollectionAtStart(leafItems);
-                            var firstLeafItem = leafItems.FirstOrDefault();
+                            var firstLeafItem = leafItems?.FirstOrDefault();
 
                             DraggedWindow?.Close();
 

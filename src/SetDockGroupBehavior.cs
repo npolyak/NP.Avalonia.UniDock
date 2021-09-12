@@ -11,19 +11,18 @@
 
 using System;
 using System.Collections.Generic;
-using NP.Concepts.Behaviors;
 
 namespace NP.Avalonia.UniDock
 {
     public class SetDockGroupBehavior<T> : IDisposable
         where T : IDockGroup
     {
-        private RemoveItemBehavior<T>? _removeItemBehavior;
+        private RemoveDockGroupBehavior<T>? _removeItemBehavior;
         private SetParentBehavior<T>? _setParentBehavior;
         private SetAttachedPropertyFromParentBehavior<T, DockManager>? _setDockManagerBehavior;
         public SetDockGroupBehavior(IDockGroup parent, IList<T> items)
         {
-            _removeItemBehavior = new RemoveItemBehavior<T>(items);
+            _removeItemBehavior = new RemoveDockGroupBehavior<T>(items);
             _setParentBehavior = new SetParentBehavior<T>(parent, items);
             _setDockManagerBehavior = new SetAttachedPropertyFromParentBehavior<T, DockManager>(parent, items, DockAttachedProperties.TheDockManagerProperty);
         }

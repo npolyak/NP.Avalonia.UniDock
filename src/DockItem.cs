@@ -48,6 +48,21 @@ namespace NP.Avalonia.UniDock
             DockIdChanged?.Invoke(this);
         }
 
+
+        #region IsDockVisible Styled Avalonia Property
+        public bool IsDockVisible
+        {
+            get { return GetValue(IsDockVisibleProperty); }
+            set { SetValue(IsDockVisibleProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsDockVisibleProperty =
+            AvaloniaProperty.Register<DockItem, bool>
+            (
+                nameof(IsDockVisible)
+            );
+        #endregion IsDockVisible Styled Avalonia Property
+
         static DockItem()
         {
             DockIdProperty.Changed.AddClassHandler<DockItem>((g, e) => g.OnDockIdChanged(e));
@@ -206,5 +221,7 @@ namespace NP.Avalonia.UniDock
         {
 
         }
+
+        public bool IsDynamic { get; set; }
     }
 }

@@ -349,5 +349,11 @@ namespace NP.Avalonia.UniDock
         {
             this.SimplifySelfImpl();
         }
+
+        public bool IsDynamic
+        {
+            get;
+            set;
+        }
     }
 }
