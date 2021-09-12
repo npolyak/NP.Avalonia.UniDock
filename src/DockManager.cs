@@ -143,10 +143,10 @@ namespace NP.Avalonia.UniDock
 
             CurrentLeafObjToInsertWithRespectTo = pointerAboveGroups.FirstOrDefault();
 
-            if (CurrentLeafObjToInsertWithRespectTo == null)
-            {
-                return;
-            }
+            //if (CurrentLeafObjToInsertWithRespectTo == null)
+            //{
+            //    return;
+            //}
 
             //Window w = CurrentLeafObjToInsertWithRespectTo.GetVisual().GetVisualAncestors().OfType<Window>().First();
 
@@ -240,7 +240,7 @@ namespace NP.Avalonia.UniDock
             {
                 string prefix = window.GetType().Name;
                 windowId =
-                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix, true);
+                    Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)).GetUniqueName(prefix);
 
                 DockAttachedProperties.SetWindowId(window, windowId);
             }
@@ -270,7 +270,7 @@ namespace NP.Avalonia.UniDock
             {
                 string prefix = addedGroup.GetType().Name;
 
-                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix, true);
+                addedGroup.DockId = AllGroups.Except(addedGroup.ToCollection()).Select(group => group.DockId).GetUniqueName(prefix);
             }
             else
             {

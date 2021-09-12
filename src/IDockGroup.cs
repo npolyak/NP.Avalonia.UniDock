@@ -33,6 +33,9 @@ namespace NP.Avalonia.UniDock
 
         bool AutoDestroy { get; set; }
 
+        // makes it invisible instead of removing it.
+        //bool AutoShrink { get; set; }
+
         bool IsRoot => DockParent == null;
 
         void CleanSelfOnRemove()
