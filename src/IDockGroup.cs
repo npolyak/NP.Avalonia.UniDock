@@ -51,12 +51,21 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        // IsPredefined == true - means
-        // the items are not removed, but made invisible
+        /// stable groups become invisible when they do not have any items.
+        /// They are not removed, when empty or have only one item. 
+        /// They are used to set the default locations of predefined DockItems
+        bool IsStableGroup
+        {
+            get => false;
+            set
+            {
+
+            }
+        }
+
+        // IsPredefined == true can only be for DockItems
         // so that
-        //      1. They can be restored from dock id (without any extra data) - for DockItems
-        //      2. They can be used as containers for default location of the DockItems - e.g. if DockItem needs to be 
-        //          redocked.
+        //      They can be restored from dock id (without any extra data) - for DockItems
         // IsPredefine == false means
         //      If dock item - it does not have a default location and needs a full parameter list with values to
         //          be restored - or rather - recreated
@@ -100,15 +109,18 @@ namespace NP.Avalonia.UniDock
     {
         public static void RemoveItselfFromParent(this IDockGroup item)
         {
-            IDockGroup? parent = item.DockParent;
-
-            if (parent != null)
+            if (!item.IsStableGroup)
             {
-                parent.DockChildren!.Remove(item);
-                item.DockParent = null;
-            }
+                IDockGroup? parent = item.DockParent;
 
-            item.CleanSelfOnRemove();
+                if (parent != null)
+                {
+                    parent.DockChildren!.Remove(item);
+                    item.DockParent = null;
+                }
+
+                item.CleanSelfOnRemove();
+            }
         }
 
         public static int GetNumberChildren(this IDockGroup item)
@@ -148,7 +160,7 @@ namespace NP.Avalonia.UniDock
 
         public static void SimplifySelfImpl(this IDockGroup group)
         {
-            if (!group.AutoDestroy)
+            if (!group.AutoDestroy || group.IsStableGroup)
             {
                 return;
             }

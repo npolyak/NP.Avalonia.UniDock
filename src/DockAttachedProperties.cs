@@ -12,10 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using NP.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
@@ -182,5 +179,25 @@ namespace NP.Avalonia.UniDock
                 "SizeGridLength"
             );
         #endregion SizeGridLength Attached Avalonia Property
+
+
+        #region IsDockVisible Attached Avalonia Property
+        public static bool GetIsDockVisible(AvaloniaObject obj)
+        {
+            return obj.GetValue(IsDockVisibleProperty);
+        }
+
+        public static void SetIsDockVisible(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(IsDockVisibleProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsDockVisibleProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "IsDockVisible",
+                true
+            );
+        #endregion IsDockVisible Attached Avalonia Property
     }
 }
