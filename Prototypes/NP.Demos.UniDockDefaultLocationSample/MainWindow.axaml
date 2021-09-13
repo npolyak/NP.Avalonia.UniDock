@@ -33,7 +33,7 @@
           <np:DockItem Header="LeftTop 1"
                        DockId="LeftTop1"
                        FloatingSize="500, 500"
-                       CanRemove="False">
+                       CanClose="False">
             <TextBlock Text="Left Top 1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
@@ -50,7 +50,7 @@
           <np:DockItem Header="Document 1"
                        DockId="Document1"
                        CanFloat="False"
-                       CanRemove="False">
+                       CanClose="False">
             <Grid Background="Gray">
               <TextBlock Text="Document 1"
                          HorizontalAlignment="Center"

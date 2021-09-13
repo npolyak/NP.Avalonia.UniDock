@@ -42,7 +42,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        bool CanRemove
+        bool CanClose
         {
             get => true;
             set

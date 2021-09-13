@@ -46,7 +46,7 @@ namespace NP.Avalonia.UniDock
 
 
         #region CanRemove Styled Avalonia Property
-        public bool CanRemove
+        public bool CanClose
         {
             get { return GetValue(CanRemoveProperty); }
             set { SetValue(CanRemoveProperty, value); }
@@ -55,7 +55,7 @@ namespace NP.Avalonia.UniDock
         public static readonly StyledProperty<bool> CanRemoveProperty =
             AvaloniaProperty.Register<DockItem, bool>
             (
-                nameof(CanRemove),
+                nameof(CanClose),
                 true
             );
         #endregion CanRemove Styled Avalonia Property

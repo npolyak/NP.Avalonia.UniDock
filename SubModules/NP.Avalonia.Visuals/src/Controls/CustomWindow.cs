@@ -589,5 +589,21 @@ namespace NP.Avalonia.Visuals.Controls
             );
         #endregion HasCustomWindowFeatures Styled Avalonia Property
 
+
+        #region CanClose Styled Avalonia Property
+        public bool CanClose
+        {
+            get { return GetValue(CanCloseProperty); }
+            set { SetValue(CanCloseProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanCloseProperty =
+            AvaloniaProperty.Register<CustomWindow, bool>
+            (
+                nameof(CanClose),
+                true
+            );
+        #endregion CanClose Styled Avalonia Property
+
     }
 }

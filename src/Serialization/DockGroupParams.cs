@@ -91,7 +91,7 @@ namespace NP.Avalonia.UniDock.Serialization
             p.ParentDockId = dg.DockParent?.DockId;
             p.IsPredefined = dg.IsPredefined;
             p.CanFloat = dg.CanFloat;
-            p.CanRemove = dg.CanRemove;
+            p.CanRemove = dg.CanClose;
             
             if (dg.GetNumberChildren() > 0)
             {
@@ -128,7 +128,7 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.AutoDestroy = p.AutoDestroy;
             dg.IsPredefined = p.IsPredefined;
             dg.CanFloat = p.CanFloat;
-            dg.CanRemove = p.CanRemove;
+            dg.CanClose = p.CanRemove;
 
             if (dg is StackDockGroup stackGroup)
             {

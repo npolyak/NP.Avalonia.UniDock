@@ -136,7 +136,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="5,3"
-                    IsVisible="{Binding Path=CanRemove}"/>
+                    IsVisible="{Binding Path=CanClose}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -181,7 +181,7 @@
                   Foreground="{Binding Path=(np:DockAttachedProperties.IconButtonForeground), RelativeSource={RelativeSource Mode=TemplatedParent}}"
                   Grid.Column="1"
                   Margin="6,2,2,2"
-                  IsVisible="{Binding Path=CanRemove}"/>
+                  IsVisible="{Binding Path=CanClose}"/>
         </Grid>
       </ControlTemplate>
     </Setter>

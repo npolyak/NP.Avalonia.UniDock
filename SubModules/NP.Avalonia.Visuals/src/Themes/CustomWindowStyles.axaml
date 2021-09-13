@@ -119,7 +119,8 @@
                     <MenuItem Header="Close"
                               behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
                               behaviors:CallAction.MethodName="Close"
-                              FontWeight="Bold">
+                              FontWeight="Bold"
+                              IsVisible="{Binding Path=CanClose}">
                       <MenuItem.Icon>
                         <Path Data="{StaticResource CloseIcon}"
                               Fill="Black"
@@ -138,6 +139,7 @@
                                            Converter={x:Static ObjectConverters.IsNotNull}}"
                        behaviors:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
                        behaviors:CallAction.MethodName="Close"
+                       IsEnabled="{Binding Path=CanClose}"
                        Width="{Binding Path=CustomHeaderIconWidth, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                        Height="{Binding Path=CustomHeaderIconHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                        Margin="{Binding Path=CustomHeaderIconMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
@@ -182,7 +184,8 @@
                 <Button x:Name="CloseButton"
                         Classes="WindowIconButton IconButton"
                         controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
-                        behaviors:CallAction.MethodName="Close"/>
+                        behaviors:CallAction.MethodName="Close"
+                        IsVisible="{Binding Path=CanClose}"/>
               </StackPanel>
             </Grid>
           </Grid>
