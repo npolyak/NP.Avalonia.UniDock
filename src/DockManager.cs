@@ -37,11 +37,33 @@ namespace NP.Avalonia.UniDock
         internal void RemoveWindow(Window window) => _windows.Remove(window);
         
 
-        private IList<IDockGroup> _allGroups = new ObservableCollection<IDockGroup>();
-        public IEnumerable<IDockGroup> AllGroups => _allGroups;
-        internal void AddGroup(IDockGroup group) => _allGroups.Add(group);
-        internal void RemoveGroup(IDockGroup group) => _allGroups.Remove(group);
+        private IList<IDockGroup> _connectedGroups = new ObservableCollection<IDockGroup>();
+        public IEnumerable<IDockGroup> ConnectedGroups => _connectedGroups;
+        internal void AddConnectedGroup(IDockGroup group)
+        {
+            if (group.IsPredefined)
+            {
+                _disconnectedGroups.Remove(group);
+            }
 
+            _connectedGroups.Add(group);
+        }
+            
+        internal void RemoveConnectedGroup(IDockGroup group)
+        {
+            _connectedGroups.Remove(group);
+
+            if (group.IsPredefined)
+            {
+                _disconnectedGroups.Add(group);
+            }
+        }
+
+        private IList<IDockGroup> _disconnectedGroups = new List<IDockGroup>();
+
+        public IEnumerable<IDockGroup> DisconnectedGroups => _disconnectedGroups;
+
+        public IEnumerable<IDockGroup> AllGroups => _connectedGroups.Union(_disconnectedGroups);
 
         public IList<ILeafDockObj> DockLeafObjs { get; } =
             new List<ILeafDockObj>();
@@ -51,7 +73,7 @@ namespace NP.Avalonia.UniDock
 
         public void ClearGroups()
         {
-            foreach(IDockGroup group in _allGroups.ToList())
+            foreach(IDockGroup group in _connectedGroups.ToList())
             {
                 if (!group.IsRoot)
                 {
@@ -203,7 +225,7 @@ namespace NP.Avalonia.UniDock
         public DockManager()
         {
             _groupsBehavior = 
-                AllGroups.AddBehavior(OnGroupItemAdded, OnGroupItemRemoved);
+                ConnectedGroups.AddBehavior(OnGroupItemAdded, OnGroupItemRemoved);
 
             _windowsBehavior = 
                 Windows.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);

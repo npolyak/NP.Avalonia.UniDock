@@ -73,12 +73,12 @@ namespace NP.Avalonia.UniDock
                         oldDockManager.DockLeafObjs.Remove(leafObj);
                     }
 
-                    oldDockManager.RemoveGroup(group);
+                    oldDockManager.RemoveConnectedGroup(group);
                 }
 
                 if (dockManager != null)
                 {
-                    dockManager.AddGroup(group);
+                    dockManager.AddConnectedGroup(group);
 
                     if (group is ILeafDockObj leafObj)
                     {

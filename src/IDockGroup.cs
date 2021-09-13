@@ -33,16 +33,20 @@ namespace NP.Avalonia.UniDock
 
         bool AutoDestroy { get; set; }
 
-        // IsDynamic == false - means
+        // IsPredefined == true - means
         // the items are not removed, but made invisible
         // so that
         //      1. They can be restored from dock id (without any extra data) - for DockItems
         //      2. They can be used as containers for default location of the DockItems - e.g. if DockItem needs to be 
         //          redocked.
-        // Dynamic == true means
+        // IsPredefine == false means
         //      If dock item - it does not have a default location and needs a full parameter list with values to
         //          be restored - or rather - recreated
-        bool IsDynamic { get; set; }
+        bool IsPredefined 
+        {
+            get => false;
+            set { }
+        }
 
         bool IsRoot => DockParent == null;
 
@@ -78,22 +82,15 @@ namespace NP.Avalonia.UniDock
     {
         public static void RemoveItselfFromParent(this IDockGroup item)
         {
-            //if (item.IsDynamic)
-            //{
-                IDockGroup? parent = item.DockParent;
+            IDockGroup? parent = item.DockParent;
 
-                if (parent != null)
-                {
-                    parent.DockChildren!.Remove(item);
-                    item.DockParent = null;
-                }
+            if (parent != null)
+            {
+                parent.DockChildren!.Remove(item);
+                item.DockParent = null;
+            }
 
-                item.CleanSelfOnRemove();
-            //}
-            //else
-            //{
-            //    item.IsDockVisible = false;
-            //}
+            item.CleanSelfOnRemove();
         }
 
         public static int GetNumberChildren(this IDockGroup item)

@@ -76,7 +76,7 @@ namespace NP.Avalonia.UniDock
         {
             TheDockManager = null;
 
-            var allGroups = TheDockGroup.GetDockGroupSelfAndAncestors().Reverse().ToList();
+            var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
 
             allGroups?.DoForEach(item => item.RemoveItselfFromParent());
         }

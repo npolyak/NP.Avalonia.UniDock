@@ -27,6 +27,8 @@ namespace NP.Avalonia.UniDock
         ILeafDockObj,
         ISelectableItem<DockItem>
     {
+        public bool IsPredefined { get; set; } = true;
+
         public event Action<IDockGroup>? DockIdChanged;
 
         #region DockId Styled Avalonia Property
@@ -47,21 +49,6 @@ namespace NP.Avalonia.UniDock
         {
             DockIdChanged?.Invoke(this);
         }
-
-
-        #region IsDockVisible Styled Avalonia Property
-        public bool IsDockVisible
-        {
-            get { return GetValue(IsDockVisibleProperty); }
-            set { SetValue(IsDockVisibleProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> IsDockVisibleProperty =
-            AvaloniaProperty.Register<DockItem, bool>
-            (
-                nameof(IsDockVisible)
-            );
-        #endregion IsDockVisible Styled Avalonia Property
 
         static DockItem()
         {
@@ -221,7 +208,5 @@ namespace NP.Avalonia.UniDock
         {
 
         }
-
-        public bool IsDynamic { get; set; }
     }
 }

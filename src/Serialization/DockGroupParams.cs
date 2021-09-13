@@ -63,10 +63,7 @@ namespace NP.Avalonia.UniDock.Serialization
         public Orientation TheOrientation { get; set; }
 
         [XmlAttribute]
-        public bool IsDynamic { get; set; }
-
-        [XmlAttribute]
-        public bool IsDockVisible { get; set; }
+        public bool IsPredefined { get; set; }
 
         #region DockItem parameters
         [XmlElement]
@@ -86,8 +83,7 @@ namespace NP.Avalonia.UniDock.Serialization
             p.GroupFullTypeName = dg.GetType().FullName;
             p.DockId = dg.DockId;
             p.ParentDockId = dg.DockParent?.DockId;
-            p.IsDynamic = dg.IsDynamic;
-            //p.IsDockVisible = dg.IsDockVisible;
+            p.IsPredefined = dg.IsPredefined;
             
             if (dg.GetNumberChildren() > 0)
             {
@@ -122,8 +118,7 @@ namespace NP.Avalonia.UniDock.Serialization
         {
             dg.DockId = p.DockId!;
             dg.AutoDestroy = p.AutoDestroy;
-            dg.IsDynamic = p.IsDynamic;
-            //dg.IsDockVisible = p.IsDockVisible;
+            dg.IsPredefined = p.IsPredefined;
 
             if (dg is StackDockGroup stackGroup)
             {

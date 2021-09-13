@@ -44,7 +44,5 @@ namespace NP.Avalonia.UniDock
         }
 
         public override string ToString() => DockId;
-
-        public bool IsDynamic { get; set; } = false;
    }
 }

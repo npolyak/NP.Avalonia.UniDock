@@ -24,7 +24,10 @@ namespace NP.Avalonia.UniDock.Serialization
         public List<WindowParams>? WindowsSerializationParams { get; set; }
 
         [XmlArray]
-        public List<DockGroupParams>? DockGroupParams { get; set; }
+        public List<DockGroupParams>? DisconnectedDockGroupParams { get; set; }
+
+        [XmlArray]
+        public List<DockGroupParams>? ConnectedDockGroupParams { get; set; }
     }
 
     public static class DockManagerParamsHelper
@@ -34,8 +37,8 @@ namespace NP.Avalonia.UniDock.Serialization
             DockManagerParams dmp = new DockManagerParams
             {
                 WindowsSerializationParams = new List<WindowParams>(),
-
-                DockGroupParams = new List<DockGroupParams>()
+                DisconnectedDockGroupParams = new List<DockGroupParams>(),
+                ConnectedDockGroupParams = new List<DockGroupParams>()
             };
 
             foreach(var window in dockManager.Windows)
@@ -43,10 +46,15 @@ namespace NP.Avalonia.UniDock.Serialization
                 dmp.WindowsSerializationParams.Add(window.ToWindowParams());
             }
 
-            foreach(var group in dockManager.AllGroups)
+            foreach(var group in dockManager.ConnectedGroups)
             {
-                dmp.DockGroupParams.Add(group.ToGroupParams());
+                dmp.ConnectedDockGroupParams.Add(group.ToGroupParams());
             }    
+
+            foreach(var group in dockManager.DisconnectedGroups)
+            {
+                dmp.DisconnectedDockGroupParams.Add(group.ToGroupParams());
+            }
 
             return dmp;
         }
@@ -105,21 +113,21 @@ namespace NP.Avalonia.UniDock.Serialization
             return w;
         }
 
-        public static IDockGroup? FindGroupById(this DockManager dm, string? dockId)
+        private static IDockGroup? FindGroupById(this DockManager dm, string? dockId)
         {
             var result = dm.AllGroups.FirstOrDefault(g => g.DockId == dockId);
 
             return result;
         }
 
-        public static DockGroupParams? FindGroupParamsById(this DockManagerParams dmp, string? dockId)
+        private static DockGroupParams? FindGroupParamsById(this DockManagerParams dmp, string? dockId)
         {
-            var result = dmp.DockGroupParams.NullToEmpty().FirstOrDefault(g => g.DockId == dockId);
+            var result = dmp.ConnectedDockGroupParams.NullToEmpty().FirstOrDefault(g => g.DockId == dockId);
 
             return result;
         }
 
-        public static IDockGroup? BuildGroup(this DockManager dm, DockManagerParams dmp, string? dockId, IEnumerable<DockItem> dockItems)
+        private static IDockGroup? BuildGroup(this DockManager dm, DockManagerParams dmp, string? dockId, IEnumerable<DockItem> dockItems)
         {
             DockGroupParams? p = dmp.FindGroupParamsById(dockId);
             IDockGroup? dg = dm.FindGroupById(dockId);
@@ -161,7 +169,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
         public static void SetDockManagerFromParams(this DockManager dm, DockManagerParams dmp)
         {
-            List<DockItem> dockItems = dm.AllGroups.OfType<DockItem>().ToList();
+            List<DockItem> dockItems = dm.ConnectedGroups.OfType<DockItem>().ToList();
 
             dm.ClearGroups();
 
@@ -225,7 +233,7 @@ namespace NP.Avalonia.UniDock.Serialization
             }
 
             // set the coefficients for the DockStackGroups
-            foreach(var group in dm.AllGroups)
+            foreach(var group in dm.ConnectedGroups)
             {
                 if (group is StackDockGroup dockStackGroup)
                 {
