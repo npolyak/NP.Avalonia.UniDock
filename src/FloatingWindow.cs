@@ -18,6 +18,7 @@ using NP.Avalonia.Visuals.Controls;
 using NP.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace NP.Avalonia.UniDock
@@ -72,7 +73,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void FloatingWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        private void FloatingWindow_Closing(object? sender, CancelEventArgs e)
         {
             TheDockManager = null;
 
