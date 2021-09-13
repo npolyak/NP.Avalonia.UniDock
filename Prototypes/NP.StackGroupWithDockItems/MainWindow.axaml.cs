@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using NP.Avalonia.Visuals.Controls;
-using NP.AvaloniaDock;
 using NP.Utilities;
 
 namespace NP.GroupPanelSample
