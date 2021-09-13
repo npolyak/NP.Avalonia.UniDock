@@ -183,9 +183,9 @@
                         behaviors:CallAction.MethodName="Maximize"/>
                 <Button x:Name="CloseButton"
                         Classes="WindowIconButton IconButton"
+                        IsVisible="{Binding Path=CanClose}"
                         controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
-                        behaviors:CallAction.MethodName="Close"
-                        IsVisible="{Binding Path=CanClose}"/>
+                        behaviors:CallAction.MethodName="Close"/>
               </StackPanel>
             </Grid>
           </Grid>

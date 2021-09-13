@@ -12,7 +12,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using NP.Utilities;
 
 namespace NP.Demos.UniDockWindowsSample
 {
@@ -32,7 +31,7 @@ namespace NP.Demos.UniDockWindowsSample
 
             base.OnFrameworkInitializationCompleted();
 
-            Logger.SetLog(NLog.Instance);
+            NP.NLogAdapter.NLog.SetLog();
         }
     }
 }

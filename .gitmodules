@@ -16,3 +16,6 @@
 [submodule "SubModules/NP.IoCy"]
 	path = SubModules/NP.IoCy
 	url = https://github.com/npolyak/NP.IoCy.git
+[submodule "SubModules/NP.NLogAdapter"]
+	path = SubModules/NP.NLogAdapter
+	url = https://github.com/npolyak/NP.NLogAdapter.git
