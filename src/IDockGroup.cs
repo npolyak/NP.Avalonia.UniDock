@@ -33,6 +33,24 @@ namespace NP.Avalonia.UniDock
 
         bool AutoDestroy { get; set; }
 
+        bool CanFloat
+        {
+            get => true;
+            set
+            {
+
+            }
+        }
+
+        bool CanRemove
+        {
+            get => true;
+            set
+            {
+
+            }
+        }
+
         // IsPredefined == true - means
         // the items are not removed, but made invisible
         // so that

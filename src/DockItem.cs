@@ -29,6 +29,37 @@ namespace NP.Avalonia.UniDock
     {
         public bool IsPredefined { get; set; } = true;
 
+        #region CanFloat Styled Avalonia Property
+        public bool CanFloat
+        {
+            get { return GetValue(CanFloatProperty); }
+            set { SetValue(CanFloatProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanFloatProperty =
+            AvaloniaProperty.Register<DockItem, bool>
+            (
+                nameof(CanFloat),
+                true
+            );
+        #endregion CanFloat Styled Avalonia Property
+
+
+        #region CanRemove Styled Avalonia Property
+        public bool CanRemove
+        {
+            get { return GetValue(CanRemoveProperty); }
+            set { SetValue(CanRemoveProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanRemoveProperty =
+            AvaloniaProperty.Register<DockItem, bool>
+            (
+                nameof(CanRemove),
+                true
+            );
+        #endregion CanRemove Styled Avalonia Property
+
         public event Action<IDockGroup>? DockIdChanged;
 
         #region DockId Styled Avalonia Property

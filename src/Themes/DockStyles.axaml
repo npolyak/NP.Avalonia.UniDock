@@ -135,7 +135,8 @@
                     Classes="CloseButton"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Margin="5,3"/>
+                    Margin="5,3"
+                    IsVisible="{Binding Path=CanRemove}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -179,7 +180,8 @@
                   Classes="CloseButton"
                   Foreground="{Binding Path=(np:DockAttachedProperties.IconButtonForeground), RelativeSource={RelativeSource Mode=TemplatedParent}}"
                   Grid.Column="1"
-                  Margin="6,2,2,2"/>
+                  Margin="6,2,2,2"
+                  IsVisible="{Binding Path=CanRemove}"/>
         </Grid>
       </ControlTemplate>
     </Setter>

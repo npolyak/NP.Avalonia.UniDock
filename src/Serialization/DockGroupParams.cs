@@ -21,6 +21,12 @@ namespace NP.Avalonia.UniDock.Serialization
     public class DockGroupParams
     {
         [XmlAttribute]
+        public bool CanFloat { get; set; }
+
+        [XmlAttribute]
+        public bool CanRemove { get; set; }
+
+        [XmlAttribute]
         public string? GroupFullTypeName { get; set; }
 
         public Type GetGroupType()
@@ -84,6 +90,8 @@ namespace NP.Avalonia.UniDock.Serialization
             p.DockId = dg.DockId;
             p.ParentDockId = dg.DockParent?.DockId;
             p.IsPredefined = dg.IsPredefined;
+            p.CanFloat = dg.CanFloat;
+            p.CanRemove = dg.CanRemove;
             
             if (dg.GetNumberChildren() > 0)
             {
@@ -119,6 +127,8 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.DockId = p.DockId!;
             dg.AutoDestroy = p.AutoDestroy;
             dg.IsPredefined = p.IsPredefined;
+            dg.CanFloat = p.CanFloat;
+            dg.CanRemove = p.CanRemove;
 
             if (dg is StackDockGroup stackGroup)
             {

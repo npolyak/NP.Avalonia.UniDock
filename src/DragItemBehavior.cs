@@ -92,6 +92,11 @@ namespace NP.Avalonia.UniDock
 
             _draggedDockItem = _dockItemGetter.Invoke(_startItem);
 
+            if (!_draggedDockItem.CanFloat)
+            {
+                return;
+            }
+
             itemsContainer.AddHandler
             (
                 Control.PointerMovedEvent,
