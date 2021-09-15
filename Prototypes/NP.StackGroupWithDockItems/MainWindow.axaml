@@ -26,19 +26,46 @@
   <Grid Margin="10"
         DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         Background="Gray">
-    <np:StackDockGroup x:Name="TheStackGroup"
-                       TheOrientation="Vertical"
-                       np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
-                       Margin="20">
-      <np:DockItem Header="Tab1">
-        <TextBlock Text="Hello World!"/>
-      </np:DockItem>
-      <np:DockItem Header="Tab2">
-        <TextBlock Text="Hi World!"/>
-      </np:DockItem>
-      <np:DockItem Header="Tab3">
-        <TextBlock Text="Hi World 1234!"/>
-      </np:DockItem>
-    </np:StackDockGroup>
+    <np:SimpleDockGroup>
+      <np:StackDockGroup x:Name="TheStackGroup"
+                         TheOrientation="Vertical"
+                         IsStableGroup="True"
+                         np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+                         Margin="20">
+        <np:StackDockGroup TheOrientation="Horizontal"
+                           IsStableGroup="True"
+                           DockId="Group1">
+          <np:DockItem Header="Tab1"
+                       DefaultDockGroupId="Group1"
+                       DefaultDockOrderInGroup="1">
+            <TextBlock Text="Hello World!"/>
+          </np:DockItem>
+          <np:DockItem Header="Tab2"
+                       DefaultDockGroupId="Group1"
+                       DefaultDockOrderInGroup="2">
+            <TextBlock Text="Hi World!"/>
+          </np:DockItem>
+        </np:StackDockGroup>
+        <np:TabbedDockGroup Background="White"
+                            IsStableGroup="True"
+                            DockId="Group2">
+          <np:DockItem Header="Tab3"
+                       DefaultDockGroupId="Group2"
+                       DefaultDockOrderInGroup="1">
+            <TextBlock Text="Hi World 3333!"/>
+          </np:DockItem>
+          <np:DockItem Header="Tab4"
+                       DefaultDockGroupId="Group2"
+                       DefaultDockOrderInGroup="2">
+            <TextBlock Text="Hi World 4444!"/>
+          </np:DockItem>
+          <np:DockItem Header="Tab5"
+                       DefaultDockGroupId="Group2"
+                       DefaultDockOrderInGroup="3">
+            <TextBlock Text="Hi World 5555!"/>
+          </np:DockItem>
+        </np:TabbedDockGroup>
+      </np:StackDockGroup>
+    </np:SimpleDockGroup>
   </Grid>
 </Window>

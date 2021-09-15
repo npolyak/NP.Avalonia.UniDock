@@ -124,6 +124,17 @@
         <ControlTemplate TargetType="np:DockItemHeaderControl">
           <Grid x:Name="PART_HeaderPanel"
                 Background="{TemplateBinding Background}">
+            <Grid.ContextMenu>
+              <ContextMenu IsVisible="{Binding Path=(np:AttachedProperties.HasVisibleLogicalChildren), RelativeSource={RelativeSource Self}}">
+                <np:LogicalChildrenBehavior.TheLogicalChildBehavior>
+                  <np:HasVisibleLogicalChildrenBehavior/>
+                </np:LogicalChildrenBehavior.TheLogicalChildBehavior>
+                <MenuItem Header="Restore Default Location"
+                          np:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                          np:CallAction.MethodName="ReattachToDefaultGroup"
+                          IsVisible="{Binding Path=CanReattachToDefaultGroup}"/>
+              </ContextMenu>
+            </Grid.ContextMenu>
             <ContentPresenter x:Name="Header"
                               Content="{TemplateBinding Content}"
                               ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -269,6 +280,8 @@
             Value="Stretch"/>
     <Setter Property="VerticalAlignment"
             Value="Stretch"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=IsDockVisible, RelativeSource={RelativeSource Self}}"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="local:TabbedDockGroup">

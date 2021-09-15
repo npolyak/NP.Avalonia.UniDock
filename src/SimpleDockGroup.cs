@@ -26,6 +26,22 @@ namespace NP.Avalonia.UniDock
 {
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
+        public event Action<IDockGroup> IsDockVisibleChangedEvent;
+
+        void IDockGroup.FireIsDockVisibleChangedEvent()
+        {
+            IsDockVisibleChangedEvent?.Invoke(this);
+        }
+
+        public bool IsStable
+        {
+            get => true;
+            set
+            {
+
+            }
+        }
+
         public event Action<SimpleDockGroup>? HasNoChildrenEvent;
 
         #region NumberDockChildren Direct Avalonia Property

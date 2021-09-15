@@ -275,6 +275,7 @@ namespace NP.Avalonia.UniDock
             if (NumberChildren == 1)
             {
                 this.GridChildren.Remove(item);
+                Definitions.DeleteAllOneByOne();
             }
             else
             {
@@ -295,14 +296,13 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private IList Definitions => TheOrientation == Orientation.Horizontal ? this.GridColumnDefinitions : this.GridRowDefinitions;
+
         private void RemoveChildAt(int idx)
         {
             GridChildren.RemoveAt(idx);
 
-            IList definitions =
-                TheOrientation == Orientation.Horizontal ? this.GridColumnDefinitions : this.GridRowDefinitions;
-
-            definitions.RemoveAt(idx);
+            Definitions.RemoveAt(idx);
         }
 
         private void AddChildAtIndexZero(T itemToInsert)

@@ -224,6 +224,8 @@ namespace NP.Avalonia.UniDock
         IDisposable _windowsBehavior;
         public DockManager()
         {
+            DockGroupHelper.SetIsDockVisibleChangeSubscription();
+
             _groupsBehavior = 
                 ConnectedGroups.AddBehavior(OnGroupItemAdded, OnGroupItemRemoved);
 
@@ -426,6 +428,13 @@ namespace NP.Avalonia.UniDock
                 XmlSerializationUtils.Deserialize<DockManagerParams>(serializationStr);
 
             this.SetDockManagerFromParams(dmp);
+        }
+
+        internal IDockGroup? FindGroupById(string? dockId)
+        {
+            var result = this.AllGroups.FirstOrDefault(g => g.DockId == dockId);
+
+            return result;
         }
     }
 }

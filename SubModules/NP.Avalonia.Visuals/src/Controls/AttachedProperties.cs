@@ -168,5 +168,25 @@ namespace NP.Avalonia.Visuals.Controls
                 "CurrentScreenPoint"
             );
         #endregion CurrentScreenPoint Attached Avalonia Property
+
+
+        #region HasVisibleLogicalChildren Attached Avalonia Property
+        public static bool GetHasVisibleLogicalChildren(IAvaloniaObject obj)
+        {
+            return obj.GetValue(HasVisibleLogicalChildrenProperty);
+        }
+
+        internal static void SetHasVisibleLogicalChildren(IAvaloniaObject obj, bool value)
+        {
+            obj.SetValue(HasVisibleLogicalChildrenProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> HasVisibleLogicalChildrenProperty =
+            AvaloniaProperty.RegisterAttached<object, IControl, bool>
+            (
+                "HasVisibleLogicalChildren"
+            );
+        #endregion HasVisibleLogicalChildren Attached Avalonia Property
+
     }
 }

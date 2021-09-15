@@ -78,5 +78,12 @@ namespace NP.Avalonia.Visuals
         {
             return c.IsPointWithinControl(e.GetPosition(c));
         }
+
+        public static bool IsLeftMousePressed(this Control c, PointerEventArgs e)
+        {
+            var props = e.GetCurrentPoint(c).Properties;
+
+            return props.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
+        }
     }
 }

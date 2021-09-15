@@ -27,6 +27,13 @@ namespace NP.Avalonia.UniDock
 {
     public class TabbedDockGroup : TemplatedControl, ILeafDockObj
     {
+        public event Action<IDockGroup> IsDockVisibleChangedEvent;
+
+        void IDockGroup.FireIsDockVisibleChangedEvent()
+        {
+            IsDockVisibleChangedEvent?.Invoke(this);
+        }
+
         public event Action<IDockGroup>? DockIdChanged;
 
         #region DockId Styled Avalonia Property
@@ -43,6 +50,8 @@ namespace NP.Avalonia.UniDock
             );
         #endregion Id Styled Avalonia Property
 
+        public bool IsStableGroup { get; set; } = false;
+
         private void FireDockIdChanged()
         {
             DockIdChanged?.Invoke(this);
@@ -51,7 +60,6 @@ namespace NP.Avalonia.UniDock
         static TabbedDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<TabbedDockGroup>((g, e) => g.OnDockIdChanged(e));
-
 
             TabStripPlacementProperty.Changed.AddClassHandler<TabbedDockGroup>((sender, e) => sender.OnTabStringPlacementChanged(e));
         }
@@ -123,25 +131,6 @@ namespace NP.Avalonia.UniDock
 
         public IList<IDockGroup>? DockChildren => Items;
 
-        #region NumberDockChildren Direct Avalonia Property
-        public static readonly DirectProperty<TabbedDockGroup, int> NumberDockChildrenProperty =
-            AvaloniaProperty.RegisterDirect<TabbedDockGroup, int>
-            (
-                nameof(NumberDockChildren),
-                o => o.NumberDockChildren,
-                (o, c) => o.NumberDockChildren = c
-            );
-        #endregion NumberDockChildren Direct Avalonia Property
-
-        private int _numChildren = 0;
-        public int NumberDockChildren
-        {
-            get => _numChildren;
-            private set
-            {
-                SetAndRaise(NumberDockChildrenProperty, ref _numChildren, value);
-            }
-        }
         public DropPanelWithCompass? DropPanel =>
             this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
 
@@ -159,6 +148,8 @@ namespace NP.Avalonia.UniDock
         public TabbedDockGroup()
         {
             AffectsMeasure<DockTabsPresenter>(TabStripPlacementProperty);
+            AffectsMeasure<TabbedDockGroup>(DockAttachedProperties.IsDockVisibleProperty);
+
             SetBehavior();
 
             _singleSelectionBehavior.PropertyChanged += 
@@ -307,21 +298,16 @@ namespace NP.Avalonia.UniDock
             _behavior = Items?.AddBehavior(OnItemAdded, OnItemRemoved);
         }
 
-        private void SetNumberItems()
-        {
-            NumberDockChildren = Items?.Count ?? 0;
-        }
 
         private void OnItemAdded(IDockGroup child)
         {
-            SetNumberItems();
+            this.SetIsDockVisible();
         }
 
         private void OnItemRemoved(IDockGroup child)
         {
-            SetNumberItems();
-
             child.TheDockManager = null;
+            this.SetIsDockVisible();
         }
 
         private void DisposeBehavior()

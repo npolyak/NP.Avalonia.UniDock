@@ -23,9 +23,18 @@ namespace NP.Avalonia.UniDock
 {
     public class StackDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
+        public event Action<IDockGroup>? IsDockVisibleChangedEvent;
+
+        void IDockGroup.FireIsDockVisibleChangedEvent()
+        {
+            IsDockVisibleChangedEvent?.Invoke(this);
+        }
+
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
         public bool ShowChildHeaders { get; } = true;
+
+        public bool IsStableGroup { get; set; } = false;
 
         public DockManager? TheDockManager
         {
@@ -77,9 +86,11 @@ namespace NP.Avalonia.UniDock
             RemoveEvent?.Invoke(this);
         }
 
+        
         static StackDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<StackDockGroup>((g, e) => g.OnDockIdChanged(e));
+
         }
 
         IDisposable? _behavior;
@@ -87,7 +98,8 @@ namespace NP.Avalonia.UniDock
 
         public StackDockGroup()
         {
-            AffectsMeasure<SimpleDockGroup>(NumberDockChildrenProperty);
+            AffectsMeasure<StackDockGroup>(NumberDockChildrenProperty);
+            AffectsMeasure<StackDockGroup>(DockAttachedProperties.IsDockVisibleProperty);
 
             ((ISetLogicalParent)_stackGroup).SetParent(this);
             this.VisualChildren.Add(_stackGroup);
@@ -116,19 +128,55 @@ namespace NP.Avalonia.UniDock
         private void OnDockChildAdded(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
         {
             SetNumberDockChildren();
+            AddChildToStackGroup(dockChild);
 
+            dockChild.IsDockVisibleChangedEvent += OnDockChild_IsDockVisibleChangedEvent;
+        }
+
+        private void OnDockChild_IsDockVisibleChangedEvent(IDockGroup dockChild)
+        {
+            if (dockChild.GetIsDockVisible())
+            {
+                AddChildToStackGroup(dockChild);
+            }
+            else
+            {
+                int idx = DockChildren.IndexOf(dockChild);
+                RemoveChildFromStackGroup(idx);
+            }
+        }
+
+        private void AddChildToStackGroup(IDockGroup dockChild)
+        {
+            if (!dockChild.GetIsDockVisible())
+            {
+                return;
+            }
+            
             IControl newVisualChildToInsert =
                TheDockVisualItemGenerator!.Generate(dockChild);
 
+            int idx = DockChildren.IndexOf(dockChild);
+
             _stackGroup.Items.Insert(idx, newVisualChildToInsert);
+
+            this.SetIsDockVisible();
         }
 
         private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
         {
+            dockChild.IsDockVisibleChangedEvent -= OnDockChild_IsDockVisibleChangedEvent;
+
             dockChild.CleanSelfOnRemove();
             SetNumberDockChildren();
 
+            RemoveChildFromStackGroup(idx);
+        }
+
+        private void RemoveChildFromStackGroup(int idx)
+        {
             _stackGroup.Items.RemoveAt(idx);
+            this.SetIsDockVisible();
         }
 
         void IDockGroup.SimplifySelf()

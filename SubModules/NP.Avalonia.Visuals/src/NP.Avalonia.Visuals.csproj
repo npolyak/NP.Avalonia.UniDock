@@ -37,6 +37,7 @@
     <PackageReference Include="Avalonia" Version="0.10.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +45,7 @@
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <IncludeAssets>NP.Utilities.dll</IncludeAssets>
     </ProjectReference>
+    <ProjectReference Include="..\..\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />
   </ItemGroup>
   <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
     <ItemGroup>

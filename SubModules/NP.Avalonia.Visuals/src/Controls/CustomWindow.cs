@@ -234,6 +234,9 @@ namespace NP.Avalonia.Visuals.Controls
 
         private void OnHeaderPointerPressed(object? sender, PointerPressedEventArgs e)
         {
+            if (!_headerControl.IsLeftMousePressed(e))
+                return;
+
             if (DragOnBeginMove)
             {
                 BeginMoveDrag(e);

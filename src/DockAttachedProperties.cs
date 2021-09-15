@@ -182,18 +182,18 @@ namespace NP.Avalonia.UniDock
 
 
         #region IsDockVisible Attached Avalonia Property
-        public static bool GetIsDockVisible(AvaloniaObject obj)
+        public static bool GetIsDockVisible(this IAvaloniaObject obj)
         {
             return obj.GetValue(IsDockVisibleProperty);
         }
 
-        public static void SetIsDockVisible(AvaloniaObject obj, bool value)
+        public static void SetIsDockVisible(IAvaloniaObject obj, bool value)
         {
             obj.SetValue(IsDockVisibleProperty, value);
         }
 
         public static readonly AttachedProperty<bool> IsDockVisibleProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            AvaloniaProperty.RegisterAttached<object, IControl, bool>
             (
                 "IsDockVisible",
                 true

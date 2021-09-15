@@ -81,6 +81,9 @@ namespace NP.Avalonia.UniDock
         {
             Control itemsContainer = (Control)sender;
 
+            if (!itemsContainer.IsLeftMousePressed(e))
+                return;
+
             _startMousePoint = e.GetPosition(itemsContainer).ToPoint2D();
 
             _startItem = e.GetControlUnderCurrentMousePosition<TItem>((Control)sender)!;
@@ -96,18 +99,23 @@ namespace NP.Avalonia.UniDock
             {
                 return;
             }
+            
+            CurrentScreenPointBehavior.Capture(itemsContainer);
 
-            itemsContainer.AddHandler
-            (
-                Control.PointerMovedEvent,
-                OnDragPointerMoved!,
-                RoutingStrategies.Bubble,
-                false);
+            if (CurrentScreenPointBehavior.CapturedControl != itemsContainer)
+                return;
 
             itemsContainer.AddHandler
             (
                 Control.PointerReleasedEvent,
                 ClearHandlers!,
+                RoutingStrategies.Bubble,
+                false);
+
+            itemsContainer.AddHandler
+            (
+                Control.PointerMovedEvent,
+                OnDragPointerMoved!,
                 RoutingStrategies.Bubble,
                 false);
 
@@ -144,12 +152,10 @@ namespace NP.Avalonia.UniDock
 
             if (currentPoint.Minus(_startMousePoint).ToAbs().GreaterOrEqual(PointHelper.MinimumDragDistance).Any)
             {
-                CurrentScreenPointBehavior.Capture(itemsContainer);
-
                 _allowDrag = true;
             }
 
-            if (CurrentScreenPointBehavior.CapturedControl != itemsContainer || !_allowDrag)
+            if (!_allowDrag)
                 return;
 
             bool allDone = MoveItemWithinContainer(itemsContainer, e);
@@ -161,10 +167,10 @@ namespace NP.Avalonia.UniDock
 
             IDockGroup? parentItem = _draggedDockItem.DockParent;
 
+            Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
+
             // remove from the current items
             _draggedDockItem?.RemoveItselfFromParent();
-
-            Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
 
             parentItem?.Simplify();
 

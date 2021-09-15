@@ -113,13 +113,6 @@ namespace NP.Avalonia.UniDock.Serialization
             return w;
         }
 
-        private static IDockGroup? FindGroupById(this DockManager dm, string? dockId)
-        {
-            var result = dm.AllGroups.FirstOrDefault(g => g.DockId == dockId);
-
-            return result;
-        }
-
         private static DockGroupParams? FindGroupParamsById(this DockManagerParams dmp, string? dockId)
         {
             var result = dmp.ConnectedDockGroupParams.NullToEmpty().FirstOrDefault(g => g.DockId == dockId);

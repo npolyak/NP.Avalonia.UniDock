@@ -9,6 +9,7 @@
 // Also, please, mention this software in any documentation for the 
 // products that use it.
 
+using Avalonia;
 using Avalonia.Controls;
 using NP.Concepts.Behaviors;
 using System;
@@ -22,6 +23,10 @@ namespace NP.Avalonia.UniDock
         public string DockId { get; set; }
 
         event Action<IDockGroup> DockIdChanged;
+
+        event Action<IDockGroup> IsDockVisibleChangedEvent;
+
+        internal void FireIsDockVisibleChangedEvent();
 
         DockManager? TheDockManager { get; set; }
 
@@ -191,6 +196,33 @@ namespace NP.Avalonia.UniDock
 
                 dockParent.SetSizeCoeff(idx, sizeCoeff);
             }
+        }
+
+        public static void SetIsDockVisible(this IDockGroup group)
+        {
+            bool isDockVisible = group.DockChildren.Any(child => DockAttachedProperties.GetIsDockVisible(child));
+
+            DockAttachedProperties.SetIsDockVisible(group, isDockVisible);
+        }
+
+        private static IDisposable? _isDockVisibleChangeSubscription = null;
+        internal static void SetIsDockVisibleChangeSubscription()
+        {
+            if (_isDockVisibleChangeSubscription == null)
+            {
+                _isDockVisibleChangeSubscription =
+                    DockAttachedProperties
+                        .IsDockVisibleProperty
+                        .Changed
+                        .Subscribe(OnIsDockVisbleChanged);
+            }
+        }
+
+        private static void OnIsDockVisbleChanged(AvaloniaPropertyChangedEventArgs<bool> args)
+        {
+            IDockGroup? dockGroup = args.Sender as IDockGroup;
+
+            dockGroup?.FireIsDockVisibleChangedEvent();
         }
     }
 }
