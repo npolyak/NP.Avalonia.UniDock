@@ -24,6 +24,8 @@ using System.ComponentModel;
 using System.IO;
 using NP.Avalonia.UniDock.Serialization;
 using NP.Avalonia.UniDock.Factories;
+using NP.Utilities.BasicInterfaces;
+using NP.Utilities.Attributes;
 
 namespace NP.Avalonia.UniDock
 {
@@ -32,9 +34,36 @@ namespace NP.Avalonia.UniDock
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
 
-        public IStackGroupFactory StackGroupFactory { get; set; } = new StackGroupFactory();
+        [Part]
+        private IStackGroupFactory StackGroupFactory { get; set; } = 
+            new StackGroupFactory();
 
-        public ITabbedGroupFactory TabbedGroupFactory { get; set; } = new TabbedGroupFactory();
+        [Part]
+        private ITabbedGroupFactory TabbedGroupFactory { get; set; } = 
+            new TabbedGroupFactory();
+
+        [Part]
+        internal IFloatingWindowFactory FloatingWindowFactory { get; set; } =
+            new FloatingWindowFactory();
+
+        [Part]
+        internal IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
+            new DockVisualItemGenerator();
+
+        IObjectComposer? _dockObjectComposer = null;
+        public IObjectComposer? TheDockObjectComposer
+        {
+            get => _dockObjectComposer;
+            set
+            {
+                if (_dockObjectComposer == value)
+                    return;
+
+                _dockObjectComposer = value;
+
+                _dockObjectComposer?.ComposeObject(this);
+            }
+        }
 
         IList<Window> _windows = new ObservableCollection<Window>();
         public IEnumerable<Window> Windows => _windows;

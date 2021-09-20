@@ -18,6 +18,7 @@ using Avalonia.VisualTree;
 using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
+using NP.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,9 +74,6 @@ namespace NP.Avalonia.UniDock
         }
 
         public bool ShowChildHeader => false;
-
-        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
-            new DockVisualItemGenerator();
 
         public bool ShowChildHeaders { get; } = false;
 
@@ -148,7 +146,7 @@ namespace NP.Avalonia.UniDock
             childrenToRemove.DoForEach(child => DockChildren.Remove(child));
 
             IControl newVisualChildToInsert =
-                TheDockVisualItemGenerator!.Generate(newChildToInsert);
+                TheDockManager!.TheDockVisualItemGenerator!.Generate(newChildToInsert)!;
 
             ((ISetLogicalParent)newVisualChildToInsert).SetParent(this);
             VisualChildren.Add(newVisualChildToInsert);

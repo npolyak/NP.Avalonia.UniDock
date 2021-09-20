@@ -18,6 +18,7 @@ using NP.Avalonia.UniDock.Factories;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
+using NP.Utilities.Attributes;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,8 +73,6 @@ namespace NP.Avalonia.UniDock
         protected DockItem? _draggedDockItem;
 
         protected Func<TItem, DockItem> _dockItemGetter;
-
-        public IFloatingWindowFactory FloatingWindowFactory { get; set; } = new FloatingWindowFactory();
 
         public DragItemBehavior(Func<TItem, DockItem> dockItemGetter)
         {
@@ -178,7 +177,7 @@ namespace NP.Avalonia.UniDock
             parentItem?.Simplify();
 
             // create the window
-            var dockWindow = FloatingWindowFactory.CreateFloatingWindow();
+            var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
 
             DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 

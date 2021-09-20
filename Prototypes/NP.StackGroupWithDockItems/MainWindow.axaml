@@ -26,11 +26,10 @@
   <Grid Margin="10"
         DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         Background="Gray">
-    <np:SimpleDockGroup>
+    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True"
-                         np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                          Margin="20">
         <np:StackDockGroup TheOrientation="Horizontal"
                            IsStableGroup="True"

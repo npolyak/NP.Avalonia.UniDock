@@ -12,6 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using NP.Utilities.BasicInterfaces;
 using System;
 
 namespace NP.Avalonia.UniDock
@@ -39,6 +40,8 @@ namespace NP.Avalonia.UniDock
         static DockAttachedProperties()
         {
             TheDockManagerProperty.Changed.Subscribe(OnDockManagerChanged);
+
+            TheDockObjectComposerProperty.Changed.Subscribe(OnDockObjectComposerChanged);
         }
 
         private static void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs<DockManager> dockManagerChangeArgs)
@@ -83,6 +86,13 @@ namespace NP.Avalonia.UniDock
                     }
                 }
             }
+        }
+
+        private static void OnDockObjectComposerChanged(AvaloniaPropertyChangedEventArgs<IObjectComposer> args)
+        {
+            IObjectComposer? objectComposer = args.NewValue.Value;
+            
+
         }
 
         #region DockSide Attached Avalonia Property
@@ -179,6 +189,25 @@ namespace NP.Avalonia.UniDock
                 "SizeGridLength"
             );
         #endregion SizeGridLength Attached Avalonia Property
+
+
+        #region TheDockObjectComposer Attached Avalonia Property
+        public static IObjectComposer GetTheDockObjectComposer(IAvaloniaObject obj)
+        {
+            return obj.GetValue(TheDockObjectComposerProperty);
+        }
+
+        public static void SetTheDockObjectComposer(IAvaloniaObject obj, IObjectComposer value)
+        {
+            obj.SetValue(TheDockObjectComposerProperty, value);
+        }
+
+        public static readonly AttachedProperty<IObjectComposer> TheDockObjectComposerProperty =
+            AvaloniaProperty.RegisterAttached<object, IControl, IObjectComposer>
+            (
+                "TheDockObjectComposer"
+            );
+        #endregion TheDockObjectComposer Attached Avalonia Property
 
 
         #region IsDockVisible Attached Avalonia Property
