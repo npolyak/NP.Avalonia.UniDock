@@ -23,6 +23,7 @@ using NP.Concepts.Behaviors;
 using System.ComponentModel;
 using System.IO;
 using NP.Avalonia.UniDock.Serialization;
+using NP.Avalonia.UniDock.Factories;
 
 namespace NP.Avalonia.UniDock
 {
@@ -30,6 +31,10 @@ namespace NP.Avalonia.UniDock
     {
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
+
+        public IStackGroupFactory StackGroupFactory { get; set; } = new StackGroupFactory();
+
+        public ITabbedGroupFactory TabbedGroupFactory { get; set; } = new TabbedGroupFactory();
 
         IList<Window> _windows = new ObservableCollection<Window>();
         public IEnumerable<Window> Windows => _windows;
@@ -110,6 +115,7 @@ namespace NP.Avalonia.UniDock
 
             _currentDockGroups = 
                 DockLeafObjsWithoutLeafParents
+                .Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree)
                 .Except(_draggedWindow.LeafItems)
                 .Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
 
@@ -205,7 +211,9 @@ namespace NP.Avalonia.UniDock
                 double sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
 
                 CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
-                StackDockGroup insertGroup = new StackDockGroup { TheOrientation = orientation };
+                StackDockGroup insertGroup = StackGroupFactory.Create();
+
+                insertGroup.TheOrientation = orientation;
                 
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
 
@@ -344,7 +352,7 @@ namespace NP.Avalonia.UniDock
 
                             if (groupToInsertItemsInto == null)
                             {
-                                groupToInsertItemsInto = new TabbedDockGroup();
+                                groupToInsertItemsInto = TabbedGroupFactory.Create();
 
                                 int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
                                 double sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);

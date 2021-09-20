@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using NP.Avalonia.UniDock.Factories;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities;
@@ -71,6 +72,8 @@ namespace NP.Avalonia.UniDock
         protected DockItem? _draggedDockItem;
 
         protected Func<TItem, DockItem> _dockItemGetter;
+
+        public IFloatingWindowFactory FloatingWindowFactory { get; set; } = new FloatingWindowFactory();
 
         public DragItemBehavior(Func<TItem, DockItem> dockItemGetter)
         {
@@ -175,7 +178,14 @@ namespace NP.Avalonia.UniDock
             parentItem?.Simplify();
 
             // create the window
-            var dockWindow = dockManager.CreateDockItemWindow(_draggedDockItem!);
+            var dockWindow = FloatingWindowFactory.CreateFloatingWindow();
+
+            DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
+
+            _draggedDockItem!.CleanSelfOnRemove();
+            dockWindow.Width = _draggedDockItem.FloatingSize.X;
+            dockWindow.Height = _draggedDockItem.FloatingSize.Y;
+            dockWindow.TheDockGroup.DockChildren.Add(_draggedDockItem!);
 
             Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
 

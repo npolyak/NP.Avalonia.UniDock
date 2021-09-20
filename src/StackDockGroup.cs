@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Metadata;
+using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
 using System;
 using System.Collections.Generic;
@@ -72,12 +73,8 @@ namespace NP.Avalonia.UniDock
         [Content]
         public IList<IDockGroup> DockChildren { get; } = new ObservableCollection<IDockGroup>();
 
-        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } 
-
-        protected virtual void SetDockVisualItemGenerator()
-        {
-            TheDockVisualItemGenerator = new DockVisualItemGenerator();
-        }
+        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
+            new DockVisualItemGenerator();
 
         public event Action<IRemovable>? RemoveEvent;
 
@@ -107,8 +104,6 @@ namespace NP.Avalonia.UniDock
 
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
-
-            SetDockVisualItemGenerator();
         }
 
         public void Dispose()

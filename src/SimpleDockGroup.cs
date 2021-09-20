@@ -15,6 +15,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -26,7 +27,7 @@ namespace NP.Avalonia.UniDock
 {
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
-        public event Action<IDockGroup> IsDockVisibleChangedEvent;
+        public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -60,7 +61,7 @@ namespace NP.Avalonia.UniDock
             get => _numChildren;
             private set
             {
-                SetAndRaise(NumberDockChildrenProperty, ref _numChildren, value);
+                SetAndRaise(NumberDockChildrenProperty, ref _numChildren,   value);
             }
         }
 
@@ -73,12 +74,8 @@ namespace NP.Avalonia.UniDock
 
         public bool ShowChildHeader => false;
 
-        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; }
-
-        protected virtual void SetDockVisualItemGenerator()
-        {
-            TheDockVisualItemGenerator = new DockVisualItemGenerator();
-        }
+        private IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
+            new DockVisualItemGenerator();
 
         public bool ShowChildHeaders { get; } = false;
 
@@ -128,8 +125,6 @@ namespace NP.Avalonia.UniDock
 
             _addRemoveChildBehavior = 
                 DockChildren.AddBehavior(OnChildAdded, OnChildRemoved);
-
-            SetDockVisualItemGenerator();
         }
 
         private Control FindVisualChild(IDockGroup dockChild)
