@@ -99,19 +99,24 @@
                   Grid.ColumnSpan="3"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"/>
-            <np:DockSideControl Grid.Row="1"
+            <np:DockSideControl x:Name="CenterControl" 
+                                Grid.Row="1"
                                 Grid.Column="1"
                                 local:DockAttachedProperties.DockSide="Tabs"/>
             <np:DockSideControl Grid.Row="1"
-                                local:DockAttachedProperties.DockSide="Left"/>
+                                local:DockAttachedProperties.DockSide="Left"
+                                IsVisible="{TemplateBinding AllowHorizontalDocking}"/>
             <np:DockSideControl Grid.Column="1"
-                                local:DockAttachedProperties.DockSide="Top"/>
+                                local:DockAttachedProperties.DockSide="Top"
+                                IsVisible="{TemplateBinding AllowVerticalDocking}"/>
             <np:DockSideControl Grid.Row="1"
                                 Grid.Column="2"
-                                local:DockAttachedProperties.DockSide="Right"/>
+                                local:DockAttachedProperties.DockSide="Right"
+                                IsVisible="{TemplateBinding AllowHorizontalDocking}"/>
             <np:DockSideControl Grid.Row="2"
                                 Grid.Column="1"
-                                local:DockAttachedProperties.DockSide="Bottom"/>
+                                local:DockAttachedProperties.DockSide="Bottom"
+                                IsVisible="{TemplateBinding AllowVerticalDocking}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -261,6 +266,8 @@
                              VerticalAlignment="Center"
                              Grid.RowSpan="2"
                              Grid.ColumnSpan="2"
+                             AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
+                             AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
                              StartOrEndPointerDetection="{Binding Path=IsVisible, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                              local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
                                                                              Mode=TwoWay, 
@@ -334,6 +341,8 @@
                 <local:DropPanelWithCompass 
                       Grid.Row="1"
                       Grid.Column="1"
+                      AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
+                      AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
                       IsVisible="{Binding Path=ShowCompass, 
                                           RelativeSource= {RelativeSource TemplatedParent}}"/>
               </Grid>

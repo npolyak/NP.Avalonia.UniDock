@@ -71,5 +71,36 @@ namespace NP.Avalonia.UniDock
                 nameof(SelectBackground)
             );
         #endregion SelectBackground Styled Avalonia Property
+
+        #region AllowVerticalDocking Styled Avalonia Property
+        public bool AllowVerticalDocking
+        {
+            get { return GetValue(AllowVerticalDockingProperty); }
+            set { SetValue(AllowVerticalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowVerticalDockingProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, bool>
+            (
+                nameof(AllowVerticalDocking),
+                true
+            );
+        #endregion AllowVerticalDocking Styled Avalonia Property
+
+
+        #region AllowHorizontalDocking Styled Avalonia Property
+        public bool AllowHorizontalDocking
+        {
+            get { return GetValue(AllowHorizontalDockingProperty); }
+            set { SetValue(AllowHorizontalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowHorizontalDockingProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, bool>
+            (
+                nameof(AllowHorizontalDocking),
+                true
+            );
+        #endregion AllowHorizontalDocking Styled Avalonia Property
     }
 }

@@ -50,7 +50,37 @@ namespace NP.Avalonia.UniDock
             );
         #endregion Id Styled Avalonia Property
 
-        public bool IsStableGroup { get; set; } = false;
+        private bool _isStableGroup = false;
+        public bool IsStableGroup 
+        { 
+            get => _isStableGroup; 
+            set
+            {
+                if (_isStableGroup == value)
+                    return;
+
+                _isStableGroup = value;
+
+                SetHorizontalAndVerticalDockingAllowed();
+            }
+        }
+
+        private void SetHorizontalAndVerticalDockingAllowed()
+        {
+            if (_isStableGroup)
+            {
+                StackDockGroup? parentGroup = DockParent as StackDockGroup;
+
+                AllowHorizontalDocking = parentGroup?.TheOrientation == Orientation.Horizontal;
+                AllowVerticalDocking = parentGroup?.TheOrientation == Orientation.Vertical;
+            }
+            else
+            {
+                AllowHorizontalDocking = true;
+                AllowVerticalDocking = true;
+                return;
+            }
+        }
 
         private void FireDockIdChanged()
         {
@@ -137,7 +167,20 @@ namespace NP.Avalonia.UniDock
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
 
-        public IDockGroup? DockParent { get; set; }
+        private IDockGroup? _dockParent;
+        public IDockGroup? DockParent
+        {
+            get => _dockParent;
+            set
+            {
+                if (_dockParent == value)
+                    return;
+
+                _dockParent = value;
+
+                SetHorizontalAndVerticalDockingAllowed();
+            }
+        }
 
         private readonly SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionFirstByDefaultBehavior<DockItem>();
@@ -286,6 +329,37 @@ namespace NP.Avalonia.UniDock
                 nameof(ShowCompass)
             );
         #endregion ShowCompass Styled Avalonia Property
+
+        #region AllowVerticalDocking Styled Avalonia Property
+        public bool AllowVerticalDocking
+        {
+            get { return GetValue(AllowVerticalDockingProperty); }
+            set { SetValue(AllowVerticalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowVerticalDockingProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
+            (
+                nameof(AllowVerticalDocking),
+                true
+            );
+        #endregion AllowVerticalDocking Styled Avalonia Property
+
+
+        #region AllowHorizontalDocking Styled Avalonia Property
+        public bool AllowHorizontalDocking
+        {
+            get { return GetValue(AllowHorizontalDockingProperty); }
+            set { SetValue(AllowHorizontalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowHorizontalDockingProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
+            (
+                nameof(AllowHorizontalDocking),
+                true
+            );
+        #endregion AllowHorizontalDocking Styled Avalonia Property
 
         IDisposable? _behavior;
         private void SetBehavior()

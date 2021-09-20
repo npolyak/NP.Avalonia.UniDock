@@ -48,6 +48,38 @@ namespace NP.Avalonia.UniDock
         }
 
 
+        #region AllowVerticalDocking Styled Avalonia Property
+        public bool AllowVerticalDocking
+        {
+            get { return GetValue(AllowVerticalDockingProperty); }
+            set { SetValue(AllowVerticalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowVerticalDockingProperty =
+            AvaloniaProperty.Register<DockCompass, bool>
+            (
+                nameof(AllowVerticalDocking),
+                true
+            );
+        #endregion AllowVerticalDocking Styled Avalonia Property
+
+
+        #region AllowHorizontalDocking Styled Avalonia Property
+        public bool AllowHorizontalDocking
+        {
+            get { return GetValue(AllowHorizontalDockingProperty); }
+            set { SetValue(AllowHorizontalDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowHorizontalDockingProperty =
+            AvaloniaProperty.Register<DockCompass, bool>
+            (
+                nameof(AllowHorizontalDocking),
+                true
+            );
+        #endregion AllowHorizontalDocking Styled Avalonia Property
+
+
         #region StartOrEndPointerDetection Styled Avalonia Property
         public bool StartOrEndPointerDetection
         {
