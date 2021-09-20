@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace NP.GroupPanelSample
+namespace NP.StackGroupWithDockItems
 {
     public class App : Application
     {

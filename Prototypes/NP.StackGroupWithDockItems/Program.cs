@@ -1,9 +1,6 @@
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using System;
 
-namespace NP.GroupPanelSample
+namespace NP.StackGroupWithDockItems
 {
     class Program
     {

@@ -1,10 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using NP.Avalonia.Visuals.Controls;
-using NP.Utilities;
 
-namespace NP.GroupPanelSample
+namespace NP.StackGroupWithDockItems
 {
     public partial class MainWindow : Window
     {
@@ -14,11 +12,6 @@ namespace NP.GroupPanelSample
 #if DEBUG
             this.AttachDevTools();
 #endif
-        }
-
-        private void OnCurrentScreenPointChanged(Point2D screenPoint)
-        {
-            AttachedProperties.SetCurrentScreenPoint(this, screenPoint);
         }
 
         private void InitializeComponent()

@@ -61,7 +61,7 @@ namespace NP.Avalonia.UniDock
 
                 _dockObjectComposer = value;
 
-                _dockObjectComposer?.ComposeObject(this);
+                _dockObjectComposer?.ComposeObject(this, true);
             }
         }
 
