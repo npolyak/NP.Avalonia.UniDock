@@ -347,6 +347,8 @@ namespace NP.Avalonia.UniDock
                 $"Default group '{this.DefaultDockGroupId}' is not stable".ThrowProgError();
             }
 
+            IDockGroup? parent = DockParent;
+
             this.RemoveItselfFromParent();
 
             defaultGroup
@@ -356,6 +358,8 @@ namespace NP.Avalonia.UniDock
                     this,
                     dockGroup => (dockGroup as DockItem)?.DefaultDockOrderInGroup ?? 0,
                     (i1, i2) => i1 < i2 ? -1 : i1 > i2 ? 1 : 0);
+
+            parent?.Simplify();
         }
     }
 }
