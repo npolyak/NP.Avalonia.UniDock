@@ -37,8 +37,7 @@
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
- 
-  
+
   <Style Selector="Button.CloseButton">
     <Setter Property="np:ClassesBehavior.InsertClasses"
             Value="WindowIconButton IconButton"/>
@@ -59,7 +58,7 @@
     <Setter Property="np:AttachedProperties.IconHeight"
             Value="10"/>
   </Style>
-  
+
   <Style Selector="local|DockSideControl">
     <Setter Property="BorderBrush"
             Value="Gray"/>
@@ -123,6 +122,28 @@
     </Setter>
   </Style>
 
+  <Style Selector="ContextMenu.LogicalChildrenVisibility">
+    <Setter Property="np:LogicalChildrenBehavior.TheLogicalChildBehavior">
+      <Setter.Value>
+        <np:HasVisibleLogicalChildrenBehavior/>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=(np:AttachedProperties.HasVisibleLogicalChildren), 
+                            RelativeSource={RelativeSource Self}}" />
+  </Style>
+
+  <Style Selector="MenuItem.RestoreDefaultLocation">
+    <Setter Property="Header"
+            Value="Restore Default Location"/>
+    <Setter Property="np:CallAction.TheEvent"
+            Value="{x:Static MenuItem.ClickEvent}"/>
+    <Setter Property="np:CallAction.MethodName"
+            Value="ReattachToDefaultGroup"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=CanReattachToDefaultGroup}"/>
+  </Style>
+  
   <Style Selector="np|DockItemHeaderControl">
     <Setter Property="Template">
       <Setter.Value>
@@ -130,14 +151,8 @@
           <Grid x:Name="PART_HeaderPanel"
                 Background="{TemplateBinding Background}">
             <Grid.ContextMenu>
-              <ContextMenu IsVisible="{Binding Path=(np:AttachedProperties.HasVisibleLogicalChildren), RelativeSource={RelativeSource Self}}">
-                <np:LogicalChildrenBehavior.TheLogicalChildBehavior>
-                  <np:HasVisibleLogicalChildrenBehavior/>
-                </np:LogicalChildrenBehavior.TheLogicalChildBehavior>
-                <MenuItem Header="Restore Default Location"
-                          np:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
-                          np:CallAction.MethodName="ReattachToDefaultGroup"
-                          IsVisible="{Binding Path=CanReattachToDefaultGroup}"/>
+              <ContextMenu Classes="LogicalChildrenVisibility">
+                <MenuItem Classes="RestoreDefaultLocation"/>
               </ContextMenu>
             </Grid.ContextMenu>
             <ContentPresenter x:Name="Header"

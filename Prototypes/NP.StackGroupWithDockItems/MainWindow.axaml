@@ -48,9 +48,7 @@
         <np:TabbedDockGroup Background="White"
                             IsStableGroup="True"
                             DockId="Group2">
-          <np:DockItem Header="Tab3"
-                       DefaultDockGroupId="Group2"
-                       DefaultDockOrderInGroup="1">
+          <np:DockItem Header="Tab3">
             <TextBlock Text="Hi World 3333!"/>
           </np:DockItem>
           <np:DockItem Header="Tab4"

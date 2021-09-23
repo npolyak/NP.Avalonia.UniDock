@@ -18,14 +18,14 @@ namespace NP.Avalonia.Visuals.Behaviors
             IControl child = (IControl)childObj;
 
             IDisposable subscriptionToken = 
-                child.GetObservable(Visual.IsVisibleProperty).Subscribe(OnIsVisibleChanged);
+                child.GetObservable(Visual.IsVisibleProperty).Subscribe(OnIsChildVisibleChanged);
 
             _subscriptionDictionary[childObj] = subscriptionToken;
 
             ResetHasVisibleChildren();
         }
 
-        private void OnIsVisibleChanged(bool isChildVisible)
+        private void OnIsChildVisibleChanged(bool isChildVisible)
         {
             ResetHasVisibleChildren();
         }
