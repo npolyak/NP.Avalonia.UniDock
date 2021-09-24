@@ -36,6 +36,7 @@
                Color="{StaticResource DockSeparatorColor}"/>
     </ResourceDictionary>
   </Styles.Resources>
+  <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml"/>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
   <Style Selector="Button.CloseButton">
@@ -454,10 +455,12 @@
             Value="2"/>
     <!--<Setter Property="ResizeMargin"
             Value="10"/>-->
+    <Setter Property="CustomHeaderIcon"
+            Value="avares://NP.Avalonia.Visuals/Assets/avalonia-32.png"/>
     <Setter Property="HeaderSeparatorBrush"
             Value="{StaticResource DockSeparatorBrush}"/>
     <Setter Property="CustomHeaderIconMargin"
-            Value="5"/>
+            Value="5,5,0,5"/>
     <Setter Property="TitleMargin"
             Value="5"/>
     <Setter Property="HeaderContentTemplate">

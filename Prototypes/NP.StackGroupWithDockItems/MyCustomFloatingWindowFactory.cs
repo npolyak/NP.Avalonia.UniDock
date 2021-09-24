@@ -11,7 +11,7 @@ namespace NP.StackGroupWithDockItems
 
             FloatingWindow dockWindow = new FloatingWindow();
 
-            dockWindow.CustomHeaderIcon = null;
+            //dockWindow.CustomHeaderIcon = null;
             dockWindow.Title = "My Floating Window";
             dockWindow.TitleClasses = "WindowTitle";
 

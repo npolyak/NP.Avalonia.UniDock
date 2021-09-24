@@ -23,11 +23,11 @@
   <Style Selector="TextBlock.WindowTitle">
     <Setter Property="np:ClassesBehavior.InsertClasses"
             Value="Base"/>
-    <Setter Property="FontWeight"
-            Value="Bold"/>
+    <!--<Setter Property="FontWeight"
+            Value="Bold"/>-->
     <Setter Property="FontSize"
-            Value="16"/>
+            Value="13"/>
     <Setter Property="Margin"
-            Value="5,0,0,0"/>
+            Value="0,0,0,0"/>
   </Style>
 </Styles>
