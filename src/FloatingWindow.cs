@@ -58,6 +58,17 @@ namespace NP.Avalonia.UniDock
             TheDockGroup.HasNoChildrenEvent += TheDockGroup_HasNoChildrenEvent;
 
             this.Closing += FloatingWindow_Closing;
+
+            DockStaticEvents.PossibleDockChangeHappenedInsideEvent += 
+                DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
+        }
+
+        private void DockStaticEvents_PossibleDockChangeHappenedInsideEvent(IDockGroup group)
+        {
+            if (group != this.TheDockGroup)
+                return;
+
+            CanReattachToDefaultGroup = LeafItemsWithDefaultPosition.Any();
         }
 
         public FloatingWindow(DockManager dockManager) : this()
@@ -133,6 +144,29 @@ namespace NP.Avalonia.UniDock
             {
                 return GetLeafGroups(TheDockManager!).SelectMany(g => g.LeafItems);
             }
+        }
+
+        public IEnumerable<DockItem> LeafItemsWithDefaultPosition =>
+            LeafItems.Where(item => !item.DefaultDockGroupId.IsNullOrEmpty());
+
+
+        #region CanReattachToDefaultGroup Styled Avalonia Property
+        public bool CanReattachToDefaultGroup
+        {
+            get { return GetValue(CanReattachToDefaultGroupProperty); }
+            private set { SetValue(CanReattachToDefaultGroupProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanReattachToDefaultGroupProperty =
+            AvaloniaProperty.Register<FloatingWindow, bool>
+            (
+                nameof(CanReattachToDefaultGroup)
+            );
+        #endregion CanReattachToDefaultGroup Styled Avalonia Property
+
+        public void ReattachToDefaultGroup()
+        {
+            LeafItemsWithDefaultPosition.ToList().DoForEach(item => item.ReattachToDefaultGroup());
         }
     }
 }

@@ -192,9 +192,16 @@ namespace NP.Avalonia.UniDock
         {
             IDockGroup? parent = DockParent;
 
+            IDockGroup? topDockGroup = this.GetDockGroupSelfAndAncestors().LastOrDefault();
+
             RemoveEvent?.Invoke(this);
 
             parent?.Simplify();
+
+            if (topDockGroup != null)
+            {
+                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+            }
         }
 
         public void Select()
@@ -348,6 +355,7 @@ namespace NP.Avalonia.UniDock
             }
 
             IDockGroup? parent = DockParent;
+            IDockGroup? topDockGroup = this.GetDockGroupSelfAndAncestors().LastOrDefault();
 
             this.RemoveItselfFromParent();
 
@@ -360,6 +368,11 @@ namespace NP.Avalonia.UniDock
                     (i1, i2) => i1 < i2 ? -1 : i1 > i2 ? 1 : 0);
 
             parent?.Simplify();
+
+            if (topDockGroup != null)
+            {
+                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+            }
         }
     }
 }

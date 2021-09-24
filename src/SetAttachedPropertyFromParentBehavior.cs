@@ -14,6 +14,7 @@ using NP.Concepts.Behaviors;
 using System.Collections.Generic;
 using System;
 using NP.Utilities;
+using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
@@ -53,7 +54,14 @@ namespace NP.Avalonia.UniDock
 
         protected override void OnItemAdded(T item)
         {
+            IDockGroup? topGroup = Parent?.GetDockGroupSelfAndAncestors().LastOrDefault();
+
             SetItemValue(item);
+
+            if (topGroup != null)
+            {
+                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topGroup);
+            }
         }
 
         protected override void OnItemRemoved(T item)

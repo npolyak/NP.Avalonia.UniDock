@@ -165,7 +165,9 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
+
             IDockGroup? parentItem = _draggedDockItem.DockParent;
+            IDockGroup? topDockGroup = _draggedDockItem.GetDockGroupSelfAndAncestors().LastOrDefault();
 
             Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
 
@@ -173,6 +175,11 @@ namespace NP.Avalonia.UniDock
             _draggedDockItem?.RemoveItselfFromParent();
 
             parentItem?.Simplify();
+
+            if (topDockGroup != null)
+            {
+                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+            }
 
             // create the window
             var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
