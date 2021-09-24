@@ -47,11 +47,9 @@ namespace NP.Avalonia.UniDock
             TheDockGroup.TheDockManager = TheDockManager;
         }
 
-        public FloatingWindow()
+        public FloatingWindow() 
         {
             DragOnBeginMove = false;
-
-            Classes = new Classes(new[] { "PlainFloatingWindow" });
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
 
@@ -61,6 +59,12 @@ namespace NP.Avalonia.UniDock
 
             DockStaticEvents.PossibleDockChangeHappenedInsideEvent += 
                 DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
+        }
+
+        public void DoInvalidateStyles()
+        {
+            this.InvalidateArrange();
+            this.InvalidateStyles();
         }
 
         private void DockStaticEvents_PossibleDockChangeHappenedInsideEvent(IDockGroup group)

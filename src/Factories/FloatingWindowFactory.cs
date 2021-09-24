@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 
 namespace NP.Avalonia.UniDock.Factories
 {
@@ -10,7 +11,7 @@ namespace NP.Avalonia.UniDock.Factories
 
             FloatingWindow dockWindow = new FloatingWindow();
 
-            dockWindow.CustomHeaderIcon = null;
+            dockWindow.Classes = new Classes("PlainFloatingWindow" );
             dockWindow.Title = "Floating Window";
             dockWindow.TitleClasses = "WindowTitle";
 

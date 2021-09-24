@@ -1,4 +1,5 @@
-﻿using NP.Avalonia.UniDock;
+﻿using Avalonia.Controls;
+using NP.Avalonia.UniDock;
 using NP.Avalonia.UniDock.Factories;
 
 namespace NP.StackGroupWithDockItems
@@ -11,7 +12,7 @@ namespace NP.StackGroupWithDockItems
 
             FloatingWindow dockWindow = new FloatingWindow();
 
-            //dockWindow.CustomHeaderIcon = null;
+            dockWindow.Classes = new Classes("PlainFloatingWindow");
             dockWindow.Title = "My Floating Window";
             dockWindow.TitleClasses = "WindowTitle";
 

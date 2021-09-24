@@ -446,7 +446,7 @@
     </Setter>
   </Style>
 
-  <Style Selector=":is(np|CustomWindow).PlainFloatingWindow">
+    <Style Selector=":is(np|CustomWindow).PlainFloatingWindow">
     <Setter Property="HeaderBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderHeight"
