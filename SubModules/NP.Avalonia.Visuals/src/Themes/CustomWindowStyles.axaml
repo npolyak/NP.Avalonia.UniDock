@@ -28,8 +28,8 @@
         <StackPanel x:Name="PART_IconAndTitleContainer"
                     Orientation="Horizontal"
                     Background="Transparent"
-                    DataContext="{Binding Path=Value}"
-                    Opacity="{Binding Path=IsKeyboardFocusWithin, 
+                    DataContext="{Binding Converter={x:Static converters:FromControlContainerConverter.Instance}}"
+                    Opacity="{Binding Path=IsActive, 
                                       Converter={StaticResource TitleOpacityConverter}}">
           <StackPanel.ContextMenu>
             <ContextMenu IsEnabled="True"
@@ -162,14 +162,13 @@
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
 
-              <ContentPresenter x:Name="PART_HeaderTitleAreaContentPresenter"
-                                Content="{Binding Path=TitleAreaContent, 
-                                                  Converter={x:Static converters:ToValueContainerConverter.Instance},
-                                                  RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                                ContentTemplate="{Binding Path=TitleAreaContentTemplate, 
-                                                          RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Stretch"/>
+              <controls:AvaloniaContentPresenter x:Name="PART_HeaderTitleAreaContentPresenter"
+                                                RealContent="{Binding Path=TitleAreaContent,
+                                                                      RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                                ContentTemplate="{Binding Path=TitleAreaContentTemplate, 
+                                                                          RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Stretch"/>
               
               <ContentPresenter HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"

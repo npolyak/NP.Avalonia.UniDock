@@ -1,21 +1,24 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using NP.Utilities;
 using System;
 using System.Globalization;
 
 namespace NP.Avalonia.Visuals.Converters
 {
-    public class ToValueContainerConverter : IValueConverter
+    public class ToControlContainerConverter : IValueConverter
     {
-        public static ToValueContainerConverter Instance { get; } = 
-            new ToValueContainerConverter();
+        public static ToControlContainerConverter Instance { get; } = 
+            new ToControlContainerConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                return null;
+            IControl control = value as IControl;
 
-            return new ValueContainer(value);
+            if (control == null)
+                return value;
+
+            return new ControlContainer(control);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
