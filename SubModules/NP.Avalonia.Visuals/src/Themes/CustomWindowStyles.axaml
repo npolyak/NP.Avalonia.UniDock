@@ -23,9 +23,90 @@
       <converters:BoolToDoubleConverter x:Key="TitleOpacityConverter"
                                         TrueValue="1"
                                         FalseValue="0.5"/>
+
+      <DataTemplate x:Key="DefaultWindowTitleAreaDataTemplate">
+        <StackPanel x:Name="PART_IconAndTitleContainer"
+                    Orientation="Horizontal"
+                    Background="Transparent"
+                    DataContext="{Binding Path=Value}"
+                    Opacity="{Binding Path=IsKeyboardFocusWithin, 
+                                      Converter={StaticResource TitleOpacityConverter}}">
+          <StackPanel.ContextMenu>
+            <ContextMenu IsEnabled="True"
+                         DataContext="{Binding Path=Parent.Parent.DataContext, RelativeSource={RelativeSource Self}}">
+              <MenuItem Header="Restore"
+                        IsEnabled="{Binding Path=CanRestore}"
+                        behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                        behaviors:CallAction.MethodName="Restore">
+                <MenuItem.Icon>
+                  <Path Data="{StaticResource RestoreIcon}"
+                        Fill="Black"
+                        Stretch="Uniform"
+                        Width="11"
+                        Height="11"/>
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Maximize"
+                        IsEnabled="{Binding Path=CanMaximize}"
+                        behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                        behaviors:CallAction.MethodName="Maximize">
+                <MenuItem.Icon>
+                  <Path Data="{StaticResource MaximizeIcon}"
+                        Fill="Black"
+                        Stretch="Uniform"
+                        Width="11"
+                        Height="11"/>
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Minimize"
+                        behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                        behaviors:CallAction.MethodName="Minimize">
+                <MenuItem.Icon>
+                  <Path Data="{StaticResource MinimizeIcon}"
+                        Fill="Black"
+                        Stretch="Uniform"
+                        VerticalAlignment="Center"
+                        Width="11"
+                        Height="3"/>
+                </MenuItem.Icon>
+              </MenuItem>
+              <MenuItem Header="Close"
+                        behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
+                        behaviors:CallAction.MethodName="Close"
+                        FontWeight="Bold"
+                        IsVisible="{Binding Path=CanClose}">
+                <MenuItem.Icon>
+                  <Path Data="{StaticResource CloseIcon}"
+                        Fill="Black"
+                        Stretch="Uniform"
+                        Width="11"
+                        Height="11"/>
+                </MenuItem.Icon>
+              </MenuItem>
+            </ContextMenu>
+          </StackPanel.ContextMenu>
+          <Image Source="{Binding Path=CustomHeaderIcon}"
+                 VerticalAlignment="Center"
+                 Stretch="Uniform"
+                 IsVisible="{Binding Path=CustomHeaderIcon, 
+                                     Converter={x:Static ObjectConverters.IsNotNull}}"
+                 behaviors:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
+                 behaviors:CallAction.MethodName="Close"
+                 IsEnabled="{Binding Path=CanClose}"
+                 Width="{Binding Path=CustomHeaderIconWidth}"
+                 Height="{Binding Path=CustomHeaderIconHeight}"
+                 Margin="{Binding Path=CustomHeaderIconMargin}"/>
+          <TextBlock x:Name="TheTitle"
+                     IsVisible="{Binding Path=Title, 
+                                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                     Text="{Binding Path=Title}"
+                     Margin="{Binding Path=TitleMargin}"
+                     behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses}"/>
+        </StackPanel>
+      </DataTemplate>
     </ResourceDictionary>
   </Styles.Resources>
-  
+
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
   <Style Selector="TextBlock.DefaultWindowTitle">
@@ -58,6 +139,12 @@
             Value="LightGray"/>
     <Setter Property="BorderThickness"
             Value="1"/>
+    <!--<Setter Property="TitleAreaContent"
+            Value="{Binding RelativeSource={RelativeSource Self}}"/>-->
+    <Setter Property="TitleAreaContent"
+            Value="{Binding RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="TitleAreaContentTemplate"
+            Value="{StaticResource DefaultWindowTitleAreaDataTemplate}" />
     <Setter Property="Icon"
             Value="{Binding Path=CustomHeaderIcon,
                             Converter={x:Static converters:ToWindowIconConverter.Instance},
@@ -74,90 +161,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
-              <StackPanel x:Name="PART_IconAndTitleContainer"
-                          Orientation="Horizontal"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Stretch"
-                          Background="Transparent"
-                          Opacity="{Binding Path=IsKeyboardFocusWithin, 
-                                            Converter={StaticResource TitleOpacityConverter},
-                                            RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                          DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
-                <StackPanel.ContextMenu>
-                  <ContextMenu IsEnabled="True"
-                               DataContext="{Binding Path=Parent.Parent.DataContext, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="Restore"
-                              IsEnabled="{Binding Path=CanRestore}"
-                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
-                              behaviors:CallAction.MethodName="Restore">
-                      <MenuItem.Icon>
-                        <Path Data="{StaticResource RestoreIcon}"
-                              Fill="Black"
-                              Stretch="Uniform"
-                              Width="11"
-                              Height="11"/>
-                      </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Maximize"
-                              IsEnabled="{Binding Path=CanMaximize}"
-                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
-                              behaviors:CallAction.MethodName="Maximize">
-                      <MenuItem.Icon>
-                        <Path Data="{StaticResource MaximizeIcon}"
-                              Fill="Black"
-                              Stretch="Uniform"
-                              Width="11"
-                              Height="11"/>
-                      </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Minimize"
-                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
-                              behaviors:CallAction.MethodName="Minimize">
-                      <MenuItem.Icon>
-                        <Path Data="{StaticResource MinimizeIcon}"
-                              Fill="Black"
-                              Stretch="Uniform"
-                              VerticalAlignment="Center"
-                              Width="11"
-                              Height="3"/>
-                      </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Close"
-                              behaviors:CallAction.TheEvent="{x:Static MenuItem.ClickEvent}"
-                              behaviors:CallAction.MethodName="Close"
-                              FontWeight="Bold"
-                              IsVisible="{Binding Path=CanClose}">
-                      <MenuItem.Icon>
-                        <Path Data="{StaticResource CloseIcon}"
-                              Fill="Black"
-                              Stretch="Uniform"
-                              Width="11"
-                              Height="11"/>
-                      </MenuItem.Icon>
-                    </MenuItem>
-                  </ContextMenu>
-                </StackPanel.ContextMenu>
-                <Image Source="{Binding Path=CustomHeaderIcon, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                       VerticalAlignment="Center"
-                       Stretch="Uniform"
-                       IsVisible="{Binding Path=CustomHeaderIcon, 
-                                           RelativeSource={RelativeSource AncestorType=controls:CustomWindow},
-                                           Converter={x:Static ObjectConverters.IsNotNull}}"
-                       behaviors:CallAction.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
-                       behaviors:CallAction.MethodName="Close"
-                       IsEnabled="{Binding Path=CanClose}"
-                       Width="{Binding Path=CustomHeaderIconWidth, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                       Height="{Binding Path=CustomHeaderIconHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                       Margin="{Binding Path=CustomHeaderIconMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
-                <TextBlock x:Name="TheTitle"
-                           IsVisible="{Binding Path=Title, 
-                                               RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
-                                               Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                           Text="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                           Margin="{Binding Path=TitleMargin, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                           behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
-              </StackPanel>
 
+              <ContentPresenter x:Name="PART_HeaderTitleAreaContentPresenter"
+                                Content="{Binding Path=TitleAreaContent, 
+                                                  Converter={x:Static converters:ToValueContainerConverter.Instance},
+                                                  RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                ContentTemplate="{Binding Path=TitleAreaContentTemplate, 
+                                                          RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"/>
+              
               <ContentPresenter HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Grid.Column="1"

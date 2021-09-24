@@ -608,5 +608,34 @@ namespace NP.Avalonia.Visuals.Controls
             );
         #endregion CanClose Styled Avalonia Property
 
+        #region TitleAreaContent Styled Avalonia Property
+        public object TitleAreaContent
+        {
+            get { return GetValue(TitleAreaContentProperty); }
+            set { SetValue(TitleAreaContentProperty, value); }
+        }
+
+        public static readonly StyledProperty<object> TitleAreaContentProperty =
+            AvaloniaProperty.Register<CustomWindow, object>
+            (
+                nameof(TitleAreaContent)
+            );
+        #endregion TitleAreaContent Styled Avalonia Property
+
+        #region TitleAreaContentTemplate Styled Avalonia Property
+        public DataTemplate TitleAreaContentTemplate
+        {
+            get { return GetValue(TitleAreaContentTemplateProperty); }
+            set { SetValue(TitleAreaContentTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<DataTemplate> TitleAreaContentTemplateProperty =
+            AvaloniaProperty.Register<CustomWindow, DataTemplate>
+            (
+                nameof(TitleAreaContentTemplate)
+            );
+        #endregion TitleAreaContentTemplate Styled Avalonia Property
+
+
     }
 }
