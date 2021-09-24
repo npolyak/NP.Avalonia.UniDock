@@ -12,6 +12,7 @@
 using NP.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
@@ -32,7 +33,7 @@ namespace NP.Avalonia.UniDock
             return g.SelfAndAncestors(ToParent!);
         }
 
-        public static IDockGroup GetDockGroupRootNote(this IDockGroup g)
+        public static IDockGroup GetDockGroupRoot(this IDockGroup g)
         {
             return g.GetRootNode(ToParent!);
         }

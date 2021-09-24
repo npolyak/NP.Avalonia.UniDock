@@ -54,14 +54,11 @@ namespace NP.Avalonia.UniDock
 
         protected override void OnItemAdded(T item)
         {
-            IDockGroup? topGroup = Parent?.GetDockGroupSelfAndAncestors().LastOrDefault();
+            IDockGroup topGroup = Parent.GetDockGroupRoot();
 
             SetItemValue(item);
 
-            if (topGroup != null)
-            {
-                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topGroup);
-            }
+            DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topGroup);
         }
 
         protected override void OnItemRemoved(T item)
