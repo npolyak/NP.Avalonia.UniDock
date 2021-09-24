@@ -15,6 +15,16 @@
         xmlns:behaviors="clr-namespace:NP.Avalonia.Visuals.Behaviors"
         xmlns:converters="clr-namespace:NP.Avalonia.Visuals.Converters"
         xmlns:controls="clr-namespace:NP.Avalonia.Visuals.Controls">
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Themes/Geometries.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <converters:BoolToDoubleConverter x:Key="TitleOpacityConverter"
+                                        TrueValue="1"
+                                        FalseValue="0.5"/>
+    </ResourceDictionary>
+  </Styles.Resources>
   
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
@@ -58,13 +68,6 @@
           <Grid x:Name="PART_HeaderContainer"
                 Height="{Binding Path=HeaderHeight, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                 Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
-            <Grid.Resources>
-              <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                  <ResourceInclude Source="/Themes/Geometries.axaml"/>
-                </ResourceDictionary.MergedDictionaries>
-              </ResourceDictionary>
-            </Grid.Resources>
             <Grid VerticalAlignment="Center">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -76,6 +79,9 @@
                           HorizontalAlignment="Left"
                           VerticalAlignment="Stretch"
                           Background="Transparent"
+                          Opacity="{Binding Path=IsKeyboardFocusWithin, 
+                                            Converter={StaticResource TitleOpacityConverter},
+                                            RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
                 <StackPanel.ContextMenu>
                   <ContextMenu IsEnabled="True"
