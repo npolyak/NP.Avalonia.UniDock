@@ -11,14 +11,10 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Metadata;
 using Avalonia.Styling;
-using Avalonia.VisualTree;
-using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
-using NP.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +25,8 @@ namespace NP.Avalonia.UniDock
     public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
+
+        public event Action<SimpleDockGroup>? PossibleDockChangeInsideEvent;
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -123,7 +121,19 @@ namespace NP.Avalonia.UniDock
 
             _addRemoveChildBehavior = 
                 DockChildren.AddBehavior(OnChildAdded, OnChildRemoved);
+
+            DockStaticEvents.PossibleDockChangeHappenedInsideEvent +=
+                DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
         }
+
+        private void DockStaticEvents_PossibleDockChangeHappenedInsideEvent(IDockGroup group)
+        {
+            if (group != this)
+                return;
+
+            PossibleDockChangeInsideEvent?.Invoke(this);
+        }
+
 
         private Control FindVisualChild(IDockGroup dockChild)
         {
@@ -185,5 +195,21 @@ namespace NP.Avalonia.UniDock
         }
 
         public bool AutoDestroy { get; set; } = true;
+
+        internal IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
+        {
+            return this.GetDockGroupSelfAndDescendants(stopCondition: item => item is ILeafDockObj)
+                        .OfType<ILeafDockObj>()
+                        .Distinct()
+                        .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
+        }
+
+        public IEnumerable<DockItem> LeafItems
+        {
+            get
+            {
+                return GetLeafGroups(TheDockManager!).SelectMany(g => g.LeafItems);
+            }
+        }
     }
 }

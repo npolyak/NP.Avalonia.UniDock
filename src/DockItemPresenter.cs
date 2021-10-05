@@ -11,6 +11,9 @@
 
 using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using System;
 
 namespace NP.Avalonia.UniDock
 {
@@ -50,6 +53,17 @@ namespace NP.Avalonia.UniDock
             {
                 newDockItem.TheVisual = this;
             }
+        }
+
+
+        public DockItemPresenter()
+        {
+            this.AddHandler(PointerPressedEvent, OnPointerPressedFired, RoutingStrategies.Bubble, true);
+        }
+
+        private void OnPointerPressedFired(object? sender, PointerPressedEventArgs e)
+        {
+            this.DockContext?.Select();
         }
     }
 }

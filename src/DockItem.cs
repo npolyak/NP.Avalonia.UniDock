@@ -28,6 +28,22 @@ namespace NP.Avalonia.UniDock
         ISelectableItem<DockItem>
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
+        public event Action<IDockGroup>? IsActiveInWindowChangedEvent;
+
+        #region IsActiveInWindow Styled Avalonia Property
+        public bool IsActiveInWindow
+        {
+            get { return GetValue(IsActiveInWindowProperty); }
+            set { SetValue(IsActiveInWindowProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsActiveInWindowProperty =
+            AvaloniaProperty.Register<DockItem, bool>
+            (
+                nameof(IsActiveInWindow)
+            );
+        #endregion IsActiveInWindow Styled Avalonia Property
+
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -90,16 +106,36 @@ namespace NP.Avalonia.UniDock
 
         static DockItem()
         {
-            DockIdProperty.Changed.AddClassHandler<DockItem>((g, e) => g.OnDockIdChanged(e));
-            IsSelectedProperty.Changed.Subscribe(OnIsSelectedChanged);
+            DockIdProperty
+                .Changed
+                .AddClassHandler<DockItem>((g, e) => g.OnDockIdChanged(e));
+            IsSelectedProperty
+                .Changed
+                .Subscribe(OnIsSelectedChanged);
 
             DockAttachedProperties
                 .TheDockManagerProperty
                 .Changed
-                .AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
+                .AddClassHandler<DockItem>
+                (
+                    (dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
 
-            DefaultDockGroupIdProperty.Changed.AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
+            DefaultDockGroupIdProperty
+                .Changed
+                .AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
         }
+
+        public DockItem()
+        {
+            this.GetObservable(IsActiveInWindowProperty)
+                .Subscribe(OnIsActiveInWindowChanged);
+        }
+
+        private void OnIsActiveInWindowChanged(bool isActiveInWindow)
+        {
+            IsActiveInWindowChangedEvent?.Invoke(this);
+        }
+
 
         private void SetCanReattachToDefaultGroup(AvaloniaPropertyChangedEventArgs args)
         {
@@ -161,7 +197,9 @@ namespace NP.Avalonia.UniDock
         }
 
         public DropPanelWithCompass? DropPanel =>
-            this?.TheVisual?.GetVisualDescendants()?.OfType<DropPanelWithCompass>().FirstOrDefault();
+            this?.TheVisual
+                ?.GetVisualDescendants()
+                ?.OfType<DropPanelWithCompass>().FirstOrDefault();
 
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
@@ -218,9 +256,18 @@ namespace NP.Avalonia.UniDock
         {
             DockItem dockItem = (DockItem)change.Sender;
 
-            dockItem.FireSelectionChanged();
+            dockItem.OnIsSelectedChanged();
         }
 
+        private void OnIsSelectedChanged()
+        {
+            if (IsSelected)
+            {
+                IsActiveInWindow = true;
+            }
+
+            this.FireSelectionChanged();
+        }
 
         #region ShowCompass Styled Avalonia Property
         public bool ShowCompass

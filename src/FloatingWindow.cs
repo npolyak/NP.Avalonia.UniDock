@@ -53,26 +53,24 @@ namespace NP.Avalonia.UniDock
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
 
-            TheDockGroup.HasNoChildrenEvent += TheDockGroup_HasNoChildrenEvent;
+            TheDockGroup.HasNoChildrenEvent += 
+                TheDockGroup_HasNoChildrenEvent;
+
+            TheDockGroup.PossibleDockChangeInsideEvent += 
+                TheDockGroup_PossibleDockChangeInsideEvent;
 
             this.Closing += FloatingWindow_Closing;
+        }
 
-            DockStaticEvents.PossibleDockChangeHappenedInsideEvent += 
-                DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
+        private void TheDockGroup_PossibleDockChangeInsideEvent(SimpleDockGroup obj)
+        {
+            CanReattachToDefaultGroup = LeafItemsWithDefaultPosition.Any();
         }
 
         public void DoInvalidateStyles()
         {
             this.InvalidateArrange();
             this.InvalidateStyles();
-        }
-
-        private void DockStaticEvents_PossibleDockChangeHappenedInsideEvent(IDockGroup group)
-        {
-            if (group != this.TheDockGroup)
-                return;
-
-            CanReattachToDefaultGroup = LeafItemsWithDefaultPosition.Any();
         }
 
         public FloatingWindow(DockManager dockManager) : this()
@@ -135,20 +133,10 @@ namespace NP.Avalonia.UniDock
 
         private IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
         {
-            return this.TheDockGroup
-                        .GetDockGroupSelfAndDescendants(stopCondition:item => item is ILeafDockObj)
-                        .OfType<ILeafDockObj>()
-                        .Distinct()
-                        .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
+            return this.TheDockGroup.GetLeafGroups(dockManager);
         }
 
-        public IEnumerable<DockItem> LeafItems
-        {
-            get
-            {
-                return GetLeafGroups(TheDockManager!).SelectMany(g => g.LeafItems);
-            }
-        }
+        public IEnumerable<DockItem> LeafItems => TheDockGroup.LeafItems;
 
         public IEnumerable<DockItem> LeafItemsWithDefaultPosition =>
             LeafItems.Where(item => !item.DefaultDockGroupId.IsNullOrEmpty());
