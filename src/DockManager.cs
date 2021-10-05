@@ -254,6 +254,8 @@ namespace NP.Avalonia.UniDock
                 insertGroup.DockChildren?.Insert(insertIdx, draggedGroup);
             }
 
+            (draggedGroup.GetLeafItems().FirstOrDefault() as IActiveItem<DockItem>)?.MakeActive();
+
             DraggedWindow?.Close();
         }
 

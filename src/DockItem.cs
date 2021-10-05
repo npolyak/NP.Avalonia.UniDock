@@ -25,24 +25,30 @@ namespace NP.Avalonia.UniDock
     public class DockItem :
         HeaderedContentControl, 
         ILeafDockObj,
-        ISelectableItem<DockItem>
+        ISelectableItem<DockItem>,
+        IActiveItem<DockItem>
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
-        public event Action<IDockGroup>? IsActiveInWindowChangedEvent;
 
-        #region IsActiveInWindow Styled Avalonia Property
-        public bool IsActiveInWindow
+        // IsActive in current top level (root) group (or in floating window) changed
+        public event Action<DockItem>? IsActiveChanged;
+
+        #region IsActive Styled Avalonia Property
+        /// <summary>
+        /// IsActive in current top level (root) group (or in floating window)
+        /// </summary>
+        public bool IsActive
         {
-            get { return GetValue(IsActiveInWindowProperty); }
-            set { SetValue(IsActiveInWindowProperty, value); }
+            get { return GetValue(IsActiveProperty); }
+            set { SetValue(IsActiveProperty, value); }
         }
 
-        public static readonly StyledProperty<bool> IsActiveInWindowProperty =
+        public static readonly StyledProperty<bool> IsActiveProperty =
             AvaloniaProperty.Register<DockItem, bool>
             (
-                nameof(IsActiveInWindow)
+                nameof(IsActive)
             );
-        #endregion IsActiveInWindow Styled Avalonia Property
+        #endregion IsActive Styled Avalonia Property
 
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
@@ -127,13 +133,13 @@ namespace NP.Avalonia.UniDock
 
         public DockItem()
         {
-            this.GetObservable(IsActiveInWindowProperty)
+            this.GetObservable(IsActiveProperty)
                 .Subscribe(OnIsActiveInWindowChanged);
         }
 
         private void OnIsActiveInWindowChanged(bool isActiveInWindow)
         {
-            IsActiveInWindowChangedEvent?.Invoke(this);
+            IsActiveChanged?.Invoke(this);
         }
 
 
@@ -263,7 +269,7 @@ namespace NP.Avalonia.UniDock
         {
             if (IsSelected)
             {
-                IsActiveInWindow = true;
+                IsActive = true;
             }
 
             this.FireSelectionChanged();

@@ -218,6 +218,21 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public static IEnumerable<ILeafDockObj> GetLeafGroups(this IDockGroup dockGroup)
+        {
+            var leafGroups = 
+                dockGroup.GetDockGroupSelfAndDescendants(stopCondition: item => item is ILeafDockObj)
+                         .OfType<ILeafDockObj>()
+                         .Distinct();
+
+            return leafGroups;
+        }
+
+        public static IEnumerable<DockItem> GetLeafItems(this IDockGroup dockGroup)
+        {
+            return dockGroup.GetLeafGroups().SelectMany(g => g.LeafItems);
+        }
+
         private static void OnIsDockVisbleChanged(AvaloniaPropertyChangedEventArgs<bool> args)
         {
             IDockGroup? dockGroup = args.Sender as IDockGroup;

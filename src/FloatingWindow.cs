@@ -131,10 +131,8 @@ namespace NP.Avalonia.UniDock
             TheDockManager?.CompleteDragDropAction();
         }
 
-        private IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
-        {
-            return this.TheDockGroup.GetLeafGroups(dockManager);
-        }
+        private IEnumerable<ILeafDockObj> GetLeafGroups() => 
+            this.TheDockGroup.GetLeafGroups();
 
         public IEnumerable<DockItem> LeafItems => TheDockGroup.LeafItems;
 

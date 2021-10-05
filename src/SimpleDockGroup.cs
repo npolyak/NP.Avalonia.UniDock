@@ -44,6 +44,8 @@ namespace NP.Avalonia.UniDock
 
         public event Action<SimpleDockGroup>? HasNoChildrenEvent;
 
+        private SingleActiveBehavior<DockItem> _singleActiveBehavior = new SingleActiveBehavior<DockItem>();
+
         #region NumberDockChildren Direct Avalonia Property
         public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
             AvaloniaProperty.RegisterDirect<SimpleDockGroup, int>
@@ -132,8 +134,19 @@ namespace NP.Avalonia.UniDock
                 return;
 
             PossibleDockChangeInsideEvent?.Invoke(this);
+
+            _singleActiveBehavior.TheCollection = LeafItems;
         }
 
+        internal void MakeFirstItemActive()
+        {
+            _singleActiveBehavior.MakeFirstItemActive();
+        }
+
+        internal void MakeFirstItemActiveIfNoActive()
+        {
+            _singleActiveBehavior.MakeFirstItemActiveIfNoActive();
+        }
 
         private Control FindVisualChild(IDockGroup dockChild)
         {
@@ -196,20 +209,6 @@ namespace NP.Avalonia.UniDock
 
         public bool AutoDestroy { get; set; } = true;
 
-        internal IEnumerable<ILeafDockObj> GetLeafGroups(DockManager dockManager)
-        {
-            return this.GetDockGroupSelfAndDescendants(stopCondition: item => item is ILeafDockObj)
-                        .OfType<ILeafDockObj>()
-                        .Distinct()
-                        .Where(g => ReferenceEquals(g.TheDockManager, dockManager));
-        }
-
-        public IEnumerable<DockItem> LeafItems
-        {
-            get
-            {
-                return GetLeafGroups(TheDockManager!).SelectMany(g => g.LeafItems);
-            }
-        }
+        public IEnumerable<DockItem> LeafItems => this.GetLeafItems();
     }
 }

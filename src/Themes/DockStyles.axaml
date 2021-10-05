@@ -21,8 +21,10 @@
         <ResourceInclude Source="avares://NP.Avalonia.UniDock/Themes/DockGeometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
 
-      <Color x:Key="DockMouseOverColor">#FF1C97EA</Color>
-      <Color x:Key="DockSelectedColor">#FF007ACC</Color>
+      <Color x:Key="OldDockSelectedColor">#FF007ACC</Color>
+      <Color x:Key="OldDockMouseOverColor">#FF1C97EA</Color>
+      <Color x:Key="DockMouseOverColor">#FFDDE6FF</Color>
+      <Color x:Key="DockSelectedColor">#FFCCD5F0</Color>
       <Color x:Key="DockHeaderColor">#FFEEEEF2</Color>
       <Color x:Key="DockSeparatorColor">#FFCCCEDB</Color>
 
@@ -222,20 +224,20 @@
   <Style Selector="TabItem.Dock:pointerover">
     <Setter Property="Background"
             Value="{StaticResource DockMouseOverBrush}"/>
-    <Setter Property="Foreground"
-            Value="White"/>
+    <!--<Setter Property="Foreground"
+            Value="White"/>-->
     <Setter Property="np:DockAttachedProperties.IconButtonForeground"
-            Value="#DFFFFFFF"/>
+            Value="#FF000000"/>
   </Style>
 
 
   <Style Selector="TabItem.Dock[IsSelected=True]">
     <Setter Property="Background"
             Value="{StaticResource DockSelectedBrush}"/>
-    <Setter Property="Foreground"
+    <!--<Setter Property="Foreground"
             Value="White"/>
     <Setter Property="np:DockAttachedProperties.IconButtonForeground"
-            Value="White"/>
+            Value="White"/>-->
   </Style>
 
   <Style Selector="local|DropDockSideControl">
@@ -412,6 +414,22 @@
             Value="5"/>
     <Setter Property="DataContext"
             Value="{Binding Path=DockContext, RelativeSource={RelativeSource Mode=Self}}"/>
+    <Setter Property="HeaderBackground"
+            Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="HeaderForeground"
+            Value="Black"/>
+    <Setter Property="IsActive"
+            Value="{Binding Path=IsActive}"/>
+    <Setter Property="IsFullyActive">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="IsActive"
+                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="IsActive"
+                   RelativeSource="{RelativeSource AncestorType=Window}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="np:DockItem">
@@ -420,7 +438,8 @@
             <Grid RowDefinitions="Auto, Auto"
                   IsVisible="{Binding Path=ShowChildHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
               <np:DockItemHeaderControl x:Name="Header"
-                                        Background="{StaticResource DockHeaderBrush}"
+                                        Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"
                                         np:DragHeaderBehavior.IsSet="True"
                                         Content="{Binding Path=Header}"
                                         ContentTemplate="{Binding Path=HeaderTemplate}"
@@ -446,7 +465,21 @@
     </Setter>
   </Style>
 
-    <Style Selector=":is(np|CustomWindow).PlainFloatingWindow">
+  <Style Selector="np|DockItemPresenter[IsActive=True]">
+    <Setter Property="HeaderBackground"
+        Value="{StaticResource DockSelectedBrush}"/>
+    <!--<Setter Property="HeaderForeground"
+            Value="White"/>-->
+  </Style>
+
+  <Style Selector="np|DockItemPresenter[IsFullyActive=True]">
+    <Setter Property="HeaderBackground"
+        Value="#F5CC84"/>
+    <!--<Setter Property="HeaderForeground"
+            Value="White"/>-->
+  </Style>
+  
+  <Style Selector=":is(np|CustomWindow).PlainFloatingWindow">
     <Setter Property="HeaderBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderHeight"
