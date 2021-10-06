@@ -228,5 +228,25 @@ namespace NP.Avalonia.UniDock
                 true
             );
         #endregion IsDockVisible Attached Avalonia Property
+
+
+        #region OriginalDockGroup Attached Avalonia Property
+        public static IDockGroup? GetOriginalDockGroup(IControl obj)
+        {
+            return obj.GetValue(OriginalDockGroupProperty);
+        }
+
+        public static void SetOriginalDockGroup(IControl obj, IDockGroup? value)
+        {
+            obj.SetValue(OriginalDockGroupProperty, value);
+        }
+
+        public static readonly AttachedProperty<IDockGroup?> OriginalDockGroupProperty =
+            AvaloniaProperty.RegisterAttached<object, IControl, IDockGroup?>
+            (
+                "OriginalDockGroup"
+            );
+        #endregion OriginalDockGroup Attached Avalonia Property
+
     }
 }

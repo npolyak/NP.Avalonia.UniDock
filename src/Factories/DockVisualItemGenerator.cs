@@ -17,16 +17,18 @@ namespace NP.Avalonia.UniDock.Factories
     {
         public IControl Generate(IDockGroup dockObj)
         {
+            IControl result;
+
             if (dockObj is DockItem dockItem)
             {
-                DockItemPresenter result = new DockItemPresenter();
-
-                result.DockContext = dockItem;
-
-                return result;
+                result = new DockItemPresenter { DockContext = dockItem };
+            }
+            else
+            {
+                result = dockObj;
             }
 
-            return dockObj;
+            return result;
         }
     }
 }

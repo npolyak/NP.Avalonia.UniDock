@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using Avalonia.Data;
 using Avalonia.Controls.Primitives;
+using NP.Avalonia.Visuals.Behaviors;
 
 namespace NP.Avalonia.UniDock
 {
@@ -84,8 +85,7 @@ namespace NP.Avalonia.UniDock
         public static readonly StyledProperty<double> SeparatorWidthProperty =
             AvaloniaProperty.Register<StackGroup<T>, double>
             (
-                nameof(SeparatorWidth),
-                4d
+                nameof(SeparatorWidth)
             );
         #endregion SeparatorWidth Styled Avalonia Property
 
@@ -103,6 +103,21 @@ namespace NP.Avalonia.UniDock
                 nameof(SeparatorBackground)
             );
         #endregion SeparatorBackground Styled Avalonia Property
+
+
+        #region SeparatorClasses Styled Avalonia Property
+        public string SeparatorClasses
+        {
+            get { return GetValue(SeparatorClassesProperty); }
+            set { SetValue(SeparatorClassesProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> SeparatorClassesProperty =
+            AvaloniaProperty.Register<StackGroup<T>, string>
+            (
+                nameof(SeparatorClasses)
+            );
+        #endregion SeparatorClasses Styled Avalonia Property
 
 
         #region TheOrientation Styled Avalonia Property
@@ -252,16 +267,18 @@ namespace NP.Avalonia.UniDock
         {
             GridSplitter gridSplitter = new GridSplitter();
 
+            gridSplitter[!ClassesBehavior.TheClassesProperty] = this[!SeparatorClassesProperty];
+
             gridSplitter[!TemplatedControl.BackgroundProperty] = this[!SeparatorBackgroundProperty];
 
             if (TheOrientation == Orientation.Horizontal)
             {
-                gridSplitter.Width = SeparatorWidth;
+                gridSplitter[!WidthProperty] = this[!SeparatorWidthProperty];
                 gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
             }
             else //TheOrientation == Orientation.Vertical
             {
-                gridSplitter.Height = SeparatorWidth;
+                gridSplitter[!HeightProperty] = this[!SeparatorWidthProperty];
                 gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
             }
 

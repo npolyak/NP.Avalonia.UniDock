@@ -11,17 +11,15 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.Styling;
-using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
-using NP.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using NP.Utilities;
 
 namespace NP.Avalonia.UniDock
 {
@@ -109,6 +107,13 @@ namespace NP.Avalonia.UniDock
 
             _stackGroup[!StackGroup<IControl>.SeparatorBackgroundProperty] =
                 this[!SeparatorBackgroundProperty];
+
+
+            _stackGroup[!StackGroup<IControl>.SeparatorWidthProperty] =
+                this[!SeparatorWidthProperty];
+
+            _stackGroup[!StackGroup<IControl>.SeparatorClassesProperty] =
+                this[!SeparatorClassesProperty];
         }
 
 
@@ -126,6 +131,37 @@ namespace NP.Avalonia.UniDock
                 new SolidColorBrush(Colors.Red)
             );
         #endregion SeparatorBackground Styled Avalonia Property
+
+
+        #region SeparatorWidth Styled Avalonia Property
+        public double SeparatorWidth
+        {
+            get { return GetValue(SeparatorWidthProperty); }
+            set { SetValue(SeparatorWidthProperty, value); }
+        }
+
+        public static readonly StyledProperty<double> SeparatorWidthProperty =
+            AvaloniaProperty.Register<StackDockGroup, double>
+            (
+                nameof(SeparatorWidth),
+                4d
+            );
+        #endregion SeparatorWidth Styled Avalonia Property
+
+
+        #region SeparatorClasses Styled Avalonia Property
+        public string SeparatorClasses
+        {
+            get { return GetValue(SeparatorClassesProperty); }
+            set { SetValue(SeparatorClassesProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> SeparatorClassesProperty =
+            AvaloniaProperty.Register<StackDockGroup, string>
+            (
+                nameof(SeparatorClasses)
+            );
+        #endregion SeparatorClasses Styled Avalonia Property
 
 
         public void Dispose()
@@ -158,8 +194,7 @@ namespace NP.Avalonia.UniDock
             }
             else
             {
-                int idx = DockChildren.IndexOf(dockChild);
-                RemoveChildFromStackGroup(idx);
+                RemoveChildFromStackGroup(dockChild);
             }
         }
 
@@ -173,9 +208,22 @@ namespace NP.Avalonia.UniDock
             IControl newVisualChildToInsert =
                TheDockManager!.TheDockVisualItemGenerator!.Generate(dockChild);
 
-            int idx = DockChildren.IndexOf(dockChild);
+            DockAttachedProperties.SetOriginalDockGroup(newVisualChildToInsert, dockChild);
 
-            _stackGroup.Items.Insert(idx, newVisualChildToInsert);
+            int CompareGroups(IControl control1, IControl control2)
+            {
+                IDockGroup originalGroup1 =
+                    DockAttachedProperties.GetOriginalDockGroup(control1)!;
+                IDockGroup originalGroup2 =
+                    DockAttachedProperties.GetOriginalDockGroup(control2)!;
+
+                int idx1 = DockChildren.IndexOf(originalGroup1);
+                int idx2 = DockChildren.IndexOf(originalGroup2);
+
+                return idx1 > idx2 ? 1 : idx1 == idx2 ? 0 : -1;
+            }
+
+            _stackGroup.Items.InsertInOrder(newVisualChildToInsert, CompareGroups);
 
             this.SetIsDockVisible();
         }
@@ -187,12 +235,17 @@ namespace NP.Avalonia.UniDock
             dockChild.CleanSelfOnRemove();
             SetNumberDockChildren();
 
-            RemoveChildFromStackGroup(idx);
+            RemoveChildFromStackGroup(dockChild);
         }
 
-        private void RemoveChildFromStackGroup(int idx)
+        private void RemoveChildFromStackGroup(IDockGroup dockChild)
         {
+            int idx = 
+                _stackGroup.Items
+                           .IndexOf(item => DockAttachedProperties.GetOriginalDockGroup(item) == dockChild);
+
             _stackGroup.Items.RemoveAt(idx);
+
             this.SetIsDockVisible();
         }
 
