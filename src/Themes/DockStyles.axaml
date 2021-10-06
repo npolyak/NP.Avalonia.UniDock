@@ -321,7 +321,7 @@
 
   <Style Selector="np|StackDockGroup">
     <Setter Property="SeparatorBackground"
-            Value="#FFCCCCD0"/>
+            Value="{StaticResource DockSeparatorBrush}"/>
   </Style>
   
   <Style Selector="local|TabbedDockGroup">
@@ -333,6 +333,8 @@
             Value="{Binding Path=IsDockVisible, RelativeSource={RelativeSource Self}}"/>
     <Setter Property="TabSeparatorBackground"
             Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="Background"
+            Value="White"/>
     <Setter Property="IsFullyActive">
       <Setter.Value>
         <MultiBinding Converter="{x:Static BoolConverters.And}">

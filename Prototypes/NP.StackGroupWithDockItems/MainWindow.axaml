@@ -44,8 +44,7 @@
             <TextBlock Text="Hi World!"/>
           </np:DockItem>
         </np:StackDockGroup>
-        <np:TabbedDockGroup Background="White"
-                            IsStableGroup="True"
+        <np:TabbedDockGroup IsStableGroup="True"
                             DockId="Group2">
           <np:DockItem Header="Tab3">
             <TextBlock Text="Hi World 3333!"/>
