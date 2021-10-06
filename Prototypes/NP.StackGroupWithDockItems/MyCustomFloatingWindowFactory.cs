@@ -12,8 +12,7 @@ namespace NP.StackGroupWithDockItems
 
             FloatingWindow dockWindow = new FloatingWindow();
 
-            dockWindow.Classes = new Classes("PlainFloatingWindow");
-            dockWindow.Title = "My Floating Window";
+            dockWindow.Classes = new Classes("PlainFloatingWindow", "MyFloatingWindow");
             dockWindow.TitleClasses = "WindowTitle";
 
             dockWindow.SetMovePtr();

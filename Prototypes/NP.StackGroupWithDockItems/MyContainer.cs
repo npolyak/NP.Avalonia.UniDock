@@ -11,7 +11,7 @@ namespace NP.StackGroupWithDockItems
         {
             TheContainer = new IoCContainer();
 
-            //TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
+            TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
 
             TheContainer?.CompleteConfiguration();
         }
