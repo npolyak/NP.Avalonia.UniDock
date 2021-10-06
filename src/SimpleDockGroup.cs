@@ -135,7 +135,7 @@ namespace NP.Avalonia.UniDock
 
             PossibleDockChangeInsideEvent?.Invoke(this);
 
-            _singleActiveBehavior.TheCollection = LeafItems;
+            _singleActiveBehavior.TheCollection = LeafItems.ToList();
         }
 
         internal void MakeFirstItemActive()

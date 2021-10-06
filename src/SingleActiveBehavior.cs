@@ -26,7 +26,7 @@ namespace NP.Avalonia.UniDock
 
                 _behaviorDisposable?.Dispose();
 
-                _collection = value?.ToList();
+                _collection = value;
 
                 _behaviorDisposable =
                     _collection?.AddBehavior(OnItemAdded, OnItemRemoved);
