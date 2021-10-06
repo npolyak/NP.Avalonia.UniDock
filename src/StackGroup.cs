@@ -22,6 +22,7 @@ using NP.Concepts.Behaviors;
 using System.Collections;
 using System.Collections.ObjectModel;
 using Avalonia.Data;
+using Avalonia.Controls.Primitives;
 
 namespace NP.Avalonia.UniDock
 {
@@ -99,8 +100,7 @@ namespace NP.Avalonia.UniDock
         public static readonly StyledProperty<IBrush> SeparatorBackgroundProperty =
             AvaloniaProperty.Register<StackGroup<T>, IBrush>
             (
-                nameof(SeparatorBackground),
-                new SolidColorBrush(new Color(0xFF, 0xEE, 0xEE, 0xF2))
+                nameof(SeparatorBackground)
             );
         #endregion SeparatorBackground Styled Avalonia Property
 
@@ -252,7 +252,7 @@ namespace NP.Avalonia.UniDock
         {
             GridSplitter gridSplitter = new GridSplitter();
 
-            gridSplitter.Background = SeparatorBackground;
+            gridSplitter[!TemplatedControl.BackgroundProperty] = this[!SeparatorBackgroundProperty];
 
             if (TheOrientation == Orientation.Horizontal)
             {

@@ -9,12 +9,8 @@
 // Also, please, mention this software in any documentation for the 
 // products that use it.
 
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Templates;
-using Avalonia.Layout;
 
 namespace NP.Avalonia.UniDock
 {

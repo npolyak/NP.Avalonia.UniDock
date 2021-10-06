@@ -21,7 +21,6 @@
   </Window.Resources>
   <Window.Styles>
     <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml"/>
-
   </Window.Styles>
   <Grid Margin="10"
         DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"

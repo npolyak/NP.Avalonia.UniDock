@@ -13,7 +13,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.Styling;
 using NP.Avalonia.UniDock.Factories;
 using NP.Concepts.Behaviors;
 using NP.Utilities.Attributes;
@@ -23,8 +25,10 @@ using System.Collections.ObjectModel;
 
 namespace NP.Avalonia.UniDock
 {
-    public class StackDockGroup : DockIdContainingControl, IDockGroup, IDisposable
+    public class StackDockGroup : DockIdContainingControl, IDockGroup, IDisposable, IStyleable
     {
+        Type IStyleable.StyleKey => typeof(StackDockGroup);
+
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
@@ -102,7 +106,27 @@ namespace NP.Avalonia.UniDock
 
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
+
+            _stackGroup[!StackGroup<IControl>.SeparatorBackgroundProperty] =
+                this[!SeparatorBackgroundProperty];
         }
+
+
+        #region SeparatorBackground Styled Avalonia Property
+        public IBrush SeparatorBackground
+        {
+            get { return GetValue(SeparatorBackgroundProperty); }
+            set { SetValue(SeparatorBackgroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> SeparatorBackgroundProperty =
+            AvaloniaProperty.Register<StackDockGroup, IBrush>
+            (
+                nameof(SeparatorBackground),
+                new SolidColorBrush(Colors.Red)
+            );
+        #endregion SeparatorBackground Styled Avalonia Property
+
 
         public void Dispose()
         {

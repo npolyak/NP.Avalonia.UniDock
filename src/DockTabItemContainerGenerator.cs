@@ -11,11 +11,10 @@
 
 using Avalonia.Controls;
 using Avalonia.Controls.Generators;
-using NP.Avalonia.Visuals.Controls;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockTabItemContainerGenerator : ItemContainerGenerator<TabItem>
+    public class DockTabItemContainerGenerator : ItemContainerGenerator<DockTabItem>
     {
         public DockTabItemContainerGenerator(DockTabsPresenter owner) : 
             base(owner, ContentControl.ContentProperty, ContentControl.ContentTemplateProperty)

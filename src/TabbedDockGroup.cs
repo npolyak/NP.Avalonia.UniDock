@@ -12,7 +12,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
@@ -27,7 +31,7 @@ namespace NP.Avalonia.UniDock
 {
     public class TabbedDockGroup : TemplatedControl, ILeafDockObj
     {
-        public event Action<IDockGroup> IsDockVisibleChangedEvent;
+        public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -64,6 +68,37 @@ namespace NP.Avalonia.UniDock
                 SetHorizontalAndVerticalDockingAllowed();
             }
         }
+
+
+        #region IsActive Styled Avalonia Property
+        public bool IsActive
+        {
+            get { return GetValue(IsActiveProperty); }
+            set { SetValue(IsActiveProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsActiveProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
+            (
+                nameof(IsActive)
+            );
+        #endregion IsActive Styled Avalonia Property
+
+
+        #region IsFullyActive Styled Avalonia Property
+        public bool IsFullyActive
+        {
+            get { return GetValue(IsFullyActiveProperty); }
+            set { SetValue(IsFullyActiveProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsFullyActiveProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
+            (
+                nameof(IsFullyActive)
+            );
+        #endregion IsFullyActive Styled Avalonia Property
+
 
         private void SetHorizontalAndVerticalDockingAllowed()
         {
@@ -130,19 +165,19 @@ namespace NP.Avalonia.UniDock
         /// <summary>
         /// Defines the <see cref="Items"/> property.
         /// </summary>
-        public static readonly DirectProperty<TabbedDockGroup, IList<IDockGroup>> ItemsProperty =
-            AvaloniaProperty.RegisterDirect<TabbedDockGroup, IList<IDockGroup>>
+        public static readonly DirectProperty<TabbedDockGroup, IList<IDockGroup>?> ItemsProperty =
+            AvaloniaProperty.RegisterDirect<TabbedDockGroup, IList<IDockGroup>?>
             (
                 nameof(Items),
                 o => o.Items,
                 (o, v) => o.Items = v);
 
-        private IList<IDockGroup> _items = new ObservableCollection<IDockGroup>();
+        private IList<IDockGroup>? _items = new ObservableCollection<IDockGroup>();
         /// <summary>
         /// Gets or sets the items to display.
         /// </summary>
         [Content]
-        public IList<IDockGroup> Items
+        public IList<IDockGroup>? Items
         {
             get
             {
@@ -153,7 +188,7 @@ namespace NP.Avalonia.UniDock
             {
                 DisposeBehavior();
 
-                SetAndRaise(ItemsProperty, ref _items, value);
+                SetAndRaise(ItemsProperty!, ref _items, value);
 
                 SetBehavior();
             }
@@ -201,6 +236,16 @@ namespace NP.Avalonia.UniDock
             SetSelectedItem();
 
             OnTabStringPlacementChanged();
+
+            this.AddHandler(InputElement.PointerPressedEvent, OnTabbedDockGroupPressed, RoutingStrategies.Bubble, true);
+        }
+
+        private void OnTabbedDockGroupPressed(object? sender, PointerPressedEventArgs e)
+        {
+            if (SelectedItem is IActiveItem<DockItem> dockItem)
+            {
+                dockItem.MakeActive();
+            }
         }
 
         private void _singleSelectionBehavior_PropertyChanged
@@ -211,9 +256,21 @@ namespace NP.Avalonia.UniDock
             SetSelectedItem();
         }
 
+        private IDisposable? _isActiveBinding = null;
         private void SetSelectedItem()
         {
+            _isActiveBinding?.Dispose();
+
             SelectedItem = _singleSelectionBehavior.TheSelectedItem;
+
+            if (SelectedItem is DockItem dockItem)
+            {
+                Binding binding = new Binding();
+                binding.Source = dockItem;
+                binding.Path = "IsActive";
+                binding.Mode = BindingMode.OneWay;
+                _isActiveBinding = this.Bind(IsActiveProperty, binding);
+            }
         }
 
         public void ClearSelectedItem()
@@ -364,7 +421,10 @@ namespace NP.Avalonia.UniDock
         IDisposable? _behavior;
         private void SetBehavior()
         {
-            _setItemsBehavior = new SetDockGroupBehavior<IDockGroup>(this, Items);
+            if (Items != null)
+            {
+                _setItemsBehavior = new SetDockGroupBehavior<IDockGroup>(this, Items!);
+            }
 
             _mimicCollectionBehavior.InputCollection = Items;
             _singleSelectionBehavior.TheCollection = _mimicCollectionBehavior.OutputCollection;
@@ -415,5 +475,20 @@ namespace NP.Avalonia.UniDock
             get;
             set;
         }
+
+
+        #region TabSeparatorBackground Styled Avalonia Property
+        public IBrush TabSeparatorBackground
+        {
+            get { return GetValue(TabSeparatorBackgroundProperty); }
+            set { SetValue(TabSeparatorBackgroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> TabSeparatorBackgroundProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, IBrush>
+            (
+                nameof(TabSeparatorBackground)
+            );
+        #endregion TabSeparatorBackground Styled Avalonia Property
     }
 }

@@ -177,7 +177,7 @@
     </Setter>
   </Style>
 
-  <Style Selector="TabItem.Dock">
+  <Style Selector="np|DockTabItem.Dock">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="FontSize" Value="12"/>
     <Setter Property="Foreground" Value="Black"/>
@@ -195,6 +195,19 @@
             Value="Select"/>
     <Setter Property="np:CallAction.TheRoutingStrategy"
             Value="Bubble"/>
+    <Setter Property="IsActive"
+            Value="{Binding Path=Content.IsActive, 
+                            RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="IsFullyActive">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="IsActive"
+                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="IsActive"
+                   RelativeSource="{RelativeSource AncestorType=Window}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
     <Setter Property="Template">
       <ControlTemplate>
         <Grid ColumnDefinitions="Auto, Auto"
@@ -221,7 +234,7 @@
     </Setter>
   </Style>
 
-  <Style Selector="TabItem.Dock:pointerover">
+  <Style Selector="np|DockTabItem.Dock:pointerover">
     <Setter Property="Background"
             Value="{StaticResource DockMouseOverBrush}"/>
     <!--<Setter Property="Foreground"
@@ -231,15 +244,21 @@
   </Style>
 
 
-  <Style Selector="TabItem.Dock[IsSelected=True]">
+  <Style Selector="np|DockTabItem.Dock[IsSelected=True]">
     <Setter Property="Background"
-            Value="{StaticResource DockSelectedBrush}"/>
-    <!--<Setter Property="Foreground"
-            Value="White"/>
-    <Setter Property="np:DockAttachedProperties.IconButtonForeground"
-            Value="White"/>-->
+            Value="{StaticResource DockHeaderBrush}"/>
   </Style>
 
+  <Style Selector="np|DockTabItem.Dock[IsActive=True]">
+    <Setter Property="Background"
+            Value="{StaticResource DockSelectedBrush}"/>
+  </Style>
+
+  <Style Selector="np|DockTabItem.Dock[IsFullyActive=True]">
+    <Setter Property="Background"
+            Value="#F5CC84"/>
+  </Style>
+  
   <Style Selector="local|DropDockSideControl">
     <Setter Property="IsHitTestVisible"
             Value="False"/>
@@ -299,6 +318,11 @@
     <Setter Property="SelectBackground"
             Value="Green"/>
   </Style>
+
+  <Style Selector="np|StackDockGroup">
+    <Setter Property="SeparatorBackground"
+            Value="#FFCCCCD0"/>
+  </Style>
   
   <Style Selector="local|TabbedDockGroup">
     <Setter Property="HorizontalAlignment"
@@ -307,6 +331,18 @@
             Value="Stretch"/>
     <Setter Property="IsVisible"
             Value="{Binding Path=IsDockVisible, RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="TabSeparatorBackground"
+            Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="IsFullyActive">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="SelectedItem.IsActive"
+                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="IsActive"
+                   RelativeSource="{RelativeSource AncestorType=Window}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="local:TabbedDockGroup">
@@ -343,7 +379,7 @@
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="PART_TabSeparator" 
-                      Background="{StaticResource DockSelectedColor}"
+                      Background="{TemplateBinding TabSeparatorBackground}"
                       IsVisible="{Binding Path=NumberDockChildren, 
                                           Converter={x:Static np:IntConverters.IsPositiveConverter},
                                           RelativeSource={RelativeSource TemplatedParent}}"/>
@@ -370,6 +406,22 @@
       </Setter.Value>
     </Setter>
   </Style>
+
+
+  <Style Selector="np|TabbedDockGroup[IsActive=True]">
+    <Setter Property="TabSeparatorBackground"
+        Value="{StaticResource DockSelectedBrush}"/>
+    <!--<Setter Property="HeaderForeground"
+            Value="White"/>-->
+  </Style>
+
+  <Style Selector="np|TabbedDockGroup[IsFullyActive=True]">
+    <Setter Property="TabSeparatorBackground"
+        Value="#F5CC84"/>
+    <!--<Setter Property="HeaderForeground"
+            Value="White"/>-->
+  </Style>
+
 
   <Style Selector="local|TabbedDockGroup[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
     <Setter Property="DockPanel.Dock" Value="Top"/>
