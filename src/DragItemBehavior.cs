@@ -180,6 +180,7 @@ namespace NP.Avalonia.UniDock
 
             // create the window
             var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
+            dockWindow.SetMovePtr();
 
             DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 

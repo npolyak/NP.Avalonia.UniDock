@@ -109,19 +109,21 @@ namespace NP.Avalonia.UniDock.Serialization
             }
         }
 
-        public static Window? RestoreWindow(this WindowParams wp)
+        public static Window? RestoreWindow(this WindowParams wp, DockManager dm)
         {
-            Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
+            //Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
 
-            // only floating windows can be restored
-            if (!typeof(FloatingWindow).IsAssignableFrom(windowType))
-            {
-                return null;
-            }
+            //// only floating windows can be restored
+            //if (!typeof(FloatingWindow).IsAssignableFrom(windowType))
+            //{
+            //    return null;
+            //}
 
-            FloatingWindow w = (FloatingWindow) Activator.CreateInstance(windowType)!;
+            //FloatingWindow w = (FloatingWindow) Activator.CreateInstance(windowType)!;
 
-            w.SetWindowFromParams(wp);
+            FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow();
+
+            w.TheDockManager = dm;
 
             w.TheDockGroup.DockId = wp.TopLevelGroupId!;
 

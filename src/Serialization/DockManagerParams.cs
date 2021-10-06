@@ -192,16 +192,13 @@ namespace NP.Avalonia.UniDock.Serialization
                 }
                 else
                 {
-                    w = wp.RestoreWindow();
-
-                    if (w != null)
-                    {
-                        DockAttachedProperties.SetTheDockManager(w, dm);
-                    }
+                    w = wp.RestoreWindow(dm);
                 }
+
+                w.SetWindowFromParams(wp);
             }
 
-            foreach(WindowParams wp in dmp.WindowsSerializationParams.NullToEmpty())
+            foreach (WindowParams wp in dmp.WindowsSerializationParams.NullToEmpty())
             {
                 // show windows - owners first
                 dm.ShowOwnersAndWindow(dmp, wp.WindowId!);
