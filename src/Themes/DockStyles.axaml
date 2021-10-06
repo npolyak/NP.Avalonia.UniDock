@@ -319,10 +319,66 @@
             Value="Green"/>
   </Style>
 
-  <Style Selector="np|StackDockGroup">
-    <Setter Property="SeparatorBackground"
+  <Style Selector="np|DockSeparator">
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="MinWidth" Value="1" />
+    <Setter Property="MinHeight" Value="1" />
+    <Setter Property="Background"
             Value="{StaticResource DockSeparatorBrush}"/>
+    <Setter Property="HorizontalAlignment"
+        Value="Stretch"/>
+    <Setter Property="VerticalAlignment"
+        Value="Stretch"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Background="{TemplateBinding Background}"/>
+      </ControlTemplate>
+    </Setter>
   </Style>
+
+  <Style Selector="np|DockSeparator[TheOrientation=Horizontal]">
+    <Setter Property="Height"
+            Value="4"/>
+  </Style>
+
+  <Style Selector="np|DockSeparator[TheOrientation=Vertical]">
+    <Setter Property="Width"
+            Value="4"/>
+  </Style>
+
+  <!--<Style Selector="np|DockSeparator[TheOrientation=Horizontal]">
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0%,0%"
+                             EndPoint="0%, 100%">
+          <GradientStop Offset="0"
+                        Color="White"/>
+          <GradientStop Offset="0.5"
+                        Color="{StaticResource DockSeparatorColor}"/>
+          <GradientStop Offset="1"
+                        Color="White"/>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="np|DockSeparator[TheOrientation=Vertical]">
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0%,0%"
+                             EndPoint="100%, 0%">
+          <GradientStop Offset="0"
+                        Color="White"/>
+          <GradientStop Offset="0.5"
+                        Color="{StaticResource DockSeparatorColor}"/>
+          <GradientStop Offset="1"
+                        Color="White"/>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>-->
   
   <Style Selector="local|TabbedDockGroup">
     <Setter Property="HorizontalAlignment"
@@ -569,4 +625,5 @@
       </Setter.Value>
     </Setter>
   </Style>
+
 </Styles>

@@ -16,20 +16,19 @@ using System.Linq;
 using NP.Utilities;
 using System.Collections.Generic;
 using System;
-using Avalonia.Media;
 using Avalonia.Metadata;
 using NP.Concepts.Behaviors;
 using System.Collections;
 using System.Collections.ObjectModel;
-using Avalonia.Data;
-using Avalonia.Controls.Primitives;
-using NP.Avalonia.Visuals.Behaviors;
+using NP.Avalonia.UniDock.Factories;
 
 namespace NP.Avalonia.UniDock
 {
     public class StackGroup<T> : Control
         where T : IControl
     {
+        internal IDockSeparatorFactory? TheDockSeparatorFactory { get; set; }
+
         private ObservableCollection<T> _items = new ObservableCollection<T>();
         /// <summary>
         /// Defines the <see cref="Items"/> property.
@@ -74,51 +73,6 @@ namespace NP.Avalonia.UniDock
         }
 
         public int Count => Items.Count;
-
-        #region SeparatorWidth Styled Avalonia Property
-        public double SeparatorWidth
-        {
-            get { return GetValue(SeparatorWidthProperty); }
-            set { SetValue(SeparatorWidthProperty, value); }
-        }
-
-        public static readonly StyledProperty<double> SeparatorWidthProperty =
-            AvaloniaProperty.Register<StackGroup<T>, double>
-            (
-                nameof(SeparatorWidth)
-            );
-        #endregion SeparatorWidth Styled Avalonia Property
-
-
-        #region SeparatorBackground Styled Avalonia Property
-        public IBrush SeparatorBackground
-        {
-            get { return GetValue(SeparatorBackgroundProperty); }
-            set { SetValue(SeparatorBackgroundProperty, value); }
-        }
-
-        public static readonly StyledProperty<IBrush> SeparatorBackgroundProperty =
-            AvaloniaProperty.Register<StackGroup<T>, IBrush>
-            (
-                nameof(SeparatorBackground)
-            );
-        #endregion SeparatorBackground Styled Avalonia Property
-
-
-        #region SeparatorClasses Styled Avalonia Property
-        public string SeparatorClasses
-        {
-            get { return GetValue(SeparatorClassesProperty); }
-            set { SetValue(SeparatorClassesProperty, value); }
-        }
-
-        public static readonly StyledProperty<string> SeparatorClassesProperty =
-            AvaloniaProperty.Register<StackGroup<T>, string>
-            (
-                nameof(SeparatorClasses)
-            );
-        #endregion SeparatorClasses Styled Avalonia Property
-
 
         #region TheOrientation Styled Avalonia Property
         public Orientation TheOrientation
@@ -265,21 +219,15 @@ namespace NP.Avalonia.UniDock
 
         private Control GetSeparator()
         {
-            GridSplitter gridSplitter = new GridSplitter();
-
-            gridSplitter[!ClassesBehavior.TheClassesProperty] = this[!SeparatorClassesProperty];
-
-            gridSplitter[!TemplatedControl.BackgroundProperty] = this[!SeparatorBackgroundProperty];
+            DockSeparator gridSplitter = TheDockSeparatorFactory?.GetDockSeparator()!;
 
             if (TheOrientation == Orientation.Horizontal)
             {
-                gridSplitter[!WidthProperty] = this[!SeparatorWidthProperty];
-                gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
+                gridSplitter.TheOrientation = Orientation.Vertical;
             }
             else //TheOrientation == Orientation.Vertical
             {
-                gridSplitter[!HeightProperty] = this[!SeparatorWidthProperty];
-                gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
+                gridSplitter.TheOrientation = Orientation.Horizontal;
             }
 
             return gridSplitter;

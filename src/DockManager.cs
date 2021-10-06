@@ -50,6 +50,10 @@ namespace NP.Avalonia.UniDock
         internal IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
             new DockVisualItemGenerator();
 
+        [Part]
+        internal IDockSeparatorFactory? TheDockSeparatorFactory { get; set; } =
+            new DockSeparatorFactory();
+
         IObjectComposer? _dockObjectComposer = null;
         public IObjectComposer? TheDockObjectComposer
         {

@@ -87,7 +87,6 @@ namespace NP.Avalonia.UniDock
         static StackDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<StackDockGroup>((g, e) => g.OnDockIdChanged(e));
-
         }
 
         IDisposable? _behavior;
@@ -105,64 +104,16 @@ namespace NP.Avalonia.UniDock
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
 
-            _stackGroup[!StackGroup<IControl>.SeparatorBackgroundProperty] =
-                this[!SeparatorBackgroundProperty];
-
-
-            _stackGroup[!StackGroup<IControl>.SeparatorWidthProperty] =
-                this[!SeparatorWidthProperty];
-
-            _stackGroup[!StackGroup<IControl>.SeparatorClassesProperty] =
-                this[!SeparatorClassesProperty];
+            this.GetObservable(DockAttachedProperties.TheDockManagerProperty).Subscribe(OnDockManagerChanged);
         }
 
-
-        #region SeparatorBackground Styled Avalonia Property
-        public IBrush SeparatorBackground
+        private void OnDockManagerChanged(DockManager dockManager)
         {
-            get { return GetValue(SeparatorBackgroundProperty); }
-            set { SetValue(SeparatorBackgroundProperty, value); }
+            if (TheDockManager != null)
+            {
+                _stackGroup.TheDockSeparatorFactory = TheDockManager?.TheDockSeparatorFactory;
+            }
         }
-
-        public static readonly StyledProperty<IBrush> SeparatorBackgroundProperty =
-            AvaloniaProperty.Register<StackDockGroup, IBrush>
-            (
-                nameof(SeparatorBackground),
-                new SolidColorBrush(Colors.Red)
-            );
-        #endregion SeparatorBackground Styled Avalonia Property
-
-
-        #region SeparatorWidth Styled Avalonia Property
-        public double SeparatorWidth
-        {
-            get { return GetValue(SeparatorWidthProperty); }
-            set { SetValue(SeparatorWidthProperty, value); }
-        }
-
-        public static readonly StyledProperty<double> SeparatorWidthProperty =
-            AvaloniaProperty.Register<StackDockGroup, double>
-            (
-                nameof(SeparatorWidth),
-                4d
-            );
-        #endregion SeparatorWidth Styled Avalonia Property
-
-
-        #region SeparatorClasses Styled Avalonia Property
-        public string SeparatorClasses
-        {
-            get { return GetValue(SeparatorClassesProperty); }
-            set { SetValue(SeparatorClassesProperty, value); }
-        }
-
-        public static readonly StyledProperty<string> SeparatorClassesProperty =
-            AvaloniaProperty.Register<StackDockGroup, string>
-            (
-                nameof(SeparatorClasses)
-            );
-        #endregion SeparatorClasses Styled Avalonia Property
-
 
         public void Dispose()
         {
