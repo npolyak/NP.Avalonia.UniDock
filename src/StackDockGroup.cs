@@ -195,7 +195,10 @@ namespace NP.Avalonia.UniDock
                 _stackGroup.Items
                            .IndexOf(item => DockAttachedProperties.GetOriginalDockGroup(item) == dockChild);
 
-            _stackGroup.Items.RemoveAt(idx);
+            if (idx > -1)
+            {
+                _stackGroup.Items.RemoveAt(idx);
+            }
 
             this.SetIsDockVisible();
         }

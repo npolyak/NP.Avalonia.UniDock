@@ -92,7 +92,10 @@ namespace NP.Avalonia.UniDock
 
             var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
 
-            allGroups?.DoForEach(item => item.RemoveItselfFromParent());
+            foreach(var group in allGroups)
+            {
+                group.RemoveItselfFromParent();
+            }
         }
 
         public void SetMovePtr()
