@@ -68,6 +68,10 @@ namespace NP.Avalonia.Visuals.Controls
                 HasCustomWindowFeaturesProperty.Changed.Subscribe(OnHasCustomFeaturesChanged);
         }
 
+        
+        public bool IsTemplateApplied { get; private set; }
+
+
         private void OnHasCustomFeaturesChanged(AvaloniaPropertyChangedEventArgs<bool> hasCustomFeaturesContainer)
         {
             if (!hasCustomFeaturesContainer.NewValue.Value)
@@ -85,21 +89,21 @@ namespace NP.Avalonia.Visuals.Controls
 
         private void OnWindowStateChanged(AvaloniaPropertyChangedEventArgs<WindowState> windowStateChange)
         {
-            WindowState windowState = windowStateChange.NewValue.Value;
+            OnWindowStateChanged();
+        }
 
-            if (windowState == WindowState.Maximized)
+        private void OnWindowStateChanged()
+        {
+            if (!IsTemplateApplied)
+                return;
+
+            if (this.WindowState == WindowState.Maximized)
             {
                 SetIsHitVisibleOnResizeControls(false);
             }
-
-            WindowState oldWindowState = windowStateChange.OldValue.Value;
-
-            if (oldWindowState == WindowState.Maximized)
+            else if (HasCustomWindowFeatures)
             {
-                if (HasCustomWindowFeatures)
-                {
-                    SetIsHitVisibleOnResizeControls(true);
-                }
+                SetIsHitVisibleOnResizeControls(true);
             }
         }
 
@@ -133,7 +137,7 @@ namespace NP.Avalonia.Visuals.Controls
             }
             else
             {
-                WindowState = WindowState.Maximized;
+                Maximize();
             }
         }
 
@@ -145,7 +149,7 @@ namespace NP.Avalonia.Visuals.Controls
 
         public bool CanMaximize => this.WindowState != WindowState.Maximized;
 
-        public void Maximize()
+        public virtual void Maximize()
         {
             this.WindowState = WindowState.Maximized;
         }
@@ -225,6 +229,9 @@ namespace NP.Avalonia.Visuals.Controls
             _headerControl.PointerPressed += OnHeaderPointerPressed;
 
             _headerControl.DoubleTapped += OnHeaderDoubleTapped;
+
+            IsTemplateApplied = true;
+            OnWindowStateChanged();
         }
 
         private void OnHeaderDoubleTapped(object? sender, RoutedEventArgs e)
