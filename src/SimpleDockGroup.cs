@@ -46,6 +46,29 @@ namespace NP.Avalonia.UniDock
 
         private SingleActiveBehavior<DockItem> _singleActiveBehavior = new SingleActiveBehavior<DockItem>();
 
+
+        #region ActiveDockItem Direct Avalonia Property
+        private DockItem? _ActiveDockItem = default;
+
+        public static readonly DirectProperty<SimpleDockGroup, DockItem?> ActiveDockItemProperty =
+            AvaloniaProperty.RegisterDirect<SimpleDockGroup, DockItem?>
+            (
+                nameof(ActiveDockItem),
+                o => o.ActiveDockItem
+            );
+
+        public DockItem? ActiveDockItem
+        {
+            get => _ActiveDockItem;
+            private set
+            {
+                SetAndRaise(ActiveDockItemProperty, ref _ActiveDockItem, value);
+            }
+        }
+
+        #endregion ActiveDockItem Direct Avalonia Property
+
+
         #region NumberDockChildren Direct Avalonia Property
         public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
             AvaloniaProperty.RegisterDirect<SimpleDockGroup, int>
@@ -126,6 +149,13 @@ namespace NP.Avalonia.UniDock
 
             DockStaticEvents.PossibleDockChangeHappenedInsideEvent +=
                 DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
+
+            _singleActiveBehavior.ActiveItemChangedEvent += _singleActiveBehavior_ActiveItemChangedEvent;
+        }
+
+        private void _singleActiveBehavior_ActiveItemChangedEvent()
+        {
+            ActiveDockItem = _singleActiveBehavior.TheActiveItem;
         }
 
         private void DockStaticEvents_PossibleDockChangeHappenedInsideEvent(IDockGroup group)

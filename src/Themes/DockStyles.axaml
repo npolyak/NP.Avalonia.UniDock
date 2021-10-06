@@ -548,6 +548,10 @@
             Value="5,5,0,5"/>
     <Setter Property="TitleMargin"
             Value="5"/>
+    <Setter Property="Title"
+            Value="{Binding Path=TheDockGroup.ActiveDockItem.Header, 
+                            StringFormat='Floating Window - {0}'
+                            RelativeSource={RelativeSource Self}}"/>
     <Setter Property="HeaderContentTemplate">
       <Setter.Value>
         <DataTemplate>
