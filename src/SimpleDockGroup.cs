@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -80,9 +81,6 @@ namespace NP.Avalonia.UniDock
             );
         #endregion NumberDockChildren Direct Avalonia Property
 
-        public Window? OwningWindow =>
-            this.GetVisualAncestors().OfType<Window>().FirstOrDefault();
-
         private int _numChildren = 0;
         public int NumberDockChildren
         {
@@ -144,28 +142,12 @@ namespace NP.Avalonia.UniDock
             AvaloniaProperty.RegisterDirect<SimpleDockGroup, IList<FloatingWindowContainer>?>
             (
                 nameof(FloatingWindows),
-                o => o.FloatingWindows,
-                (o, v) => o.FloatingWindows = v
+                o => o.FloatingWindows
             );
 
         public IList<FloatingWindowContainer>? FloatingWindows
         {
             get => _floatingWindows;
-            set
-            {
-                if (ReferenceEquals(_floatingWindows, value))
-                {
-                    return;
-                }
-
-                _floatingWindows = value;
-
-                SetAndRaise
-                (
-                    FloatingWindowsProperty, 
-                    ref _floatingWindows, 
-                    value);
-            }
         }
 
         #endregion FloatingWindows Direct Avalonia Property
@@ -179,7 +161,8 @@ namespace NP.Avalonia.UniDock
         private IDisposable? _addRemoveChildBehavior;
         private SetDockGroupBehavior? _setBehavior;
 
-        SetAttachedPropertyFromParentBehavior<IDockGroup, FloatingWindowContainer, DockManager>? _floatingWindowDockManagerSettingBehavior;
+        private readonly AttachedPropToCollectionBindingBehavior<DockManager, FloatingWindowContainer>? _floatingWindowDockManagerSettingBehavior;
+        private readonly AttachedPropToCollectionBindingBehavior<Window, FloatingWindowContainer>? _floatingWindowParentWindowSettingBehavior;
 
         public SimpleDockGroup()
         {
@@ -193,42 +176,55 @@ namespace NP.Avalonia.UniDock
             DockStaticEvents.PossibleDockChangeHappenedInsideEvent +=
                 DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
 
-            _singleActiveBehavior.ActiveItemChangedEvent += 
+            _singleActiveBehavior.ActiveItemChangedEvent +=
                 _singleActiveBehavior_ActiveItemChangedEvent;
 
-            this.GetObservable(FloatingWindowsProperty).Subscribe(OnFloatingWindowPropChanged!);
+            _floatingWindowDockManagerSettingBehavior =
+                new AttachedPropToCollectionBindingBehavior<DockManager, FloatingWindowContainer>
+                (
+                    this, 
+                    DockAttachedProperties.TheDockManagerProperty,
+                    _floatingWindows,
+                    (w, dm) => w.TheDockManager = dm
+                );
 
             this.AttachedToVisualTree += SimpleDockGroup_AttachedToVisualTree;
+
+            _floatingWindowParentWindowSettingBehavior = new AttachedPropToCollectionBindingBehavior<Window, FloatingWindowContainer>
+            (
+                this,
+                OwningWindowProperty!,
+                FloatingWindows,
+                (floatingWindowContainer, ownerWindow) => floatingWindowContainer.ParentWindow = ownerWindow
+            ); ;
         }
 
-        private void SimpleDockGroup_AttachedToVisualTree
-        ( 
-            object? sender, 
-            VisualTreeAttachmentEventArgs e)
+        private void SimpleDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            
+            OwningWindow = this.GetVisualAncestors().OfType<Window>().FirstOrDefault();
         }
 
-        private void OnFloatingWindowPropChanged(IList<FloatingWindowContainer> obj)
-        {
-            SetFloatingWindowBehaviors();
-        }
+        #region OwningWindow Direct Avalonia Property
+        private Window? _owningWindow = default;
 
-        void SetFloatingWindowBehaviors()
-        {
-            _floatingWindowDockManagerSettingBehavior?.Dispose();
-            _floatingWindowDockManagerSettingBehavior = null;
+        public static readonly DirectProperty<SimpleDockGroup, Window?> OwningWindowProperty =
+            AvaloniaProperty.RegisterDirect<SimpleDockGroup, Window?>
+            (
+                nameof(OwningWindow),
+                o => o.OwningWindow
+            );
 
-            if (FloatingWindows != null)
+        public Window? OwningWindow
+        {
+            get => _owningWindow;
+            private set
             {
-                _floatingWindowDockManagerSettingBehavior =
-                    new SetAttachedPropertyFromParentBehavior<IDockGroup, FloatingWindowContainer, DockManager>
-                    (
-                        this,
-                        FloatingWindows,
-                        DockAttachedProperties.TheDockManagerProperty);
+                SetAndRaise(OwningWindowProperty, ref _owningWindow, value);
             }
         }
+
+        #endregion OwningWindow Direct Avalonia Property
+
 
         private void _singleActiveBehavior_ActiveItemChangedEvent()
         {

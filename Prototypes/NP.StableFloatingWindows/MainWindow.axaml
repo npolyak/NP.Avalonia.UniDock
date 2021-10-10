@@ -25,7 +25,7 @@
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    WindowRelativePosition="800, 100"
+                                    WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
           <np:TabbedDockGroup x:Name="TheFloatingGroup">
             <np:DockItem Header="Floating Tab 1">
