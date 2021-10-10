@@ -21,11 +21,11 @@ namespace NP.TestBindingBehavior
             _collection.Add(new DockManagerContainer());
             _collection.Add(new DockManagerContainer());
 
-            AttachedToPlainBindingBehavior<IControl, DockManager, DockManagerContainer> _behavior =
-                new AttachedToPlainBindingBehavior<IControl, DockManager, DockManagerContainer>
+            AttachedPropToCollectionBindingBehavior<DockManager, DockManagerContainer> _behavior =
+                new AttachedPropToCollectionBindingBehavior<DockManager, DockManagerContainer>
                 (
-                    dockGroup,
-                    DockAttachedProperties.TheDockManagerProperty, 
+                    dockGroup, 
+                    DockAttachedProperties.TheDockManagerProperty,
                     _collection,
                     (container, dm) => container.TheDockManager = dm);
 
