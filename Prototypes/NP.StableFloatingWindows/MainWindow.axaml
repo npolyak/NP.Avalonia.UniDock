@@ -12,7 +12,8 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <np:DockManager x:Key="TheDockManager" TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
+      <np:DockManager x:Key="TheDockManager" 
+                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
     </ResourceDictionary>
   </Window.Resources>
   <Window.Styles>
@@ -24,7 +25,7 @@
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    WindowPosition="100, 100"
+                                    WindowRelativePosition="800, 100"
                                     WindowSize ="300, 300">
           <np:TabbedDockGroup x:Name="TheFloatingGroup">
             <np:DockItem Header="Floating Tab 1">

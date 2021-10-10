@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Metadata;
 using NP.Utilities;
 using System.ComponentModel;
@@ -11,14 +12,15 @@ namespace NP.Avalonia.UniDock
         {
             if ( (_dockManager == null) ||
                  (_windowSize == null) ||
-                 (_windowPosition == null) ||
-                 (_windowId == null) )
+                 (_windowRelativePosition == null) ||
+                 (_windowId == null) || 
+                 (ParentWindow == null) )
             {
                 return;
             }
 
             _floatingWindow = _dockManager.FloatingWindowFactory.CreateFloatingWindow();
-            _floatingWindow.Position = WindowPosition!.Value;
+            _floatingWindow.Position = WindowRelativePosition!.Value + ParentWindow.Position;
             _floatingWindow.Width = _windowSize.Value.X;
             _floatingWindow.Height = _windowSize.Value.Y;
             DockAttachedProperties.SetWindowId(_floatingWindow, WindowId);
@@ -45,18 +47,21 @@ namespace NP.Avalonia.UniDock
 
         private FloatingWindow? _floatingWindow;
 
-        private PixelPoint? _windowPosition;
-        public PixelPoint? WindowPosition 
+        private PixelPoint? _windowRelativePosition;
+        /// <summary>
+        /// relative to the parent window
+        /// </summary>
+        public PixelPoint? WindowRelativePosition 
         { 
-            get => _windowPosition;
+            get => _windowRelativePosition;
             set
             {
-                if (_windowPosition.ObjEquals(value))
+                if (_windowRelativePosition.ObjEquals(value))
                 {
                     return;
                 }
 
-                _windowPosition = value;
+                _windowRelativePosition = value;
                 TrySetWindow();
             }
         }
@@ -144,6 +149,20 @@ namespace NP.Avalonia.UniDock
         }
         #endregion Title Property
 
+        Window? _parentWindow;
+        internal Window? ParentWindow 
+        {
+            get => _parentWindow;
+            set
+            {
+                if (_parentWindow == value)
+                    return;
+
+                _parentWindow = value;
+
+                TrySetWindow();
+            }
+        }
 
         private void SetExtras()
         {

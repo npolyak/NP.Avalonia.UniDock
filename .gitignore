@@ -56,3 +56,6 @@
 /Prototypes/NP.StableFloatingWindows/.vs
 /Prototypes/NP.StableFloatingWindows/bin/Debug/net5.0
 /Prototypes/NP.StableFloatingWindows/obj
+/Tests/NP.TestBindingBehavior/.vs
+/Tests/NP.TestBindingBehavior/bin/Debug/net5.0
+/Tests/NP.TestBindingBehavior/obj

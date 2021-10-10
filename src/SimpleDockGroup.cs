@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Metadata;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -78,6 +79,9 @@ namespace NP.Avalonia.UniDock
                 (o, c) => o.NumberDockChildren = c
             );
         #endregion NumberDockChildren Direct Avalonia Property
+
+        public Window? OwningWindow =>
+            this.GetVisualAncestors().OfType<Window>().FirstOrDefault();
 
         private int _numChildren = 0;
         public int NumberDockChildren
@@ -193,6 +197,16 @@ namespace NP.Avalonia.UniDock
                 _singleActiveBehavior_ActiveItemChangedEvent;
 
             this.GetObservable(FloatingWindowsProperty).Subscribe(OnFloatingWindowPropChanged!);
+
+            this.AttachedToVisualTree += SimpleDockGroup_AttachedToVisualTree;
+        }
+
+        private void SimpleDockGroup_AttachedToVisualTree
+        ( 
+            object? sender, 
+            VisualTreeAttachmentEventArgs e)
+        {
+            
         }
 
         private void OnFloatingWindowPropChanged(IList<FloatingWindowContainer> obj)
@@ -214,16 +228,6 @@ namespace NP.Avalonia.UniDock
                         FloatingWindows,
                         DockAttachedProperties.TheDockManagerProperty);
             }
-        }
-
-        private void OnFloatingWindowAdded(FloatingWindow window)
-        {
-            window.Show();
-        }
-
-        private void OnFloatingWindowRemoved(FloatingWindow window)
-        {
-            window.Close();
         }
 
         private void _singleActiveBehavior_ActiveItemChangedEvent()

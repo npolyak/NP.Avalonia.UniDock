@@ -100,10 +100,9 @@ namespace NP.Avalonia.UniDock
         {
             if (IsStable)
             {
+                this.Hide();
                 e.Cancel = true;
             }
-
-            this.IsVisible = false;
         }
 
         private void FloatingWindow_Closing(object? sender, CancelEventArgs e)
