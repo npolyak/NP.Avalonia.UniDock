@@ -19,12 +19,12 @@ namespace NP.Avalonia.UniDock
     {
         private RemoveDockGroupBehavior<T>? _removeItemBehavior;
         private SetParentBehavior<T>? _setParentBehavior;
-        private SetAttachedPropertyFromParentBehavior<T, DockManager>? _setDockManagerBehavior;
+        private SetAttachedPropertyFromParentGroupBehavior<T, DockManager>? _setDockManagerBehavior;
         public SetDockGroupBehavior(IDockGroup parent, IList<T> items)
         {
             _removeItemBehavior = new RemoveDockGroupBehavior<T>(items);
             _setParentBehavior = new SetParentBehavior<T>(parent, items);
-            _setDockManagerBehavior = new SetAttachedPropertyFromParentBehavior<T, DockManager>(parent, items, DockAttachedProperties.TheDockManagerProperty);
+            _setDockManagerBehavior = new SetAttachedPropertyFromParentGroupBehavior<T, DockManager>(parent, items, DockAttachedProperties.TheDockManagerProperty);
         }
 
         public void Dispose()

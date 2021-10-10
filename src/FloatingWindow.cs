@@ -12,6 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Metadata;
 using NP.Avalonia.Visuals;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Avalonia.Visuals.Controls;
@@ -23,10 +24,24 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class FloatingWindow : CustomWindow
+    public class FloatingWindow : CustomWindow, IDockManagerContainer
     {
+        public bool IsStable { get; set; }
+
         public SimpleDockGroup TheDockGroup { get; } = 
             new SimpleDockGroup();
+
+        [Content]
+        public IDockGroup? DockContent
+        {
+            get => TheDockGroup.TheChild;
+
+            set
+            {
+                TheDockGroup.TheChild = value;
+            }
+        }
+
 
         public DockManager? TheDockManager
         {
@@ -73,11 +88,6 @@ namespace NP.Avalonia.UniDock
             this.InvalidateStyles();
         }
 
-        public FloatingWindow(DockManager dockManager) : this()
-        {
-            DockAttachedProperties.SetTheDockManager(this, dockManager);
-        }
-
         private void TheDockGroup_HasNoChildrenEvent(SimpleDockGroup obj)
         {
             if ((TheDockGroup as IDockGroup).AutoDestroy)
@@ -86,8 +96,23 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        protected virtual void BeforeClosing(CancelEventArgs e)
+        {
+            if (IsStable)
+            {
+                e.Cancel = true;
+            }
+
+            this.IsVisible = false;
+        }
+
         private void FloatingWindow_Closing(object? sender, CancelEventArgs e)
         {
+            BeforeClosing(e);
+
+            if (e.Cancel)
+                return;
+
             TheDockManager = null;
 
             var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();

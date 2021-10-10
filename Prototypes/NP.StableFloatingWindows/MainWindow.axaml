@@ -22,6 +22,20 @@
         DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         Background="Gray">
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
+      <np:SimpleDockGroup.FloatingWindows>
+        <np:FloatingWindowContainer WindowId="AddedWindow1"
+                                    WindowPosition="100, 100"
+                                    WindowSize ="300, 300">
+          <np:TabbedDockGroup x:Name="TheFloatingGroup">
+            <np:DockItem Header="Floating Tab 1">
+              <TextBlock Text="Floating Tab 1"/>
+            </np:DockItem>
+            <np:DockItem Header="Floating Tab 2">
+              <TextBlock Text="Floating Tab 2"/>
+            </np:DockItem>
+          </np:TabbedDockGroup>
+        </np:FloatingWindowContainer>
+      </np:SimpleDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True"

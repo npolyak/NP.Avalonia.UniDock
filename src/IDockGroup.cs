@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public interface IDockGroup : IControl, IRemovable
+    public interface IDockGroup : IDockManagerContainer, IControl, IRemovable
     {
         public string DockId { get; set; }
 
@@ -27,8 +27,6 @@ namespace NP.Avalonia.UniDock
         event Action<IDockGroup> IsDockVisibleChangedEvent;
 
         internal void FireIsDockVisibleChangedEvent();
-
-        DockManager? TheDockManager { get; set; }
 
         IDockGroup? DockParent { get; set; }
 

@@ -19,9 +19,6 @@ namespace NP.Avalonia.UniDock.Serialization
 {
     public class WindowParams
     {
-        [XmlAttribute]
-        public string? FullWindowType { get; set; }
-
         public Point2D? TopLeft { get; set; }
 
         public Point2D? Size { get; set; }
@@ -50,8 +47,6 @@ namespace NP.Avalonia.UniDock.Serialization
         public static WindowParams ToWindowParams(this Window w)
         {
             WindowParams wp = new WindowParams();
-
-            wp.FullWindowType = w.GetType().FullName;
 
             wp.TopLeft = w.Position.ToPoint2D();
 
@@ -87,13 +82,6 @@ namespace NP.Avalonia.UniDock.Serialization
 
         public static void  SetWindowFromParams(this Window w, WindowParams wp)
         {
-            Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
-
-            if (windowType != w.GetType())
-            {
-                throw new Exception($"ERROR window types do not match for the window titled {w.Title}.");
-            }
-
             w.Position = wp.TopLeft.ToPixelPoint();
             w.Width = wp.Size!.X;
             w.Height = wp.Size.Y;

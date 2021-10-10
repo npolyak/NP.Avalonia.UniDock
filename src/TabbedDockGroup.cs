@@ -423,7 +423,7 @@ namespace NP.Avalonia.UniDock
         {
             if (Items != null)
             {
-                _setItemsBehavior = new SetDockGroupBehavior<IDockGroup>(this, Items!);
+                _setItemsBehavior = new SetDockGroupBehavior(this, Items!);
             }
 
             _mimicCollectionBehavior.InputCollection = Items;

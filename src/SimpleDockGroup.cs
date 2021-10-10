@@ -131,6 +131,42 @@ namespace NP.Avalonia.UniDock
         public IList<IDockGroup> DockChildren { get; } = 
             new ObservableCollection<IDockGroup>();
 
+
+        #region FloatingWindows Direct Avalonia Property
+        private IList<FloatingWindowContainer>? _floatingWindows = 
+            new ObservableCollection<FloatingWindowContainer>();
+
+        public static readonly DirectProperty<SimpleDockGroup, IList<FloatingWindowContainer>?> FloatingWindowsProperty =
+            AvaloniaProperty.RegisterDirect<SimpleDockGroup, IList<FloatingWindowContainer>?>
+            (
+                nameof(FloatingWindows),
+                o => o.FloatingWindows,
+                (o, v) => o.FloatingWindows = v
+            );
+
+        public IList<FloatingWindowContainer>? FloatingWindows
+        {
+            get => _floatingWindows;
+            set
+            {
+                if (ReferenceEquals(_floatingWindows, value))
+                {
+                    return;
+                }
+
+                _floatingWindows = value;
+
+                SetAndRaise
+                (
+                    FloatingWindowsProperty, 
+                    ref _floatingWindows, 
+                    value);
+            }
+        }
+
+        #endregion FloatingWindows Direct Avalonia Property
+
+
         static SimpleDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<SimpleDockGroup>((g, e) => g.OnDockIdChanged(e));
@@ -138,6 +174,9 @@ namespace NP.Avalonia.UniDock
 
         private IDisposable? _addRemoveChildBehavior;
         private SetDockGroupBehavior? _setBehavior;
+
+        SetAttachedPropertyFromParentBehavior<IDockGroup, FloatingWindowContainer, DockManager>? _floatingWindowDockManagerSettingBehavior;
+
         public SimpleDockGroup()
         {
             AffectsMeasure<SimpleDockGroup>(NumberDockChildrenProperty);
@@ -150,7 +189,41 @@ namespace NP.Avalonia.UniDock
             DockStaticEvents.PossibleDockChangeHappenedInsideEvent +=
                 DockStaticEvents_PossibleDockChangeHappenedInsideEvent;
 
-            _singleActiveBehavior.ActiveItemChangedEvent += _singleActiveBehavior_ActiveItemChangedEvent;
+            _singleActiveBehavior.ActiveItemChangedEvent += 
+                _singleActiveBehavior_ActiveItemChangedEvent;
+
+            this.GetObservable(FloatingWindowsProperty).Subscribe(OnFloatingWindowPropChanged!);
+        }
+
+        private void OnFloatingWindowPropChanged(IList<FloatingWindowContainer> obj)
+        {
+            SetFloatingWindowBehaviors();
+        }
+
+        void SetFloatingWindowBehaviors()
+        {
+            _floatingWindowDockManagerSettingBehavior?.Dispose();
+            _floatingWindowDockManagerSettingBehavior = null;
+
+            if (FloatingWindows != null)
+            {
+                _floatingWindowDockManagerSettingBehavior =
+                    new SetAttachedPropertyFromParentBehavior<IDockGroup, FloatingWindowContainer, DockManager>
+                    (
+                        this,
+                        FloatingWindows,
+                        DockAttachedProperties.TheDockManagerProperty);
+            }
+        }
+
+        private void OnFloatingWindowAdded(FloatingWindow window)
+        {
+            window.Show();
+        }
+
+        private void OnFloatingWindowRemoved(FloatingWindow window)
+        {
+            window.Close();
         }
 
         private void _singleActiveBehavior_ActiveItemChangedEvent()
