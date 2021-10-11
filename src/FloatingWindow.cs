@@ -103,23 +103,22 @@ namespace NP.Avalonia.UniDock
                 this.Hide();
                 e.Cancel = true;
             }
+            else
+            {
+                TheDockManager = null;
+            }
+
+            var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
+
+            foreach (var group in allGroups)
+            {
+                group.RemoveItselfFromParent();
+            }
         }
 
         private void FloatingWindow_Closing(object? sender, CancelEventArgs e)
         {
             BeforeClosing(e);
-
-            if (e.Cancel)
-                return;
-
-            TheDockManager = null;
-
-            var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
-
-            foreach(var group in allGroups)
-            {
-                group.RemoveItselfFromParent();
-            }
         }
 
         public void SetMovePtr()

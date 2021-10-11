@@ -44,6 +44,9 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        // should never be called on the window root group
+        public IDockGroup CloneIfStable() => throw new NotImplementedException();
+
         public event Action<SimpleDockGroup>? HasNoChildrenEvent;
 
         private SingleActiveBehavior<DockItem> _singleActiveBehavior = new SingleActiveBehavior<DockItem>();

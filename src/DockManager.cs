@@ -216,14 +216,15 @@ namespace NP.Avalonia.UniDock
             //_draggedWindow?.Activate();
         }
 
-        private void DropWithOrientation(DockKind? dock, IDockGroup draggedGroup)
+        private void DropWithOrientation(DockKind? dock, IDockGroup originalDraggedGroup)
         {
             if (dock == null || dock == DockKind.Tabs)
             {
                 throw new Exception("Programming ERROR: dock should be one of Left, Top, Right, Bottom");
             }
 
-            draggedGroup.RemoveItselfFromParent();
+            var draggedGroup = originalDraggedGroup.CloneIfStable();
+
             IDockGroup parentGroup = CurrentLeafObjToInsertWithRespectTo!.DockParent!;
 
             Orientation orientation = (Orientation) dock.ToOrientation()!;
@@ -263,8 +264,8 @@ namespace NP.Avalonia.UniDock
             DraggedWindow?.Close();
         }
 
-        IDisposable _groupsBehavior;
-        IDisposable _windowsBehavior;
+        private readonly IDisposable _groupsBehavior;
+        private readonly IDisposable _windowsBehavior;
         public DockManager()
         {
             DockGroupHelper.SetIsDockVisibleChangeSubscription();

@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NP.Utilities;
+using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
@@ -112,6 +113,11 @@ namespace NP.Avalonia.UniDock
             if (TheDockManager != null)
             {
                 _stackGroup.TheDockSeparatorFactory = TheDockManager?.TheDockSeparatorFactory;
+
+                foreach (var child in DockChildren)
+                {
+                    AddChildToStackGroup(child);
+                }
             }
         }
 
@@ -151,6 +157,11 @@ namespace NP.Avalonia.UniDock
 
         private void AddChildToStackGroup(IDockGroup dockChild)
         {
+            if (TheDockManager == null)
+            {
+                return;
+            }
+
             if (!dockChild.GetIsDockVisible())
             {
                 return;
@@ -228,6 +239,34 @@ namespace NP.Avalonia.UniDock
         public void SetSizeCoefficients(double[]? coeffs)
         {
             _stackGroup.SetSizeCoefficients(coeffs);
+        }
+
+        public IDockGroup CloneIfStable()
+        {
+            if (IsStableGroup)
+            {
+                StackDockGroup result = new StackDockGroup();
+                result.AutoDestroy = this.AutoDestroy;
+                result.TheOrientation = this.TheOrientation;
+
+                result.TheDockManager = this.TheDockManager;
+
+                var coefficients = this.GetSizeCoefficients();
+
+                foreach (IDockGroup childGroup in this.DockChildren.ToList())
+                {
+                    result.DockChildren.Add(childGroup.CloneIfStable());
+                }
+
+                result.SetSizeCoefficients(coefficients);
+
+                return result;
+            }
+            else
+            {
+                this.RemoveItselfFromParent();
+                return this;
+            }
         }
     }
 }

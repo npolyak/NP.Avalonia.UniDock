@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:NP.StableFloatingWindows"
         Width="700"
         Height="700"
+        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         x:Class="NP.StableFloatingWindows.MainWindow"
         Title="NP.StableFloatingWindows">
   <Window.Resources>
@@ -27,14 +28,24 @@
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
-          <np:TabbedDockGroup x:Name="TheFloatingGroup">
-            <np:DockItem Header="Floating Tab 1">
+          <np:StackDockGroup TheOrientation="Horizontal"
+                             DockId="FloatingGroup1"
+                             IsStableGroup="True">
+            <np:DockItem Header="FloatingWindowPanel1"
+                         DockId="FloatingDockItem1">
               <TextBlock Text="Floating Tab 1"/>
             </np:DockItem>
-            <np:DockItem Header="Floating Tab 2">
-              <TextBlock Text="Floating Tab 2"/>
-            </np:DockItem>
-          </np:TabbedDockGroup>
+            <np:TabbedDockGroup x:Name="TheFloatingGroup"
+                                DockId="FloatingGroup2"
+                                IsStableGroup="True">
+              <np:DockItem Header="Floating Tab 1">
+                <TextBlock Text="Floating Tab 1"/>
+              </np:DockItem>
+              <np:DockItem Header="Floating Tab 2">
+                <TextBlock Text="Floating Tab 2"/>
+              </np:DockItem>
+            </np:TabbedDockGroup>
+          </np:StackDockGroup>
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"

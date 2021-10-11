@@ -93,6 +93,8 @@ namespace NP.Avalonia.UniDock
             SimplifySelf();
             dockParent?.Simplify();
         }
+
+        IDockGroup CloneIfStable();
     }
 
     public interface ILeafDockObj : IDockGroup

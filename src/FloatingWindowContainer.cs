@@ -28,7 +28,18 @@ namespace NP.Avalonia.UniDock
             _floatingWindow.TheDockManager = _dockManager;
             SetExtras();
 
-            _floatingWindow.Show();
+            Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(ParentWindow);
+
+            if (ownerWindow != null)
+            {
+                DockAttachedProperties.SetDockChildWindowOwner(_floatingWindow, ownerWindow);
+
+                _floatingWindow.Show(ownerWindow);
+            }
+            else
+            {
+                _floatingWindow.Show();
+            }
         }
 
         DockManager? _dockManager;

@@ -470,13 +470,6 @@ namespace NP.Avalonia.UniDock
             this.SimplifySelfImpl();
         }
 
-        public bool IsDynamic
-        {
-            get;
-            set;
-        }
-
-
         #region TabSeparatorBackground Styled Avalonia Property
         public IBrush TabSeparatorBackground
         {
@@ -490,5 +483,29 @@ namespace NP.Avalonia.UniDock
                 nameof(TabSeparatorBackground)
             );
         #endregion TabSeparatorBackground Styled Avalonia Property
+
+
+        public IDockGroup CloneIfStable()
+        {
+            if (IsStableGroup)
+            {
+                TabbedDockGroup result = new TabbedDockGroup();
+                result.AutoDestroy = this.AutoDestroy;
+                result.TabOrientation = this.TabOrientation;
+
+                foreach (IDockGroup childGroup in this.DockChildren.NullToEmpty().ToList())
+                {
+                    result?.DockChildren?.Add(childGroup.CloneIfStable());
+                }
+
+                result.TheDockManager = this.TheDockManager;
+                return result;
+            }
+            else
+            {
+                this.RemoveItselfFromParent();
+                return this;
+            }
+        }
     }
 }

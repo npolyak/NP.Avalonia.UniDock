@@ -421,5 +421,12 @@ namespace NP.Avalonia.UniDock
 
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
+
+        // always un-stable
+        public IDockGroup CloneIfStable()
+        {
+            this.RemoveItselfFromParent();
+            return this;
+        }
     }
 }
