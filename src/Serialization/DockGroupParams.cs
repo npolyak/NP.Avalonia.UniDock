@@ -100,7 +100,6 @@ namespace NP.Avalonia.UniDock.Serialization
                 foreach(var child in dg.DockChildren)
                 {
                     p.ChildrenDockIds.Add(child.DockId);
-                    p.AutoDestroy = dg.AutoDestroy;
                 }
             }
 
@@ -125,7 +124,6 @@ namespace NP.Avalonia.UniDock.Serialization
         public static void SetGroupFromParams(this IDockGroup dg, DockGroupParams p)
         {
             dg.DockId = p.DockId!;
-            dg.AutoDestroy = p.AutoDestroy;
             dg.IsPredefined = p.IsPredefined;
             dg.CanFloat = p.CanFloat;
             dg.CanClose = p.CanRemove;

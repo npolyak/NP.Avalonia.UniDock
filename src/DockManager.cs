@@ -295,7 +295,13 @@ namespace NP.Avalonia.UniDock
                       .Where(group => group.IsRoot).ToList();
             }
 
-            dockGroups.DoForEach(group => group.TheDockManager = null);
+            foreach (var group in dockGroups)
+            {
+                if (!group.IsStableGroup)
+                {
+                    group.TheDockManager = null;
+                }
+            }
         }
 
         private void OnWindowItemAdded(Window window)

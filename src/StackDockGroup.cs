@@ -118,6 +118,8 @@ namespace NP.Avalonia.UniDock
                 {
                     AddChildToStackGroup(child);
                 }
+
+                this.SetIsDockVisible();
             }
         }
 
@@ -141,6 +143,8 @@ namespace NP.Avalonia.UniDock
             AddChildToStackGroup(dockChild);
 
             dockChild.IsDockVisibleChangedEvent += OnDockChild_IsDockVisibleChangedEvent;
+
+            this.SetIsDockVisible();
         }
 
         private void OnDockChild_IsDockVisibleChangedEvent(IDockGroup dockChild)
@@ -153,6 +157,8 @@ namespace NP.Avalonia.UniDock
             {
                 RemoveChildFromStackGroup(dockChild);
             }
+
+            this.SetIsDockVisible();
         }
 
         private void AddChildToStackGroup(IDockGroup dockChild)
@@ -186,8 +192,6 @@ namespace NP.Avalonia.UniDock
             }
 
             _stackGroup.Items.InsertInOrder(newVisualChildToInsert, CompareGroups);
-
-            this.SetIsDockVisible();
         }
 
         private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
@@ -198,6 +202,8 @@ namespace NP.Avalonia.UniDock
             SetNumberDockChildren();
 
             RemoveChildFromStackGroup(dockChild);
+
+            this.SetIsDockVisible();
         }
 
         private void RemoveChildFromStackGroup(IDockGroup dockChild)
@@ -210,8 +216,6 @@ namespace NP.Avalonia.UniDock
             {
                 _stackGroup.Items.RemoveAt(idx);
             }
-
-            this.SetIsDockVisible();
         }
 
         void IDockGroup.SimplifySelf()
@@ -220,6 +224,20 @@ namespace NP.Avalonia.UniDock
         }
 
         public bool AutoDestroy { get; set; } = true;
+
+        #region DefaultDockOrderInGroup Styled Avalonia Property
+        public double? DefaultDockOrderInGroup
+        {
+            get { return GetValue(DefaultDockOrderInGroupProperty); }
+            set { SetValue(DefaultDockOrderInGroupProperty, value); }
+        }
+
+        public static readonly StyledProperty<double?> DefaultDockOrderInGroupProperty =
+            AvaloniaProperty.Register<StackDockGroup, double?>
+            (
+                nameof(DefaultDockOrderInGroup)
+            );
+        #endregion DefaultDockOrderInGroup Styled Avalonia Property
 
         public double GetSizeCoefficient(int idx)
         {

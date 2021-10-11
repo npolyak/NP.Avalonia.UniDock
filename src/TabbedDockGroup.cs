@@ -418,6 +418,22 @@ namespace NP.Avalonia.UniDock
             );
         #endregion AllowHorizontalDocking Styled Avalonia Property
 
+
+        #region DefaultDockOrderInGroup Styled Avalonia Property
+        public double? DefaultDockOrderInGroup
+        {
+            get { return GetValue(DefaultDockOrderInGroupProperty); }
+            set { SetValue(DefaultDockOrderInGroupProperty, value); }
+        }
+
+        public static readonly StyledProperty<double?> DefaultDockOrderInGroupProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, double?>
+            (
+                nameof(DefaultDockOrderInGroup)
+            );
+        #endregion DefaultDockOrderInGroup Styled Avalonia Property
+
+
         IDisposable? _behavior;
         private void SetBehavior()
         {

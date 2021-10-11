@@ -197,14 +197,7 @@ namespace NP.Avalonia.UniDock
 
             await Task.Delay(200);
 
-            if (ownerWindow != null)
-            {
-                dockWindow.Show(ownerWindow);
-            }
-            else
-            {
-                dockWindow.Show();
-            }
+            dockWindow.ShowDockWindow();
 
             if (!dockWindow.IsActive)
             {

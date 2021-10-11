@@ -80,6 +80,8 @@ namespace NP.Avalonia.UniDock
 
         bool IsRoot => DockParent == null;
 
+        double? DefaultDockOrderInGroup => 0;
+
         void CleanSelfOnRemove()
         {
             this.TheDockManager = null;

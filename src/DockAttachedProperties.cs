@@ -12,6 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Utilities.BasicInterfaces;
 using System;
 
@@ -248,5 +249,11 @@ namespace NP.Avalonia.UniDock
             );
         #endregion OriginalDockGroup Attached Avalonia Property
 
+        public static void ShowDockWindow(this Window dockWindow)
+        {
+            Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(dockWindow);
+
+            dockWindow.ShowWindow(ownerWindow);
+        }
     }
 }

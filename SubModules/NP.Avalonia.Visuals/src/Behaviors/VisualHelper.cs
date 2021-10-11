@@ -44,5 +44,31 @@ namespace NP.Avalonia.Visuals.Behaviors
                 parent.Content = null;
             }
         }
+
+        public static TWindow GetControlsWindow<TWindow>(this IVisual visual)
+            where TWindow : Window
+        {
+            if (visual.IsAttachedToVisualTree)
+            {
+                return 
+                    visual.GetSelfAndVisualAncestors()
+                          .OfType<TWindow>()
+                          .FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        public static void ShowWindow(this Window window, Window ownerWindow)
+        {
+            if (ownerWindow != null)
+            {
+                window.Show(ownerWindow);
+            }
+            else
+            {
+                window.Show();
+            }
+        }
     }
 }

@@ -35,9 +35,9 @@ namespace NP.Avalonia.UniDock
             IsDockVisibleChangedEvent?.Invoke(this);
         }
 
-        public bool IsStable
+        public bool IsStableGroup
         {
-            get => true;
+            get => this.GetControlsWindow<FloatingWindow>()?.IsStable ?? true;
             set
             {
 
@@ -199,7 +199,7 @@ namespace NP.Avalonia.UniDock
                 OwningWindowProperty!,
                 FloatingWindows,
                 (floatingWindowContainer, ownerWindow) => floatingWindowContainer.ParentWindow = ownerWindow
-            ); ;
+            );
         }
 
         private void SimpleDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -282,11 +282,18 @@ namespace NP.Avalonia.UniDock
             LogicalChildren.Add(newVisualChildToInsert);
 
             NumberDockChildren = DockChildren?.Count() ?? 0;
+            newChildToInsert.IsDockVisibleChangedEvent += OnChildIsDockVisibleChanged;
+            this.SetIsDockVisible();
         }
 
+        private void OnChildIsDockVisibleChanged(IDockGroup obj)
+        {
+            this.SetIsDockVisible();
+        }
 
         private void OnChildRemoved(IDockGroup childToRemove)
         {
+            childToRemove.IsDockVisibleChangedEvent -= OnChildIsDockVisibleChanged;
             Control visualChildToRemove = FindVisualChild(childToRemove);
 
             ((ISetLogicalParent)visualChildToRemove).SetParent(null);
@@ -294,6 +301,7 @@ namespace NP.Avalonia.UniDock
             LogicalChildren.Remove(visualChildToRemove);
 
             NumberDockChildren = DockChildren?.Count() ?? 0;
+            this.SetIsDockVisible();
         }
 
         public void Dispose()

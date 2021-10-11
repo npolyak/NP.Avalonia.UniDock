@@ -68,13 +68,30 @@ namespace NP.Avalonia.UniDock
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
 
-            TheDockGroup.HasNoChildrenEvent += 
-                TheDockGroup_HasNoChildrenEvent;
+            //TheDockGroup.HasNoChildrenEvent += 
+            //    TheDockGroup_HasNoChildrenEvent;
 
             TheDockGroup.PossibleDockChangeInsideEvent += 
                 TheDockGroup_PossibleDockChangeInsideEvent;
 
             this.Closing += FloatingWindow_Closing;
+
+            TheDockGroup.IsDockVisibleChangedEvent += TheDockGroup_IsDockVisibleChangedEvent;
+        }
+
+        private void TheDockGroup_IsDockVisibleChangedEvent(IDockGroup obj)
+        {
+            if (TheDockGroup.GetIsDockVisible())
+            {
+                if (!this.IsVisible)
+                {
+                    this.ShowDockWindow();
+                }
+            }
+            else if (this.IsVisible)
+            {
+                this.Close();
+            }
         }
 
         private void TheDockGroup_PossibleDockChangeInsideEvent(SimpleDockGroup obj)
@@ -86,14 +103,6 @@ namespace NP.Avalonia.UniDock
         {
             this.InvalidateArrange();
             this.InvalidateStyles();
-        }
-
-        private void TheDockGroup_HasNoChildrenEvent(SimpleDockGroup obj)
-        {
-            if ((TheDockGroup as IDockGroup).AutoDestroy)
-            {
-                this.Close();
-            }
         }
 
         protected virtual void BeforeClosing(CancelEventArgs e)
