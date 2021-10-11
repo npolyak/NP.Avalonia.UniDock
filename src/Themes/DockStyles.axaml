@@ -533,8 +533,7 @@
     <Setter Property="IsFullyActive">
       <Setter.Value>
         <MultiBinding Converter="{x:Static BoolConverters.And}">
-          <Binding Path="IsActive"
-                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="IsActive"/>
           <Binding Path="IsActive"
                    RelativeSource="{RelativeSource AncestorType=Window}"/>
         </MultiBinding>
