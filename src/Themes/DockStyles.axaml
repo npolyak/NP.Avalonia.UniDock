@@ -195,6 +195,9 @@
             Value="Select"/>
     <Setter Property="np:CallAction.TheRoutingStrategy"
             Value="Bubble"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=Content.(np:DockAttachedProperties.IsDockVisible), 
+                            RelativeSource={RelativeSource Self}}" />
     <Setter Property="IsActive"
             Value="{Binding Path=Content.IsActive, 
                             RelativeSource={RelativeSource Self}}"/>
@@ -386,7 +389,8 @@
     <Setter Property="VerticalAlignment"
             Value="Stretch"/>
     <Setter Property="IsVisible"
-            Value="{Binding Path=IsDockVisible, RelativeSource={RelativeSource Self}}"/>
+            Value="{Binding Path=(np:DockAttachedProperties.IsDockVisible), 
+                            RelativeSource={RelativeSource Self}}"/>
     <Setter Property="TabSeparatorBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="Background"
@@ -530,6 +534,9 @@
             Value="Black"/>
     <Setter Property="IsActive"
             Value="{Binding Path=IsActive}"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=DockContext.(np:DockAttachedProperties.IsDockVisible),
+                            RelativeSource={RelativeSource Self}}" />
     <Setter Property="IsFullyActive">
       <Setter.Value>
         <MultiBinding Converter="{x:Static BoolConverters.And}">
