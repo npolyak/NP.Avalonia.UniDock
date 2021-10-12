@@ -41,6 +41,8 @@ namespace NP.Avalonia.UniDock
 
         public bool IsStableGroup { get; set; } = false;
 
+        private List<double> _sizeCoefficients = new List<double>();
+
         public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
@@ -118,9 +120,15 @@ namespace NP.Avalonia.UniDock
                 {
                     AddChildToStackGroup(child);
                 }
-
-                this.SetIsDockVisible();
             }
+            else
+            {
+                foreach (var child in DockChildren)
+                {
+                    RemoveChildFromStackGroup(child);
+                }
+            }
+            this.SetIsDockVisible();
         }
 
         public void Dispose()
@@ -140,6 +148,9 @@ namespace NP.Avalonia.UniDock
         private void OnDockChildAdded(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
         {
             SetNumberDockChildren();
+
+            _sizeCoefficients.Insert(idx, 1d);
+
             AddChildToStackGroup(dockChild);
 
             dockChild.IsDockVisibleChangedEvent += OnDockChild_IsDockVisibleChangedEvent;
@@ -161,6 +172,36 @@ namespace NP.Avalonia.UniDock
             this.SetIsDockVisible();
         }
 
+        private int GetInternalIdx(IDockGroup dockGroup)
+        {
+            int internalIdx = _stackGroup.Items.IndexOf(c => DockAttachedProperties.GetOriginalDockGroup(c) == dockGroup);
+
+            return internalIdx;
+        }
+
+        private int GetInternalIdx(int idx)
+        {
+            return GetInternalIdx(DockChildren[idx]);
+        }
+
+        private int GetExternalIdx(IControl control)
+        {
+            IDockGroup? originalGroup = DockAttachedProperties.GetOriginalDockGroup(control);
+
+            if (originalGroup == null)
+            {
+                throw new ProgrammingError("");
+            }
+            return this.DockChildren.IndexOf(originalGroup);
+        }
+
+        private int GetExternalIdx(int idx)
+        {
+            IControl c = _stackGroup.Items[idx];
+
+            return GetExternalIdx(c);
+        }
+
         private void AddChildToStackGroup(IDockGroup dockChild)
         {
             if (TheDockManager == null)
@@ -180,13 +221,8 @@ namespace NP.Avalonia.UniDock
 
             int CompareGroups(IControl control1, IControl control2)
             {
-                IDockGroup originalGroup1 =
-                    DockAttachedProperties.GetOriginalDockGroup(control1)!;
-                IDockGroup originalGroup2 =
-                    DockAttachedProperties.GetOriginalDockGroup(control2)!;
-
-                int idx1 = DockChildren.IndexOf(originalGroup1);
-                int idx2 = DockChildren.IndexOf(originalGroup2);
+                int idx1 = GetExternalIdx(control1);
+                int idx2 = GetExternalIdx(control2);
 
                 return idx1 > idx2 ? 1 : idx1 == idx2 ? 0 : -1;
             }
@@ -196,6 +232,8 @@ namespace NP.Avalonia.UniDock
 
         private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
         {
+            _sizeCoefficients.RemoveAt(idx);
+
             dockChild.IsDockVisibleChangedEvent -= OnDockChild_IsDockVisibleChangedEvent;
 
             dockChild.CleanSelfOnRemove();
@@ -208,12 +246,15 @@ namespace NP.Avalonia.UniDock
 
         private void RemoveChildFromStackGroup(IDockGroup dockChild)
         {
-            int idx = 
-                _stackGroup.Items
-                           .IndexOf(item => DockAttachedProperties.GetOriginalDockGroup(item) == dockChild);
+            int idx = GetInternalIdx(dockChild);
 
             if (idx > -1)
             {
+                if (DockChildren.Contains(dockChild))
+                {
+                    _sizeCoefficients[idx] = _stackGroup.GetSizeCoefficient(idx);
+                }
+
                 _stackGroup.Items.RemoveAt(idx);
             }
         }
@@ -241,22 +282,48 @@ namespace NP.Avalonia.UniDock
 
         public double GetSizeCoefficient(int idx)
         {
-            return _stackGroup.GetSizeCoefficient(idx);
+            int internalIdx = GetInternalIdx(idx);
+
+            double coeff = (internalIdx > -1) ? 
+                            _stackGroup.GetSizeCoefficient(internalIdx) : _sizeCoefficients[idx];
+
+            return coeff;
         }
 
         public void SetSizeCoefficient(int idx, double coeff)
         {
-            _stackGroup.SetSizeCoefficient(idx, coeff);
+            _sizeCoefficients[idx] = coeff;
+
+            int internalIdx = GetInternalIdx(idx);
+
+            if (internalIdx > -1)
+            {
+                _stackGroup.SetSizeCoefficient(internalIdx, coeff);
+            }
         }
 
         public double[] GetSizeCoefficients()
         {
-            return _stackGroup.GetSizeCoefficients();
+            var result = new double[NumberDockChildren];
+            for(int i = 0; i < NumberDockChildren; i++)
+            {
+                result[i] = GetSizeCoefficient(i);
+            }
+
+            return result;
         }
 
         public void SetSizeCoefficients(double[]? coeffs)
-        {
-            _stackGroup.SetSizeCoefficients(coeffs);
+        {   
+            if (coeffs == null)
+            {
+                return;
+            }    
+
+            for(int i = 0; i < coeffs.Length; i++)
+            {
+                SetSizeCoefficient(i, coeffs[i]);
+            }
         }
 
         public IDockGroup CloneIfStable()

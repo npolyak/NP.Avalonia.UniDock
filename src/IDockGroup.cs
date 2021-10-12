@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using System;
 using System.Collections.Generic;
@@ -185,18 +186,28 @@ namespace NP.Avalonia.UniDock
 
             if (group.GetNumberChildren() == 1)
             {
-                int idx = dockParent.DockChildren.IndexOf(group);
+                FloatingWindow? window = group.GetGroupWindow();
 
-                double sizeCoeff = dockParent.GetSizeCoeff(idx);
+                try
+                {
+                    window?.SetCannotClose();
+                    int idx = dockParent.DockChildren.IndexOf(group);
 
-                group.RemoveItselfFromParent();
+                    double sizeCoeff = dockParent.GetSizeCoeff(idx);
 
-                IDockGroup child = group.DockChildren.First();
-                child.RemoveItselfFromParent();
+                    group.RemoveItselfFromParent();
 
-                dockParent.DockChildren.Insert(idx, child);
+                    IDockGroup child = group.DockChildren.First();
+                    child.RemoveItselfFromParent();
 
-                dockParent.SetSizeCoeff(idx, sizeCoeff);
+                    dockParent.DockChildren.Insert(idx, child);
+
+                    dockParent.SetSizeCoeff(idx, sizeCoeff);
+                }
+                finally
+                {
+                    window?.ResetCanClose();
+                }
             }
         }
 
@@ -240,6 +251,11 @@ namespace NP.Avalonia.UniDock
             IDockGroup? dockGroup = args.Sender as IDockGroup;
 
             dockGroup?.FireIsDockVisibleChangedEvent();
+        }
+
+        public static FloatingWindow? GetGroupWindow(this IDockGroup group)
+        {
+            return group.GetDockGroupRoot()?.GetControlsWindow<FloatingWindow>();
         }
     }
 }

@@ -373,29 +373,29 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        public double[] GetSizeCoefficients()
-        {
-            if (Items.Count <= 1)
-            {
-                return new[] { 1d };
-            }
+        //public double[] GetSizeCoefficients()
+        //{
+        //    if (Items.Count <= 1)
+        //    {
+        //        return new[] { 1d };
+        //    }
 
-            return Items.Select((item, i) => GetSizeCoefficient(i)).ToArray();
-        }
+        //    return Items.Select((item, i) => GetSizeCoefficient(i)).ToArray();
+        //}
 
-        public void SetSizeCoefficients(double[]? coeffs)
-        {
-            if (coeffs == null || Items.Count <= 1)
-            {
-                return;
-            }
+        //public void SetSizeCoefficients(double[]? coeffs)
+        //{
+        //    if (coeffs == null || Items.Count <= 1)
+        //    {
+        //        return;
+        //    }
 
-            if (coeffs.Length != Items.Count)
-            {
-                throw new Exception($"Error: number of Items ({Items.Count}) is not the same as the number of passed coeffs ({coeffs.Length}).");
-            }
+        //    if (coeffs.Length != Items.Count)
+        //    {
+        //        throw new Exception($"Error: number of Items ({Items.Count}) is not the same as the number of passed coeffs ({coeffs.Length}).");
+        //    }
 
-            Items.DoForEach((item, i) => SetSizeCoefficient(i, coeffs[i]));
-        }
+        //    Items.DoForEach((item, i) => SetSizeCoefficient(i, coeffs[i]));
+        //}
     }
 }

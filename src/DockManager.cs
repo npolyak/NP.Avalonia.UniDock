@@ -365,6 +365,8 @@ namespace NP.Avalonia.UniDock
 
         public void CompleteDragDropAction()
         {
+            FloatingWindow? currentWindowToDropInto =  CurrentLeafObjToInsertWithRespectTo?.GetGroupWindow(); 
+
             try
             {
                 _pointerMovedSubscription?.Dispose();
@@ -372,7 +374,9 @@ namespace NP.Avalonia.UniDock
 
                 IDockGroup? draggedGroup = DraggedWindow?.TheDockGroup?.TheChild;
 
-                DockKind? currentDock = CurrentLeafObjToInsertWithRespectTo?.CurrentGroupDock;
+                currentWindowToDropInto?.SetCannotClose();
+
+                DockKind ? currentDock = CurrentLeafObjToInsertWithRespectTo?.CurrentGroupDock;
                 if (draggedGroup != null)
                 {
                     switch (currentDock)
@@ -448,6 +452,8 @@ namespace NP.Avalonia.UniDock
                 {
                     CurrentLeafObjToInsertWithRespectTo = null;
                 }
+
+                currentWindowToDropInto?.ResetCanClose();
 
                 DraggedWindow = null;
             }
