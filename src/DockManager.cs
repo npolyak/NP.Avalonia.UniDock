@@ -455,7 +455,6 @@ namespace NP.Avalonia.UniDock
 
         public void SaveToFile(string filePath)
         {
-
             var dockManagerParams = this.ToParams();
 
             string serializationStr =

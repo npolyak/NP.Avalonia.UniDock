@@ -6,8 +6,10 @@
         Width="700"
         Height="700"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
         x:Class="NP.StableFloatingWindows.MainWindow"
-        Title="NP.StableFloatingWindows">
+        Title="NP.StableFloatingWindows"
+        BorderBrush="Gray">
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -20,9 +22,8 @@
   <Window.Styles>
     <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml"/>
   </Window.Styles>
-  <Grid Margin="10"
-        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-        Background="Gray">
+  <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+        RowDefinitions="*, Auto">
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
@@ -59,8 +60,7 @@
       </np:SimpleDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
-                         IsStableGroup="True"
-                         Margin="20">
+                         IsStableGroup="True">
         <np:StackDockGroup TheOrientation="Horizontal"
                            IsStableGroup="True"
                            DockId="Group1">
@@ -93,5 +93,19 @@
         </np:TabbedDockGroup>
       </np:StackDockGroup>
     </np:SimpleDockGroup>
+
+    <StackPanel Margin="10,5"
+                Grid.Row="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+      <Button x:Name="SaveButton"
+              Content="Save"
+              Padding="10,5"
+              Margin="0,0,10,0" />
+
+      <Button x:Name="RestoreButton"
+              Content="Restore"
+              Padding="10,5" />
+    </StackPanel>
   </Grid>
 </Window>

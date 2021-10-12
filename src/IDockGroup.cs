@@ -69,7 +69,7 @@ namespace NP.Avalonia.UniDock
         // IsPredefined == true can only be for DockItems
         // so that
         //      They can be restored from dock id (without any extra data) - for DockItems
-        // IsPredefine == false means
+        // IsPredefined == false means
         //      If dock item - it does not have a default location and needs a full parameter list with values to
         //          be restored - or rather - recreated
         bool IsPredefined 

@@ -151,7 +151,7 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 IDockGroup? childGroup = dm.BuildGroup(dmp, childDockId, dockItems);
 
-                if (childGroup != null)
+                if (childGroup != null && (!dg.DockChildren.Contains(childGroup)))
                 {
                     dg.DockChildren.Add(childGroup);
                 }
@@ -193,9 +193,8 @@ namespace NP.Avalonia.UniDock.Serialization
                 else
                 {
                     w = wp.RestoreWindow(dm);
+                    w.SetWindowFromParams(wp);
                 }
-
-                w.SetWindowFromParams(wp);
             }
 
             foreach (WindowParams wp in dmp.WindowsSerializationParams.NullToEmpty())
