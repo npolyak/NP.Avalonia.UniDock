@@ -567,13 +567,13 @@
             </Grid>
             <Grid Grid.Row="1">
               <ContentPresenter x:Name="Body"
-                                Content="{Binding Path=DockContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                ContentTemplate="{Binding Path=DockContext.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                Content="{Binding Path=Content}"
+                                ContentTemplate="{Binding Path=ContentTemplate}"
                                 HorizontalAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
-                                Margin="{Binding Path=DockContext.Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                Margin="{Binding Path=Padding}"/>
               <local:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
-                                          IsVisible="{Binding Path=DockContext.ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                          IsVisible="{Binding ShowCompass}"/>
             </Grid>
           </Grid>
         </ControlTemplate>

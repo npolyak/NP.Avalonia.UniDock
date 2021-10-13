@@ -21,6 +21,7 @@ using NP.Concepts.Behaviors;
 using System.Collections;
 using System.Collections.ObjectModel;
 using NP.Avalonia.UniDock.Factories;
+using Avalonia.VisualTree;
 
 namespace NP.Avalonia.UniDock
 {

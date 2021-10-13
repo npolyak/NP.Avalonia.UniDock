@@ -26,10 +26,12 @@ using NP.Avalonia.UniDock.Serialization;
 using NP.Avalonia.UniDock.Factories;
 using NP.Utilities.BasicInterfaces;
 using NP.Utilities.Attributes;
+using System.Collections.Specialized;
+using Avalonia;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockManager
+    public class DockManager : VMBase
     {
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
@@ -97,11 +99,15 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private IList<IDockGroup> _disconnectedGroups = new List<IDockGroup>();
+        private IList<IDockGroup> _disconnectedGroups = new ObservableCollection<IDockGroup>();
 
         public IEnumerable<IDockGroup> DisconnectedGroups => _disconnectedGroups;
 
         public IEnumerable<IDockGroup> AllGroups => _connectedGroups.Union(_disconnectedGroups);
+
+        public UnionBehavior<IDockGroup> AllGroupsBehavior { get; }
+
+        public ExpandoObjectBehavior<IDockGroup> DockIdKeysGroups { get; }
 
         public IList<ILeafDockObj> DockLeafObjs { get; } =
             new List<ILeafDockObj>();
@@ -264,8 +270,8 @@ namespace NP.Avalonia.UniDock
             DraggedWindow?.Close();
         }
 
-        private readonly IDisposable _groupsBehavior;
-        private readonly IDisposable _windowsBehavior;
+        private readonly IDisposable? _groupsBehavior;
+        private readonly IDisposable? _windowsBehavior;
         public DockManager()
         {
             DockGroupHelper.SetIsDockVisibleChangeSubscription();
@@ -275,6 +281,15 @@ namespace NP.Avalonia.UniDock
 
             _windowsBehavior = 
                 Windows.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
+
+            AllGroupsBehavior = new UnionBehavior<IDockGroup>(_disconnectedGroups, _connectedGroups);
+
+            DockIdKeysGroups =
+                new ExpandoObjectBehavior<IDockGroup>
+                (
+                    AllGroupsBehavior.Result, 
+                    group => group.DockId,
+                    group => group.GetObservable(DockIdContainingControl.DockIdProperty));
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

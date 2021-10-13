@@ -48,10 +48,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, string>
-            (
-                nameof(DockId)
-            );
+            DockIdContainingControl.DockIdProperty.AddOwner<TabbedDockGroup>();
         #endregion Id Styled Avalonia Property
 
         private bool _isStableGroup = false;
@@ -64,7 +61,6 @@ namespace NP.Avalonia.UniDock
                     return;
 
                 _isStableGroup = value;
-
                 SetHorizontalAndVerticalDockingAllowed();
             }
         }

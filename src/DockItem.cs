@@ -99,10 +99,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, string>
-            (
-                nameof(DockId)
-            );
+            DockIdContainingControl.DockIdProperty.AddOwner<DockItem>();
         #endregion Id Styled Avalonia Property
 
         private void FireDockIdChanged()
