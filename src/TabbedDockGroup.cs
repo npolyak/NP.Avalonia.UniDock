@@ -213,8 +213,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private readonly SingleSelectionFirstByDefaultBehavior<DockItem> _singleSelectionBehavior =
-            new SingleSelectionFirstByDefaultBehavior<DockItem>();
+        private readonly SingleSelectionBehavior<DockItem> _singleSelectionBehavior =
+            new SingleSelectionBehavior<DockItem>();
 
         private readonly MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>> _mimicCollectionBehavior =
             new MimicCollectionBehavior<IDockGroup, DockItem, ObservableCollection<DockItem>>(dockGroup => (DockItem)dockGroup);
@@ -282,7 +282,7 @@ namespace NP.Avalonia.UniDock
 
         public void SelectFirst()
         {
-            _singleSelectionBehavior.SelectFirst();
+            SelectFirstVisibleChild();
         }
 
 
@@ -448,10 +448,44 @@ namespace NP.Avalonia.UniDock
         private void OnItemAdded(IDockGroup child)
         {
             this.SetIsDockVisible();
+            child.IsDockVisibleChangedEvent += OnChildDockVisibleChanged;
+        }
+
+        private void OnChildDockVisibleChanged(IDockGroup child)
+        {
+            if (child is DockItem dockItemChild)
+            {
+                if (!dockItemChild.GetIsDockVisible() && dockItemChild.IsSelected)
+                {
+                    dockItemChild.IsSelected = false;
+                }
+
+                SelectFirstVisibleChild();
+            }
+
+            this.SetIsDockVisible();
+        }
+
+        private void SelectFirstVisibleChild()
+        {
+            DockItem? firstVisibleChild =
+                Items?.OfType<DockItem>()?.FirstOrDefault(item => item.GetIsDockVisible());
+
+            if (firstVisibleChild != null)
+            {
+                firstVisibleChild.IsSelected = true;
+            }
         }
 
         private void OnItemRemoved(IDockGroup child)
         {
+            if (child is DockItem dockItemChild && dockItemChild.IsSelected)
+            {
+                dockItemChild.IsSelected = false;
+                SelectFirstVisibleChild();
+            }
+
+            child.IsDockVisibleChangedEvent -= OnChildDockVisibleChanged;
             child.TheDockManager = null;
             this.SetIsDockVisible();
         }
