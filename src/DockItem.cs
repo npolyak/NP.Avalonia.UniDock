@@ -54,6 +54,9 @@ namespace NP.Avalonia.UniDock
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
+
+            IDockGroup topDockGroup = this.GetDockGroupRoot();
+            DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
 
         public bool IsPredefined { get; set; } = true;

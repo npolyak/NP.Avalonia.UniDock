@@ -244,16 +244,6 @@ namespace NP.Avalonia.UniDock
             _singleActiveBehavior.TheCollection = LeafItems.ToList();
         }
 
-        internal void MakeFirstItemActive()
-        {
-            _singleActiveBehavior.MakeFirstItemActive();
-        }
-
-        internal void MakeFirstItemActiveIfNoActive()
-        {
-            _singleActiveBehavior.MakeFirstItemActiveIfNoActive();
-        }
-
         private Control FindVisualChild(IDockGroup dockChild)
         {
             IControl control = dockChild;

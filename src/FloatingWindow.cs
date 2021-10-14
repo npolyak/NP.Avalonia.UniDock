@@ -76,7 +76,8 @@ namespace NP.Avalonia.UniDock
 
             this.Closing += FloatingWindow_Closing;
 
-            TheDockGroup.IsDockVisibleChangedEvent += TheDockGroup_IsDockVisibleChangedEvent;
+            TheDockGroup.IsDockVisibleChangedEvent += 
+                TheDockGroup_IsDockVisibleChangedEvent;
             ResetCanClose();
         }
 
@@ -102,7 +103,7 @@ namespace NP.Avalonia.UniDock
             }
             else if (this.IsVisible && _canClose)
             {
-                this.Close();
+                this.Hide();
             }
         }
 

@@ -31,6 +31,12 @@ namespace NP.Avalonia.UniDock
 
         IDockGroup? DockParent { get; set; }
 
+        bool IsDockVisible
+        {
+            get => DockAttachedProperties.GetIsDockVisible(this);
+            set => DockAttachedProperties.SetIsDockVisible(this, value);
+        }
+
         IList<IDockGroup> DockChildren { get; }
 
         bool ShowChildHeader => true;
@@ -213,9 +219,9 @@ namespace NP.Avalonia.UniDock
 
         public static void SetIsDockVisible(this IDockGroup group)
         {
-            bool isDockVisible = group.DockChildren.Any(child => DockAttachedProperties.GetIsDockVisible(child));
+            bool isDockVisible = group.DockChildren.Any(child => child.IsDockVisible);
 
-            DockAttachedProperties.SetIsDockVisible(group, isDockVisible);
+            group.IsDockVisible = isDockVisible;
         }
 
         private static IDisposable? _isDockVisibleChangeSubscription = null;

@@ -160,7 +160,7 @@ namespace NP.Avalonia.UniDock
 
         private void OnDockChild_IsDockVisibleChangedEvent(IDockGroup dockChild)
         {
-            if (dockChild.GetIsDockVisible())
+            if (dockChild.IsDockVisible)
             {
                 AddChildToStackGroup(dockChild);
             }
@@ -209,7 +209,7 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            if (!dockChild.GetIsDockVisible())
+            if (!dockChild.IsDockVisible)
             {
                 return;
             }

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace NP.Avalonia.UniDock
 {
     public class SingleActiveBehavior<TActiveItem> : VMBase
-        where TActiveItem : class, IActiveItem<TActiveItem>
+        where TActiveItem : class, IActiveItem<TActiveItem>, IDockGroup
     {
         IDisposable? _behaviorDisposable = null;
         public event Action? ActiveItemChangedEvent = null;
@@ -133,7 +133,7 @@ namespace NP.Avalonia.UniDock
 
         public void MakeFirstItemActive()
         {
-            TheCollection?.FirstOrDefault()?.MakeActive();
+            TheCollection?.Where(item => item.IsDockVisible).FirstOrDefault()?.MakeActive();
         }
 
         public void MakeFirstItemActiveIfNoActive()

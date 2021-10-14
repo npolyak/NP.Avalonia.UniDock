@@ -449,18 +449,20 @@ namespace NP.Avalonia.UniDock
         {
             this.SetIsDockVisible();
             child.IsDockVisibleChangedEvent += OnChildDockVisibleChanged;
+
+            SelecteFirstVisibleChildIfNoSelection();
         }
 
         private void OnChildDockVisibleChanged(IDockGroup child)
         {
             if (child is DockItem dockItemChild)
             {
-                if (!dockItemChild.GetIsDockVisible() && dockItemChild.IsSelected)
+                if (!child.IsDockVisible && dockItemChild.IsSelected)
                 {
                     dockItemChild.IsSelected = false;
                 }
 
-                SelectFirstVisibleChild();
+                SelecteFirstVisibleChildIfNoSelection();
             }
 
             this.SetIsDockVisible();
@@ -477,14 +479,25 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private void SelecteFirstVisibleChildIfNoSelection()
+        {
+            if (SelectedItem == null)
+            {
+                SelectFirstVisibleChild();
+            }    
+        }
+
         private void OnItemRemoved(IDockGroup child)
         {
-            if (child is DockItem dockItemChild && dockItemChild.IsSelected)
+            if (child is DockItem dockItemChild )
             {
-                dockItemChild.IsSelected = false;
-                SelectFirstVisibleChild();
+                if (dockItemChild.IsSelected)
+                {
+                    dockItemChild.IsSelected = false;
+                }
             }
 
+            SelecteFirstVisibleChildIfNoSelection();
             child.IsDockVisibleChangedEvent -= OnChildDockVisibleChanged;
             child.TheDockManager = null;
             this.SetIsDockVisible();

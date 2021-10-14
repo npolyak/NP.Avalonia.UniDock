@@ -77,6 +77,9 @@ namespace NP.Avalonia.UniDock.Serialization
 
         [XmlElement]
         public string? ContentRestorationInfo { get; set; }
+
+        [XmlAttribute]
+        public bool IsDockVisible { get; set; }
         #endregion DockItem Parameters
     }
 
@@ -115,7 +118,9 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (dg is DockItem dockItem)
             {
+                p.IsDockVisible = dg.IsDockVisible;
                 p.HeaderRestorationInfo = dockItem.Header?.ToString();
+                p.ContentRestorationInfo = dockItem.Content?.ToString();
             }
 
             return p;
@@ -135,6 +140,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (dg is DockItem dockItem)
             {
+                dg.IsDockVisible = p.IsDockVisible;
                 dockItem.Header = p.HeaderRestorationInfo;
             }
         }
