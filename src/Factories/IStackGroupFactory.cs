@@ -2,6 +2,6 @@
 {
     public interface IStackGroupFactory
     {
-        StackDockGroup Create();
+        StackDockGroup Create(object? stockGroupChooser);
     }
 }

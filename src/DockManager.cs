@@ -251,7 +251,7 @@ namespace NP.Avalonia.UniDock
                 double sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
 
                 CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
-                StackDockGroup insertGroup = StackGroupFactory.Create();
+                StackDockGroup insertGroup = StackGroupFactory.Create(null);
 
                 insertGroup.TheOrientation = orientation;
                 
@@ -413,7 +413,7 @@ namespace NP.Avalonia.UniDock
 
                             if (groupToInsertItemsInto == null)
                             {
-                                groupToInsertItemsInto = TabbedGroupFactory.Create();
+                                groupToInsertItemsInto = TabbedGroupFactory.Create(null);
 
                                 int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
                                 double sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);

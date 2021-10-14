@@ -179,7 +179,7 @@ namespace NP.Avalonia.UniDock
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
 
             // create the window
-            var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
+            var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow(null);
             dockWindow.SetMovePtr();
 
             DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);

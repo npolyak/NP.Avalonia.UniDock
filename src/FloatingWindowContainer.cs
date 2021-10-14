@@ -19,7 +19,7 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            _floatingWindow = _dockManager.FloatingWindowFactory.CreateFloatingWindow();
+            _floatingWindow = _dockManager.FloatingWindowFactory.CreateFloatingWindow(null);
             _floatingWindow.Position = WindowRelativePosition!.Value + ParentWindow.Position;
             _floatingWindow.Width = _windowSize.Value.X;
             _floatingWindow.Height = _windowSize.Value.Y;

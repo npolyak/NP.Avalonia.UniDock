@@ -2,7 +2,7 @@
 {
     public class TabbedGroupFactory : ITabbedGroupFactory
     {
-        public TabbedDockGroup Create()
+        public TabbedDockGroup Create(object? tabbedDockGroupChooser)
         {
             return new TabbedDockGroup();
         }

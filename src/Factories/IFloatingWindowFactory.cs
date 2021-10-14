@@ -2,6 +2,6 @@
 {
     public interface IFloatingWindowFactory
     {
-        FloatingWindow CreateFloatingWindow();
+        FloatingWindow CreateFloatingWindow(object? windowChooser);
     }
 }

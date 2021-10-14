@@ -109,7 +109,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
             //FloatingWindow w = (FloatingWindow) Activator.CreateInstance(windowType)!;
 
-            FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow();
+            FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow(null);
 
             w.TheDockManager = dm;
 

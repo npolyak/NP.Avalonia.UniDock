@@ -2,7 +2,7 @@
 {
     public class DockSeparatorFactory : IDockSeparatorFactory
     {
-        public DockSeparator GetDockSeparator()
+        public DockSeparator GetDockSeparator(object? separatorChooser)
         {
             return new DockSeparator();
         }

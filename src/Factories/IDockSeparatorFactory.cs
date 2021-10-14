@@ -2,6 +2,6 @@
 {
     public interface IDockSeparatorFactory
     {
-        DockSeparator GetDockSeparator();
+        DockSeparator GetDockSeparator(object? separatorChooser);
     }
 }
