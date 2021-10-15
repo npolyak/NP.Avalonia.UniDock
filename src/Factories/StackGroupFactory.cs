@@ -5,7 +5,7 @@ namespace NP.Avalonia.UniDock.Factories
 {
     public class StackGroupFactory : IStackGroupFactory
     {
-        public StackDockGroup Create(object? stackGroupChooser)
+        public StackDockGroup Create()
         {
             return new StackDockGroup();
         }

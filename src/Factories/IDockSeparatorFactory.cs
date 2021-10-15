@@ -1,7 +1,9 @@
-﻿namespace NP.Avalonia.UniDock.Factories
+﻿using Avalonia.Layout;
+
+namespace NP.Avalonia.UniDock.Factories
 {
     public interface IDockSeparatorFactory
     {
-        DockSeparator GetDockSeparator(object? separatorChooser);
+        DockSeparator GetDockSeparator(Orientation orientation);
     }
 }

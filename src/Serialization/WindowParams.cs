@@ -99,7 +99,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
         public static Window? RestoreWindow(this WindowParams wp, DockManager dm)
         {
-            FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow(null);
+            FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow();
 
             w.TheDockManager = dm;
 

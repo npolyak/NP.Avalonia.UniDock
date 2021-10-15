@@ -5,7 +5,7 @@ namespace NP.Avalonia.UniDock.Factories
 {
     public class FloatingWindowFactory : IFloatingWindowFactory
     {
-        public virtual FloatingWindow CreateFloatingWindow(object? windowChooser)
+        public virtual FloatingWindow CreateFloatingWindow()
         {
             // create the window
 

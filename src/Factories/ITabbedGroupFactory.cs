@@ -2,6 +2,6 @@
 {
     public interface ITabbedGroupFactory
     {
-        TabbedDockGroup Create(object? tabbedDockGroupChooser);
+        TabbedDockGroup Create();
     }
 }

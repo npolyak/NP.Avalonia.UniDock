@@ -220,7 +220,7 @@ namespace NP.Avalonia.UniDock
 
         private Control GetSeparator()
         {
-            DockSeparator gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(null)!;
+            DockSeparator gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(TheOrientation)!;
 
             if (TheOrientation == Orientation.Horizontal)
             {
