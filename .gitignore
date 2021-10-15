@@ -65,3 +65,5 @@
 /Prototypes/NP.ViewModelSample/.vs
 /Prototypes/NP.ViewModelSample/bin/Debug/net5.0
 /Prototypes/NP.ViewModelSample/obj
+/SubModules/NP.Avalonia.UniDockService/src/bin/Debug/net5.0
+/SubModules/NP.Avalonia.UniDockService/src/obj
