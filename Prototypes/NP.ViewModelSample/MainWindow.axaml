@@ -17,6 +17,11 @@
       </ResourceDictionary.MergedDictionaries>
       <np:DockManager x:Key="TheDockManager" 
                       TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
+      <DataTemplate x:Key="TheDataTemplate">
+        <TextBlock Background="Green"
+                   Foreground="White"
+                   Text="{Binding}"/>
+      </DataTemplate>
     </ResourceDictionary>
   </Window.Resources>
   <Window.Styles>

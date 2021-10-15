@@ -1,4 +1,6 @@
-﻿using NP.Avalonia.UniDock.Factories;
+﻿using NP.Avalonia.UniDock;
+using NP.Avalonia.UniDock.Factories;
+using NP.Avalonia.UniDockService;
 using NP.IoCy;
 
 namespace NP.ViewModelSample
@@ -12,6 +14,7 @@ namespace NP.ViewModelSample
             TheContainer = new IoCContainer();
 
             TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
+            TheContainer.MapSingleton<IUniDockService, DockManager>();
 
             TheContainer?.CompleteConfiguration();
         }

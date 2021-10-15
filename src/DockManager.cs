@@ -26,15 +26,14 @@ using NP.Avalonia.UniDock.Serialization;
 using NP.Avalonia.UniDock.Factories;
 using NP.Utilities.BasicInterfaces;
 using NP.Utilities.Attributes;
-using System.Collections.Specialized;
 using Avalonia;
-using NP.Avalonia.UniDock.ViewModels;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml.Templates;
+using NP.Avalonia.UniDockService;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockManager : VMBase
+    public class DockManager : VMBase, IUniDockService
     {
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }

@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDock;
-using NP.Avalonia.UniDock.ViewModels;
+using NP.Avalonia.UniDockService;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -52,7 +52,8 @@ namespace NP.ViewModelSample
                 HeaderContent = "Tab2",
                 DefaultDockGroupId = "Group1",
                 DefaultDockOrderInGroup = 2,
-                Content = "Hi World!"
+                Content = "Hi World!",
+                ContentTemplateResourceKey = "TheDataTemplate"
             };
 
             vms.Add(vm2);

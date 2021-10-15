@@ -28,6 +28,7 @@
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <IncludeAssets>NP.Avalonia.Visuals.dll</IncludeAssets>
     </ProjectReference>
+    <ProjectReference Include="..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj" />
   </ItemGroup>
   <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
     <ItemGroup>
