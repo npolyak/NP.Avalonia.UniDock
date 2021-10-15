@@ -14,6 +14,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using System;
 
 namespace NP.Avalonia.UniDock
@@ -60,6 +61,13 @@ namespace NP.Avalonia.UniDock
         public DockItemPresenter()
         {
             this.AddHandler(PointerPressedEvent, OnPointerPressedFired, RoutingStrategies.Bubble, true);
+
+            (this as IVisual).DetachedFromVisualTree += DockItemPresenter_DetachedFromVisualTree;
+        }
+
+        private void DockItemPresenter_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            this.RemoveHandler(PointerPressedEvent, OnPointerPressedFired);
         }
 
         private void OnPointerPressedFired(object? sender, PointerPressedEventArgs e)

@@ -213,7 +213,7 @@ namespace NP.Avalonia.UniDock
             {
                 return;
             }
-            
+
             IControl newVisualChildToInsert =
                TheDockManager!.TheDockVisualItemGenerator!.Generate(dockChild);
 
@@ -227,7 +227,13 @@ namespace NP.Avalonia.UniDock
                 return idx1 > idx2 ? 1 : idx1 == idx2 ? 0 : -1;
             }
 
-            _stackGroup.Items.InsertInOrder(newVisualChildToInsert, CompareGroups);
+            bool hasAlready =
+                _stackGroup.Items.Where(item => DockAttachedProperties.GetOriginalDockGroup(item) == dockChild).Any();
+
+            if (!hasAlready)
+            {
+                _stackGroup.Items.InsertInOrder(newVisualChildToInsert, CompareGroups);
+            }
         }
 
         private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)

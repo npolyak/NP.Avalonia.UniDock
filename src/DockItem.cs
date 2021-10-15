@@ -77,7 +77,7 @@ namespace NP.Avalonia.UniDock
         #endregion CanFloat Styled Avalonia Property
 
 
-        #region CanRemove Styled Avalonia Property
+        #region CanClose Styled Avalonia Property
         public bool CanClose
         {
             get { return GetValue(CanRemoveProperty); }
@@ -90,7 +90,7 @@ namespace NP.Avalonia.UniDock
                 nameof(CanClose),
                 true
             );
-        #endregion CanRemove Styled Avalonia Property
+        #endregion CanClose Styled Avalonia Property
 
         public event Action<IDockGroup>? DockIdChanged;
 
@@ -131,10 +131,22 @@ namespace NP.Avalonia.UniDock
                 .AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
         }
 
+
         public DockItem()
         {
             this.GetObservable(IsActiveProperty)
                 .Subscribe(OnIsActiveInWindowChanged);
+
+            this.GetObservable(DockAttachedProperties.IsDockVisibleProperty)
+                .Subscribe(OnIsDockVisibleChanged);
+        }
+
+        private void OnIsDockVisibleChanged(bool isDockVisible)
+        {
+            if (!isDockVisible)
+            {
+                this.DropPanel?.FinishPointerDetection();
+            }
         }
 
         private void OnIsActiveInWindowChanged(bool isActiveInWindow)
@@ -251,7 +263,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public override string ToString() =>
-            $"TheDockItem: {DockId} {Header?.ToString()} IsSelected={IsSelected}";
+            $"TheDockItem: {DockId} {Header?.ToString()} {Content?.ToString()}";
 
         private void FireSelectionChanged()
         {
@@ -407,7 +419,10 @@ namespace NP.Avalonia.UniDock
             IDockGroup? parent = DockParent;
             IDockGroup topDockGroup = this.GetDockGroupRoot();
 
-            this.RemoveItselfFromParent();
+            if (parent != null)
+            {
+                this.RemoveItselfFromParent();
+            }
 
             defaultGroup
                 .DockChildren
@@ -419,6 +434,7 @@ namespace NP.Avalonia.UniDock
 
             parent?.Simplify();
 
+            SetCanReattachToDefaultGroup();
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
 

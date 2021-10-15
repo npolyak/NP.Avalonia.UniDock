@@ -99,16 +99,6 @@ namespace NP.Avalonia.UniDock.Serialization
 
         public static Window? RestoreWindow(this WindowParams wp, DockManager dm)
         {
-            //Type windowType = ReflectionUtils.RestoreType(wp.FullWindowType);
-
-            //// only floating windows can be restored
-            //if (!typeof(FloatingWindow).IsAssignableFrom(windowType))
-            //{
-            //    return null;
-            //}
-
-            //FloatingWindow w = (FloatingWindow) Activator.CreateInstance(windowType)!;
-
             FloatingWindow w = dm.FloatingWindowFactory.CreateFloatingWindow(null);
 
             w.TheDockManager = dm;

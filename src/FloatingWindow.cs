@@ -109,7 +109,10 @@ namespace NP.Avalonia.UniDock
 
         private void TheDockGroup_PossibleDockChangeInsideEvent(SimpleDockGroup obj)
         {
-            CanReattachToDefaultGroup = LeafItemsWithDefaultPosition.Any();
+            CanReattachToDefaultGroup = 
+                LeafItemsWithDefaultPosition
+                    .Where(item => item.CanReattachToDefaultGroup)
+                    .Any();
         }
 
         public void DoInvalidateStyles()
@@ -187,7 +190,6 @@ namespace NP.Avalonia.UniDock
         public IEnumerable<DockItem> LeafItemsWithDefaultPosition =>
             LeafItems.Where(item => !item.DefaultDockGroupId.IsNullOrEmpty());
 
-
         #region CanReattachToDefaultGroup Styled Avalonia Property
         public bool CanReattachToDefaultGroup
         {
@@ -204,7 +206,10 @@ namespace NP.Avalonia.UniDock
 
         public void ReattachToDefaultGroup()
         {
-            LeafItemsWithDefaultPosition.ToList().DoForEach(item => item.ReattachToDefaultGroup());
+            LeafItemsWithDefaultPosition
+                .Where(item => item.CanReattachToDefaultGroup)
+                .ToList()
+                .DoForEach(item => item.ReattachToDefaultGroup());
         }
     }
 }

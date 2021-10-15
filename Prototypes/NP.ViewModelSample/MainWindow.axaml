@@ -102,16 +102,18 @@
           <np:StackDockGroup TheOrientation="Horizontal"
                              DockId="FloatingGroup1"
                              IsStableGroup="True">
-            <np:DockItem Header="FloatingWindowPanel1"
+            <!--<np:DockItem Header="FloatingWindowPanel1"
                          DockId="FloatingDockItem1"
                          DefaultDockGroupId="FloatingGroup1"
                          DefaultDockOrderInGroup="1">
               <TextBlock Text="Floating Panel"/>
-            </np:DockItem>
+            </np:DockItem>-->
+            
             <np:TabbedDockGroup x:Name="FloatingGroup2"
                                 DockId="FloatingGroup2"
                                 DefaultDockOrderInGroup="2"
                                 IsStableGroup="True">
+              <!--
               <np:DockItem Header="Floating Tab 1"
                            DockId="FloatingDockItem3"
                            DefaultDockGroupId="FloatingGroup2"
@@ -123,7 +125,7 @@
                            DefaultDockGroupId="FloatingGroup2"
                            DefaultDockOrderInGroup="2">
                 <TextBlock Text="Floating Tab 2"/>
-              </np:DockItem>
+              </np:DockItem>-->
             </np:TabbedDockGroup>
           </np:StackDockGroup>
         </np:FloatingWindowContainer>
@@ -134,7 +136,7 @@
         <np:StackDockGroup TheOrientation="Horizontal"
                            IsStableGroup="True"
                            DockId="Group1">
-          <np:DockItem Header="Tab1"
+          <!--<np:DockItem Header="Tab1"
                        DockId="Tab1"
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="1">
@@ -145,11 +147,11 @@
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="2">
             <TextBlock Text="Hi World!"/>
-          </np:DockItem>
+          </np:DockItem>-->
         </np:StackDockGroup>
         <np:TabbedDockGroup IsStableGroup="True"
                             DockId="Group2">
-          <np:DockItem Header="Tab3"
+          <!--<np:DockItem Header="Tab3"
                        DockId="Tab3">
             <TextBlock Text="Hi World 3333!"/>
           </np:DockItem>
@@ -164,7 +166,7 @@
                        DefaultDockGroupId="Group2"
                        DefaultDockOrderInGroup="3">
             <TextBlock Text="Hi World 5555!"/>
-          </np:DockItem>
+          </np:DockItem>-->
         </np:TabbedDockGroup>
       </np:StackDockGroup>
     </np:SimpleDockGroup>

@@ -6,7 +6,7 @@ namespace NP.DockItemsInMenus
 {
     public class MyCustomFloatingWindowFactory : IFloatingWindowFactory
     {
-        public virtual FloatingWindow CreateFloatingWindow()
+        public virtual FloatingWindow CreateFloatingWindow(object _)
         {
             // create the window
 

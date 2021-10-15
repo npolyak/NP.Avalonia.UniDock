@@ -567,11 +567,11 @@
             </Grid>
             <Grid Grid.Row="1">
               <ContentPresenter x:Name="Body"
-                                Content="{Binding Path=Content}"
-                                ContentTemplate="{Binding Path=ContentTemplate}"
+                                Content="{Binding Path=DataContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplate="{Binding Path=DataContext.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                                 HorizontalAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
-                                Margin="{Binding Path=Padding}"/>
+                                Margin="{Binding Path=DataContext.Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
               <local:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
                                           IsVisible="{Binding ShowCompass}"/>
             </Grid>

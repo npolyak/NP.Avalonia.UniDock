@@ -28,6 +28,9 @@ using NP.Utilities.BasicInterfaces;
 using NP.Utilities.Attributes;
 using System.Collections.Specialized;
 using Avalonia;
+using NP.Avalonia.UniDock.ViewModels;
+using Avalonia.Data;
+using Avalonia.Markup.Xaml.Templates;
 
 namespace NP.Avalonia.UniDock
 {
@@ -114,6 +117,137 @@ namespace NP.Avalonia.UniDock
 
         public IEnumerable<ILeafDockObj> DockLeafObjsWithoutLeafParents =>
             DockLeafObjs.Where(leaf => !leaf.HasLeafAncestor()).ToList();
+
+
+        private IDisposable? _viewModelsBehavior;
+        #region DockItemsViewModels Property
+        private IEnumerable<DockItemViewModel>? _dockItemsViewModels;
+        public IEnumerable<DockItemViewModel>? DockItemsViewModels
+        {
+            get
+            {
+                return this._dockItemsViewModels;
+            }
+            set
+            {
+                if (this._dockItemsViewModels == value)
+                {
+                    return;
+                }
+
+                _viewModelsBehavior?.Dispose();
+
+                this._dockItemsViewModels = value;
+
+                _viewModelsBehavior = 
+                    _dockItemsViewModels?.AddBehavior
+                    (
+                        OnGroupViewModelAdded, 
+                        OnGroupViewModelRemoved);
+
+                this.OnPropertyChanged(nameof(DockItemsViewModels));
+            }
+        }
+
+        private DockItem CreateDockItemFromVm(DockItemViewModel vm)
+        {
+            DockItem? dockItem =
+                this.FindGroupById(vm.DockId) as DockItem;
+
+            if (dockItem != null)
+            {
+                return dockItem;
+            }
+
+            dockItem = new DockItem
+            {
+                DockId = vm.DockId!,
+                DefaultDockGroupId = vm.DefaultDockGroupId!,
+                DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
+                CanFloat = vm.CanFloat,
+                CanClose = vm.CanClose,
+                IsPredefined = vm.IsPredefined,
+                Header = vm.HeaderContent,
+                Content = vm.Content
+            };
+
+            dockItem.DataContext = vm;
+            void AddBind<T>
+            (
+                AvaloniaProperty<T> prop,
+                string propName,
+                BindingMode bindingMode = BindingMode.TwoWay)
+            {
+                Binding binding = new Binding(propName);
+                binding.Mode = bindingMode;
+                dockItem.Bind(prop, binding);
+            }
+
+            AddBind(DockAttachedProperties.IsDockVisibleProperty, "IsDockVisible");
+            AddBind(DockItem.IsSelectedProperty, "IsSelected");
+            AddBind(DockItem.IsActiveProperty, "IsActive");
+
+            dockItem.TheDockManager = this;
+
+            return dockItem;
+        }
+
+        private void SetDockItemFromVm(DockItemViewModel vm, IDockGroup dockGroup)
+        {
+            //if (vm.DockId == "FloatingDockItem1")
+            //{
+            //    return;
+            //}
+
+            if (vm.IsConstructed)
+                return;
+
+            DockItem? dockItem =
+                this.FindGroupById(vm.DockId) as DockItem;
+
+            if (dockItem == null)
+            {
+                return;
+            }
+
+            if (vm.HeaderContentTemplateResourceKey != null)
+            {
+                dockItem.HeaderTemplate =
+                    (DataTemplate)dockGroup.FindResource(vm.HeaderContentTemplateResourceKey)!;
+            }
+
+            if (vm.ContentTemplateResourceKey != null)
+            {
+                dockItem.ContentTemplate =
+                    (DataTemplate)dockGroup.FindResource(vm.ContentTemplateResourceKey)!;
+            }
+
+            dockItem.ReattachToDefaultGroup();
+
+            vm.IsConstructed = true;
+        }
+
+        private void OnGroupViewModelAdded(DockItemViewModel vm)
+        {
+            DockItem dockItem = CreateDockItemFromVm(vm);
+
+            string groupId = vm.DefaultDockGroupId!;
+
+            IDockGroup? dockGroup =
+                AllGroupsBehavior.Result.FirstOrDefault(g => g.DockId == groupId);
+
+            if (dockGroup != null)
+            {
+                SetDockItemFromVm(vm, dockGroup);
+            }
+        }
+
+        private void OnGroupViewModelRemoved(DockItemViewModel dockItemViewModel)
+        {
+            dockItemViewModel.IsConstructed = false;
+        }
+        #endregion DockItemsViewModels Property
+
 
         public void ClearGroups()
         {
@@ -209,17 +343,6 @@ namespace NP.Avalonia.UniDock
                               .FirstOrDefault()).ToList();
 
             CurrentLeafObjToInsertWithRespectTo = pointerAboveGroups.FirstOrDefault();
-
-            //if (CurrentLeafObjToInsertWithRespectTo == null)
-            //{
-            //    return;
-            //}
-
-            //Window w = CurrentLeafObjToInsertWithRespectTo.GetVisual().GetVisualAncestors().OfType<Window>().First();
-
-            //w.Activate();
-
-            //_draggedWindow?.Activate();
         }
 
         private void DropWithOrientation(DockKind? dock, IDockGroup originalDraggedGroup)
@@ -371,6 +494,21 @@ namespace NP.Avalonia.UniDock
             }
 
             addedGroup.DockIdChanged += AddedGroup_DockIdChanged;
+
+            IEnumerable<DockItemViewModel>? vms =
+                DockItemsViewModels
+                    ?.Where(viewModel => viewModel.DefaultDockGroupId == addedGroup.DockId);
+
+            if (vms != null)
+            {
+                foreach(var vm in vms)
+                {
+                    if (vm.IsConstructed)
+                        continue;
+
+                    SetDockItemFromVm(vm, addedGroup);
+                }
+            }
         }
 
         private void OnGroupItemRemoved(IDockGroup removedGroup)
