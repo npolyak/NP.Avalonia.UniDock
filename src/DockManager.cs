@@ -167,21 +167,23 @@ namespace NP.Avalonia.UniDock
 
             if (dockItem != null)
             {
-                return dockItem;
+                vm.IsDockVisible = (dockItem as IDockGroup).IsDockVisible;
+                vm.IsConstructed = true;
             }
-
-            dockItem = new DockItem
+            else
             {
-                DockId = vm.DockId!,
-                DefaultDockGroupId = vm.DefaultDockGroupId!,
-                DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
-                CanFloat = vm.CanFloat,
-                CanClose = vm.CanClose,
-                IsPredefined = vm.IsPredefined,
-                Header = vm.HeaderContent,
-                Content = vm.Content
-            };
-
+                dockItem = new DockItem
+                {
+                    DockId = vm.DockId!,
+                    DefaultDockGroupId = vm.DefaultDockGroupId!,
+                    DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
+                    CanFloat = vm.CanFloat,
+                    CanClose = vm.CanClose,
+                    IsPredefined = vm.IsPredefined,
+                    Header = vm.HeaderContent,
+                    Content = vm.Content
+                };
+            }
             dockItem.DataContext = vm;
             void AddBind<T>
             (
@@ -198,21 +200,16 @@ namespace NP.Avalonia.UniDock
             AddBind(DockItem.IsSelectedProperty, "IsSelected");
             AddBind(DockItem.IsActiveProperty, "IsActive");
 
-            dockItem.TheDockManager = this;
+            if (dockItem.TheDockManager == null)
+            {
+                dockItem.TheDockManager = this;
+            }
 
             return dockItem;
         }
 
         private void SetDockItemFromVm(DockItemViewModel vm, IDockGroup dockGroup)
         {
-            //if (vm.DockId == "FloatingDockItem1")
-            //{
-            //    return;
-            //}
-
-            if (vm.IsConstructed)
-                return;
-
             DockItem? dockItem =
                 this.FindGroupById(vm.DockId) as DockItem;
 
@@ -232,6 +229,9 @@ namespace NP.Avalonia.UniDock
                 dockItem.ContentTemplate =
                     (DataTemplate)dockGroup.FindResource(vm.ContentTemplateResourceKey)!;
             }
+
+            if (vm.IsConstructed)
+                return;
 
             dockItem.ReattachToDefaultGroup();
 

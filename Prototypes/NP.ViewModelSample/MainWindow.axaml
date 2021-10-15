@@ -4,7 +4,7 @@
         xmlns:np="https://np.com/visuals"
         xmlns:local="clr-namespace:NP.ViewModelSample"
         Width="700"
-        Height="700"
+        Height="1000"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.ViewModelSample.MainWindow"
@@ -27,75 +27,17 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <Menu DataContext="{x:Static local:MyContainer.TheDockManager}"
-          Height="30">
-      <MenuItem Header="Item1">
-        <MenuItem Header="Tab1"
-                  DataContext="{Binding Path=DockIdKeysGroups.Result[Tab1]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="Tab2"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[Tab2]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="Tab3"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[Tab3]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="Tab4"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[Tab4]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="Tab5"
-                DataContext="{Binding Path=DockIdKeysGroups.Result[Tab5]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="FloatingDockItem1"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[FloatingDockItem1]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="FloatingDockItem3"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[FloatingDockItem3]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-        <MenuItem Header="FloatingDockItem2"
-          DataContext="{Binding Path=DockIdKeysGroups.Result[FloatingDockItem2]}">
-          <MenuItem.Icon>
-            <CheckBox IsChecked="{Binding Path=Parent.DataContext.(np:DockAttachedProperties.IsDockVisible), 
-                                          Mode=TwoWay,
-                                          RelativeSource={RelativeSource Self}}"/>
-          </MenuItem.Icon>
-        </MenuItem>
-      </MenuItem>
-    </Menu>
+    <ListBox Items="{Binding Path=VMs, RelativeSource={RelativeSource AncestorType=Window}}"
+             Height="300">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <CheckBox IsChecked="{Binding Path=IsDockVisible, Mode=TwoWay}"
+                      Content="{Binding HeaderContent}"/>
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
                         Grid.Row="1">
       <np:SimpleDockGroup.FloatingWindows>

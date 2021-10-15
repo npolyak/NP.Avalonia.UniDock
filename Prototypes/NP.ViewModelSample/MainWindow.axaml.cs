@@ -16,6 +16,8 @@ namespace NP.ViewModelSample
         private DockManager _dockManager;
 
         private ObservableCollection<DockItemViewModel> _vms;
+
+        public ObservableCollection<DockItemViewModel> VMs => _vms;
         public MainWindow()
         {
             InitializeComponent();
@@ -143,7 +145,8 @@ namespace NP.ViewModelSample
                 HeaderContent = tabStr,
                 DefaultDockGroupId = "Group2",
                 DefaultDockOrderInGroup = _tabNumber,
-                Content = tabStr
+                Content = tabStr,
+                IsPredefined = false
             };
             _vms.Add(newTabVm);
 
@@ -164,6 +167,7 @@ namespace NP.ViewModelSample
                 DefaultDockGroupId = "FloatingGroup2",
                 DefaultDockOrderInGroup = _floatingTabNumber,
                 Content = floatingTabStr,
+                IsPredefined = false
             };
 
             _vms.Add(newTabVm);
