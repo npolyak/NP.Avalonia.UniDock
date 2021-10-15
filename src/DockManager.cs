@@ -101,6 +101,18 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public (string? dockId, GroupKind? groupKind) GetContainingGroupInfo(string dockId)
+        {
+            IDockGroup? dockGroup = AllGroups.FirstOrDefault(item => item.DockId == dockId);
+
+            IDockGroup? parentDockGroup = dockGroup?.DockParent;
+
+            if (parentDockGroup == null)
+                return (null, null);
+
+            return (parentDockGroup.DockId, parentDockGroup.TheGroupKind);
+        }
+
         private IList<IDockGroup> _disconnectedGroups = new ObservableCollection<IDockGroup>();
 
         public IEnumerable<IDockGroup> DisconnectedGroups => _disconnectedGroups;

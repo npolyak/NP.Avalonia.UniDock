@@ -15,6 +15,7 @@ namespace NP.ViewModelSample
     {
         private DockManager _dockManager;
 
+        private ObservableCollection<DockItemViewModel> _vms;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +34,8 @@ namespace NP.ViewModelSample
 
             ObservableCollection<DockItemViewModel> vms = 
                 new ObservableCollection<DockItemViewModel>();
+
+            _vms = vms;
 
             DockItemViewModel vm1 = new DockItemViewModel
             {
@@ -118,6 +121,54 @@ namespace NP.ViewModelSample
             vms.Add(floatingVm3);
 
             // object? result = this.FindResource("DefaultWindowTitleAreaDataTemplate");
+
+            Button mainTabsButton = this.FindControl<Button>("AddMainTabButton");
+
+            mainTabsButton.Click += MainTabsButton_Click;
+
+
+            Button floatingTabsButton = this.FindControl<Button>("AddFloatingTabButton");
+
+            floatingTabsButton.Click += FloatingTabsButton_Click;
+        }
+
+        int _tabNumber = 5;
+        private void MainTabsButton_Click(object? sender, RoutedEventArgs e)
+        {
+            string tabStr = $"Tab{_tabNumber}";
+
+            var newTabVm = new DockItemViewModel
+            {
+                DockId = tabStr,
+                HeaderContent = tabStr,
+                DefaultDockGroupId = "Group2",
+                DefaultDockOrderInGroup = _tabNumber,
+                Content = tabStr
+            };
+            _vms.Add(newTabVm);
+
+            newTabVm.IsSelected = true;
+
+            _tabNumber++;
+        }
+
+        int _floatingTabNumber = 3;
+        private void FloatingTabsButton_Click(object? sender, RoutedEventArgs e)
+        {
+            string floatingTabStr = $"FloatingTab{_floatingTabNumber}";
+
+            var newTabVm = new DockItemViewModel
+            {
+                DockId = floatingTabStr,
+                HeaderContent = floatingTabStr,
+                DefaultDockGroupId = "FloatingGroup2",
+                DefaultDockOrderInGroup = _floatingTabNumber,
+                Content = floatingTabStr,
+            };
+
+            _vms.Add(newTabVm);
+
+            _floatingTabNumber++;
         }
 
 

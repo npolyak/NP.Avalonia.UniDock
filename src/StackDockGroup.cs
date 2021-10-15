@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NP.Utilities;
 using System.Linq;
+using NP.Avalonia.UniDockService;
 
 namespace NP.Avalonia.UniDock
 {
@@ -42,6 +43,8 @@ namespace NP.Avalonia.UniDock
         public bool IsStableGroup { get; set; } = false;
 
         private List<double> _sizeCoefficients = new List<double>();
+
+        public GroupKind TheGroupKind => GroupKind.Stack;
 
         public DockManager? TheDockManager
         {

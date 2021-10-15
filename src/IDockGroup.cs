@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using System;
@@ -36,6 +37,8 @@ namespace NP.Avalonia.UniDock
             get => DockAttachedProperties.GetIsDockVisible(this);
             set => DockAttachedProperties.SetIsDockVisible(this, value);
         }
+
+        public GroupKind TheGroupKind { get; }
 
         IList<IDockGroup> DockChildren { get; }
 

@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
+using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
@@ -32,6 +33,8 @@ namespace NP.Avalonia.UniDock
 
         // IsActive in current top level (root) group (or in floating window) changed
         public event Action<DockItem>? IsActiveChanged;
+
+        public GroupKind TheGroupKind => GroupKind.DockItem;
 
         #region IsActive Styled Avalonia Property
         /// <summary>

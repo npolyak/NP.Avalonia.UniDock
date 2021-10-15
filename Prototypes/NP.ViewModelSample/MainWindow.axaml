@@ -15,8 +15,6 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <!--<np:DockManager x:Key="TheDockManager" 
-                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>-->
       <DataTemplate x:Key="TheDataTemplate">
         <TextBlock Background="Green"
                    Foreground="White"
@@ -180,6 +178,16 @@
                 Grid.Row="2"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
+      <Button x:Name="AddMainTabButton"
+              Content="Add Main Tab"
+              Padding="10,5"
+              Margin="0,0,10,0" />
+
+      <Button x:Name="AddFloatingTabButton"
+              Content="Add Floating Tab"
+              Padding="10,5"
+              Margin="0,0,10,0" />
+
       <Button x:Name="SaveButton"
               Content="Save"
               Padding="10,5"

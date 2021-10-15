@@ -19,6 +19,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
+using NP.Avalonia.UniDockService;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -32,6 +33,8 @@ namespace NP.Avalonia.UniDock
     public class TabbedDockGroup : TemplatedControl, ILeafDockObj
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
+
+        public GroupKind TheGroupKind => GroupKind.Tab;
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {

@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
@@ -104,6 +105,8 @@ namespace NP.Avalonia.UniDock
         public bool ShowChildHeader => false;
 
         public bool ShowChildHeaders { get; } = false;
+
+        public GroupKind TheGroupKind => GroupKind.Simple;
 
         public DockManager? TheDockManager
         {
