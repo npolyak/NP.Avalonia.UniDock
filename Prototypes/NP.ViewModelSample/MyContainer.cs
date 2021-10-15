@@ -9,12 +9,17 @@ namespace NP.ViewModelSample
     {
         public static IoCContainer? TheContainer { get; }
 
+        public static DockManager TheDockManager { get; } = new DockManager();
+
         static MyContainer()
         {
             TheContainer = new IoCContainer();
 
-            TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
-            TheContainer.MapSingleton<IUniDockService, DockManager>();
+            
+
+            TheContainer.MapSingleton<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
+            TheContainer.MapSingleton<DockManager, DockManager>(TheDockManager, null, true);
+            TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
 
             TheContainer?.CompleteConfiguration();
         }

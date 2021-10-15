@@ -21,7 +21,7 @@ namespace NP.ViewModelSample
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _dockManager = (DockManager) this.FindResource("TheDockManager")!;
+            _dockManager = MyContainer.TheDockManager;
 
             Opened += MainWindow_Opened;
 

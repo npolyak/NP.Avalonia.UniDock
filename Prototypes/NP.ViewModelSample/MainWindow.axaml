@@ -6,7 +6,7 @@
         Width="700"
         Height="700"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
+        np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.ViewModelSample.MainWindow"
         Title="NP.ViewModelSample"
         BorderBrush="Gray">
@@ -15,8 +15,8 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <np:DockManager x:Key="TheDockManager" 
-                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
+      <!--<np:DockManager x:Key="TheDockManager" 
+                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>-->
       <DataTemplate x:Key="TheDataTemplate">
         <TextBlock Background="Green"
                    Foreground="White"
@@ -29,7 +29,7 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <Menu DataContext="{DynamicResource TheDockManager}"
+    <Menu DataContext="{x:Static local:MyContainer.TheDockManager}"
           Height="30">
       <MenuItem Header="Item1">
         <MenuItem Header="Tab1"
@@ -98,7 +98,7 @@
         </MenuItem>
       </MenuItem>
     </Menu>
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
                         Grid.Row="1">
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
