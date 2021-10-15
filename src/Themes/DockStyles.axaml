@@ -216,6 +216,11 @@
         <Grid ColumnDefinitions="Auto, Auto"
               Background="{TemplateBinding Background}"
               DataContext="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}">
+          <Grid.ContextMenu>
+            <ContextMenu Classes="LogicalChildrenVisibility">
+              <MenuItem Classes="RestoreDefaultLocation"/>
+            </ContextMenu>
+          </Grid.ContextMenu>
           <ContentPresenter
               Name="PART_ContentPresenter"
               BorderBrush="{TemplateBinding BorderBrush}"
