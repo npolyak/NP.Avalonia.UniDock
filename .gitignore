@@ -67,3 +67,6 @@
 /Prototypes/NP.ViewModelSample/obj
 /SubModules/NP.Avalonia.UniDockService/src/bin/Debug/net5.0
 /SubModules/NP.Avalonia.UniDockService/src/obj
+/Prototypes/NP.ViewModelSaveRestoreSample/.vs
+/Prototypes/NP.ViewModelSaveRestoreSample/bin/Debug/net5.0
+/Prototypes/NP.ViewModelSaveRestoreSample/obj
