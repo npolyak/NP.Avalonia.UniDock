@@ -41,7 +41,7 @@ namespace NP.Avalonia.UniDock.Serialization
                 ConnectedDockGroupParams = new List<DockGroupParams>()
             };
 
-            foreach(var window in dockManager.Windows)
+            foreach(var window in dockManager.AllWindows)
             {
                 dmp.WindowsSerializationParams.Add(window.ToWindowParams());
             }
@@ -61,7 +61,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
         private static Window? GetWindowById(this DockManager dm, string? windowId)
         {
-            Window? w = dm.Windows.FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == windowId);
+            Window? w = dm.AllWindows.FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == windowId);
 
             return w;
         }
@@ -151,8 +151,13 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 IDockGroup? childGroup = dm.BuildGroup(dmp, childDockId, dockItems);
 
-                if (childGroup != null && (!dg.DockChildren.Contains(childGroup)))
+                if (childGroup != null)
                 {
+                    if ((dg.DockChildren.Contains(childGroup)))
+                    {
+                        childGroup = dg.DockChildren.First(item => item.DockId == childGroup.DockId);
+                        dg.DockChildren.Remove(childGroup); // to fix the order
+                    }
                     dg.DockChildren.Add(childGroup);
                 }
             }
@@ -170,7 +175,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
             // clear the windows that do not exist in the serialization.
             var oldWindowsToRemove = 
-                dm.Windows.Where(w => !DockAttachedProperties.GetWindowId(w).IsInValCollection(newWindowIds)).ToList();
+                dm.AllWindows.Where(w => !DockAttachedProperties.GetWindowId(w).IsInValCollection(newWindowIds)).ToList();
             foreach(var w in oldWindowsToRemove)
             {
                 w.Close();
@@ -184,7 +189,7 @@ namespace NP.Avalonia.UniDock.Serialization
             foreach(WindowParams wp in dmp.WindowsSerializationParams.NullToEmpty())
             {
                 Window? w = 
-                    dm.Windows.FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == wp.WindowId);
+                    dm.AllWindows.FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == wp.WindowId);
 
                 if (w != null)
                 {
@@ -204,7 +209,7 @@ namespace NP.Avalonia.UniDock.Serialization
             }
 
             // set the groups
-            foreach(Window w in dm.Windows)
+            foreach(Window w in dm.AllWindows)
             {
                 if (w is FloatingWindow dw)
                 {

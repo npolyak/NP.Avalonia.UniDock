@@ -15,11 +15,10 @@ namespace NP.ViewModelSaveRestoreSample
         {
             TheContainer = new IoCContainer();
 
-            
 
             TheContainer.MapSingleton<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
             TheContainer.MapSingleton<DockManager, DockManager>(TheDockManager, null, true);
-            TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
+            //TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
 
             TheContainer?.CompleteConfiguration();
         }

@@ -4,7 +4,7 @@
         xmlns:np="https://np.com/visuals"
         xmlns:local="clr-namespace:NP.ViewModelSaveRestoreSample"
         Width="700"
-        Height="1000"
+        Height="800"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.ViewModelSaveRestoreSample.MainWindow"
@@ -18,7 +18,9 @@
       <DataTemplate x:Key="TheDataTemplate">
         <TextBlock Background="Green"
                    Foreground="White"
-                   Text="{Binding}"/>
+                   Text="{Binding}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
       </DataTemplate>
     </ResourceDictionary>
   </Window.Resources>
@@ -27,13 +29,13 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <ListBox Items="{Binding Path=VMs, RelativeSource={RelativeSource AncestorType=Window}}"
-             Height="300">
+    <ListBox Items="{Binding Path=TheDataItemsViewModelBehavior.DockItemsViewModels, RelativeSource={RelativeSource AncestorType=Window}}"
+             Height="100">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <CheckBox IsChecked="{Binding Path=IsDockVisible, Mode=TwoWay}"
-                      Content="{Binding HeaderContent}"/>
+                      Content="{Binding Path=Header}"/>
           </StackPanel>
         </DataTemplate>
       </ListBox.ItemTemplate>
@@ -47,31 +49,18 @@
           <np:StackDockGroup TheOrientation="Horizontal"
                              DockId="FloatingGroup1"
                              IsStableGroup="True">
-            <!--<np:DockItem Header="FloatingWindowPanel1"
+            <np:DockItem Header="FloatingWindowPanel1"
                          DockId="FloatingDockItem1"
                          DefaultDockGroupId="FloatingGroup1"
-                         DefaultDockOrderInGroup="1">
-              <TextBlock Text="Floating Panel"/>
-            </np:DockItem>-->
-            
+                         DefaultDockOrderInGroup="1"
+                         Content="Floating Panel"
+                         ContentTemplateResourceKey="TheDataTemplate">
+            </np:DockItem>
+
             <np:TabbedDockGroup x:Name="FloatingGroup2"
                                 DockId="FloatingGroup2"
                                 DefaultDockOrderInGroup="2"
-                                IsStableGroup="True">
-              <!--
-              <np:DockItem Header="Floating Tab 1"
-                           DockId="FloatingDockItem3"
-                           DefaultDockGroupId="FloatingGroup2"
-                           DefaultDockOrderInGroup="1">
-                <TextBlock Text="Floating Tab 1"/>
-              </np:DockItem>
-              <np:DockItem Header="Floating Tab 2"
-                           DockId="FloatingDockItem2"
-                           DefaultDockGroupId="FloatingGroup2"
-                           DefaultDockOrderInGroup="2">
-                <TextBlock Text="Floating Tab 2"/>
-              </np:DockItem>-->
-            </np:TabbedDockGroup>
+                                IsStableGroup="True"/>
           </np:StackDockGroup>
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
@@ -81,37 +70,21 @@
         <np:StackDockGroup TheOrientation="Horizontal"
                            IsStableGroup="True"
                            DockId="Group1">
-          <!--<np:DockItem Header="Tab1"
+          <np:DockItem Header="Tab1"
                        DockId="Tab1"
                        DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="1">
-            <TextBlock Text="Hello World!"/>
-          </np:DockItem>
+                       DefaultDockOrderInGroup="1"
+                       Content="Hello World"
+                       ContentTemplateResourceKey="TheDataTemplate"/>
           <np:DockItem Header="Tab2"
                        DockId="Tab2"
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="2">
             <TextBlock Text="Hi World!"/>
-          </np:DockItem>-->
+          </np:DockItem>
         </np:StackDockGroup>
         <np:TabbedDockGroup IsStableGroup="True"
                             DockId="Group2">
-          <!--<np:DockItem Header="Tab3"
-                       DockId="Tab3">
-            <TextBlock Text="Hi World 3333!"/>
-          </np:DockItem>
-          <np:DockItem Header="Tab4"
-                       DockId="Tab4"
-                       DefaultDockGroupId="Group2"
-                       DefaultDockOrderInGroup="2">
-            <TextBlock Text="Hi World 4444!"/>
-          </np:DockItem>
-          <np:DockItem Header="Tab5"
-                       DockId="Tab5"
-                       DefaultDockGroupId="Group2"
-                       DefaultDockOrderInGroup="3">
-            <TextBlock Text="Hi World 5555!"/>
-          </np:DockItem>-->
         </np:TabbedDockGroup>
       </np:StackDockGroup>
     </np:SimpleDockGroup>

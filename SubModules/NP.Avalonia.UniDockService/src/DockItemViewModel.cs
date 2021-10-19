@@ -1,11 +1,42 @@
 ﻿using NP.Utilities;
+using System.Xml.Serialization;
 
 namespace NP.Avalonia.UniDockService
 {
-    public class DockItemViewModel : VMBase
+    public interface IDockItemViewModel
+    {
+        bool IsDockVisible { get; set; }
+
+        string? DockId { get; }
+
+        string? DefaultDockGroupId { get; }
+
+        double DefaultDockOrderInGroup { get; }
+
+        bool IsSelected { get; set; }
+
+        bool IsActive { get; set; }
+
+        bool CanFloat { get; }
+
+        bool CanClose { get; }
+
+        bool IsPredefined { get; }
+
+        object? Header { get; }
+
+        string? HeaderContentTemplateResourceKey { get; }
+
+        object Content { get; }
+
+        string? ContentTemplateResourceKey { get; }
+    }
+
+    public class DockItemViewModel : VMBase, IDockItemViewModel
     {
         #region IsDockVisible Property
         private bool _isDockVisible = true;
+        [XmlAttribute]
         public bool IsDockVisible
         {
             get
@@ -25,12 +56,14 @@ namespace NP.Avalonia.UniDockService
         }
         #endregion IsDockVisible Property
 
+        [XmlAttribute]
         public string? DockId { get; set; }
-
+        
+        [XmlAttribute]
         public string? DefaultDockGroupId { get; set; }
 
-        public int DefaultDockOrderInGroup { get; set; } = default;
-
+        [XmlAttribute]
+        public double DefaultDockOrderInGroup { get; set; } = default;
 
         #region IsSelected Property
         private bool _isSelected = default;
@@ -74,98 +107,50 @@ namespace NP.Avalonia.UniDockService
         }
         #endregion IsActive Property
 
+        [XmlAttribute]
         public bool CanFloat { get; set; } = true;
 
+        [XmlAttribute]
         public bool CanClose { get; set; } = true;
 
+        [XmlAttribute]
         public bool IsPredefined { get; set; } = true;
 
-        public bool IsConstructed { get; set; }
-
         #region HeaderContent Property
-        private object? _headerContent;
-        public object? HeaderContent
+        [XmlElement]
+        public virtual object? Header
         {
-            get
-            {
-                return this._headerContent;
-            }
-            set
-            {
-                if (this._headerContent == value)
-                {
-                    return;
-                }
-
-                this._headerContent = value;
-                this.OnPropertyChanged(nameof(HeaderContent));
-            }
+            get;
+            set;
         }
         #endregion HeaderContent Property
 
         #region HeaderContentTemplateResourceKey Property
-        private string? _headerContentTemplateResourceKey;
+        [XmlAttribute]
         public string? HeaderContentTemplateResourceKey
         {
-            get
-            {
-                return this._headerContentTemplateResourceKey;
-            }
-            set
-            {
-                if (this._headerContentTemplateResourceKey == value)
-                {
-                    return;
-                }
-
-                this._headerContentTemplateResourceKey = value;
-                this.OnPropertyChanged(nameof(HeaderContentTemplateResourceKey));
-            }
+            get;
+            set;
         }
         #endregion HeaderContentTemplateResourceKey Property
 
 
         #region Content Property
-        private object? _content;
-        public object? Content
+        [XmlElement]
+        public virtual object? Content
         {
-            get
-            {
-                return this._content;
-            }
-            set
-            {
-                if (this._content == value)
-                {
-                    return;
-                }
-
-                this._content = value;
-                this.OnPropertyChanged(nameof(Content));
-            }
+            get;
+            set;
         }
         #endregion Content Property
 
         #region ContentTemplateResourceKey Property
-        private string? _contentTemplateResourceKey;
+        [XmlAttribute]
         public string? ContentTemplateResourceKey
         {
-            get
-            {
-                return this._contentTemplateResourceKey;
-            }
-            set
-            {
-                if (this._contentTemplateResourceKey == value)
-                {
-                    return;
-                }
-
-                this._contentTemplateResourceKey = value;
-                this.OnPropertyChanged(nameof(ContentTemplateResourceKey));
-            }
+            get;
+            set;
         }
         #endregion ContentTemplateResourceKey Property
-
     }
 }

@@ -6,8 +6,10 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDock;
 using NP.Avalonia.UniDockService;
+using NP.Utilities;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace NP.ViewModelSaveRestoreSample
 {
@@ -15,9 +17,8 @@ namespace NP.ViewModelSaveRestoreSample
     {
         private DockManager _dockManager;
 
-        private ObservableCollection<DockItemViewModel> _vms;
+        DataItemsViewModelBehavior<DockItemViewModel> TheDataItemsViewModelBehavior { get; }
 
-        public ObservableCollection<DockItemViewModel> VMs => _vms;
         public MainWindow()
         {
             InitializeComponent();
@@ -25,8 +26,6 @@ namespace NP.ViewModelSaveRestoreSample
             this.AttachDevTools();
 #endif
             _dockManager = MyContainer.TheDockManager;
-
-            Opened += MainWindow_Opened;
 
             Button saveButton = this.FindControl<Button>("SaveButton");
             saveButton.Click += SaveButton_Click;
@@ -37,92 +36,10 @@ namespace NP.ViewModelSaveRestoreSample
             ObservableCollection<DockItemViewModel> vms = 
                 new ObservableCollection<DockItemViewModel>();
 
-            _vms = vms;
+            TheDataItemsViewModelBehavior =
+                new DataItemsViewModelBehavior<DockItemViewModel>(_dockManager);
 
-            DockItemViewModel vm1 = new DockItemViewModel
-            {
-                DockId = "Tab1",
-                HeaderContent = "Tab1",
-                DefaultDockGroupId = "Group1",
-                DefaultDockOrderInGroup = 1,
-                Content = "Hello World!"
-            };
-
-            vms.Add(vm1);
-
-
-            DockItemViewModel vm2 = new DockItemViewModel
-            {
-                DockId = "Tab2",
-                HeaderContent = "Tab2",
-                DefaultDockGroupId = "Group1",
-                DefaultDockOrderInGroup = 2,
-                Content = "Hi World!",
-                ContentTemplateResourceKey = "TheDataTemplate"
-            };
-
-            vms.Add(vm2);
-
-            vm1.IsActive = true;
-
-            _dockManager.DockItemsViewModels = vms;
-
-            DockItemViewModel vm3 = new DockItemViewModel
-            {
-                DockId = "Tab3",
-                HeaderContent = "Tab3",
-                DefaultDockGroupId = "Group2",
-                DefaultDockOrderInGroup = 0,
-                Content = "3333"
-            };
-
-            vms.Add(vm3);
-
-            DockItemViewModel vm4 = new DockItemViewModel
-            {
-                DockId = "Tab4",
-                HeaderContent = "Tab4",
-                DefaultDockGroupId = "Group2",
-                DefaultDockOrderInGroup = 1,
-                Content = "4444"
-            };
-
-            vms.Add(vm4);
-
-            DockItemViewModel floatingVm1 = new DockItemViewModel
-            {
-                DockId = "FloatingDockItem1",
-                HeaderContent = "FloatingWindowPanel1",
-                DefaultDockGroupId = "FloatingGroup1",
-                DefaultDockOrderInGroup = 1,
-                Content = "Floating Panel"
-            };
-
-            vms.Add(floatingVm1);
-
-            DockItemViewModel floatingVm2 = new DockItemViewModel
-            {
-                DockId = "FloatingDockItem2",
-                HeaderContent = "Floating Tab 1",
-                DefaultDockGroupId = "FloatingGroup2",
-                DefaultDockOrderInGroup = 1,
-                Content = "Floating Tab 1"
-            };
-
-            vms.Add(floatingVm2);
-
-            DockItemViewModel floatingVm3 = new DockItemViewModel
-            {
-                DockId = "FloatingDockItem3",
-                HeaderContent = "Floating Tab 2",
-                DefaultDockGroupId = "FloatingGroup2",
-                DefaultDockOrderInGroup = 2,
-                Content = "Floating Tab 2"
-            };
-
-            vms.Add(floatingVm3);
-
-            // object? result = this.FindResource("DefaultWindowTitleAreaDataTemplate");
+            TheDataItemsViewModelBehavior.DockItemsViewModels = new ObservableCollection<DockItemViewModel>();
 
             Button mainTabsButton = this.FindControl<Button>("AddMainTabButton");
 
@@ -142,13 +59,14 @@ namespace NP.ViewModelSaveRestoreSample
             var newTabVm = new DockItemViewModel
             {
                 DockId = tabStr,
-                HeaderContent = tabStr,
+                Header = tabStr,
                 DefaultDockGroupId = "Group2",
                 DefaultDockOrderInGroup = _tabNumber,
                 Content = tabStr,
                 IsPredefined = false
             };
-            _vms.Add(newTabVm);
+
+            TheDataItemsViewModelBehavior.DockItemsViewModels!.Add(newTabVm);
 
             newTabVm.IsSelected = true;
 
@@ -163,41 +81,37 @@ namespace NP.ViewModelSaveRestoreSample
             var newTabVm = new DockItemViewModel
             {
                 DockId = floatingTabStr,
-                HeaderContent = floatingTabStr,
+                Header = floatingTabStr,
                 DefaultDockGroupId = "FloatingGroup2",
                 DefaultDockOrderInGroup = _floatingTabNumber,
                 Content = floatingTabStr,
                 IsPredefined = false
             };
 
-            _vms.Add(newTabVm);
+            TheDataItemsViewModelBehavior.DockItemsViewModels!.Add(newTabVm);
 
             _floatingTabNumber++;
         }
 
 
         private const string SerializationFile = "Serialization.xml";
+        private const string VMSerializationFile = "VMSerialization.xml";
         private void SaveButton_Click(object? sender, RoutedEventArgs e)
         {
             _dockManager.SaveToFile(SerializationFile);
+
+            (TheDataItemsViewModelBehavior.DockItemsViewModels! as ObservableCollection<DockItemViewModel>)
+                .SerializeToFile(VMSerializationFile, typeof(MyDockItemViewModel), typeof(TabViewModel));
+
         }
 
         private void RestoreButton_Click(object? sender, RoutedEventArgs e)
         {
             _dockManager.RestoreFromFile(SerializationFile);
-        }
 
-        private void MainWindow_Opened(object? sender, System.EventArgs e)
-        {
-            var w = (FloatingWindow)(App.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Windows[1];
+            var restoredVms = XmlSerializationUtils.DeserializeFromFile<ObservableCollection<DockItemViewModel>>(VMSerializationFile);
 
-            var visualDescendants = 
-                w.GetVisualDescendants().ToList();
-        }
-
-        private void MainWindow_Initialized(object? sender, System.EventArgs e)
-        {
-            
+            TheDataItemsViewModelBehavior.DockItemsViewModels = restoredVms;
         }
 
         private void InitializeComponent()

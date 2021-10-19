@@ -33,7 +33,7 @@ using NP.Avalonia.UniDockService;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockManager : VMBase, IUniDockService
+    public class DockManager : VMBase//, IUniDockService
     {
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
@@ -73,10 +73,51 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        IList<Window> _windows = new ObservableCollection<Window>();
-        public IEnumerable<Window> Windows => _windows;
-        internal void AddWindow(Window window) => _windows.Add(window);
-        internal void RemoveWindow(Window window) => _windows.Remove(window);
+        private IEnumerable<IDockItemViewModel>? _dockItemViewModels;
+        public IEnumerable<IDockItemViewModel>? DockItemsViewModels
+        {
+            get => _dockItemViewModels;
+            set
+            {
+                if (_dockItemViewModels == value)
+                    return;
+
+                _dockItemViewModels = value;
+
+                OnPropertyChanged(nameof(DockItemsViewModels));
+            }
+        }
+
+        IList<Window> _predefinedWindows = new ObservableCollection<Window>();
+        public IEnumerable<Window> PredefinedWindows => _predefinedWindows;
+
+        IList<FloatingWindow> _floatingWindows = new ObservableCollection<FloatingWindow>();
+        public IEnumerable<FloatingWindow> FloatingWindows => _floatingWindows;
+
+        private UnionBehavior<Window> _allWindowsBehavior;
+        internal void AddWindow(Window window)
+        {
+            if (window is FloatingWindow floatingWindow)
+            {
+                _floatingWindows.Add(floatingWindow);
+            }
+            else
+            {
+                _predefinedWindows.Add(window);
+            }
+        }
+
+        internal void RemoveWindow(Window window)
+        {
+            if (window is FloatingWindow floatingWindow)
+            {
+                _floatingWindows.Remove(floatingWindow);
+            }
+            else
+            {
+                _predefinedWindows.Remove(window);
+            }
+        }
         
 
         private IList<IDockGroup> _connectedGroups = new ObservableCollection<IDockGroup>();
@@ -101,16 +142,13 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        public (string? dockId, GroupKind? groupKind) GetContainingGroupInfo(string dockId)
+        public DockObjectInfo? GetParentGroupInfo(string? dockId)
         {
             IDockGroup? dockGroup = AllGroups.FirstOrDefault(item => item.DockId == dockId);
 
             IDockGroup? parentDockGroup = dockGroup?.DockParent;
 
-            if (parentDockGroup == null)
-                return (null, null);
-
-            return (parentDockGroup.DockId, parentDockGroup.TheGroupKind);
+            return parentDockGroup?.ToDockObjectInfo();
         }
 
         private IList<IDockGroup> _disconnectedGroups = new ObservableCollection<IDockGroup>();
@@ -128,136 +166,6 @@ namespace NP.Avalonia.UniDock
 
         public IEnumerable<ILeafDockObj> DockLeafObjsWithoutLeafParents =>
             DockLeafObjs.Where(leaf => !leaf.HasLeafAncestor()).ToList();
-
-
-        private IDisposable? _viewModelsBehavior;
-        #region DockItemsViewModels Property
-        private IEnumerable<DockItemViewModel>? _dockItemsViewModels;
-        public IEnumerable<DockItemViewModel>? DockItemsViewModels
-        {
-            get
-            {
-                return this._dockItemsViewModels;
-            }
-            set
-            {
-                if (this._dockItemsViewModels == value)
-                {
-                    return;
-                }
-
-                _viewModelsBehavior?.Dispose();
-
-                this._dockItemsViewModels = value;
-
-                _viewModelsBehavior = 
-                    _dockItemsViewModels?.AddBehavior
-                    (
-                        OnGroupViewModelAdded, 
-                        OnGroupViewModelRemoved);
-
-                this.OnPropertyChanged(nameof(DockItemsViewModels));
-            }
-        }
-
-        private DockItem CreateDockItemFromVm(DockItemViewModel vm)
-        {
-            DockItem? dockItem =
-                this.FindGroupById(vm.DockId) as DockItem;
-
-            if (dockItem != null)
-            {
-                vm.IsDockVisible = (dockItem as IDockGroup).IsDockVisible;
-                vm.IsConstructed = true;
-            }
-            else
-            {
-                dockItem = new DockItem
-                {
-                    DockId = vm.DockId!,
-                    DefaultDockGroupId = vm.DefaultDockGroupId!,
-                    DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
-                    CanFloat = vm.CanFloat,
-                    CanClose = vm.CanClose,
-                    IsPredefined = vm.IsPredefined,
-                    Header = vm.HeaderContent,
-                    Content = vm.Content
-                };
-            }
-            dockItem.DataContext = vm;
-            void AddBind<T>
-            (
-                AvaloniaProperty<T> prop,
-                string propName,
-                BindingMode bindingMode = BindingMode.TwoWay)
-            {
-                Binding binding = new Binding(propName);
-                binding.Mode = bindingMode;
-                dockItem.Bind(prop, binding);
-            }
-
-            AddBind(DockAttachedProperties.IsDockVisibleProperty, "IsDockVisible");
-            AddBind(DockItem.IsSelectedProperty, "IsSelected");
-            AddBind(DockItem.IsActiveProperty, "IsActive");
-
-            if (dockItem.TheDockManager == null)
-            {
-                dockItem.TheDockManager = this;
-            }
-
-            return dockItem;
-        }
-
-        private void SetDockItemFromVm(DockItemViewModel vm, IDockGroup dockGroup)
-        {
-            DockItem? dockItem =
-                this.FindGroupById(vm.DockId) as DockItem;
-
-            if (dockItem == null)
-            {
-                return;
-            }
-
-            if (vm.HeaderContentTemplateResourceKey != null)
-            {
-                dockItem.HeaderTemplate =
-                    (DataTemplate)dockGroup.FindResource(vm.HeaderContentTemplateResourceKey)!;
-            }
-
-            if (vm.ContentTemplateResourceKey != null)
-            {
-                dockItem.ContentTemplate =
-                    (DataTemplate)dockGroup.FindResource(vm.ContentTemplateResourceKey)!;
-            }
-
-            if (vm.IsConstructed)
-                return;
-
-            dockItem.ReattachToDefaultGroup();
-
-            vm.IsConstructed = true;
-        }
-
-        private void OnGroupViewModelAdded(DockItemViewModel vm)
-        {
-            DockItem dockItem = CreateDockItemFromVm(vm);
-
-            string groupId = vm.DefaultDockGroupId!;
-
-            IDockGroup? dockGroup =
-                AllGroupsBehavior.Result.FirstOrDefault(g => g.DockId == groupId);
-
-            if (dockGroup != null)
-            {
-                SetDockItemFromVm(vm, dockGroup);
-            }
-        }
-
-        private void OnGroupViewModelRemoved(DockItemViewModel dockItemViewModel)
-        {
-            dockItemViewModel.IsConstructed = false;
-        }
-        #endregion DockItemsViewModels Property
 
 
         public void ClearGroups()
@@ -404,17 +312,21 @@ namespace NP.Avalonia.UniDock
             DraggedWindow?.Close();
         }
 
+        public ObservableCollection<Window> AllWindows => _allWindowsBehavior.Result;
+
         private readonly IDisposable? _groupsBehavior;
         private readonly IDisposable? _windowsBehavior;
         public DockManager()
         {
             DockGroupHelper.SetIsDockVisibleChangeSubscription();
 
+            _allWindowsBehavior = new UnionBehavior<Window>(_predefinedWindows, _floatingWindows);
+
             _groupsBehavior = 
                 ConnectedGroups.AddBehavior(OnGroupItemAdded, OnGroupItemRemoved);
 
-            _windowsBehavior = 
-                Windows.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
+            _windowsBehavior =
+                _allWindowsBehavior.Result.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
 
             AllGroupsBehavior = new UnionBehavior<IDockGroup>(_disconnectedGroups, _connectedGroups);
 
@@ -465,7 +377,7 @@ namespace NP.Avalonia.UniDock
                 windowId =
                     _windowIdGenerator.GetUniqueName
                     (
-                        Windows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)), prefix);
+                        FloatingWindows.Except(window.ToCollection()).Select(w => DockAttachedProperties.GetWindowId(w)), prefix);
 
                 DockAttachedProperties.SetWindowId(window, windowId);
             }
@@ -506,24 +418,16 @@ namespace NP.Avalonia.UniDock
 
             addedGroup.DockIdChanged += AddedGroup_DockIdChanged;
 
-            IEnumerable<DockItemViewModel>? vms =
-                DockItemsViewModels
-                    ?.Where(viewModel => viewModel.DefaultDockGroupId == addedGroup.DockId);
-
-            if (vms != null)
-            {
-                foreach(var vm in vms)
-                {
-                    if (vm.IsConstructed)
-                        continue;
-
-                    SetDockItemFromVm(vm, addedGroup);
-                }
-            }
+            AfterGroupItemAdded?.Invoke(addedGroup);
         }
+
+        internal Action<IDockGroup>? AfterGroupItemAdded { get; set; }
+
+        internal Action<IDockGroup>? AfterGroupItemRemoved { get; set; }
 
         private void OnGroupItemRemoved(IDockGroup removedGroup)
         {
+            AfterGroupItemRemoved?.Invoke(removedGroup);
             removedGroup.DockIdChanged -= AddedGroup_DockIdChanged;
         }
 
@@ -654,6 +558,13 @@ namespace NP.Avalonia.UniDock
             var result = this.AllGroups.FirstOrDefault(g => g.DockId == dockId);
 
             return result;
+        }
+
+        public DockObjectInfo? GetGroupByDockId(string? dockId)
+        {
+            IDockGroup? dockGroup = FindGroupById(dockId);
+
+            return dockGroup?.ToDockObjectInfo();
         }
     }
 }

@@ -43,6 +43,16 @@ namespace NP.Avalonia.UniDock
         }
 
 
+        public SimpleDockGroup? ParentWindowGroup 
+        { 
+            get => TheDockGroup.ParentWindowGroup;
+            set
+            {
+                TheDockGroup.ParentWindowGroup = value;
+            }
+        }
+
+
         public DockManager? TheDockManager
         {
             get => DockAttachedProperties.GetTheDockManager(this);
@@ -76,9 +86,22 @@ namespace NP.Avalonia.UniDock
 
             this.Closing += FloatingWindow_Closing;
 
+            this.Closed += FloatingWindow_Closed;
+
             TheDockGroup.IsDockVisibleChangedEvent += 
                 TheDockGroup_IsDockVisibleChangedEvent;
             ResetCanClose();
+        }
+
+        private void FloatingWindow_Closed(object? sender, EventArgs e)
+        {
+            var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
+
+            foreach (var group in allGroups)
+            {
+                group.RemoveItselfFromParent();
+                group.TheDockManager = null;
+            }
         }
 
         private bool _canClose;
@@ -131,13 +154,6 @@ namespace NP.Avalonia.UniDock
             else
             {
                 TheDockManager = null;
-            }
-
-            var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
-
-            foreach (var group in allGroups)
-            {
-                group.RemoveItselfFromParent();
             }
         }
 

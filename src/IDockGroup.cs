@@ -90,11 +90,15 @@ namespace NP.Avalonia.UniDock
 
         bool IsRoot => DockParent == null;
 
-        double? DefaultDockOrderInGroup => 0;
+        double DefaultDockOrderInGroup
+        {
+            get => 0;
+            set { }
+        }
 
         void CleanSelfOnRemove()
         {
-            this.TheDockManager = null;
+            //this.TheDockManager = null;
         }
 
         protected void SimplifySelf();
@@ -185,6 +189,7 @@ namespace NP.Avalonia.UniDock
             if (group.GetNumberChildren() == 0)
             {
                 group.RemoveItselfFromParent();
+                group.TheDockManager = null;
             }
 
             IDockGroup? dockParent = group.DockParent;
@@ -208,6 +213,8 @@ namespace NP.Avalonia.UniDock
 
                     IDockGroup child = group.DockChildren.First();
                     child.RemoveItselfFromParent();
+
+                    group.TheDockManager = null;
 
                     dockParent.DockChildren.Insert(idx, child);
 
@@ -265,6 +272,42 @@ namespace NP.Avalonia.UniDock
         public static FloatingWindow? GetGroupWindow(this IDockGroup group)
         {
             return group.GetDockGroupRoot()?.GetControlsWindow<FloatingWindow>();
+        }
+
+        public static DockObjectInfo ToDockObjectInfo(this IDockGroup group)
+        {
+            return new DockObjectInfo(group.DockId, group.TheGroupKind);
+        }
+
+        public static void SetStableParent(this IDockGroup group)
+        {
+            if (group.IsStableGroup)
+            {
+                if (group.DockParent != null)
+                {
+                    group.DockParent.IsStableGroup = true;
+                }
+            }
+        }
+
+        public static T? GetResource<T>(this IDockGroup? dockGroup, object resourceKey)
+            where T : class
+        {
+            if (dockGroup == null)
+                return null;
+
+            T? result = dockGroup.FindResource(resourceKey) as T;
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            SimpleDockGroup? rootGroup = dockGroup.GetDockGroupRoot() as SimpleDockGroup;
+
+            SimpleDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
+
+            return parentDockGroup.GetResource<T>(resourceKey);
         }
     }
 }

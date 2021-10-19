@@ -20,6 +20,10 @@ namespace NP.Avalonia.UniDock
             }
 
             _floatingWindow = _dockManager.FloatingWindowFactory.CreateFloatingWindow();
+
+
+            SetParentGroup();
+
             _floatingWindow.Position = WindowRelativePosition!.Value + ParentWindow.Position;
             _floatingWindow.Width = _windowSize.Value.X;
             _floatingWindow.Height = _windowSize.Value.Y;
@@ -39,6 +43,30 @@ namespace NP.Avalonia.UniDock
             else
             {
                 _floatingWindow.Show();
+            }
+        }
+
+        private SimpleDockGroup? _parentWindowGroup;
+        public SimpleDockGroup? ParentWindowGroup 
+        { 
+            get => _parentWindowGroup; 
+            internal set
+            {
+                if (_parentWindowGroup == value)
+                {
+                    return;
+                }
+
+                _parentWindowGroup = value;
+                SetParentGroup();
+            }
+        }
+
+        private void SetParentGroup()
+        {
+            if (_floatingWindow != null && ParentWindowGroup != null)
+            {
+                _floatingWindow.ParentWindowGroup = ParentWindowGroup;
             }
         }
 

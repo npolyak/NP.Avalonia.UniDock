@@ -11,7 +11,13 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
+using Avalonia.LogicalTree;
+using Avalonia.Markup.Data;
+using Avalonia.Markup.Xaml.MarkupExtensions;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
@@ -20,6 +26,7 @@ using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace NP.Avalonia.UniDock
 {
@@ -122,13 +129,6 @@ namespace NP.Avalonia.UniDock
                 .Changed
                 .Subscribe(OnIsSelectedChanged);
 
-            DockAttachedProperties
-                .TheDockManagerProperty
-                .Changed
-                .AddClassHandler<DockItem>
-                (
-                    (dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
-
             DefaultDockGroupIdProperty
                 .Changed
                 .AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
@@ -142,7 +142,42 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(DockAttachedProperties.IsDockVisibleProperty)
                 .Subscribe(OnIsDockVisibleChanged);
+
+            this.GetObservable(ContentTemplateResourceKeyProperty)
+                .Subscribe(OnContentTemplateResourceKeyChanged!);
         }
+
+
+        private void OnContentTemplateResourceKeyChanged(string newResourceKey)
+        {
+            if (DockParent != null)
+            {
+                if (DockParent?.IsAttachedToLogicalTree == true)
+                {
+                    TrySetContentTemplate();
+                }
+                else
+                {
+                    DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
+                }
+            }
+        }
+
+
+        #region ContentTemplateResourceKey Styled Avalonia Property
+        public string? ContentTemplateResourceKey
+        {
+            get { return GetValue(ContentTemplateResourceKeyProperty); }
+            set { SetValue(ContentTemplateResourceKeyProperty, value); }
+        }
+
+        public static readonly StyledProperty<string?> ContentTemplateResourceKeyProperty =
+            AvaloniaProperty.Register<DockItem, string?>
+            (
+                nameof(ContentTemplateResourceKey)
+            );
+        #endregion ContentTemplateResourceKey Styled Avalonia Property
+
 
         private void OnIsDockVisibleChanged(bool isDockVisible)
         {
@@ -163,7 +198,7 @@ namespace NP.Avalonia.UniDock
             SetCanReattachToDefaultGroup();
         }
 
-        private void SetCanReattachToDefaultGroup()
+        internal void SetCanReattachToDefaultGroup()
         {
             this.CanReattachToDefaultGroup =
                 (!this.DefaultDockGroupId.IsNullOrEmpty()) &&   // DefaultDockGroupId not set - means that it does not have 
@@ -230,7 +265,76 @@ namespace NP.Avalonia.UniDock
             get => DockAttachedProperties.GetTheDockManager(this);
             set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
-        public IDockGroup? DockParent { get; set; }
+
+
+        private bool _isAtInitStage = true;
+
+        private bool IsAtInitState =>
+            _isAtInitStage &&
+            DockParent != null &&
+            ContentTemplateResourceKey != null &&
+            ContentTemplate == null;
+
+
+        IDockGroup? _dockParent;
+        public IDockGroup? DockParent
+        { 
+            get => _dockParent; 
+            set
+            {
+                if (_dockParent == value)
+                    return;
+
+                _dockParent = value;
+
+                if (IsAtInitState)
+                {
+                    if ((this as ILogical).IsAttachedToLogicalTree)
+                    {
+                        TrySetContentTemplate();
+                    }
+                    else
+                    {
+                        DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
+                    }
+                }
+
+                SetCanReattachToDefaultGroup();
+            }
+        }
+
+        private void DockItem_AttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void TrySetContentTemplate()
+        {
+            if (_isAtInitStage &&
+                DockParent != null &&
+                this.ContentTemplateResourceKey != null &&
+                ContentTemplate == null)
+            {
+                var dataTemplate = DockParent.GetResource<DataTemplate>(ContentTemplateResourceKey);
+                
+                if (dataTemplate != null)
+                {
+                    ContentTemplate = dataTemplate;
+
+                    _isAtInitStage = false;
+                }
+            }
+        }
+
+        private void _dockParent_AttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
+        {
+            TrySetContentTemplate();
+
+            if (DockParent != null)
+            {
+                DockParent.AttachedToLogicalTree -= _dockParent_AttachedToLogicalTree;
+            }
+        }
 
         // dock item is the end item, so it has no dock children.
         public IList<IDockGroup>? DockChildren => null;
@@ -323,7 +427,7 @@ namespace NP.Avalonia.UniDock
                 contentControl.DisconnectVisualParentContentPresenter();
             }
 
-            this.TheDockManager = null;
+            //this.TheDockManager = null;
 
             if (this.TheVisual != null)
             {
@@ -342,14 +446,14 @@ namespace NP.Avalonia.UniDock
         }
 
         #region DefaultDockOrderInGroup Styled Avalonia Property
-        public double? DefaultDockOrderInGroup
+        public double DefaultDockOrderInGroup
         {
             get { return GetValue(DefaultDockOrderInGroupProperty); }
             set { SetValue(DefaultDockOrderInGroupProperty, value); }
         }
 
-        public static readonly StyledProperty<double?> DefaultDockOrderInGroupProperty =
-            AvaloniaProperty.Register<DockItem, double?>
+        public static readonly StyledProperty<double> DefaultDockOrderInGroupProperty =
+            AvaloniaProperty.Register<DockItem, double>
             (
                 nameof(DefaultDockOrderInGroup)
             );

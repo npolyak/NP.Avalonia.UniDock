@@ -14,6 +14,7 @@ namespace NP.Avalonia.UniDock
         protected override void OnRemoveItem(T item)
         {
             item.RemoveItselfFromParent();
+            item.TheDockManager = null;
         }
     }
 }

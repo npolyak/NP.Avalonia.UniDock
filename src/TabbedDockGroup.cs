@@ -64,6 +64,9 @@ namespace NP.Avalonia.UniDock
                     return;
 
                 _isStableGroup = value;
+
+                this.SetStableParent();
+                
                 SetHorizontalAndVerticalDockingAllowed();
             }
         }
@@ -212,6 +215,7 @@ namespace NP.Avalonia.UniDock
 
                 _dockParent = value;
 
+                this.SetStableParent();
                 SetHorizontalAndVerticalDockingAllowed();
             }
         }
@@ -419,14 +423,14 @@ namespace NP.Avalonia.UniDock
 
 
         #region DefaultDockOrderInGroup Styled Avalonia Property
-        public double? DefaultDockOrderInGroup
+        public double DefaultDockOrderInGroup
         {
             get { return GetValue(DefaultDockOrderInGroupProperty); }
             set { SetValue(DefaultDockOrderInGroupProperty, value); }
         }
 
-        public static readonly StyledProperty<double?> DefaultDockOrderInGroupProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, double?>
+        public static readonly StyledProperty<double> DefaultDockOrderInGroupProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, double>
             (
                 nameof(DefaultDockOrderInGroup)
             );
@@ -502,7 +506,6 @@ namespace NP.Avalonia.UniDock
 
             SelecteFirstVisibleChildIfNoSelection();
             child.IsDockVisibleChangedEvent -= OnChildDockVisibleChanged;
-            child.TheDockManager = null;
             this.SetIsDockVisible();
         }
 

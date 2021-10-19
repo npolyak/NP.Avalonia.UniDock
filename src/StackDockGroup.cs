@@ -40,7 +40,21 @@ namespace NP.Avalonia.UniDock
 
         public bool ShowChildHeaders { get; } = true;
 
-        public bool IsStableGroup { get; set; } = false;
+        private bool _isStableGroup = false;
+        public bool IsStableGroup
+        {
+            get => _isStableGroup;
+            set
+            {
+                if (_isStableGroup == value)
+                    return;
+
+                _isStableGroup = value;
+
+                this.SetStableParent();
+            }
+        }
+
 
         private List<double> _sizeCoefficients = new List<double>();
 
@@ -77,7 +91,21 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        public IDockGroup? DockParent { get; set; }
+
+        private IDockGroup? _dockParent;
+        public IDockGroup? DockParent
+        {
+            get => _dockParent;
+            set
+            {
+                if (_dockParent == value)
+                    return;
+
+                _dockParent = value;
+
+                this.SetStableParent();
+            }
+        }
 
         [Content]
         public IList<IDockGroup> DockChildren { get; } = new ObservableCollection<IDockGroup>();
@@ -276,14 +304,14 @@ namespace NP.Avalonia.UniDock
         public bool AutoDestroy { get; set; } = true;
 
         #region DefaultDockOrderInGroup Styled Avalonia Property
-        public double? DefaultDockOrderInGroup
+        public double DefaultDockOrderInGroup
         {
             get { return GetValue(DefaultDockOrderInGroupProperty); }
             set { SetValue(DefaultDockOrderInGroupProperty, value); }
         }
 
-        public static readonly StyledProperty<double?> DefaultDockOrderInGroupProperty =
-            AvaloniaProperty.Register<StackDockGroup, double?>
+        public static readonly StyledProperty<double> DefaultDockOrderInGroupProperty =
+            AvaloniaProperty.Register<StackDockGroup, double>
             (
                 nameof(DefaultDockOrderInGroup)
             );

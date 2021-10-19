@@ -45,6 +45,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public SimpleDockGroup? ParentWindowGroup { get; set; }
+
         // should never be called on the window root group
         public IDockGroup CloneIfStable() => throw new NotImplementedException();
 
@@ -196,6 +198,9 @@ namespace NP.Avalonia.UniDock
 
             this.AttachedToVisualTree += SimpleDockGroup_AttachedToVisualTree;
 
+
+            FloatingWindows.AddBehavior(OnFloatingWindowAdded);
+
             _floatingWindowParentWindowSettingBehavior = new AttachedPropToCollectionBindingBehavior<Window, FloatingWindowContainer>
             (
                 this,
@@ -203,6 +208,12 @@ namespace NP.Avalonia.UniDock
                 FloatingWindows,
                 (floatingWindowContainer, ownerWindow) => floatingWindowContainer.ParentWindow = ownerWindow
             );
+        }
+
+
+        private void OnFloatingWindowAdded(FloatingWindowContainer floatingWindowContainer)
+        {
+            floatingWindowContainer.ParentWindowGroup = this;
         }
 
         private void SimpleDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)

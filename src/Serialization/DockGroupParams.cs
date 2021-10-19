@@ -23,7 +23,7 @@ namespace NP.Avalonia.UniDock.Serialization
         public bool CanFloat { get; set; }
 
         [XmlAttribute]
-        public bool CanRemove { get; set; }
+        public bool CanClose { get; set; }
 
         [XmlAttribute]
         public string? GroupFullTypeName { get; set; }
@@ -50,6 +50,9 @@ namespace NP.Avalonia.UniDock.Serialization
         public List<string>? ChildrenDockIds { get; set; }
 
         [XmlAttribute]
+        public double DefaultDockOrderInGroup { get; set; }
+
+        [XmlAttribute]
         public bool AutoDestroy { get; set; }
 
         #region Width or Height Coefficients
@@ -71,6 +74,9 @@ namespace NP.Avalonia.UniDock.Serialization
         public bool IsPredefined { get; set; }
 
         #region DockItem parameters
+        [XmlAttribute]
+        public string? DefaultDockGroupId { get; set; }
+
         [XmlElement]
         public string? HeaderRestorationInfo { get; set; }
 
@@ -93,7 +99,8 @@ namespace NP.Avalonia.UniDock.Serialization
             p.ParentDockId = dg.DockParent?.DockId;
             p.IsPredefined = dg.IsPredefined;
             p.CanFloat = dg.CanFloat;
-            p.CanRemove = dg.CanClose;
+            p.CanClose = dg.CanClose;
+            p.DefaultDockOrderInGroup = dg.DefaultDockOrderInGroup;
             
             if (dg.GetNumberChildren() > 0)
             {
@@ -118,6 +125,7 @@ namespace NP.Avalonia.UniDock.Serialization
             if (dg is DockItem dockItem)
             {
                 p.IsDockVisible = dg.IsDockVisible;
+                p.DefaultDockGroupId = dockItem.DefaultDockGroupId;
                 p.HeaderRestorationInfo = dockItem.Header?.ToString();
                 p.ContentRestorationInfo = dockItem.Content?.ToString();
             }
@@ -130,7 +138,8 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.DockId = p.DockId!;
             dg.IsPredefined = p.IsPredefined;
             dg.CanFloat = p.CanFloat;
-            dg.CanClose = p.CanRemove;
+            dg.CanClose = p.CanClose;
+            dg.DefaultDockOrderInGroup = p.DefaultDockOrderInGroup;
 
             if (dg is StackDockGroup stackGroup)
             {
@@ -140,7 +149,9 @@ namespace NP.Avalonia.UniDock.Serialization
             if (dg is DockItem dockItem)
             {
                 dg.IsDockVisible = p.IsDockVisible;
+                dockItem.DefaultDockGroupId = p.DefaultDockGroupId;
                 dockItem.Header = p.HeaderRestorationInfo;
+                dockItem.Content = p.ContentRestorationInfo;
             }
         }
 
