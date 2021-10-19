@@ -15,6 +15,14 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
+
+      <DataTemplate x:Key="TheHeaderDataTemplate">
+        <TextBlock Background="Red"
+                   Foreground="White"
+                   Text="{Binding}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+      </DataTemplate>
       <DataTemplate x:Key="TheDataTemplate">
         <TextBlock Background="Green"
                    Foreground="White"
@@ -42,6 +50,7 @@
     </ListBox>
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
                         Grid.Row="1">
+      
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
@@ -54,6 +63,7 @@
                          DefaultDockGroupId="FloatingGroup1"
                          DefaultDockOrderInGroup="1"
                          Content="Floating Panel"
+                         HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
                          ContentTemplateResourceKey="TheDataTemplate">
             </np:DockItem>
 
@@ -64,6 +74,7 @@
           </np:StackDockGroup>
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
+      
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True">
@@ -75,13 +86,16 @@
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="1"
                        Content="Hello World"
+                       HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
                        ContentTemplateResourceKey="TheDataTemplate"/>
+          
           <np:DockItem Header="Tab2"
                        DockId="Tab2"
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="2">
             <TextBlock Text="Hi World!"/>
           </np:DockItem>
+          
         </np:StackDockGroup>
         <np:TabbedDockGroup IsStableGroup="True"
                             DockId="Group2">

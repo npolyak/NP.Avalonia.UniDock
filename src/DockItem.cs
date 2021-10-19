@@ -145,8 +145,21 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(ContentTemplateResourceKeyProperty)
                 .Subscribe(OnContentTemplateResourceKeyChanged!);
+
+            this.GetObservable(HeaderContentTemplateResourceKeyProperty)
+                .Subscribe(OnHeaderContentTemplateResourceKeyChanged!);
         }
 
+        private void OnHeaderContentTemplateResourceKeyChanged(string newResourceKey)
+        {
+            if (DockParent != null)
+            {
+                if (DockParent?.IsAttachedToLogicalTree == true)
+                {
+                    TrySetHeaderContentTemplate();
+                }
+            }
+        }
 
         private void OnContentTemplateResourceKeyChanged(string newResourceKey)
         {
@@ -156,12 +169,23 @@ namespace NP.Avalonia.UniDock
                 {
                     TrySetContentTemplate();
                 }
-                else
-                {
-                    DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
-                }
             }
         }
+
+
+        #region HeaderContentTemplateResourceKey Styled Avalonia Property
+        public string? HeaderContentTemplateResourceKey
+        {
+            get { return GetValue(HeaderContentTemplateResourceKeyProperty); }
+            set { SetValue(HeaderContentTemplateResourceKeyProperty, value); }
+        }
+
+        public static readonly StyledProperty<string?> HeaderContentTemplateResourceKeyProperty =
+            AvaloniaProperty.Register<DockItem, string?>
+            (
+                nameof(HeaderContentTemplateResourceKey)
+            );
+        #endregion HeaderContentTemplateResourceKey Styled Avalonia Property
 
 
         #region ContentTemplateResourceKey Styled Avalonia Property
@@ -267,13 +291,21 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        private bool _isAtInitStage = true;
+        private bool _isAtContentInitStage = true;
 
-        private bool IsAtInitState =>
-            _isAtInitStage &&
+        private bool _isAtHeaderContentInitStage = true;
+
+        private bool IsAtContentInitState =>
+            _isAtContentInitStage &&
             DockParent != null &&
             ContentTemplateResourceKey != null &&
             ContentTemplate == null;
+
+        private bool IsAtHeaderContentInitState =>
+            _isAtHeaderContentInitStage &&
+            DockParent != null &&
+            HeaderContentTemplateResourceKey != null &&
+            HeaderTemplate == null;
 
 
         IDockGroup? _dockParent;
@@ -287,51 +319,67 @@ namespace NP.Avalonia.UniDock
 
                 _dockParent = value;
 
-                if (IsAtInitState)
+                if ((this as ILogical).IsAttachedToLogicalTree)
                 {
-                    if ((this as ILogical).IsAttachedToLogicalTree)
+                    if (IsAtHeaderContentInitState)
+                    {
+                        TrySetHeaderContentTemplate();
+                    }
+                    if (IsAtContentInitState)
                     {
                         TrySetContentTemplate();
                     }
-                    else
-                    {
-                        DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
-                    }
+                }
+                else if (DockParent != null)
+                {
+                    DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
                 }
 
                 SetCanReattachToDefaultGroup();
             }
         }
 
-        private void DockItem_AttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void TrySetContentTemplate()
         {
-            if (_isAtInitStage &&
-                DockParent != null &&
-                this.ContentTemplateResourceKey != null &&
-                ContentTemplate == null)
+            if (IsAtContentInitState)
             {
-                var dataTemplate = DockParent.GetResource<DataTemplate>(ContentTemplateResourceKey);
+                var dataTemplate = 
+                    DockParent.GetResource<DataTemplate>(ContentTemplateResourceKey!);
                 
                 if (dataTemplate != null)
                 {
                     ContentTemplate = dataTemplate;
 
-                    _isAtInitStage = false;
+                    _isAtContentInitStage = false;
+                }
+            }
+        }
+
+        private void TrySetHeaderContentTemplate()
+        {
+            if (IsAtHeaderContentInitState)
+            {
+                var dataTemplate =
+                    DockParent.GetResource<DataTemplate>(HeaderContentTemplateResourceKey!);
+
+                if (dataTemplate != null)
+                {
+                    HeaderTemplate = dataTemplate;
+
+                    _isAtHeaderContentInitStage = false;
                 }
             }
         }
 
         private void _dockParent_AttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
         {
+            TrySetHeaderContentTemplate();
             TrySetContentTemplate();
 
             if (DockParent != null)
             {
+                DockParent.AttachedToLogicalTree -= _dockParent_AttachedToLogicalTree;
                 DockParent.AttachedToLogicalTree -= _dockParent_AttachedToLogicalTree;
             }
         }
@@ -369,8 +417,10 @@ namespace NP.Avalonia.UniDock
             IsSelected = true;
         }
 
+        const string NO_HEADER = "NO_HEADER";
+
         public override string ToString() =>
-            $"TheDockItem: {DockId} {Header?.ToString()} {Content?.ToString()}";
+            $"TheDockItem: {DockId} {Header?.ToString()} { HeaderTemplate?.ToString()?? NO_HEADER} {Content?.ToString()}";
 
         private void FireSelectionChanged()
         {
@@ -536,7 +586,7 @@ namespace NP.Avalonia.UniDock
                 .InsertInOrder
                 (
                     this,
-                    dockGroup => (dockGroup as DockItem)?.DefaultDockOrderInGroup ?? 0,
+                    dockGroup => dockGroup?.DefaultDockOrderInGroup ?? 0,
                     (i1, i2) => i1 < i2 ? -1 : i1 > i2 ? 1 : 0);
 
             parent?.Simplify();
