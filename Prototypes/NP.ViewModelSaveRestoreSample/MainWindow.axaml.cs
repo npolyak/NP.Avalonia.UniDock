@@ -101,8 +101,7 @@ namespace NP.ViewModelSaveRestoreSample
             _dockManager.SaveToFile(SerializationFile);
 
             (TheDataItemsViewModelBehavior.DockItemsViewModels! as ObservableCollection<DockItemViewModel>)
-                .SerializeToFile(VMSerializationFile, typeof(MyDockItemViewModel), typeof(TabViewModel));
-
+                .SerializeToFile(VMSerializationFile);
         }
 
         private void RestoreButton_Click(object? sender, RoutedEventArgs e)
