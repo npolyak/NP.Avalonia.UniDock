@@ -17,7 +17,7 @@ namespace NP.ComplexViewModelSaveRestoreSample
     {
         private DockManager _dockManager;
 
-        DataItemsViewModelBehavior<DockItemViewModel> TheDataItemsViewModelBehavior { get; }
+        DataItemsViewModelBehavior TheDataItemsViewModelBehavior { get; }
 
         public MainWindow()
         {
@@ -33,36 +33,79 @@ namespace NP.ComplexViewModelSaveRestoreSample
             Button restoreButton = this.FindControl<Button>("RestoreButton");
             restoreButton.Click += RestoreButton_Click;
 
-            ObservableCollection<DockItemViewModel> vms = 
-                new ObservableCollection<DockItemViewModel>();
+            ObservableCollection<DockItemViewModelBase> vms = 
+                new ObservableCollection<DockItemViewModelBase>();
 
             TheDataItemsViewModelBehavior =
-                new DataItemsViewModelBehavior<DockItemViewModel>(_dockManager);
+                new DataItemsViewModelBehavior(_dockManager);
 
-            TheDataItemsViewModelBehavior.DockItemsViewModels = new ObservableCollection<DockItemViewModel>();
+            TheDataItemsViewModelBehavior.DockItemsViewModels = new ObservableCollection<DockItemViewModelBase>();
 
-            Button mainTabsButton = this.FindControl<Button>("AddMainTabButton");
+            Button addStockButton = this.FindControl<Button>("AddStockTabButton");
 
-            mainTabsButton.Click += MainTabsButton_Click;
+            addStockButton.Click += AddStockButton_Click;
 
 
-            Button floatingTabsButton = this.FindControl<Button>("AddFloatingTabButton");
+            Button addOrderButton = this.FindControl<Button>("AddOrderTabButton");
 
-            floatingTabsButton.Click += FloatingTabsButton_Click;
+            addOrderButton.Click += AddOrderButton_Click;
         }
 
-        int _tabNumber = 5;
-        private void MainTabsButton_Click(object? sender, RoutedEventArgs e)
-        {
-            string tabStr = $"Tab{_tabNumber}";
 
-            var newTabVm = new DockItemViewModel
+        #region CanAddStock Styled Avalonia Property
+        public bool CanAddStock
+        {
+            get { return GetValue(CanAddStockProperty); }
+            set { SetValue(CanAddStockProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanAddStockProperty =
+            AvaloniaProperty.Register<MainWindow, bool>
+            (
+                nameof(CanAddStock),
+                true
+            );
+        #endregion CanAddStock Styled Avalonia Property
+
+        private int _numberStocks = 0;
+
+        private static StockViewModel IBM =
+            new StockViewModel
             {
-                DockId = tabStr,
-                Header = tabStr,
-                DefaultDockGroupId = "Group2",
-                DefaultDockOrderInGroup = _tabNumber,
-                Content = tabStr,
+                Symbol = "IBM",
+                Description = "Internation Business Machines",
+                Ask = 51,
+                Bid = 49
+            };
+
+        private static StockViewModel MSFT =
+            new StockViewModel
+            {
+                Symbol = "MSFT",
+                Description = "Microsoft",
+                Ask = 101,
+                Bid = 99
+            };
+
+        private static StockViewModel[] Stocks =
+        {
+            IBM,
+            MSFT
+        };
+
+        private void AddStockButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var stock = Stocks[_numberStocks];
+            string? stockName = stock.Symbol;
+
+            var newTabVm = new StockDockItemViewModel
+            {
+                DockId = stockName,
+                DefaultDockGroupId = "StockGroup",
+                DefaultDockOrderInGroup = _numberStocks,
+                HeaderContentTemplateResourceKey= "StockHeaderDataTemplate",
+                ContentTemplateResourceKey= "StockDataTemplate",
+                TheVM = stock,
                 IsPredefined = false
             };
 
@@ -70,27 +113,40 @@ namespace NP.ComplexViewModelSaveRestoreSample
 
             newTabVm.IsSelected = true;
 
-            _tabNumber++;
+            _numberStocks++;
+
+            if (_numberStocks >= 2)
+            {
+                CanAddStock = false;
+            }
         }
 
-        int _floatingTabNumber = 3;
-        private void FloatingTabsButton_Click(object? sender, RoutedEventArgs e)
+        int _numberOrders = 0;
+        private void AddOrderButton_Click(object? sender, RoutedEventArgs e)
         {
-            string floatingTabStr = $"FloatingTab{_floatingTabNumber}";
-
-            var newTabVm = new DockItemViewModel
+            var stock = Stocks[_numberOrders % 2];
+            OrderViewModel orderVM = new OrderViewModel
             {
-                DockId = floatingTabStr,
-                Header = floatingTabStr,
-                DefaultDockGroupId = "FloatingGroup2",
-                DefaultDockOrderInGroup = _floatingTabNumber,
-                Content = floatingTabStr,
-                IsPredefined = false
+                Symbol = stock.Symbol,
+                MarketPrice = (stock.Ask + stock.Bid) / 2m,
+                NumberShares = (_numberOrders + 1) * 1000
+            };
+
+
+            var newTabVm = new OrderDockItemViewModel
+            {
+                DockId = "Order" + _numberOrders + 1,
+                DefaultDockGroupId = "OrdersGroup",
+                DefaultDockOrderInGroup = _numberOrders,
+                HeaderContentTemplateResourceKey = "OrderHeaderDataTemplate",
+                ContentTemplateResourceKey = "OrderDataTemplate",
+                IsPredefined = false,
+                TheVM = orderVM
             };
 
             TheDataItemsViewModelBehavior.DockItemsViewModels!.Add(newTabVm);
 
-            _floatingTabNumber++;
+            _numberOrders++;
         }
 
 
@@ -100,17 +156,29 @@ namespace NP.ComplexViewModelSaveRestoreSample
         {
             _dockManager.SaveToFile(SerializationFile);
 
-            (TheDataItemsViewModelBehavior.DockItemsViewModels! as ObservableCollection<DockItemViewModel>)
-                .SerializeToFile(VMSerializationFile);
+            TheDataItemsViewModelBehavior.DockItemsViewModels!.SerializeToFile
+                (
+                    VMSerializationFile, 
+                    typeof(StockDockItemViewModel), 
+                    typeof(OrderDockItemViewModel));
         }
 
         private void RestoreButton_Click(object? sender, RoutedEventArgs e)
         {
+            TheDataItemsViewModelBehavior.DockItemsViewModels = null;
             _dockManager.RestoreFromFile(SerializationFile);
 
-            var restoredVms = XmlSerializationUtils.DeserializeFromFile<ObservableCollection<DockItemViewModel>>(VMSerializationFile);
+            var restoredVms = 
+                XmlSerializationUtils.DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>
+                (
+                    VMSerializationFile, 
+                    typeof(StockDockItemViewModel),
+                    typeof(OrderDockItemViewModel));
 
             TheDataItemsViewModelBehavior.DockItemsViewModels = restoredVms;
+
+            restoredVms.OfType<StockDockItemViewModel>().FirstOrDefault()?.Select();
+            restoredVms.OfType<OrderDockItemViewModel>().FirstOrDefault()?.Select();
         }
 
         private void InitializeComponent()

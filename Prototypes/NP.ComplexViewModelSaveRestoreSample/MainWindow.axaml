@@ -15,20 +15,74 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-
-      <DataTemplate x:Key="TheHeaderDataTemplate">
-        <TextBlock Background="Red"
-                   Foreground="White"
-                   Text="{Binding}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+      <DataTemplate x:Key="StockHeaderDataTemplate">
+        <TextBlock Text="{Binding Path=Symbol}"/>
       </DataTemplate>
-      <DataTemplate x:Key="TheDataTemplate">
-        <TextBlock Background="Green"
-                   Foreground="White"
-                   Text="{Binding}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+      
+      <DataTemplate x:Key="StockDataTemplate">
+        <Grid Margin="5" 
+              RowDefinitions="Auto, Auto, Auto, Auto">
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left">
+            <TextBlock Text="Symbol: "/>
+            <TextBlock Text="{Binding Symbol}"
+                       FontWeight="Bold"/>
+          </StackPanel>
+
+          <TextBlock Text="{Binding Description}"
+                     Grid.Row="1"
+                     Margin="0,10,0,5"
+                     HorizontalAlignment="Left"/>
+
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left"
+                      Grid.Row="2"
+                      Margin="0,5">
+            <TextBlock Text="Ask: "/>
+            <TextBlock Text="{Binding Path=Ask, StringFormat='\{0:0.00\}'}"
+                       Foreground="Green"/>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left"
+                      Grid.Row="3"
+                      Margin="0,5">
+            <TextBlock Text="Bid: "/>
+            <TextBlock Text="{Binding Path=Bid, StringFormat='\{0:0.00\}'}"
+                       Foreground="Red"/>
+          </StackPanel>
+        </Grid>
+      </DataTemplate>
+
+      <DataTemplate x:Key="OrderHeaderDataTemplate">
+        <TextBlock Text="{Binding Path=Symbol, StringFormat='\{0\} Order'}"/>
+      </DataTemplate>
+
+      <DataTemplate x:Key="OrderDataTemplate">
+        <Grid Margin="5"
+              RowDefinitions="Auto, Auto, Auto, *">
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left">
+            <TextBlock Text="Symbol: "/>
+            <TextBlock Text="{Binding Symbol}"
+                       FontWeight="Bold"/>
+          </StackPanel>
+
+
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left"
+                      Grid.Row="1"
+                      Margin="0,5">
+            <TextBlock Text="Number of Shares: "/>
+            <TextBlock Text="{Binding Path=NumberShares}"/>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Left"
+                      Grid.Row="2"
+                      Margin="0,5">
+            <TextBlock Text="Market Price: "/>
+            <TextBlock Text="{Binding Path=MarketPrice, StringFormat='\{0:0.00\}'}"/>
+          </StackPanel>
+        </Grid>
       </DataTemplate>
     </ResourceDictionary>
   </Window.Resources>
@@ -37,17 +91,6 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <ListBox Items="{Binding Path=TheDataItemsViewModelBehavior.DockItemsViewModels, RelativeSource={RelativeSource AncestorType=Window}}"
-             Height="100">
-      <ListBox.ItemTemplate>
-        <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <CheckBox IsChecked="{Binding Path=IsDockVisible, Mode=TwoWay}"
-                      Content="{Binding Path=Header}"/>
-          </StackPanel>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
     <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
                         Grid.Row="1">
       
@@ -55,51 +98,28 @@
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
-          <np:StackDockGroup TheOrientation="Horizontal"
-                             DockId="FloatingGroup1"
-                             IsStableGroup="True">
-            <np:DockItem Header="FloatingWindowPanel1"
-                         DockId="FloatingDockItem1"
-                         DefaultDockGroupId="FloatingGroup1"
-                         DefaultDockOrderInGroup="1"
-                         Content="Floating Panel"
-                         HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
-                         ContentTemplateResourceKey="TheDataTemplate">
-            </np:DockItem>
-
-            <np:TabbedDockGroup x:Name="FloatingGroup2"
-                                DockId="FloatingGroup2"
-                                DefaultDockOrderInGroup="2"
+            <np:TabbedDockGroup x:Name="OrdersTabGroup"
+                                DockId="OrdersGroup"
                                 IsStableGroup="True"/>
-          </np:StackDockGroup>
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
       
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True">
-        <np:StackDockGroup TheOrientation="Horizontal"
-                           IsStableGroup="True"
-                           DockId="Group1">
-          <np:DockItem Header="Tab1"
-                       DockId="Tab1"
-                       DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="1"
-                       Content="Hello World"
-                       HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
-                       ContentTemplateResourceKey="TheDataTemplate"/>
-          
-          <np:DockItem Header="Tab2"
-                       DockId="Tab2"
-                       DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="2">
-            <TextBlock Text="Hi World!"/>
-          </np:DockItem>
-          
-        </np:StackDockGroup>
+        <np:DockItem DockId="Description"
+                     DefaultDockGroupId="TheStackGroup"
+                     DefaultDockOrderInGroup="1"
+                     Header="Description"
+                     CanFloat="False"
+                     CanClose="False">
+          <TextBlock Text="Below there is information corresponding to individual stocks:"
+                     FontSize="16"
+                     Margin="5"/>
+        </np:DockItem>
         <np:TabbedDockGroup IsStableGroup="True"
-                            DockId="Group2">
-        </np:TabbedDockGroup>
+                            DefaultDockOrderInGroup="2"
+                            DockId="StockGroup"/>
       </np:StackDockGroup>
     </np:SimpleDockGroup>
 
@@ -107,13 +127,14 @@
                 Grid.Row="2"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
-      <Button x:Name="AddMainTabButton"
-              Content="Add Main Tab"
+      <Button x:Name="AddStockTabButton"
+              Content="Add Stock"
               Padding="10,5"
-              Margin="0,0,10,0" />
+              Margin="0,0,10,0"
+              IsEnabled="{Binding Path=CanAddStock, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-      <Button x:Name="AddFloatingTabButton"
-              Content="Add Floating Tab"
+      <Button x:Name="AddOrderTabButton"
+              Content="Add Order"
               Padding="10,5"
               Margin="0,0,10,0" />
 

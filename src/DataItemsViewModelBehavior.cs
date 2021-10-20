@@ -1,23 +1,21 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml.Templates;
 using NP.Avalonia.UniDockService;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DataItemsViewModelBehavior<TViewModel> : VMBase
-        where TViewModel : class, IDockItemViewModel
+    public class DataItemsViewModelBehavior : VMBase
     {
         private IDisposable? _viewModelsBehavior;
         #region DockItemsViewModels Property
-        private IList<TViewModel>? _dockItemsViewModels;
-        public IList<TViewModel>? DockItemsViewModels
+        private ObservableCollection<DockItemViewModelBase>? _dockItemsViewModels;
+        public ObservableCollection<DockItemViewModelBase>? DockItemsViewModels
         {
             get
             {
@@ -65,12 +63,14 @@ namespace NP.Avalonia.UniDock
                     DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
                     CanFloat = vm.CanFloat,
                     CanClose = vm.CanClose,
-                    IsPredefined = vm.IsPredefined,
-                    Header = vm.Header,
-                    Content = vm.Content
+                    IsPredefined = vm.IsPredefined
                 };
             }
+
             dockItem.DataContext = vm;
+            dockItem.Header = vm.Header;
+            dockItem.Content = vm.Content;
+
             void AddBind<T>
             (
                 AvaloniaProperty<T> prop,
@@ -110,13 +110,13 @@ namespace NP.Avalonia.UniDock
             if (vm.HeaderContentTemplateResourceKey != null)
             {
                 dockItem.HeaderTemplate =
-                    (DataTemplate)dockGroup.FindResource(vm.HeaderContentTemplateResourceKey)!;
+                    dockGroup.GetResource<DataTemplate>(vm.HeaderContentTemplateResourceKey)!;
             }
 
             if (vm.ContentTemplateResourceKey != null)
             {
                 dockItem.ContentTemplate =
-                    (DataTemplate)dockGroup.FindResource(vm.ContentTemplateResourceKey)!;
+                    dockGroup.GetResource<DataTemplate>(vm.ContentTemplateResourceKey)!;
             }
 
             if (dockItem.DockParent == null)
@@ -126,7 +126,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void OnGroupViewModelAdded(TViewModel vm)
+        private void OnGroupViewModelAdded(DockItemViewModelBase vm)
         {
             DockItem dockItem = CreateDockItemFromVm(vm);
 
@@ -141,7 +141,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void OnGroupViewModelRemoved(TViewModel dockItemViewModel)
+        private void OnGroupViewModelRemoved(DockItemViewModelBase dockItemViewModel)
         {
             var dockItem = _dockManager.FindGroupById(dockItemViewModel.DockId);
 

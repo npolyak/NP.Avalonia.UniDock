@@ -150,8 +150,12 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 dg.IsDockVisible = p.IsDockVisible;
                 dockItem.DefaultDockGroupId = p.DefaultDockGroupId;
-                dockItem.Header = p.HeaderRestorationInfo;
-                dockItem.Content = p.ContentRestorationInfo;
+
+                if (!p.IsPredefined)
+                {
+                    dockItem.Header = p.HeaderRestorationInfo;
+                    dockItem.Content = p.ContentRestorationInfo;
+                }
             }
         }
 

@@ -511,14 +511,14 @@ namespace NP.Avalonia.UniDock
 
 
         #region DefaultDockGroupId Styled Avalonia Property
-        public string DefaultDockGroupId
+        public string? DefaultDockGroupId
         {
             get { return GetValue(DefaultDockGroupIdProperty); }
             set { SetValue(DefaultDockGroupIdProperty, value); }
         }
 
-        public static readonly StyledProperty<string> DefaultDockGroupIdProperty =
-            AvaloniaProperty.Register<DockItem, string>
+        public static readonly StyledProperty<string?> DefaultDockGroupIdProperty =
+            AvaloniaProperty.Register<DockItem, string?>
             (
                 nameof(DefaultDockGroupId)
             );

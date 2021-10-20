@@ -73,3 +73,6 @@
 /Prototypes/NP.ComplexViewModelSaveRestoreSample/.vs
 /Prototypes/NP.ComplexViewModelSaveRestoreSample/bin/Debug/net5.0
 /Prototypes/NP.ComplexViewModelSaveRestoreSample/obj
+/Tests/NP.TestCollectionSerialization/.vs
+/Tests/NP.TestCollectionSerialization/bin/Debug/net5.0
+/Tests/NP.TestCollectionSerialization/obj

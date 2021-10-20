@@ -1,4 +1,5 @@
 ﻿using NP.Utilities;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace NP.Avalonia.UniDockService
@@ -32,7 +33,7 @@ namespace NP.Avalonia.UniDockService
         string? ContentTemplateResourceKey { get; }
     }
 
-    public class DockItemViewModel : VMBase, IDockItemViewModel
+    public class DockItemViewModelBase : VMBase, IDockItemViewModel
     {
         #region IsDockVisible Property
         private bool _isDockVisible = true;
@@ -67,6 +68,7 @@ namespace NP.Avalonia.UniDockService
 
         #region IsSelected Property
         private bool _isSelected = default;
+        [XmlIgnore]
         public bool IsSelected
         {
             get
@@ -88,6 +90,7 @@ namespace NP.Avalonia.UniDockService
 
         #region IsActive Property
         private bool _isActive = default;
+        [XmlIgnore]
         public bool IsActive
         {
             get
@@ -114,10 +117,10 @@ namespace NP.Avalonia.UniDockService
         public bool CanClose { get; set; } = true;
 
         [XmlAttribute]
-        public bool IsPredefined { get; set; } = true;
+        public bool IsPredefined { get; set; } = false;
 
         #region HeaderContent Property
-        [XmlElement]
+        [XmlIgnore]
         public virtual object? Header
         {
             get;
@@ -136,7 +139,7 @@ namespace NP.Avalonia.UniDockService
 
 
         #region Content Property
-        [XmlElement]
+        [XmlIgnore]
         public virtual object? Content
         {
             get;
@@ -152,5 +155,61 @@ namespace NP.Avalonia.UniDockService
             set;
         }
         #endregion ContentTemplateResourceKey Property
+
+        public void MakeActive()
+        {
+            IsActive = true;
+        }
+
+        public void Select()
+        {
+            IsSelected = true;
+        }
+    }
+
+    public class DockItemViewModel<TViewModel> : DockItemViewModelBase
+        where TViewModel : class
+    {
+        #region TheVM Property
+        private TViewModel? _vm;
+        [XmlElement]
+        public TViewModel? TheVM
+        {
+            get
+            {
+                return this._vm;
+            }
+            set
+            {
+                if (this._vm == value)
+                {
+                    return;
+                }
+
+                this._vm = value;
+                this.OnPropertyChanged(nameof(TheVM));
+            }
+        }
+        #endregion TheVM Property
+
+        [XmlIgnore]
+        public override object? Header
+        {
+            get => TheVM;
+            set
+            {
+
+            }
+        }
+
+        [XmlIgnore]
+        public override object? Content
+        {
+            get => TheVM;
+            set
+            {
+
+            }
+        }
     }
 }

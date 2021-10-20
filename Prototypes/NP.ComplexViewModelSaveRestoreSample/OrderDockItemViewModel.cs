@@ -2,8 +2,7 @@
 
 namespace NP.ComplexViewModelSaveRestoreSample
 {
-    public class MyDockItemViewModel : DockItemViewModel
+    public class OrderDockItemViewModel : DockItemViewModel<OrderViewModel>
     {
-
     }
 }
