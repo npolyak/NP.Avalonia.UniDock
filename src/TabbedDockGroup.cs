@@ -65,7 +65,7 @@ namespace NP.Avalonia.UniDock
 
                 _isStableGroup = value;
 
-                this.SetStableParent();
+                //this.SetStableParent();
                 
                 SetHorizontalAndVerticalDockingAllowed();
             }
