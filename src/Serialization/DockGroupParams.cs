@@ -13,6 +13,7 @@ using Avalonia.Layout;
 using NP.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace NP.Avalonia.UniDock.Serialization
@@ -62,7 +63,7 @@ namespace NP.Avalonia.UniDock.Serialization
         /// child gets.
         /// </summary>
         [XmlArray]
-        public double[]? SizeCoefficients { get; set; }
+        public string[]? SizeCoefficients { get; set; }
 
         #endregion Width or Height Coefficients
 
@@ -114,7 +115,10 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (dg is StackDockGroup dockStackGroup)
             {
-                p.SizeCoefficients = dockStackGroup.GetSizeCoefficients();
+                p.SizeCoefficients = 
+                    dockStackGroup.GetSizeCoefficients()
+                                  .Select(item => item.ToString())
+                                  .ToArray();
             }
 
             if (dg is StackDockGroup stackGroup)

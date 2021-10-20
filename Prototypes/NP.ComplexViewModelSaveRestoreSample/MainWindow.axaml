@@ -106,14 +106,15 @@
       
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
-                         IsStableGroup="True">
+                         IsStableGroup="True"
+                         InitialSizeCoefficients="50 *">
         <np:DockItem DockId="Description"
                      DefaultDockGroupId="TheStackGroup"
                      DefaultDockOrderInGroup="1"
                      Header="Description"
                      CanFloat="False"
                      CanClose="False">
-          <TextBlock Text="Below there is information corresponding to individual stocks:"
+          <TextBlock Text="Below is the information corresponding to the individual stocks:"
                      FontSize="16"
                      Margin="5"/>
         </np:DockItem>

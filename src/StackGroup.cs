@@ -336,67 +336,41 @@ namespace NP.Avalonia.UniDock
             return Items.Select(item => GetGridIdx(item)).ToList(); ;
         }
 
-        public double GetSizeCoefficient(int itemIdx)
+        public GridLength GetSizeCoefficient(int itemIdx)
         {
+            GridLength result = new GridLength(1, GridUnitType.Star);
             if (Items.Count <= 1)
-                return 1d;
+                return result;
 
             int gridIdx = GetGridIdx(itemIdx);
 
-            double result = 1d;
             if (TheOrientation == Orientation.Horizontal)
             {
-                result = _grid.ColumnDefinitions[gridIdx].Width.Value;
+                result = _grid.ColumnDefinitions[gridIdx].Width;
             }
             else
             {
-                result = _grid.RowDefinitions[gridIdx].Height.Value;
+                result = _grid.RowDefinitions[gridIdx].Height;
             }
 
             return result;
         }
 
-        public void SetSizeCoefficient(int itemIdx, double coeff)
+        public void SetSizeCoefficient(int itemIdx, GridLength coeff)
         {
-            if (Items.Count <= 1)
+            if (Items.Count < 1)
                 return;
 
             int gridIdx = GetGridIdx(itemIdx);
 
             if (TheOrientation == Orientation.Horizontal)
             {
-                _grid.ColumnDefinitions[gridIdx].Width = new GridLength(coeff, GridUnitType.Star);
+                _grid.ColumnDefinitions[gridIdx].Width = coeff;
             }
             else
             {
-                _grid.RowDefinitions[gridIdx].Height = new GridLength(coeff, GridUnitType.Star);
+                _grid.RowDefinitions[gridIdx].Height = coeff;
             }
         }
-
-
-        //public double[] GetSizeCoefficients()
-        //{
-        //    if (Items.Count <= 1)
-        //    {
-        //        return new[] { 1d };
-        //    }
-
-        //    return Items.Select((item, i) => GetSizeCoefficient(i)).ToArray();
-        //}
-
-        //public void SetSizeCoefficients(double[]? coeffs)
-        //{
-        //    if (coeffs == null || Items.Count <= 1)
-        //    {
-        //        return;
-        //    }
-
-        //    if (coeffs.Length != Items.Count)
-        //    {
-        //        throw new Exception($"Error: number of Items ({Items.Count}) is not the same as the number of passed coeffs ({coeffs.Length}).");
-        //    }
-
-        //    Items.DoForEach((item, i) => SetSizeCoefficient(i, coeffs[i]));
-        //}
     }
 }

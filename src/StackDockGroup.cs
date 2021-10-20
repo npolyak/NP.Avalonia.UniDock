@@ -22,6 +22,7 @@ using System.Collections.ObjectModel;
 using NP.Utilities;
 using System.Linq;
 using NP.Avalonia.UniDockService;
+using Avalonia.Interactivity;
 
 namespace NP.Avalonia.UniDock
 {
@@ -56,7 +57,22 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        private List<double> _sizeCoefficients = new List<double>();
+        #region InitialSizeCoefficients Styled Avalonia Property
+        public string? InitialSizeCoefficients
+        {
+            get { return GetValue(InitialSizeCoefficientsProperty); }
+            set { SetValue(InitialSizeCoefficientsProperty, value); }
+        }
+
+        public static readonly StyledProperty<string?> InitialSizeCoefficientsProperty =
+            AvaloniaProperty.Register<StackDockGroup, string?>
+            (
+                nameof(InitialSizeCoefficients)
+            );
+        #endregion InitialSizeCoefficients Styled Avalonia Property
+
+        private GridLength[] _initSizeCoefficients;
+        private List<GridLength> _sizeCoefficients = new List<GridLength>();
 
         public GroupKind TheGroupKind => GroupKind.Stack;
 
@@ -139,6 +155,26 @@ namespace NP.Avalonia.UniDock
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
 
             this.GetObservable(DockAttachedProperties.TheDockManagerProperty).Subscribe(OnDockManagerChanged);
+
+            this.GetObservable(InitialSizeCoefficientsProperty).Subscribe(OnInitSizeCoeffsChanged!);
+        }
+
+        private void OnInitSizeCoeffsChanged(string obj)
+        {
+            SetSizeCoefficientsFromInit();
+        }
+
+        private void SetSizeCoefficientsFromInit()
+        {
+            if (InitialSizeCoefficients == null)
+                return;
+
+            _initSizeCoefficients = 
+                InitialSizeCoefficients
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(str => GridLength.Parse(str)).ToArray();
+
+            InitialSizeCoefficients = null;
         }
 
         private void OnDockManagerChanged(DockManager dockManager)
@@ -147,9 +183,17 @@ namespace NP.Avalonia.UniDock
             {
                 _stackGroup.TheDockSeparatorFactory = TheDockManager?.TheDockSeparatorFactory;
 
+                int i = 0;
                 foreach (var child in DockChildren)
                 {
                     AddChildToStackGroup(child);
+
+                    if (i < _sizeCoefficients.Count)
+                    {
+                        SetSizeCoefficient(i, _sizeCoefficients[i]);
+                    }
+
+                    i++;
                 }
             }
             else
@@ -180,10 +224,14 @@ namespace NP.Avalonia.UniDock
         {
             SetNumberDockChildren();
 
-            _sizeCoefficients.Insert(idx, 1d);
+            GridLength sizeCoeff = 
+               ((_initSizeCoefficients != null) && (idx < _initSizeCoefficients.Length)) ? _initSizeCoefficients[idx] : new GridLength(1, GridUnitType.Star);
+
+            _sizeCoefficients.Insert(idx, sizeCoeff);
 
             AddChildToStackGroup(dockChild);
 
+            SetSizeCoefficient(idx, sizeCoeff);
             dockChild.IsDockVisibleChangedEvent += OnDockChild_IsDockVisibleChangedEvent;
 
             this.SetIsDockVisible();
@@ -317,17 +365,17 @@ namespace NP.Avalonia.UniDock
             );
         #endregion DefaultDockOrderInGroup Styled Avalonia Property
 
-        public double GetSizeCoefficient(int idx)
+        public GridLength GetSizeCoefficient(int idx)
         {
             int internalIdx = GetInternalIdx(idx);
 
-            double coeff = (internalIdx > -1) ? 
+            GridLength coeff = (internalIdx > -1) ? 
                             _stackGroup.GetSizeCoefficient(internalIdx) : _sizeCoefficients[idx];
 
             return coeff;
         }
 
-        public void SetSizeCoefficient(int idx, double coeff)
+        public void SetSizeCoefficient(int idx, GridLength coeff)
         {
             _sizeCoefficients[idx] = coeff;
 
@@ -339,9 +387,9 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        public double[] GetSizeCoefficients()
+        public GridLength[] GetSizeCoefficients()
         {
-            var result = new double[NumberDockChildren];
+            var result = new GridLength[NumberDockChildren];
             for(int i = 0; i < NumberDockChildren; i++)
             {
                 result[i] = GetSizeCoefficient(i);
@@ -350,7 +398,7 @@ namespace NP.Avalonia.UniDock
             return result;
         }
 
-        public void SetSizeCoefficients(double[]? coeffs)
+        public void SetSizeCoefficients(GridLength[]? coeffs)
         {   
             if (coeffs == null)
             {

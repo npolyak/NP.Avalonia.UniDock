@@ -156,23 +156,18 @@ namespace NP.Avalonia.UniDock
                     .Any(ancestor => ancestor is ILeafDockObj);
         }
 
-        public static double GetSizeCoeff(this IDockGroup group, int idx)
+        public static GridLength GetSizeCoeff(this IDockGroup group, int idx)
         {
             if (group is StackDockGroup dockStackGroup)
             {
                 return dockStackGroup.GetSizeCoefficient(idx);
             }
 
-            return -1;
+            return default;
         }
 
-        public static void SetSizeCoeff(this IDockGroup group, int idx, double coeff)
+        public static void SetSizeCoeff(this IDockGroup group, int idx, GridLength coeff)
         {
-            if (coeff < 0)
-            {
-                return;
-            }
-
             if (group is StackDockGroup dockStackGroup)
             {
                 dockStackGroup.SetSizeCoefficient(idx, coeff);
@@ -207,7 +202,7 @@ namespace NP.Avalonia.UniDock
                     window?.SetCannotClose();
                     int idx = dockParent.DockChildren.IndexOf(group);
 
-                    double sizeCoeff = dockParent.GetSizeCoeff(idx);
+                    GridLength sizeCoeff = dockParent.GetSizeCoeff(idx);
 
                     group.RemoveItselfFromParent();
 
@@ -305,9 +300,19 @@ namespace NP.Avalonia.UniDock
 
             SimpleDockGroup? rootGroup = dockGroup.GetDockGroupRoot() as SimpleDockGroup;
 
+            if (dockGroup != rootGroup)
+            {
+                result = rootGroup?.FindResource(resourceKey) as T;
+
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
             SimpleDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
 
-            return parentDockGroup.GetResource<T>(resourceKey);
+            return parentDockGroup?.GetResource<T>(resourceKey);
         }
     }
 }

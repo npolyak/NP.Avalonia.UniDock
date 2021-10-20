@@ -233,9 +233,12 @@ namespace NP.Avalonia.UniDock.Serialization
                 {
                     DockGroupParams? p = dmp.FindGroupParamsById(group.DockId);
 
-                    if (p != null)
+                    if (p?.SizeCoefficients != null)
                     {
-                        dockStackGroup.SetSizeCoefficients(p.SizeCoefficients);
+                        dockStackGroup
+                            .SetSizeCoefficients
+                            (
+                                p.SizeCoefficients.Select(str => GridLength.Parse(str)).ToArray());
                     }
                 }
             }

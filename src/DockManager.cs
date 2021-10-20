@@ -293,7 +293,7 @@ namespace NP.Avalonia.UniDock
                  // the object it is dropped on (drop object) into that group and insert
                  // this new group in place of the drop object.
             {
-                double sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
+                GridLength sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
 
                 CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
                 StackDockGroup insertGroup = StackGroupFactory.Create();
@@ -474,7 +474,7 @@ namespace NP.Avalonia.UniDock
                                 groupToInsertItemsInto = TabbedGroupFactory.Create();
 
                                 int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
-                                double sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);
+                                GridLength sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);
 
                                 currentGroup.DockChildren?.Remove(CurrentLeafObjToInsertWithRespectTo!);
 
