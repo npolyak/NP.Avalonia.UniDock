@@ -24,16 +24,13 @@ using System.ComponentModel;
 using System.IO;
 using NP.Avalonia.UniDock.Serialization;
 using NP.Avalonia.UniDock.Factories;
-using NP.Utilities.BasicInterfaces;
 using NP.Utilities.Attributes;
 using Avalonia;
-using Avalonia.Data;
-using Avalonia.Markup.Xaml.Templates;
 using NP.Avalonia.UniDockService;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockManager : VMBase//, IUniDockService
+    public class DockManager : VMBase, IUniDockService
     {
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
@@ -58,34 +55,40 @@ namespace NP.Avalonia.UniDock
         internal IDockSeparatorFactory? TheDockSeparatorFactory { get; set; } =
             new DockSeparatorFactory();
 
-        IObjectComposer? _dockObjectComposer = null;
-        public IObjectComposer? TheDockObjectComposer
+        private DataItemsViewModelBehavior _dataItemsViewModelBehavior;
+
+        public ObservableCollection<DockItemViewModelBase>? DockItemsViewModels
         {
-            get => _dockObjectComposer;
+            get => _dataItemsViewModelBehavior.DockItemsViewModels;
             set
             {
-                if (_dockObjectComposer == value)
+                if (DockItemsViewModels == value)
                     return;
 
-                _dockObjectComposer = value;
-
-                _dockObjectComposer?.ComposeObject(this, true);
-            }
-        }
-
-        private IEnumerable<IDockItemViewModel>? _dockItemViewModels;
-        public IEnumerable<IDockItemViewModel>? DockItemsViewModels
-        {
-            get => _dockItemViewModels;
-            set
-            {
-                if (_dockItemViewModels == value)
-                    return;
-
-                _dockItemViewModels = value;
+                _dataItemsViewModelBehavior.DockItemsViewModels = value;
 
                 OnPropertyChanged(nameof(DockItemsViewModels));
             }
+        }
+
+        public void SaveViewModelsToFile(string filePath)
+        {
+            if (DockItemsViewModels == null)
+            {
+                return;
+            }    
+
+            Type[] types = 
+                DockItemsViewModels.Select(item => item.GetType()).Distinct().ToArray();
+
+            DockItemsViewModels?.SerializeToFile(filePath, types);
+        }
+
+        public void RestoreViewModelsFromFile(string filePath, params Type[] extraTypes)
+        {
+            this.DockItemsViewModels =
+                XmlSerializationUtils
+                    .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, extraTypes);
         }
 
         IList<Window> _predefinedWindows = new ObservableCollection<Window>();
@@ -318,6 +321,8 @@ namespace NP.Avalonia.UniDock
         private readonly IDisposable? _windowsBehavior;
         public DockManager()
         {
+            _dataItemsViewModelBehavior = new DataItemsViewModelBehavior(this);
+
             DockGroupHelper.SetIsDockVisibleChangeSubscription();
 
             _allWindowsBehavior = new UnionBehavior<Window>(_predefinedWindows, _floatingWindows);

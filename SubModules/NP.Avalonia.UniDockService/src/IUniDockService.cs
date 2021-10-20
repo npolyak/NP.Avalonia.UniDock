@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace NP.Avalonia.UniDockService
 {
     public interface IUniDockService
     {
-        IEnumerable<IDockItemViewModel> DockItemsViewModels { get; set; }
+        ObservableCollection<DockItemViewModelBase> DockItemsViewModels { get; set; }
 
         void SaveToFile(string filePath);
 
         void RestoreFromFile(string filePath);
+
+        void SaveViewModelsToFile(string filePath);
+
+        void RestoreViewModelsFromFile(string filePath, params Type[] extraTypes);
 
         DockObjectInfo? GetParentGroupInfo(string? dockId);
 

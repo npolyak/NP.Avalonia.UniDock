@@ -17,8 +17,6 @@ namespace NP.ComplexViewModelSaveRestoreSample
     {
         private DockManager _dockManager;
 
-        DataItemsViewModelBehavior TheDataItemsViewModelBehavior { get; }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -36,10 +34,7 @@ namespace NP.ComplexViewModelSaveRestoreSample
             ObservableCollection<DockItemViewModelBase> vms = 
                 new ObservableCollection<DockItemViewModelBase>();
 
-            TheDataItemsViewModelBehavior =
-                new DataItemsViewModelBehavior(_dockManager);
-
-            TheDataItemsViewModelBehavior.DockItemsViewModels = new ObservableCollection<DockItemViewModelBase>();
+            _dockManager.DockItemsViewModels = new ObservableCollection<DockItemViewModelBase>();
 
             Button addStockButton = this.FindControl<Button>("AddStockTabButton");
 
@@ -109,7 +104,7 @@ namespace NP.ComplexViewModelSaveRestoreSample
                 IsPredefined = false
             };
 
-            TheDataItemsViewModelBehavior.DockItemsViewModels!.Add(newTabVm);
+            _dockManager.DockItemsViewModels!.Add(newTabVm);
 
             newTabVm.IsSelected = true;
 
@@ -144,7 +139,7 @@ namespace NP.ComplexViewModelSaveRestoreSample
                 TheVM = orderVM
             };
 
-            TheDataItemsViewModelBehavior.DockItemsViewModels!.Add(newTabVm);
+            _dockManager.DockItemsViewModels!.Add(newTabVm);
 
             _numberOrders++;
         }
@@ -156,29 +151,23 @@ namespace NP.ComplexViewModelSaveRestoreSample
         {
             _dockManager.SaveToFile(SerializationFile);
 
-            TheDataItemsViewModelBehavior.DockItemsViewModels!.SerializeToFile
-                (
-                    VMSerializationFile, 
-                    typeof(StockDockItemViewModel), 
-                    typeof(OrderDockItemViewModel));
+            _dockManager.SaveViewModelsToFile(VMSerializationFile);
         }
 
         private void RestoreButton_Click(object? sender, RoutedEventArgs e)
         {
-            TheDataItemsViewModelBehavior.DockItemsViewModels = null;
+            _dockManager.DockItemsViewModels = null;
             _dockManager.RestoreFromFile(SerializationFile);
 
-            var restoredVms = 
-                XmlSerializationUtils.DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>
+            _dockManager
+                .RestoreViewModelsFromFile
                 (
-                    VMSerializationFile, 
+                    VMSerializationFile,
                     typeof(StockDockItemViewModel),
                     typeof(OrderDockItemViewModel));
 
-            TheDataItemsViewModelBehavior.DockItemsViewModels = restoredVms;
-
-            restoredVms.OfType<StockDockItemViewModel>().FirstOrDefault()?.Select();
-            restoredVms.OfType<OrderDockItemViewModel>().FirstOrDefault()?.Select();
+            _dockManager.DockItemsViewModels?.OfType<StockDockItemViewModel>().FirstOrDefault()?.Select();
+            _dockManager.DockItemsViewModels?.OfType<OrderDockItemViewModel>().FirstOrDefault()?.Select();
         }
 
         private void InitializeComponent()
