@@ -40,7 +40,7 @@ namespace NP.Avalonia.UniDock
 
         public bool IsStableGroup
         {
-            get => this.GetControlsWindow<FloatingWindow>()?.IsStable ?? true;
+            get => this.GetDockGroupDescendants().Any(g => IsStableGroup);
             set
             {
 

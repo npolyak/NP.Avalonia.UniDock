@@ -28,7 +28,6 @@ namespace NP.Avalonia.UniDock
             _floatingWindow.Width = _windowSize.Value.X;
             _floatingWindow.Height = _windowSize.Value.Y;
             DockAttachedProperties.SetWindowId(_floatingWindow, WindowId);
-            _floatingWindow.IsStable = true;
             _floatingWindow.TheDockManager = _dockManager;
             SetExtras();
 
@@ -198,7 +197,7 @@ namespace NP.Avalonia.UniDock
 
                 this._title = value;
 
-                if (_floatingWindow != null)
+                if (_floatingWindow != null && Title != null)
                 {
                     _floatingWindow.Title = Title;
                 }
@@ -226,7 +225,10 @@ namespace NP.Avalonia.UniDock
             if (_floatingWindow == null)
                 return;
 
-            _floatingWindow.Title = Title;
+            if (Title != null)
+            {
+                _floatingWindow.Title = Title;
+            }
             SetDockContent();
         }
     }

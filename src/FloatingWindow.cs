@@ -26,7 +26,7 @@ namespace NP.Avalonia.UniDock
 {
     public class FloatingWindow : CustomWindow, IDockManagerContainer
     {
-        public bool IsStable { get; set; }
+        public bool IsStable => TheDockGroup.IsStableGroup;
 
         public bool AutoInvisible
         {

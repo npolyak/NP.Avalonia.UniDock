@@ -96,7 +96,6 @@
       
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    Title="Orders"
                                     AutoInvisible="False"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
