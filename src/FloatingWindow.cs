@@ -28,6 +28,12 @@ namespace NP.Avalonia.UniDock
     {
         public bool IsStable { get; set; }
 
+        public bool AutoInvisible
+        {
+            get => TheDockGroup.AutoInvisible;
+            set => TheDockGroup.AutoInvisible = value;
+        }
+
         public SimpleDockGroup TheDockGroup { get; } = 
             new SimpleDockGroup();
 

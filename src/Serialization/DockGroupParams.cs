@@ -56,6 +56,9 @@ namespace NP.Avalonia.UniDock.Serialization
         [XmlAttribute]
         public bool AutoDestroy { get; set; }
 
+        [XmlAttribute]
+        public bool AutoInvisible { get; set; }
+
         #region Width or Height Coefficients
         /// <summary>
         /// these coefficients are only applicable to children of DockStackGroups and
@@ -102,6 +105,7 @@ namespace NP.Avalonia.UniDock.Serialization
             p.CanFloat = dg.CanFloat;
             p.CanClose = dg.CanClose;
             p.DefaultDockOrderInGroup = dg.DefaultDockOrderInGroup;
+            p.AutoInvisible = dg.AutoInvisible;
             
             if (dg.GetNumberChildren() > 0)
             {
@@ -144,6 +148,7 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.CanFloat = p.CanFloat;
             dg.CanClose = p.CanClose;
             dg.DefaultDockOrderInGroup = p.DefaultDockOrderInGroup;
+            dg.AutoInvisible = p.AutoInvisible;
 
             if (dg is StackDockGroup stackGroup)
             {

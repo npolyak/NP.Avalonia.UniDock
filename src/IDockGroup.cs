@@ -46,6 +46,8 @@ namespace NP.Avalonia.UniDock
 
         bool AutoDestroy { get; set; }
 
+        bool AutoInvisible { get; set; }
+
         bool CanFloat
         {
             get => true;
@@ -226,7 +228,14 @@ namespace NP.Avalonia.UniDock
         {
             bool isDockVisible = group.DockChildren.Any(child => child.IsDockVisible);
 
-            group.IsDockVisible = isDockVisible;
+            if ((!isDockVisible) && group.AutoInvisible)
+            {
+                group.IsDockVisible = false;
+            }
+            else
+            {
+                group.IsDockVisible = true;
+            }
         }
 
         private static IDisposable? _isDockVisibleChangeSubscription = null;

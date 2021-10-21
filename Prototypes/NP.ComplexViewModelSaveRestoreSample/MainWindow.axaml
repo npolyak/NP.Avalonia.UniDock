@@ -96,18 +96,21 @@
       
       <np:SimpleDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
+                                    Title="Orders"
+                                    AutoInvisible="False"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
             <np:TabbedDockGroup x:Name="OrdersTabGroup"
                                 DockId="OrdersGroup"
-                                IsStableGroup="True"/>
+                                IsStableGroup="True"
+                                AutoInvisible="True"/>
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
       
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True"
-                         InitialSizeCoefficients="50 *">
+                         InitialSizeCoefficients="Auto *">
         <np:DockItem DockId="Description"
                      DefaultDockGroupId="TheStackGroup"
                      DefaultDockOrderInGroup="1"
@@ -120,7 +123,8 @@
         </np:DockItem>
         <np:TabbedDockGroup IsStableGroup="True"
                             DefaultDockOrderInGroup="2"
-                            DockId="StockGroup"/>
+                            DockId="StockGroup"
+                            AutoDestroy="False"/>
       </np:StackDockGroup>
     </np:SimpleDockGroup>
 

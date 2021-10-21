@@ -71,6 +71,8 @@ namespace NP.Avalonia.UniDock
 
         public bool IsPredefined { get; set; } = true;
 
+        public bool AutoInvisible { get => false; set { } }
+
         #region CanFloat Styled Avalonia Property
         public bool CanFloat
         {

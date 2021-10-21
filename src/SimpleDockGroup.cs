@@ -31,6 +31,8 @@ namespace NP.Avalonia.UniDock
 
         public event Action<SimpleDockGroup>? PossibleDockChangeInsideEvent;
 
+        public bool AutoInvisible { get; set; }
+
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);

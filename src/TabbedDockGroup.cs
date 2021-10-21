@@ -71,6 +71,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public bool AutoInvisible { get; set; } = false;
 
         #region IsActive Styled Avalonia Property
         public bool IsActive

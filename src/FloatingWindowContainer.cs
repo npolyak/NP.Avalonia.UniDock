@@ -156,12 +156,30 @@ namespace NP.Avalonia.UniDock
 
         private void SetDockContent()
         {
-            if (_floatingWindow != null && _dockContent != null)
+            if (_floatingWindow != null)
             {
-                _floatingWindow.TheDockGroup.TheChild = _dockContent;
+                if (_dockContent != null)
+                {
+                    _floatingWindow.TheDockGroup.TheChild = _dockContent;
+                }
+                _floatingWindow.AutoInvisible = AutoInvisible;
             }
         }
 
+        bool _autoInvisible = true;
+        public bool AutoInvisible 
+        {
+            get => _autoInvisible; 
+            set
+            {
+                if (_autoInvisible == value)
+                    return;
+
+                _autoInvisible = value;
+
+                SetDockContent();
+            }
+        }
 
         #region Title Property
         private string? _title;

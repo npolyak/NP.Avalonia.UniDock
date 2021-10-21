@@ -37,6 +37,8 @@ namespace NP.Avalonia.UniDock
             IsDockVisibleChangedEvent?.Invoke(this);
         }
 
+        public bool AutoInvisible { get; set; } = true;
+
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
         public bool ShowChildHeaders { get; } = true;
@@ -71,7 +73,7 @@ namespace NP.Avalonia.UniDock
             );
         #endregion InitialSizeCoefficients Styled Avalonia Property
 
-        private GridLength[] _initSizeCoefficients;
+        private GridLength[]? _initSizeCoefficients;
         private List<GridLength> _sizeCoefficients = new List<GridLength>();
 
         public GroupKind TheGroupKind => GroupKind.Stack;
