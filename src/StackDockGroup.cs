@@ -41,7 +41,6 @@ namespace NP.Avalonia.UniDock
 
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
-        public bool ShowChildHeaders { get; } = true;
 
         private bool _isStableGroup = false;
         public bool IsStableGroup
@@ -108,6 +107,17 @@ namespace NP.Avalonia.UniDock
                 SetAndRaise(NumberDockChildrenProperty, ref _numChildren, value);
             }
         }
+
+        #region ShowHeader Styled Avalonia Property
+        public bool ShowHeader
+        {
+            get { return GetValue(ShowHeaderProperty); }
+            set { SetValue(ShowHeaderProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            DockAttachedProperties.ShowHeaderProperty.AddOwner<StackDockGroup>();
+        #endregion ShowHeader Styled Avalonia Property
 
 
         private IDockGroup? _dockParent;

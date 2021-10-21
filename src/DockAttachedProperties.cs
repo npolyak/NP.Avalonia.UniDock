@@ -221,6 +221,26 @@ namespace NP.Avalonia.UniDock
             );
         #endregion OriginalDockGroup Attached Avalonia Property
 
+
+        #region ShowHeader Attached Avalonia Property
+        public static bool GetShowHeader(AvaloniaObject obj)
+        {
+            return obj.GetValue(ShowHeaderProperty);
+        }
+
+        public static void SetShowHeader(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(ShowHeaderProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "ShowHeader"
+            );
+        #endregion ShowHeader Attached Avalonia Property
+
+
         public static void ShowDockWindow(this Window dockWindow)
         {
             Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(dockWindow);

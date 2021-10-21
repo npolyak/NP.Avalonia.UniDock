@@ -557,7 +557,7 @@
           <Grid RowDefinitions="Auto, *"
                 Background="White">
             <Grid RowDefinitions="Auto, Auto"
-                  IsVisible="{Binding Path=ShowChildHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
+                  IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
               <np:DockItemHeaderControl x:Name="Header"
                                         Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
                                         Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"

@@ -71,6 +71,19 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+
+        #region ShowHeader Styled Avalonia Property
+        public bool ShowHeader
+        {
+            get { return GetValue(ShowHeaderProperty); }
+            set { SetValue(ShowHeaderProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            DockAttachedProperties.ShowHeaderProperty.AddOwner<TabbedDockGroup>();
+        #endregion ShowHeader Styled Avalonia Property
+
+
         public bool AutoInvisible { get; set; } = false;
 
         #region IsActive Styled Avalonia Property

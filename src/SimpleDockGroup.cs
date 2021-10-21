@@ -106,10 +106,6 @@ namespace NP.Avalonia.UniDock
             RemoveEvent?.Invoke(this);
         }
 
-        public bool ShowChildHeader => false;
-
-        public bool ShowChildHeaders { get; } = false;
-
         public GroupKind TheGroupKind => GroupKind.Simple;
 
         public DockManager? TheDockManager

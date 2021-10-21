@@ -42,11 +42,11 @@ namespace NP.Avalonia.UniDock
 
         IList<IDockGroup> DockChildren { get; }
 
-        bool ShowChildHeader => true;
-
         bool AutoDestroy { get; set; }
 
         bool AutoInvisible { get; set; }
+        
+        bool ShowHeader { get => false; set { } }
 
         bool CanFloat
         {

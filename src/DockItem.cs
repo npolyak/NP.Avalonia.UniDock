@@ -61,6 +61,18 @@ namespace NP.Avalonia.UniDock
         #endregion IsActive Styled Avalonia Property
 
 
+        #region ShowHeader Styled Avalonia Property
+        public bool ShowHeader
+        {
+            get { return GetValue(ShowHeaderProperty); }
+            set { SetValue(ShowHeaderProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            DockAttachedProperties.ShowHeaderProperty.AddOwner<DockItem>();
+        #endregion ShowHeader Styled Avalonia Property
+
+
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
