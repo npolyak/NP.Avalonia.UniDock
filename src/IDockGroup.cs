@@ -38,6 +38,8 @@ namespace NP.Avalonia.UniDock
             set => DockAttachedProperties.SetIsDockVisible(this, value);
         }
 
+        Point FloatingSize { get; set; }
+
         public GroupKind TheGroupKind { get; }
 
         IList<IDockGroup> DockChildren { get; }
@@ -46,7 +48,7 @@ namespace NP.Avalonia.UniDock
 
         bool AutoInvisible { get; set; }
         
-        bool ShowHeader { get => false; set { } }
+        bool ShowHeader { get => true; set { } }
 
         bool CanFloat
         {
@@ -132,7 +134,7 @@ namespace NP.Avalonia.UniDock
     {
         public static void RemoveItselfFromParent(this IDockGroup item)
         {
-            if (!item.IsStableGroup)
+            //if (!item.IsStableGroup)
             {
                 IDockGroup? parent = item.DockParent;
 

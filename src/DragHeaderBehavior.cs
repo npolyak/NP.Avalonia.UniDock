@@ -24,15 +24,15 @@ namespace NP.Avalonia.UniDock
         }
         #endregion IsSet Attached Avalonia Property
 
-        private static DockItem? GetDockItem(DockItemHeaderControl headerControl) =>
-            headerControl.DataContext as DockItem;
+        private static IDockGroup? GetDockGroup(DockItemHeaderControl headerControl) =>
+            headerControl.DataContext as IDockGroup;
 
         protected override bool MoveItemWithinContainer(Control itemsContainer, PointerEventArgs e)
         {
             return false;
         }
 
-        public DragHeaderBehavior() : base(GetDockItem!)
+        public DragHeaderBehavior() : base(GetDockGroup!)
         {
 
         }

@@ -39,7 +39,8 @@ namespace NP.Avalonia.UniDock
         {
             Point pointerPositionWithinItemsContainer = e.GetPosition(itemsContainer);
 
-            IList<IDockGroup> itemsList = GetDockItemsCollection(_draggedDockItem!)!;
+            DockItem? draggedDockItem = _draggedDockGroup as DockItem;
+            IList<IDockGroup> itemsList = GetDockItemsCollection(draggedDockItem!)!;
 
             if (itemsContainer.IsPointWithinControl(pointerPositionWithinItemsContainer))
             {
@@ -51,16 +52,16 @@ namespace NP.Avalonia.UniDock
 
                 if (tabMouseOver != null && tabMouseOver != _startItem)
                 {
-                    int draggedDockItemIdx = itemsList.IndexOf(_draggedDockItem!);
+                    int draggedDockItemIdx = itemsList.IndexOf(_draggedDockGroup!);
 
-                    DockItem dropDockItem = _dockItemGetter(tabMouseOver);
+                    IDockGroup dropDockItem = _dockGroupGetter(tabMouseOver);
                     int dropIdx = itemsList!.IndexOf(dropDockItem);
 
-                    itemsList?.Remove(_draggedDockItem!);
+                    itemsList?.Remove(_draggedDockGroup!);
 
-                    itemsList?.Insert(dropIdx, _draggedDockItem!);
+                    itemsList?.Insert(dropIdx, _draggedDockGroup!);
 
-                    _draggedDockItem!.IsSelected = true;
+                    draggedDockItem!.IsSelected = true;
                 }
 
                 return true;

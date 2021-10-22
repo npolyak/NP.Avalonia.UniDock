@@ -55,6 +55,28 @@ namespace NP.Avalonia.UniDock
         internal IDockSeparatorFactory? TheDockSeparatorFactory { get; set; } =
             new DockSeparatorFactory();
 
+
+        #region IsInEditableState Property
+        private bool _isInEditableState = false;
+        public bool IsInEditableState
+        {
+            get
+            {
+                return this._isInEditableState;
+            }
+            set
+            {
+                if (this._isInEditableState == value)
+                {
+                    return;
+                }
+
+                this._isInEditableState = value;
+                this.OnPropertyChanged(nameof(IsInEditableState));
+            }
+        }
+        #endregion IsInEditableState Property
+
         private DataItemsViewModelBehavior _dataItemsViewModelBehavior;
 
         public ObservableCollection<DockItemViewModelBase>? DockItemsViewModels

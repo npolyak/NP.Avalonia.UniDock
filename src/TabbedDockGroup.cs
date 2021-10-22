@@ -71,6 +71,37 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public Point FloatingSize { get; set; } = new Point(700, 400);
+
+        #region HeaderBackground Styled Avalonia Property
+        public IBrush HeaderBackground
+        {
+            get { return GetValue(HeaderBackgroundProperty); }
+            set { SetValue(HeaderBackgroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> HeaderBackgroundProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, IBrush>
+            (
+                nameof(HeaderBackground)
+            );
+        #endregion HeaderBackground Styled Avalonia Property
+
+
+        #region HeaderForeground Styled Avalonia Property
+        public IBrush HeaderForeground
+        {
+            get { return GetValue(HeaderForegroundProperty); }
+            set { SetValue(HeaderForegroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> HeaderForegroundProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, IBrush>
+            (
+                nameof(HeaderForeground)
+            );
+        #endregion HeaderForeground Styled Avalonia Property
+
 
         #region ShowHeader Styled Avalonia Property
         public bool ShowHeader

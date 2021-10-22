@@ -33,6 +33,8 @@ namespace NP.Avalonia.UniDock
 
         public bool AutoInvisible { get; set; }
 
+        public Point FloatingSize { get; set; } = new Point(700, 400);
+
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
@@ -40,7 +42,7 @@ namespace NP.Avalonia.UniDock
 
         public bool IsStableGroup
         {
-            get => this.GetDockGroupDescendants().Any(g => IsStableGroup);
+            get => this.GetDockGroupDescendants().Any(g => g.IsStableGroup);
             set
             {
 

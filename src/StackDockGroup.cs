@@ -39,6 +39,8 @@ namespace NP.Avalonia.UniDock
 
         public bool AutoInvisible { get; set; } = true;
 
+        public Point FloatingSize { get; set; } = new Point(700, 400);
+
         public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
 
 

@@ -76,3 +76,6 @@
 /Tests/NP.TestCollectionSerialization/.vs
 /Tests/NP.TestCollectionSerialization/bin/Debug/net5.0
 /Tests/NP.TestCollectionSerialization/obj
+/Prototypes/NP.GroupHeaderSample/.vs
+/Prototypes/NP.GroupHeaderSample/bin/Debug/net5.0
+/Prototypes/NP.GroupHeaderSample/obj

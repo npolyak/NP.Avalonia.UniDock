@@ -68,13 +68,13 @@ namespace NP.Avalonia.UniDock
 
         protected TItem? _startItem;
 
-        protected DockItem? _draggedDockItem;
+        protected IDockGroup? _draggedDockGroup;
 
-        protected Func<TItem, DockItem> _dockItemGetter;
+        protected Func<TItem, IDockGroup> _dockGroupGetter;
 
-        public DragItemBehavior(Func<TItem, DockItem> dockItemGetter)
+        public DragItemBehavior(Func<TItem, IDockGroup> dockGroupGetter)
         {
-            _dockItemGetter = dockItemGetter;
+            _dockGroupGetter = dockGroupGetter;
         }
 
         private void Control_PointerPressed(object sender, PointerPressedEventArgs e)
@@ -93,9 +93,9 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            _draggedDockItem = _dockItemGetter.Invoke(_startItem);
+            _draggedDockGroup = _dockGroupGetter.Invoke(_startItem);
 
-            if (!_draggedDockItem.CanFloat)
+            if (!_draggedDockGroup.CanFloat)
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace NP.Avalonia.UniDock
 
             Control itemsContainer = (Control)sender;
 
-            DockManager dockManager = _draggedDockItem!.TheDockManager!;
+            DockManager dockManager = _draggedDockGroup!.TheDockManager!;
 
             Point2D currentPoint = e.GetPosition(itemsContainer).ToPoint2D();
 
@@ -166,13 +166,13 @@ namespace NP.Avalonia.UniDock
             }
 
 
-            IDockGroup? parentItem = _draggedDockItem.DockParent;
-            IDockGroup topDockGroup = _draggedDockItem.GetDockGroupRoot();
+            IDockGroup? parentItem = _draggedDockGroup.DockParent;
+            IDockGroup topDockGroup = _draggedDockGroup.GetDockGroupRoot();
 
             Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
 
             // remove from the current items
-            _draggedDockItem?.RemoveItselfFromParent();
+            _draggedDockGroup?.RemoveItselfFromParent();
 
             parentItem?.Simplify();
 
@@ -187,10 +187,11 @@ namespace NP.Avalonia.UniDock
 
             DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 
-            _draggedDockItem!.CleanSelfOnRemove();
-            dockWindow.Width = _draggedDockItem.FloatingSize.X;
-            dockWindow.Height = _draggedDockItem.FloatingSize.Y;
-            dockWindow.TheDockGroup.DockChildren.Add(_draggedDockItem!);
+            _draggedDockGroup!.CleanSelfOnRemove();
+
+            dockWindow.Width = _draggedDockGroup.FloatingSize.X;
+            dockWindow.Height = _draggedDockGroup.FloatingSize.Y;
+            dockWindow.TheDockGroup.DockChildren.Add(_draggedDockGroup!);
 
             Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
 

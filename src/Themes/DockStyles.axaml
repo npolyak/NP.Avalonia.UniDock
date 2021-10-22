@@ -393,6 +393,8 @@
             Value="Stretch"/>
     <Setter Property="VerticalAlignment"
             Value="Stretch"/>
+    <Setter Property="ShowHeader"
+            Value="{Binding Path=TheDockManager.IsInEditableState, RelativeSource={RelativeSource Self}}"/>
     <Setter Property="IsVisible"
             Value="{Binding Path=(np:DockAttachedProperties.IsDockVisible), 
                             RelativeSource={RelativeSource Self}}"/>
@@ -400,6 +402,10 @@
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="Background"
             Value="White"/>
+    <Setter Property="HeaderBackground"
+        Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="HeaderForeground"
+            Value="Black"/>
     <Setter Property="IsFullyActive">
       <Setter.Value>
         <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -420,54 +426,68 @@
               Background="{TemplateBinding Background}"
               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
               VerticalAlignment="{TemplateBinding VerticalAlignment}">
-            <DockPanel>
-              <local:DockTabsPresenter x:Name="PART_ItemsPresenter"
-                                       local:DragTabBehavior.IsSet="True"
-                                       local:DockAttachedProperties.TheDockManager="{Binding Path=(local:DockAttachedProperties.TheDockManager),
+            <Grid RowDefinitions="Auto, *">
+              <Grid RowDefinitions="Auto, Auto"
+                    IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource TemplatedParent}}">
+                <np:DockItemHeaderControl x:Name="Header"
+                                          DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                          Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"
+                                          np:DragHeaderBehavior.IsSet="True"
+                                          Height="22"/>
+                <Grid x:Name="Separator"
+                      Grid.Row="1"
+                      Height="2"/>
+              </Grid>
+              <DockPanel Grid.Row="1">
+                <local:DockTabsPresenter x:Name="PART_ItemsPresenter"
+                                         local:DragTabBehavior.IsSet="True"
+                                         local:DockAttachedProperties.TheDockManager="{Binding Path=(local:DockAttachedProperties.TheDockManager),
                                                                                              RelativeSource={RelativeSource TemplatedParent}}"
-                                       DockPanel.Dock="{TemplateBinding TabStripPlacement}"
-                                       VerticalAlignment="Top"
-                                       Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}">
-                <local:DockTabsPresenter.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <WrapPanel Orientation="{TemplateBinding TabOrientation}"/>
-                  </ItemsPanelTemplate>
-                </local:DockTabsPresenter.ItemsPanel>
-              </local:DockTabsPresenter>
-              <Grid>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto"/>
-                  <ColumnDefinition Width="*"/>
-                  <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid x:Name="PART_TabSeparator" 
-                      Background="{TemplateBinding TabSeparatorBackground}"
-                      IsVisible="{Binding Path=NumberDockChildren, 
+                                         DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                                         VerticalAlignment="Top"
+                                         Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}">
+                  <local:DockTabsPresenter.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel Orientation="{TemplateBinding TabOrientation}"/>
+                    </ItemsPanelTemplate>
+                  </local:DockTabsPresenter.ItemsPanel>
+                </local:DockTabsPresenter>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid x:Name="PART_TabSeparator"
+                        Background="{TemplateBinding TabSeparatorBackground}"
+                        IsVisible="{Binding Path=NumberDockChildren, 
                                           Converter={x:Static np:IntConverters.IsPositiveConverter},
                                           RelativeSource={RelativeSource TemplatedParent}}"/>
-                <ContentPresenter
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Name="PART_SelectedContentHost"
-                    Margin="{TemplateBinding Padding}"
-                    Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                    ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
-                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                <local:DropPanelWithCompass 
+                  <ContentPresenter
                       Grid.Row="1"
                       Grid.Column="1"
-                      AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
-                      AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
-                      IsVisible="{Binding Path=ShowCompass, 
+                      Name="PART_SelectedContentHost"
+                      Margin="{TemplateBinding Padding}"
+                      Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                      ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                  <local:DropPanelWithCompass
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
+                        AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
+                        IsVisible="{Binding Path=ShowCompass, 
                                           RelativeSource= {RelativeSource TemplatedParent}}"/>
-              </Grid>
-            </DockPanel>
+                </Grid>
+              </DockPanel>
+            </Grid>
           </Border>
         </ControlTemplate>
       </Setter.Value>
@@ -557,7 +577,7 @@
           <Grid RowDefinitions="Auto, *"
                 Background="White">
             <Grid RowDefinitions="Auto, Auto"
-                  IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource AncestorType=np:IDockGroup}}">
+                  IsVisible="{Binding Path=ShowHeader}">
               <np:DockItemHeaderControl x:Name="Header"
                                         Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
                                         Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"

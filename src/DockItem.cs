@@ -11,12 +11,8 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Templates;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Data;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
@@ -26,7 +22,6 @@ using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace NP.Avalonia.UniDock
 {
@@ -71,7 +66,6 @@ namespace NP.Avalonia.UniDock
         public static readonly AttachedProperty<bool> ShowHeaderProperty =
             DockAttachedProperties.ShowHeaderProperty.AddOwner<DockItem>();
         #endregion ShowHeader Styled Avalonia Property
-
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -162,6 +156,8 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(HeaderContentTemplateResourceKeyProperty)
                 .Subscribe(OnHeaderContentTemplateResourceKeyChanged!);
+
+            ShowHeader = true;
         }
 
         private void OnHeaderContentTemplateResourceKeyChanged(string newResourceKey)
@@ -261,24 +257,11 @@ namespace NP.Avalonia.UniDock
             );
         #endregion IsSelectedProperty Direct Avalonia Property
 
+        public Point FloatingSize { get; set; } = new Point(700, 400);
+
         public DockItemPresenter? TheVisual { get; internal set; }
 
         public IControl GetVisual() => (TheVisual as IControl) ?? this;
-
-        #region FloatingSize Styled Avalonia Property
-        public Point FloatingSize
-        {
-            get { return GetValue(FloatingSizeProperty); }
-            set { SetValue(FloatingSizeProperty, value); }
-        }
-
-        public static readonly StyledProperty<Point> FloatingSizeProperty =
-            AvaloniaProperty.Register<DockItem, Point>
-            (
-                nameof(FloatingSize),
-                new Point(400, 300)
-            );
-        #endregion FloatingSize Styled Avalonia Property
 
         private bool _isSelected = false;
         public bool IsSelected 
