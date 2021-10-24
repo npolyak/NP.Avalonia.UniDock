@@ -23,6 +23,9 @@ using NP.Utilities;
 using System.Linq;
 using NP.Avalonia.UniDockService;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 
 namespace NP.Avalonia.UniDock
 {
@@ -110,6 +113,35 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        #region HeaderBackground Styled Avalonia Property
+        public IBrush HeaderBackground
+        {
+            get { return GetValue(HeaderBackgroundProperty); }
+            set { SetValue(HeaderBackgroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> HeaderBackgroundProperty =
+            AvaloniaProperty.Register<StackDockGroup, IBrush>
+            (
+                nameof(HeaderBackground)
+            );
+        #endregion HeaderBackground Styled Avalonia Property
+
+
+        #region HeaderForeground Styled Avalonia Property
+        public IBrush HeaderForeground
+        {
+            get { return GetValue(HeaderForegroundProperty); }
+            set { SetValue(HeaderForegroundProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> HeaderForegroundProperty =
+            AvaloniaProperty.Register<StackDockGroup, IBrush>
+            (
+                nameof(HeaderForeground)
+            );
+        #endregion HeaderForeground Styled Avalonia Property
+
         #region ShowHeader Styled Avalonia Property
         public bool ShowHeader
         {
@@ -134,6 +166,7 @@ namespace NP.Avalonia.UniDock
                 _dockParent = value;
 
                 this.SetStableParent();
+                this.SetCanReattachToDefaultGroup();
             }
         }
 
@@ -147,7 +180,6 @@ namespace NP.Avalonia.UniDock
             RemoveEvent?.Invoke(this);
         }
 
-        
         static StackDockGroup()
         {
             DockIdProperty.Changed.AddClassHandler<StackDockGroup>((g, e) => g.OnDockIdChanged(e));
@@ -156,14 +188,62 @@ namespace NP.Avalonia.UniDock
         IDisposable? _behavior;
         IDisposable? _setDockGroupBehavior;
 
+
+        #region HeaderControlTemplate Styled Avalonia Property
+        public ControlTemplate HeaderControlTemplate
+        {
+            get { return GetValue(HeaderControlTemplateProperty); }
+            set { SetValue(HeaderControlTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<ControlTemplate> HeaderControlTemplateProperty =
+            AvaloniaProperty.Register<StackDockGroup, ControlTemplate>
+            (
+                nameof(HeaderControlTemplate)
+            );
+        #endregion HeaderControlTemplate Styled Avalonia Property
+
+        
+        string? _defaultDockGroupId;
+        public string? DefaultDockGroupId
+        {
+            get => _defaultDockGroupId;
+            set
+            {
+                if (_defaultDockGroupId == value)
+                    return;
+
+                _defaultDockGroupId = value;
+
+                this.SetCanReattachToDefaultGroup();
+            }
+        }
+
+
+        private Grid _panel = new Grid();
         public StackDockGroup()
         {
             AffectsMeasure<StackDockGroup>(NumberDockChildrenProperty);
             AffectsMeasure<StackDockGroup>(DockAttachedProperties.IsDockVisibleProperty);
+            AffectsMeasure<StackDockGroup>(HeaderControlTemplateProperty);
 
-            ((ISetLogicalParent)_stackGroup).SetParent(this);
-            this.VisualChildren.Add(_stackGroup);
-            this.LogicalChildren.Add(_stackGroup);
+            _panel.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            _panel.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+
+            ((ISetLogicalParent)_panel).SetParent(this);
+            this.VisualChildren.Add(_panel);
+            this.LogicalChildren.Add(_panel);
+
+            TemplatedControl headerControl = new TemplatedControl();
+
+            headerControl[!TemplatedControl.TemplateProperty] =
+                this[!HeaderControlTemplateProperty];
+
+            _panel.Children.Add(headerControl);
+
+            Grid.SetRow(_stackGroup, 1);
+
+            _panel.Children.Add(_stackGroup);
 
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);

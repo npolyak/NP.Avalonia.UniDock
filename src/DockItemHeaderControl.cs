@@ -9,11 +9,26 @@
 // Also, please, mention this software in any documentation for the 
 // products that use it.
 
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml.Templates;
 
 namespace NP.Avalonia.UniDock
 {
     public class DockItemHeaderControl : ContentControl
     {
+        #region ButtonsTemplate Styled Avalonia Property
+        public ControlTemplate ButtonsTemplate
+        {
+            get { return GetValue(ButtonsTemplateProperty); }
+            set { SetValue(ButtonsTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<ControlTemplate> ButtonsTemplateProperty =
+            AvaloniaProperty.Register<DockItemHeaderControl, ControlTemplate>
+            (
+                nameof(ButtonsTemplate)
+            );
+        #endregion ButtonsTemplate Styled Avalonia Property
     }
 }

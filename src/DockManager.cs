@@ -232,8 +232,8 @@ namespace NP.Avalonia.UniDock
 
             _currentDockGroups = 
                 DockLeafObjsWithoutLeafParents
-                .Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree)
-                .Except(_draggedWindow.LeafItems)
+                .Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree && leaf.GetVisual().IsVisible && leaf.GetVisual().GetControlsWindow<Window>().IsVisible)
+                .Except(_draggedWindow.TheDockGroup.GetLeafGroups())
                 .Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
 
             _pointerMovedSubscription = 
@@ -276,7 +276,9 @@ namespace NP.Avalonia.UniDock
             }
 
             var pointerAboveGroups =
-                _currentDockGroups.Where(gr => gr.Rect.ContainsPoint(pointerScreenLocation)).Select(gr => gr.Group);
+                _currentDockGroups
+                    .Where(gr => gr.Group.IsVisible && gr.Rect.ContainsPoint(pointerScreenLocation))
+                    .Select(gr => gr.Group);
 
             var pointerAboveWindows =
                 pointerAboveGroups

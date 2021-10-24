@@ -136,10 +136,6 @@ namespace NP.Avalonia.UniDock
             IsSelectedProperty
                 .Changed
                 .Subscribe(OnIsSelectedChanged);
-
-            DefaultDockGroupIdProperty
-                .Changed
-                .AddClassHandler<DockItem>((dockItem, args) => dockItem.SetCanReattachToDefaultGroup(args));
         }
 
 
@@ -224,22 +220,6 @@ namespace NP.Avalonia.UniDock
         private void OnIsActiveInWindowChanged(bool isActiveInWindow)
         {
             IsActiveChanged?.Invoke(this);
-        }
-
-
-        private void SetCanReattachToDefaultGroup(AvaloniaPropertyChangedEventArgs args)
-        {
-            SetCanReattachToDefaultGroup();
-        }
-
-        internal void SetCanReattachToDefaultGroup()
-        {
-            this.CanReattachToDefaultGroup =
-                (!this.DefaultDockGroupId.IsNullOrEmpty()) &&   // DefaultDockGroupId not set - means that it does not have 
-                                                                // default position
-                (!this.MatchesDefaultGroup(this.DockParent)) && // if it matches the dock parent - it is
-                                                                // already at default position
-                (this.TheDockManager != null); // the dock item is visible
         }
 
         private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
@@ -332,7 +312,7 @@ namespace NP.Avalonia.UniDock
                     DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
                 }
 
-                SetCanReattachToDefaultGroup();
+                this.SetCanReattachToDefaultGroup();
             }
         }
 
@@ -506,90 +486,19 @@ namespace NP.Avalonia.UniDock
             );
         #endregion DefaultDockOrderInGroup Styled Avalonia Property
 
-
-        #region DefaultDockGroupId Styled Avalonia Property
+        string? _defaultDockGroupId;
         public string? DefaultDockGroupId
         {
-            get { return GetValue(DefaultDockGroupIdProperty); }
-            set { SetValue(DefaultDockGroupIdProperty, value); }
-        }
-
-        public static readonly StyledProperty<string?> DefaultDockGroupIdProperty =
-            AvaloniaProperty.Register<DockItem, string?>
-            (
-                nameof(DefaultDockGroupId)
-            );
-        #endregion DefaultDockGroupId Styled Avalonia Property
-
-        public bool MatchesDefaultGroup(IDockGroup? group)
-        {
-            if ((group?.DockId).IsNullOrEmpty())
-                return false;
-
-            return group!.DockId == DefaultDockGroupId;
-        }
-
-        #region CanReattachToDefaultGroup Styled Avalonia Property
-        public bool CanReattachToDefaultGroup
-        {
-            get { return GetValue(CanReattachToDefaultGroupProperty); }
-            private set { SetValue(CanReattachToDefaultGroupProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> CanReattachToDefaultGroupProperty =
-            AvaloniaProperty.Register<DockItem, bool>
-            (
-                nameof(CanReattachToDefaultGroup)
-            );
-        #endregion CanReattachToDefaultGroup Styled Avalonia Property
-
-
-        public void ReattachToDefaultGroup()
-        {
-            if (!CanReattachToDefaultGroup)
+            get => _defaultDockGroupId;
+            set
             {
-                throw new ProgrammingError
-                (
-                    "we cannot reattach to the " +
-                    "default group, so we should never " +
-                    "get to this method");
+                if (_defaultDockGroupId == value)
+                    return;
+
+                _defaultDockGroupId = value;
+
+                this.SetCanReattachToDefaultGroup();
             }
-
-            DockManager dm = this.TheDockManager!;
-
-            IDockGroup? defaultGroup =
-                dm.FindGroupById(this.DefaultDockGroupId);
-
-            if (defaultGroup == null)
-            {
-                $"Default group '{this.DefaultDockGroupId}' does not exist".ThrowProgError();
-            }
-
-            if (!defaultGroup!.IsStableGroup)
-            {
-                $"Default group '{this.DefaultDockGroupId}' is not stable".ThrowProgError();
-            }
-
-            IDockGroup? parent = DockParent;
-            IDockGroup topDockGroup = this.GetDockGroupRoot();
-
-            if (parent != null)
-            {
-                this.RemoveItselfFromParent();
-            }
-
-            defaultGroup
-                .DockChildren
-                .InsertInOrder
-                (
-                    this,
-                    dockGroup => dockGroup?.DefaultDockOrderInGroup ?? 0,
-                    (i1, i2) => i1 < i2 ? -1 : i1 > i2 ? 1 : 0);
-
-            parent?.Simplify();
-
-            SetCanReattachToDefaultGroup();
-            DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
 
         // always un-stable

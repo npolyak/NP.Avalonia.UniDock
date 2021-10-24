@@ -247,5 +247,23 @@ namespace NP.Avalonia.UniDock
 
             dockWindow.ShowWindow(ownerWindow);
         }
+
+        #region CanReattachToDefaultGroup Attached Avalonia Property
+        public static bool GetCanReattachToDefaultGroup(IDockGroup obj)
+        {
+            return obj.GetValue(CanReattachToDefaultGroupProperty);
+        }
+
+        public static void SetCanReattachToDefaultGroup(IDockGroup obj, bool value)
+        {
+            obj.SetValue(CanReattachToDefaultGroupProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanReattachToDefaultGroupProperty =
+            AvaloniaProperty.RegisterAttached<IDockGroup, IDockGroup, bool>
+            (
+                "CanReattachToDefaultGroup"
+            );
+        #endregion CanReattachToDefaultGroup Attached Avalonia Property
     }
 }

@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
+using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,8 @@ namespace NP.Avalonia.UniDock
             get => 0;
             set { }
         }
+
+        string DefaultDockGroupId { get => null!; }
 
         void CleanSelfOnRemove()
         {
@@ -324,6 +327,87 @@ namespace NP.Avalonia.UniDock
             SimpleDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
 
             return parentDockGroup?.GetResource<T>(resourceKey);
+        }
+
+        public static bool MatchesDefaultGroup(this IDockGroup? group, IDockGroup? dockGroupToMatch)
+        {
+            if ((group?.DockId).IsNullOrEmpty() || (group?.DefaultDockGroupId).IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return group!.DefaultDockGroupId == dockGroupToMatch?.DockId;
+        }
+
+        public static bool IsAllowedToReattachToDefaultGroup(this IDockGroup? group)
+        {
+            if (group == null)
+                return false;
+
+            return 
+                group.TheDockManager != null &&
+                !group.IsUnderDefaultParent();
+        }
+
+        public static bool IsUnderDefaultParent(this IDockGroup? group)
+        {
+            if (group?.DockParent == null)
+                return false;
+
+            return group.MatchesDefaultGroup(group.DockParent);
+        }
+
+        public static void SetCanReattachToDefaultGroup(this IDockGroup group)
+        {
+            DockAttachedProperties.SetCanReattachToDefaultGroup(group, group.IsAllowedToReattachToDefaultGroup());
+        }
+
+        public static void ReattachToDefaultGroup(this IDockGroup group)
+        {
+            if (!group.IsAllowedToReattachToDefaultGroup())
+            {
+                throw new ProgrammingError
+                (
+                    "we cannot reattach to the " +
+                    "default group, so we should never " +
+                    "get to this method");
+            }
+
+            DockManager dm = group.TheDockManager!;
+
+            IDockGroup? defaultGroup =
+                dm.FindGroupById(group.DefaultDockGroupId);
+
+            if (defaultGroup == null)
+            {
+                $"Default group '{group.DefaultDockGroupId}' does not exist".ThrowProgError();
+            }
+
+            if (!defaultGroup!.IsStableGroup)
+            {
+                $"Default group '{group.DefaultDockGroupId}' is not stable".ThrowProgError();
+            }
+
+            IDockGroup? parent = group.DockParent;
+            IDockGroup topDockGroup = group.GetDockGroupRoot();
+
+            if (parent != null)
+            {
+                group.RemoveItselfFromParent();
+            }
+
+            defaultGroup
+                .DockChildren
+                .InsertInOrder
+                (
+                    group,
+                    dockGroup => dockGroup?.DefaultDockOrderInGroup ?? 0,
+                    (i1, i2) => i1 < i2 ? -1 : i1 > i2 ? 1 : 0);
+
+            parent?.Simplify();
+
+            group.SetCanReattachToDefaultGroup();
+            DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
     }
 }

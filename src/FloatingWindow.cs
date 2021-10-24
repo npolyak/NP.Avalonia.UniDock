@@ -140,7 +140,7 @@ namespace NP.Avalonia.UniDock
         {
             CanReattachToDefaultGroup = 
                 LeafItemsWithDefaultPosition
-                    .Where(item => item.CanReattachToDefaultGroup)
+                    .Where(item => item.IsAllowedToReattachToDefaultGroup())
                     .Any();
         }
 
@@ -229,7 +229,7 @@ namespace NP.Avalonia.UniDock
         public void ReattachToDefaultGroup()
         {
             LeafItemsWithDefaultPosition
-                .Where(item => item.CanReattachToDefaultGroup)
+                .Where(item => item.IsAllowedToReattachToDefaultGroup())
                 .ToList()
                 .DoForEach(item => item.ReattachToDefaultGroup());
         }

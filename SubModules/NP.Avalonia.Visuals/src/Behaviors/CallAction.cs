@@ -15,6 +15,7 @@ using Avalonia.Interactivity;
 using NP.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NP.Avalonia.Visuals.Behaviors
 {
@@ -146,6 +147,25 @@ namespace NP.Avalonia.Visuals.Behaviors
         #endregion TheRoutingStrategy Attached Avalonia Property
 
 
+        #region StaticType Attached Avalonia Property
+        public static Type GetStaticType(AvaloniaObject obj)
+        {
+            return obj.GetValue(StaticTypeProperty);
+        }
+
+        public static void SetStaticType(AvaloniaObject obj, Type value)
+        {
+            obj.SetValue(StaticTypeProperty, value);
+        }
+
+        public static readonly AttachedProperty<Type> StaticTypeProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, Type>
+            (
+                "StaticType"
+            );
+        #endregion StaticType Attached Avalonia Property
+
+
         private static void OnEvent(object? sender, RoutedEventArgs e)
         {
             Interactive? avaloniaObject = sender as Interactive;
@@ -158,27 +178,38 @@ namespace NP.Avalonia.Visuals.Behaviors
             if (methodName == null)
                 return;
 
-            object? targetObject = avaloniaObject.GetValue(TargetObjectProperty) ?? avaloniaObject.DataContext;
+            object? targetObject = 
+                avaloniaObject.GetValue(TargetObjectProperty) ?? avaloniaObject.DataContext;
 
             if (targetObject == null)
                 return;
 
-            object[] args = null;
+            Type staticType = GetStaticType(avaloniaObject);
+
+            bool isStatic = staticType != null;
+
+            IEnumerable<object> args = Enumerable.Empty<object>();
+
+            if (isStatic)
+            {
+                args = args.Union(new object[] { targetObject });
+            }
+
             if (GetHasArg(avaloniaObject))
             {
-                args = new []{ GetArg1(avaloniaObject) };
+                args = args.Union(new []{ GetArg1(avaloniaObject) });
             }
             else
             {
-                args = GetArgs(avaloniaObject)?.ToArray();
+                args = args.Union(GetArgs(avaloniaObject).NullToEmpty());
             }
 
-            if (args == null)
+            if (isStatic)
             {
-                args = new object[] { };
+                targetObject = staticType;
             }
 
-            targetObject.CallMethod(methodName, args);
+            targetObject.CallMethod(methodName, false, isStatic, args.ToArray());
         }
 
 

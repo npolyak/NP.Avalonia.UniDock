@@ -234,6 +234,14 @@ namespace NP.Avalonia.UniDock
             return gridSplitter;
         }
 
+        private void ClearItem(IControl item)
+        {
+            AvaloniaProperty propToClear =
+                TheOrientation == Orientation.Horizontal ? Grid.ColumnProperty : Grid.RowProperty;
+
+            item.ClearValue(propToClear);
+        }
+
         private void RemoveItem(T item)
         {
             item.ClearValue(DockAttachedProperties.SizeGridLengthProperty);
@@ -241,6 +249,9 @@ namespace NP.Avalonia.UniDock
             if (NumberChildren == 1)
             {
                 this.GridChildren.Remove(item);
+
+                ClearItem(item);
+
                 Definitions.DeleteAllOneByOne();
             }
             else
@@ -266,7 +277,11 @@ namespace NP.Avalonia.UniDock
 
         private void RemoveChildAt(int idx)
         {
+            IControl item = GridChildren.ElementAt(idx);
+
             GridChildren.RemoveAt(idx);
+
+            ClearItem(item);
 
             Definitions.RemoveAt(idx);
         }

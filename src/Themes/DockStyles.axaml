@@ -36,6 +36,12 @@
                      Color="{StaticResource DockHeaderColor}"/>
       <SolidColorBrush x:Key="DockSeparatorBrush"
                Color="{StaticResource DockSeparatorColor}"/>
+
+      <ControlTemplate x:Key="DockItemButtonsTemplate">
+        <Button x:Name="CloseButton"
+                Classes="CloseButton"
+                IsVisible="{Binding Path=CanClose}"/>
+      </ControlTemplate>
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml"/>
@@ -146,8 +152,21 @@
     <Setter Property="IsVisible"
             Value="{Binding Path=CanReattachToDefaultGroup}"/>
   </Style>
+
+  <Style Selector="MenuItem.RestoreDefaultLocationStatic">
+    <Setter Property="np:CallAction.StaticType"
+            Value="np:DockGroupHelper"/>
+  </Style>
   
   <Style Selector="np|DockItemHeaderControl">
+    <Setter Property="HorizontalContentAlignment"
+            Value="Left"/>
+    <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+    <Setter Property="Padding"
+            Value="5,3"/>
+    <Setter Property="ButtonsTemplate"
+            Value="{StaticResource DockItemButtonsTemplate}"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="np:DockItemHeaderControl">
@@ -155,22 +174,21 @@
                 Background="{TemplateBinding Background}">
             <Grid.ContextMenu>
               <ContextMenu Classes="LogicalChildrenVisibility">
-                <MenuItem Classes="RestoreDefaultLocation"/>
+                <MenuItem Classes="RestoreDefaultLocation RestoreDefaultLocationStatic"/>
               </ContextMenu>
             </Grid.ContextMenu>
-            <ContentPresenter x:Name="Header"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Center"
-                              Margin="5,3"/>
+            <Grid Margin="{TemplateBinding Padding}">
+              <ContentPresenter x:Name="Header"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
-            <Button x:Name="CloseButton"
-                    Classes="CloseButton"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="5,3"
-                    IsVisible="{Binding Path=CanClose}"/>
+              <TemplatedControl x:Name="ButtonsControl"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Template="{TemplateBinding ButtonsTemplate}"/>
+            </Grid>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -218,7 +236,7 @@
               DataContext="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}">
           <Grid.ContextMenu>
             <ContextMenu Classes="LogicalChildrenVisibility">
-              <MenuItem Classes="RestoreDefaultLocation"/>
+              <MenuItem Classes="RestoreDefaultLocation RestoreDefaultLocationStatic"/>
             </ContextMenu>
           </Grid.ContextMenu>
           <ContentPresenter
@@ -313,10 +331,20 @@
                              Grid.ColumnSpan="2"
                              AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
                              AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
-                             StartOrEndPointerDetection="{Binding Path=IsVisible, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                              local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
                                                                              Mode=TwoWay, 
-                                                                             RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                             RelativeSource={RelativeSource TemplatedParent}}">
+            <local:DockCompass.StartOrEndPointerDetection>
+              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="IsVisible" 
+                         Mode="OneWay" 
+                         RelativeSource="{RelativeSource TemplatedParent}"/>
+                <Binding Path="IsAttached"
+                         Mode="OneWay"
+                         RelativeSource="{RelativeSource Self}"/>
+              </MultiBinding>
+            </local:DockCompass.StartOrEndPointerDetection>
+          </local:DockCompass>
         </Grid>
       </ControlTemplate>
     </Setter>
@@ -356,38 +384,6 @@
             Value="4"/>
   </Style>
 
-  <!--<Style Selector="np|DockSeparator[TheOrientation=Horizontal]">
-    <Setter Property="Background">
-      <Setter.Value>
-        <LinearGradientBrush StartPoint="0%,0%"
-                             EndPoint="0%, 100%">
-          <GradientStop Offset="0"
-                        Color="White"/>
-          <GradientStop Offset="0.5"
-                        Color="{StaticResource DockSeparatorColor}"/>
-          <GradientStop Offset="1"
-                        Color="White"/>
-        </LinearGradientBrush>
-      </Setter.Value>
-    </Setter>
-  </Style>
-
-  <Style Selector="np|DockSeparator[TheOrientation=Vertical]">
-    <Setter Property="Background">
-      <Setter.Value>
-        <LinearGradientBrush StartPoint="0%,0%"
-                             EndPoint="100%, 0%">
-          <GradientStop Offset="0"
-                        Color="White"/>
-          <GradientStop Offset="0.5"
-                        Color="{StaticResource DockSeparatorColor}"/>
-          <GradientStop Offset="1"
-                        Color="White"/>
-        </LinearGradientBrush>
-      </Setter.Value>
-    </Setter>
-  </Style>-->
-  
   <Style Selector="local|TabbedDockGroup">
     <Setter Property="HorizontalAlignment"
             Value="Stretch"/>
@@ -484,7 +480,7 @@
                         AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
                         AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
                         IsVisible="{Binding Path=ShowCompass, 
-                                          RelativeSource= {RelativeSource TemplatedParent}}"/>
+                                            RelativeSource= {RelativeSource TemplatedParent}}"/>
                 </Grid>
               </DockPanel>
             </Grid>
@@ -605,7 +601,7 @@
       </Setter.Value>
     </Setter>
   </Style>
-
+ 
   <Style Selector="np|DockItemPresenter[IsActive=True]">
     <Setter Property="HeaderBackground"
         Value="{StaticResource DockSelectedBrush}"/>
@@ -657,4 +653,28 @@
     </Setter>
   </Style>
 
+  <Style Selector="np|StackDockGroup">
+    <Setter Property="ShowHeader"
+            Value="{Binding Path=TheDockManager.IsInEditableState, RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="HeaderBackground"
+            Value="{StaticResource DockHeaderBrush}"/>
+    <Setter Property="HeaderForeground"
+            Value="Black"/>
+    <Setter Property="HeaderControlTemplate">
+      <ControlTemplate>
+        <Grid RowDefinitions="Auto, Auto"
+              IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}">
+          <np:DockItemHeaderControl x:Name="Header"
+                                    DataContext="{Binding RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
+                                    Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
+                                    Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
+                                    np:DragHeaderBehavior.IsSet="True"
+                                    Height="22"/>
+          <Grid x:Name="Separator"
+                Grid.Row="1"
+                Height="2"/>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
 </Styles>

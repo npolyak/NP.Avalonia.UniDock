@@ -31,9 +31,25 @@ namespace NP.Avalonia.UniDock
 
         internal bool CanStartPointerDetection { get; set; } = true;
 
+
+        #region IsAttached Styled Avalonia Property
+        public bool IsAttached
+        {
+            get { return GetValue(IsAttachedProperty); }
+            private set { SetValue(IsAttachedProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsAttachedProperty =
+            AvaloniaProperty.Register<DockCompass, bool>
+            (
+                nameof(IsAttached)
+            );
+        #endregion IsAttached Styled Avalonia Property
+
+
         protected void StartPointerDetection()
         {
-            if (!CanStartPointerDetection || !IsEffectivelyVisible || !IsInitialized)
+            if (!CanStartPointerDetection || !IsEffectivelyVisible)
                 return;
 
             UpdateSideControls();
@@ -95,24 +111,27 @@ namespace NP.Avalonia.UniDock
         #endregion StartOrEndPointerDetection Styled Avalonia Property
 
 
-        static DockCompass()
+        public DockCompass()
         {
-            StartOrEndPointerDetectionProperty
-                .Changed
-                .AddClassHandler<DockCompass>((x, e) => x.StartOrEndPointerDetectionChanged(e));
+            this.GetObservable(StartOrEndPointerDetectionProperty)
+                .Subscribe(OnStartOrEndPointerDetectionChanged);
+
+            this.DetachedFromVisualTree += DockCompass_DetachedFromVisualTree; 
+            this.AttachedToVisualTree += DockCompass_AttachedToVisualTree;
         }
 
-        protected override void OnInitialized()
+        private void DockCompass_DetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            base.OnInitialized();
-
-            StartPointerDetection();
+            IsAttached = false;
         }
 
-        private void StartOrEndPointerDetectionChanged(AvaloniaPropertyChangedEventArgs flagChanged)
+        private void DockCompass_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            bool? flag = (bool?)flagChanged.NewValue;
+            IsAttached = true;
+        }
 
+        private void OnStartOrEndPointerDetectionChanged(bool flag)
+        {
             if (flag == true)
             {
                 StartPointerDetection();
@@ -120,7 +139,7 @@ namespace NP.Avalonia.UniDock
             else
             {
                 FinishPointerDetection();
-            }
+            };
         }
 
         private void UpdateSideControls()
@@ -136,6 +155,11 @@ namespace NP.Avalonia.UniDock
 
         private void OnPointerMoved(Point2D pointerScreenLocation)
         {
+            if (!(this as IVisual).IsAttachedToVisualTree)
+            {
+                return;
+            }
+
             UpdateSideControls();
 
             var currentSideControl =

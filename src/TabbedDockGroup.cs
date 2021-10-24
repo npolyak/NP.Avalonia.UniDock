@@ -147,17 +147,32 @@ namespace NP.Avalonia.UniDock
         #endregion IsFullyActive Styled Avalonia Property
 
 
+        string? _defaultDockGroupId;
+        public string? DefaultDockGroupId
+        {
+            get => _defaultDockGroupId;
+            set
+            {
+                if (_defaultDockGroupId == value)
+                    return;
+
+                _defaultDockGroupId = value;
+
+                this.SetCanReattachToDefaultGroup();
+            }
+        }
+
         private void SetHorizontalAndVerticalDockingAllowed()
         {
             if (_isStableGroup)
             {
-                StackDockGroup? parentGroup = DockParent as StackDockGroup;
+            //    StackDockGroup? parentGroup = DockParent as StackDockGroup;
 
-                AllowHorizontalDocking = parentGroup?.TheOrientation == Orientation.Horizontal;
-                AllowVerticalDocking = parentGroup?.TheOrientation == Orientation.Vertical;
-            }
-            else
-            {
+            //    AllowHorizontalDocking = parentGroup?.TheOrientation == Orientation.Horizontal;
+            //    AllowVerticalDocking = parentGroup?.TheOrientation == Orientation.Vertical;
+            //}
+            //else
+            //{
                 AllowHorizontalDocking = true;
                 AllowVerticalDocking = true;
                 return;
@@ -262,6 +277,7 @@ namespace NP.Avalonia.UniDock
 
                 this.SetStableParent();
                 SetHorizontalAndVerticalDockingAllowed();
+                this.SetCanReattachToDefaultGroup();
             }
         }
 

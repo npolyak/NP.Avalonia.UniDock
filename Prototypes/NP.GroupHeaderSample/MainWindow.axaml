@@ -57,10 +57,8 @@
         </np:FloatingWindowContainer>
       </np:SimpleDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
-                         TheOrientation="Vertical"
-                         IsStableGroup="True">
+                         TheOrientation="Vertical">
         <np:StackDockGroup TheOrientation="Horizontal"
-                           IsStableGroup="True"
                            DockId="Group1">
           <np:DockItem Header="Tab1"
                        DefaultDockGroupId="Group1"
