@@ -51,6 +51,8 @@ namespace NP.Avalonia.UniDock
         
         bool ShowHeader { get => true; set { } }
 
+        bool IsGroupEmpty => DockChildren == null || DockChildren.Count == 0;
+
         bool CanFloat
         {
             get => true;
