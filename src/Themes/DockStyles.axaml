@@ -660,6 +660,8 @@
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderForeground"
             Value="Black"/>
+    <Setter Property="Background"
+            Value="Transparent"/>
     <Setter Property="HeaderControlTemplate">
       <ControlTemplate>
         <Grid RowDefinitions="Auto, Auto"
@@ -675,6 +677,29 @@
                 Height="2"/>
         </Grid>
       </ControlTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid x:Name="PART_RootPanel"
+                RowDefinitions="Auto, *">
+            <TemplatedControl x:Name="HeaderControl"
+                              Template="{TemplateBinding HeaderControlTemplate}"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="np|RootDockGroup">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Grid x:Name="PART_RootPanel"
+                Background="{TemplateBinding Background}">
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
     </Setter>
   </Style>
 </Styles>

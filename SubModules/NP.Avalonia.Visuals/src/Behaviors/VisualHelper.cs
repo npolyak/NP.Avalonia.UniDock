@@ -45,6 +45,14 @@ namespace NP.Avalonia.Visuals.Behaviors
             }
         }
 
+        public static void RemoveFromParentPanel(this IControl control)
+        {
+            if (control.Parent is Panel p)
+            {
+                p.Children.Remove(control);
+            }
+        }
+
         public static TWindow GetControlsWindow<TWindow>(this IVisual visual)
             where TWindow : Window
         {

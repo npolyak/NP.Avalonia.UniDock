@@ -34,8 +34,8 @@ namespace NP.Avalonia.UniDock
             set => TheDockGroup.AutoInvisible = value;
         }
 
-        public SimpleDockGroup TheDockGroup { get; } = 
-            new SimpleDockGroup();
+        public RootDockGroup TheDockGroup { get; } = 
+            new RootDockGroup();
 
         [Content]
         public IDockGroup? DockContent
@@ -49,7 +49,7 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        public SimpleDockGroup? ParentWindowGroup 
+        public RootDockGroup? ParentWindowGroup 
         { 
             get => TheDockGroup.ParentWindowGroup;
             set
@@ -136,7 +136,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void TheDockGroup_PossibleDockChangeInsideEvent(SimpleDockGroup obj)
+        private void TheDockGroup_PossibleDockChangeInsideEvent(RootDockGroup obj)
         {
             CanReattachToDefaultGroup = 
                 LeafItemsWithDefaultPosition

@@ -388,4 +388,9 @@ namespace NP.Avalonia.UniDock
             }
         }
     }
+
+    public class StackGroup : StackGroup<IControl>
+    {
+
+    }
 }

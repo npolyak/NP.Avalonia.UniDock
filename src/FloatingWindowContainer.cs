@@ -45,8 +45,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private SimpleDockGroup? _parentWindowGroup;
-        public SimpleDockGroup? ParentWindowGroup 
+        private RootDockGroup? _parentWindowGroup;
+        public RootDockGroup? ParentWindowGroup 
         { 
             get => _parentWindowGroup; 
             internal set

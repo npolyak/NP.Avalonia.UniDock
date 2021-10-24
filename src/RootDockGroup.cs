@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
@@ -25,11 +26,11 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class SimpleDockGroup : DockIdContainingControl, IDockGroup, IDisposable
+    public class RootDockGroup : DockIdContainingControl, IDockGroup, IDisposable
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
-        public event Action<SimpleDockGroup>? PossibleDockChangeInsideEvent;
+        public event Action<RootDockGroup>? PossibleDockChangeInsideEvent;
 
         public bool AutoInvisible { get; set; }
 
@@ -49,12 +50,12 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        public SimpleDockGroup? ParentWindowGroup { get; set; }
+        public RootDockGroup? ParentWindowGroup { get; set; }
 
         // should never be called on the window root group
         public IDockGroup CloneIfStable() => throw new NotImplementedException();
 
-        public event Action<SimpleDockGroup>? HasNoChildrenEvent;
+        public event Action<RootDockGroup>? HasNoChildrenEvent;
 
         private SingleActiveBehavior<DockItem> _singleActiveBehavior = new SingleActiveBehavior<DockItem>();
 
@@ -62,8 +63,8 @@ namespace NP.Avalonia.UniDock
         #region ActiveDockItem Direct Avalonia Property
         private DockItem? _ActiveDockItem = default;
 
-        public static readonly DirectProperty<SimpleDockGroup, DockItem?> ActiveDockItemProperty =
-            AvaloniaProperty.RegisterDirect<SimpleDockGroup, DockItem?>
+        public static readonly DirectProperty<RootDockGroup, DockItem?> ActiveDockItemProperty =
+            AvaloniaProperty.RegisterDirect<RootDockGroup, DockItem?>
             (
                 nameof(ActiveDockItem),
                 o => o.ActiveDockItem
@@ -82,8 +83,8 @@ namespace NP.Avalonia.UniDock
 
 
         #region NumberDockChildren Direct Avalonia Property
-        public static readonly DirectProperty<SimpleDockGroup, int> NumberDockChildrenProperty =
-            AvaloniaProperty.RegisterDirect<SimpleDockGroup, int>
+        public static readonly DirectProperty<RootDockGroup, int> NumberDockChildrenProperty =
+            AvaloniaProperty.RegisterDirect<RootDockGroup, int>
             (
                 nameof(NumberDockChildren),
                 o => o.NumberDockChildren,
@@ -146,8 +147,8 @@ namespace NP.Avalonia.UniDock
         private IList<FloatingWindowContainer>? _floatingWindows = 
             new ObservableCollection<FloatingWindowContainer>();
 
-        public static readonly DirectProperty<SimpleDockGroup, IList<FloatingWindowContainer>?> FloatingWindowsProperty =
-            AvaloniaProperty.RegisterDirect<SimpleDockGroup, IList<FloatingWindowContainer>?>
+        public static readonly DirectProperty<RootDockGroup, IList<FloatingWindowContainer>?> FloatingWindowsProperty =
+            AvaloniaProperty.RegisterDirect<RootDockGroup, IList<FloatingWindowContainer>?>
             (
                 nameof(FloatingWindows),
                 o => o.FloatingWindows
@@ -161,9 +162,9 @@ namespace NP.Avalonia.UniDock
         #endregion FloatingWindows Direct Avalonia Property
 
 
-        static SimpleDockGroup()
+        static RootDockGroup()
         {
-            DockIdProperty.Changed.AddClassHandler<SimpleDockGroup>((g, e) => g.OnDockIdChanged(e));
+            DockIdProperty.Changed.AddClassHandler<RootDockGroup>((g, e) => g.OnDockIdChanged(e));
         }
 
         private IDisposable? _addRemoveChildBehavior;
@@ -172,9 +173,11 @@ namespace NP.Avalonia.UniDock
         private readonly AttachedPropToCollectionBindingBehavior<DockManager, FloatingWindowContainer>? _floatingWindowDockManagerSettingBehavior;
         private readonly AttachedPropToCollectionBindingBehavior<Window, FloatingWindowContainer>? _floatingWindowParentWindowSettingBehavior;
 
-        public SimpleDockGroup()
+
+        Grid _panel = new Grid();
+        public RootDockGroup()
         {
-            AffectsMeasure<SimpleDockGroup>(NumberDockChildrenProperty);
+            AffectsMeasure<RootDockGroup>(NumberDockChildrenProperty);
 
             _setBehavior = new SetDockGroupBehavior(this, DockChildren!);
 
@@ -210,6 +213,16 @@ namespace NP.Avalonia.UniDock
             );
         }
 
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+
+            Panel rootPanel = e.NameScope.Find<Panel>("PART_RootPanel");
+
+            _panel.RemoveFromParentPanel();
+
+            rootPanel.Children.Insert(0, _panel);
+        }
 
         private void OnFloatingWindowAdded(FloatingWindowContainer floatingWindowContainer)
         {
@@ -224,8 +237,8 @@ namespace NP.Avalonia.UniDock
         #region OwningWindow Direct Avalonia Property
         private Window? _owningWindow = default;
 
-        public static readonly DirectProperty<SimpleDockGroup, Window?> OwningWindowProperty =
-            AvaloniaProperty.RegisterDirect<SimpleDockGroup, Window?>
+        public static readonly DirectProperty<RootDockGroup, Window?> OwningWindowProperty =
+            AvaloniaProperty.RegisterDirect<RootDockGroup, Window?>
             (
                 nameof(OwningWindow),
                 o => o.OwningWindow
@@ -239,7 +252,6 @@ namespace NP.Avalonia.UniDock
                 SetAndRaise(OwningWindowProperty, ref _owningWindow, value);
             }
         }
-
         #endregion OwningWindow Direct Avalonia Property
 
 
@@ -281,9 +293,9 @@ namespace NP.Avalonia.UniDock
             IControl newVisualChildToInsert =
                 TheDockManager!.TheDockVisualItemGenerator!.Generate(newChildToInsert)!;
 
-            ((ISetLogicalParent)newVisualChildToInsert).SetParent(this);
-            VisualChildren.Add(newVisualChildToInsert);
-            LogicalChildren.Add(newVisualChildToInsert);
+            newVisualChildToInsert.RemoveFromParentPanel();
+
+            _panel.Children.Add(newVisualChildToInsert);
 
             NumberDockChildren = DockChildren?.Count() ?? 0;
             newChildToInsert.IsDockVisibleChangedEvent += OnChildIsDockVisibleChanged;
@@ -300,9 +312,7 @@ namespace NP.Avalonia.UniDock
             childToRemove.IsDockVisibleChangedEvent -= OnChildIsDockVisibleChanged;
             Control visualChildToRemove = FindVisualChild(childToRemove);
 
-            ((ISetLogicalParent)visualChildToRemove).SetParent(null);
-            VisualChildren.Remove(visualChildToRemove);
-            LogicalChildren.Remove(visualChildToRemove);
+            _panel.Children.Remove(visualChildToRemove);
 
             NumberDockChildren = DockChildren?.Count() ?? 0;
             this.SetIsDockVisible();

@@ -314,7 +314,7 @@ namespace NP.Avalonia.UniDock
                 return result;
             }
 
-            SimpleDockGroup? rootGroup = dockGroup.GetDockGroupRoot() as SimpleDockGroup;
+            RootDockGroup? rootGroup = dockGroup.GetDockGroupRoot() as RootDockGroup;
 
             if (dockGroup != rootGroup)
             {
@@ -326,7 +326,7 @@ namespace NP.Avalonia.UniDock
                 }
             }
 
-            SimpleDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
+            RootDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
 
             return parentDockGroup?.GetResource<T>(resourceKey);
         }

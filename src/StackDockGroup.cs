@@ -26,6 +26,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using NP.Avalonia.Visuals.Behaviors;
 
 namespace NP.Avalonia.UniDock
 {
@@ -44,7 +45,7 @@ namespace NP.Avalonia.UniDock
 
         public Point FloatingSize { get; set; } = new Point(700, 400);
 
-        public StackGroup<IControl> _stackGroup = new StackGroup<IControl>();
+        public StackGroup _stackGroup = new StackGroup();
 
 
         private bool _isStableGroup = false;
@@ -220,30 +221,14 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        private Grid _panel = new Grid();
         public StackDockGroup()
         {
             AffectsMeasure<StackDockGroup>(NumberDockChildrenProperty);
             AffectsMeasure<StackDockGroup>(DockAttachedProperties.IsDockVisibleProperty);
             AffectsMeasure<StackDockGroup>(HeaderControlTemplateProperty);
 
-            _panel.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            _panel.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-
-            ((ISetLogicalParent)_panel).SetParent(this);
-            this.VisualChildren.Add(_panel);
-            this.LogicalChildren.Add(_panel);
-
-            TemplatedControl headerControl = new TemplatedControl();
-
-            headerControl[!TemplatedControl.TemplateProperty] =
-                this[!HeaderControlTemplateProperty];
-
-            _panel.Children.Add(headerControl);
-
+            // should go to the first row after the header
             Grid.SetRow(_stackGroup, 1);
-
-            _panel.Children.Add(_stackGroup);
 
             _setDockGroupBehavior = new SetDockGroupBehavior(this, DockChildren!);
             _behavior = DockChildren?.AddDetailedBehavior(OnDockChildAdded, OnDockChildRemoved);
@@ -251,6 +236,17 @@ namespace NP.Avalonia.UniDock
             this.GetObservable(DockAttachedProperties.TheDockManagerProperty).Subscribe(OnDockManagerChanged);
 
             this.GetObservable(InitialSizeCoefficientsProperty).Subscribe(OnInitSizeCoeffsChanged!);
+        }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+
+            Grid panel = e.NameScope.Find<Grid>("PART_RootPanel");
+
+            _stackGroup.RemoveFromParentPanel();
+
+            panel.Children.Add(_stackGroup);
         }
 
         private void OnInitSizeCoeffsChanged(string obj)
@@ -322,6 +318,8 @@ namespace NP.Avalonia.UniDock
                ((_initSizeCoefficients != null) && (idx < _initSizeCoefficients.Length)) ? _initSizeCoefficients[idx] : new GridLength(1, GridUnitType.Star);
 
             _sizeCoefficients.Insert(idx, sizeCoeff);
+
+            dockChild.RemoveFromParentPanel();
 
             AddChildToStackGroup(dockChild);
 

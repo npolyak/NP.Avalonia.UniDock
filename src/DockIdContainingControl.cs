@@ -11,11 +11,12 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using System;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockIdContainingControl : Control
+    public class DockIdContainingControl : TemplatedControl
     {
         public event Action<IDockGroup>? DockIdChanged;
 

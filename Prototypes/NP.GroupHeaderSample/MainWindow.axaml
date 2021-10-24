@@ -22,8 +22,8 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="*, Auto">
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}">
-      <np:SimpleDockGroup.FloatingWindows>
+    <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}">
+      <np:RootDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
@@ -55,7 +55,7 @@
             </np:TabbedDockGroup>
           </np:StackDockGroup>
         </np:FloatingWindowContainer>
-      </np:SimpleDockGroup.FloatingWindows>
+      </np:RootDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical">
         <np:StackDockGroup TheOrientation="Horizontal"
@@ -88,7 +88,7 @@
           </np:DockItem>
         </np:TabbedDockGroup>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
 
     <StackPanel Margin="10,5"
                 Grid.Row="1"

@@ -30,7 +30,7 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class TabbedDockGroup : TemplatedControl, ILeafDockObj
+    public class TabbedDockGroup : DockIdContainingControl, ILeafDockObj
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
@@ -40,19 +40,6 @@ namespace NP.Avalonia.UniDock
         {
             IsDockVisibleChangedEvent?.Invoke(this);
         }
-
-        public event Action<IDockGroup>? DockIdChanged;
-
-        #region DockId Styled Avalonia Property
-        public string DockId
-        {
-            get { return GetValue(DockIdProperty); }
-            set { SetValue(DockIdProperty, value); }
-        }
-
-        public static readonly StyledProperty<string> DockIdProperty =
-            DockIdContainingControl.DockIdProperty.AddOwner<TabbedDockGroup>();
-        #endregion Id Styled Avalonia Property
 
         private bool _isStableGroup = false;
         public bool IsStableGroup 
@@ -179,15 +166,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void FireDockIdChanged()
-        {
-            DockIdChanged?.Invoke(this);
-        }
-
         static TabbedDockGroup()
         {
-            DockIdProperty.Changed.AddClassHandler<TabbedDockGroup>((g, e) => g.OnDockIdChanged(e));
-
             TabStripPlacementProperty.Changed.AddClassHandler<TabbedDockGroup>((sender, e) => sender.OnTabStringPlacementChanged(e));
         }
 
@@ -202,11 +182,6 @@ namespace NP.Avalonia.UniDock
                 (TabStripPlacement == Dock.Top || TabStripPlacement == Dock.Bottom) 
                     ? 
                     Orientation.Horizontal : Orientation.Vertical;
-        }
-
-        private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            FireDockIdChanged();
         }
 
         public DockManager? TheDockManager

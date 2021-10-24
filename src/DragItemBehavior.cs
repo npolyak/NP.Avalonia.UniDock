@@ -181,7 +181,7 @@ namespace NP.Avalonia.UniDock
             // create the window
             var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
 
-            dockWindow.ParentWindowGroup = topDockGroup as SimpleDockGroup;
+            dockWindow.ParentWindowGroup = topDockGroup as RootDockGroup;
 
             dockWindow.SetMovePtr();
 
