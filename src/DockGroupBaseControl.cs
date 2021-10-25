@@ -88,6 +88,18 @@ namespace NP.Avalonia.UniDock
 
         #endregion HasStableChild Direct Avalonia Property
 
+
+        #region CanReattachToDefaultGroup Styled Avalonia Property
+        public bool CanReattachToDefaultGroup
+        {
+            get { return GetValue(CanReattachToDefaultGroupProperty); }
+            set { SetValue(CanReattachToDefaultGroupProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> CanReattachToDefaultGroupProperty =
+            DockAttachedProperties.CanReattachToDefaultGroupProperty.AddOwner<DockGroupBaseControl>();
+        #endregion CanReattachToDefaultGroup Styled Avalonia Property
+
         private IDisposable _subscription;
         public DockGroupBaseControl()
         {

@@ -67,7 +67,7 @@
             Value="10"/>
     <Setter Property="IsEnabled">
       <Setter.Value>
-        <MultiBinding Converter="{x:Static np:AndConverter.Instance}">
+        <MultiBinding Converter="{x:Static np:BoolConverters.And}">
           <Binding Path="CanClose"/>
           <Binding Path="HasStableDescendant"
                    Converter="{x:Static np:BoolConverters.Not}"/>
@@ -84,9 +84,9 @@
     <Setter Property="Background"
             Value="Transparent"/>
     <Setter Property="Width"
-            Value="40"/>
+            Value="30"/>
     <Setter Property="Height"
-            Value="40"/>
+            Value="30"/>
     <Setter Property="Margin"
             Value="5"/>
     <Setter Property="Template">
@@ -118,8 +118,8 @@
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   IsVisible="{TemplateBinding ShowHull}"
-                  Width="150"
-                  Height="150"/>
+                  Width="120"
+                  Height="120"/>
             <np:DockSideControl x:Name="CenterControl" 
                                 Grid.Row="1"
                                 Grid.Column="1"

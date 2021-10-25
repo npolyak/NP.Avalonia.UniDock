@@ -407,6 +407,18 @@ namespace NP.Avalonia.UniDock
             IsSelected = true;
         }
 
+        #region CanReattachToDefaultGroup Styled Avalonia Property
+        public bool CanReattachToDefaultGroup
+        {
+            get { return GetValue(CanReattachToDefaultGroupProperty); }
+            set { SetValue(CanReattachToDefaultGroupProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> CanReattachToDefaultGroupProperty =
+            DockAttachedProperties.CanReattachToDefaultGroupProperty.AddOwner<DockItem>();
+        #endregion CanReattachToDefaultGroup Styled Avalonia Property
+
+
         const string NO_HEADER = "NO_HEADER";
 
         public override string ToString() =>

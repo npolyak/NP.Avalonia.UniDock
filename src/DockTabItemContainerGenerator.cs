@@ -27,6 +27,8 @@ namespace NP.Avalonia.UniDock
 
             control.Classes = new Classes("Dock");
 
+            control.DataContext = item;
+
             return control;
         }
     }

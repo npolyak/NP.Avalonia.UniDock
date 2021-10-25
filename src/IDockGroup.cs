@@ -366,6 +366,7 @@ namespace NP.Avalonia.UniDock
 
             return 
                 group.TheDockManager != null &&
+                group.DefaultDockGroupId != null &&
                 !group.IsUnderDefaultParent();
         }
 
