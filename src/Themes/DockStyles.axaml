@@ -39,8 +39,7 @@
 
       <ControlTemplate x:Key="DockItemButtonsTemplate">
         <Button x:Name="CloseButton"
-                Classes="CloseButton"
-                IsVisible="{Binding Path=CanClose}"/>
+                Classes="CloseButton"/>
       </ControlTemplate>
     </ResourceDictionary>
   </Styles.Resources>
@@ -66,6 +65,15 @@
             Value="10"/>
     <Setter Property="np:AttachedProperties.IconHeight"
             Value="10"/>
+    <Setter Property="IsEnabled">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static np:AndConverter.Instance}">
+          <Binding Path="CanClose"/>
+          <Binding Path="HasStableDescendant"
+                   Converter="{x:Static np:BoolConverters.Not}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
   </Style>
 
   <Style Selector="local|DockSideControl">
@@ -75,6 +83,10 @@
             Value="2,6,2,2"/>
     <Setter Property="Background"
             Value="Transparent"/>
+    <Setter Property="Width"
+            Value="40"/>
+    <Setter Property="Height"
+            Value="40"/>
     <Setter Property="Margin"
             Value="5"/>
     <Setter Property="Template">
@@ -89,12 +101,10 @@
   </Style>
 
   <Style Selector="local|DockCompass">
-    <Setter Property="Width"
-            Value="120"/>
-    <Setter Property="Height"
-            Value="120"/>
     <Setter Property="Background"
             Value="#AFD3D3D3"/>
+    <Setter Property="Margin"
+            Value="5"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="local:DockCompass">
@@ -106,29 +116,114 @@
                   Grid.RowSpan="3"
                   Grid.ColumnSpan="3"
                   HorizontalAlignment="Center"
-                  VerticalAlignment="Center"/>
+                  VerticalAlignment="Center"
+                  IsVisible="{TemplateBinding ShowHull}"
+                  Width="150"
+                  Height="150"/>
             <np:DockSideControl x:Name="CenterControl" 
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                local:DockAttachedProperties.DockSide="Tabs"/>
+                                local:DockAttachedProperties.DockSide="Center"
+                                IsVisible="{TemplateBinding AllowCenterDocking}"/>
             <np:DockSideControl Grid.Row="1"
                                 local:DockAttachedProperties.DockSide="Left"
-                                IsVisible="{TemplateBinding AllowHorizontalDocking}"/>
+                                IsVisible="{TemplateBinding AllowHorizontalDocking}"
+                                HorizontalAlignment="Left"/>
             <np:DockSideControl Grid.Column="1"
                                 local:DockAttachedProperties.DockSide="Top"
-                                IsVisible="{TemplateBinding AllowVerticalDocking}"/>
+                                IsVisible="{TemplateBinding AllowVerticalDocking}"
+                                VerticalAlignment="Top"/>
             <np:DockSideControl Grid.Row="1"
                                 Grid.Column="2"
                                 local:DockAttachedProperties.DockSide="Right"
-                                IsVisible="{TemplateBinding AllowHorizontalDocking}"/>
+                                IsVisible="{TemplateBinding AllowHorizontalDocking}"
+                                HorizontalAlignment="Right"/>
             <np:DockSideControl Grid.Row="2"
                                 Grid.Column="1"
                                 local:DockAttachedProperties.DockSide="Bottom"
-                                IsVisible="{TemplateBinding AllowVerticalDocking}"/>
+                                IsVisible="{TemplateBinding AllowVerticalDocking}"
+                                VerticalAlignment="Bottom"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+  </Style>
+
+
+  <Style Selector="local|DropDockSideControl">
+    <Setter Property="IsHitTestVisible"
+            Value="False"/>
+    <Setter Property="IsVisible"
+            Value="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=Self}}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="local:DropDockSideControl">
+          <Grid Background="{TemplateBinding Background}"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Background"
+            Value="#2000D0FF"/>
+  </Style>
+
+  <Style Selector="local|DropPanelWithCompass">
+    <Setter Property="CompassHorizontalAlignment"
+            Value="Center"/>
+    <Setter Property="CompassVerticalAlignment"
+            Value="Center"/>
+    <Setter Property="Template">
+      <ControlTemplate TargetType="local:DropPanelWithCompass">
+        <Grid x:Name="CompassPanel"
+              RowDefinitions="*,*"
+              ColumnDefinitions="*,*">
+          <local:DropDockSideControl SelectDockSide="Center"
+                                     Grid.RowSpan="2"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Top"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Bottom"
+                                     Grid.Row="1"
+                                     Grid.ColumnSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Left"
+                                     Grid.RowSpan="2"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DropDockSideControl SelectDockSide="Right"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="1"
+                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+          <local:DockCompass Grid.RowSpan="2"
+                             Grid.ColumnSpan="2"
+                             HorizontalAlignment="{TemplateBinding CompassHorizontalAlignment}"
+                             VerticalAlignment="{TemplateBinding CompassVerticalAlignment}"
+                             ShowHull="{TemplateBinding ShowHull}"
+                             AllowCenterDocking="{TemplateBinding AllowCenterDocking}"
+                             AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
+                             AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
+                             local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
+                                                                             Mode=TwoWay, 
+                                                                             RelativeSource={RelativeSource TemplatedParent}}">
+            <local:DockCompass.StartOrEndPointerDetection>
+              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="IsVisible"
+                         Mode="OneWay"
+                         RelativeSource="{RelativeSource TemplatedParent}"/>
+                <Binding Path="IsAttached"
+                         Mode="OneWay"
+                         RelativeSource="{RelativeSource Self}"/>
+              </MultiBinding>
+            </local:DockCompass.StartOrEndPointerDetection>
+          </local:DockCompass>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|DropPanelWithCompass[DockSide=Center]">
+    <Setter Property="SelectBackground"
+            Value="Green"/>
   </Style>
 
   <Style Selector="ContextMenu.LogicalChildrenVisibility">
@@ -253,8 +348,7 @@
                   Classes="CloseButton"
                   Foreground="{Binding Path=(np:DockAttachedProperties.IconButtonForeground), RelativeSource={RelativeSource Mode=TemplatedParent}}"
                   Grid.Column="1"
-                  Margin="6,2,2,2"
-                  IsVisible="{Binding Path=CanClose}"/>
+                  Margin="6,2,2,2"/>
         </Grid>
       </ControlTemplate>
     </Setter>
@@ -283,76 +377,6 @@
   <Style Selector="np|DockTabItem.Dock[IsFullyActive=True]">
     <Setter Property="Background"
             Value="#F5CC84"/>
-  </Style>
-  
-  <Style Selector="local|DropDockSideControl">
-    <Setter Property="IsHitTestVisible"
-            Value="False"/>
-    <Setter Property="IsVisible"
-            Value="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=Self}}"/>
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="local:DropDockSideControl">
-          <Grid Background="{TemplateBinding Background}"/>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
-    <Setter Property="Background"
-            Value="#2000D0FF"/>
-  </Style>
-  
-  <Style Selector="local|DropPanelWithCompass">
-    <Setter Property="Template">
-      <ControlTemplate TargetType="local:DropPanelWithCompass">
-        <Grid x:Name="CompassPanel"
-              RowDefinitions="*,*"
-              ColumnDefinitions="*,*">
-          <local:DropDockSideControl SelectDockSide="Tabs"
-                                     Grid.RowSpan="2"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Top"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Bottom"
-                                     Grid.Row="1"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Left"
-                                     Grid.RowSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Right"
-                                     Grid.RowSpan="2"
-                                     Grid.Column="1"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DockCompass HorizontalAlignment="Center"
-                             VerticalAlignment="Center"
-                             Grid.RowSpan="2"
-                             Grid.ColumnSpan="2"
-                             AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
-                             AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
-                             local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
-                                                                             Mode=TwoWay, 
-                                                                             RelativeSource={RelativeSource TemplatedParent}}">
-            <local:DockCompass.StartOrEndPointerDetection>
-              <MultiBinding Converter="{x:Static BoolConverters.And}">
-                <Binding Path="IsVisible" 
-                         Mode="OneWay" 
-                         RelativeSource="{RelativeSource TemplatedParent}"/>
-                <Binding Path="IsAttached"
-                         Mode="OneWay"
-                         RelativeSource="{RelativeSource Self}"/>
-              </MultiBinding>
-            </local:DockCompass.StartOrEndPointerDetection>
-          </local:DockCompass>
-        </Grid>
-      </ControlTemplate>
-    </Setter>
-  </Style>
-
-  <Style Selector="local|DropPanelWithCompass[DockSide=Tabs]">
-    <Setter Property="SelectBackground"
-            Value="Green"/>
   </Style>
 
   <Style Selector="np|DockSeparator">
@@ -685,6 +709,12 @@
                 RowDefinitions="Auto, *">
             <TemplatedControl x:Name="HeaderControl"
                               Template="{TemplateBinding HeaderControlTemplate}"/>
+            <local:DropPanelWithCompass
+                  ShowHull="False"
+                  AllowHorizontalDocking="False"
+                  AllowVerticalDocking="False"
+                  IsVisible="{Binding Path=ShowCompass, 
+                                      RelativeSource= {RelativeSource TemplatedParent}}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -697,6 +727,19 @@
         <ControlTemplate>
           <Grid x:Name="PART_RootPanel"
                 Background="{TemplateBinding Background}">
+            <local:DropPanelWithCompass
+                  ShowHull="False"
+                  CompassHorizontalAlignment="Stretch"
+                  CompassVerticalAlignment="Stretch"
+                  AllowCenterDocking="{TemplateBinding ShowCompassCenter}"
+                  AllowHorizontalDocking="{Binding Path=ShowCompassCenter, 
+                                                   Converter={x:Static BoolConverters.Not},
+                                                   RelativeSource={RelativeSource TemplatedParent}}"
+                  AllowVerticalDocking="{Binding Path=ShowCompassCenter, 
+                                                   Converter={x:Static BoolConverters.Not},
+                                                   RelativeSource={RelativeSource TemplatedParent}}"
+                  IsVisible="{Binding Path=ShowCompass, 
+                                      RelativeSource= {RelativeSource TemplatedParent}}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>

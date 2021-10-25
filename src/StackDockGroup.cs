@@ -27,10 +27,13 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using NP.Avalonia.Visuals.Behaviors;
+using Avalonia.VisualTree;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
-    public class StackDockGroup : DockIdContainingControl, IDockGroup, IDisposable, IStyleable
+    public class StackDockGroup : DockGroupBaseControl, IDockGroup, IDisposable, IStyleable
     {
         Type IStyleable.StyleKey => typeof(StackDockGroup);
 
@@ -39,9 +42,16 @@ namespace NP.Avalonia.UniDock
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
+
+            this.FireChangeWithin();
         }
 
         public bool AutoInvisible { get; set; } = true;
+
+        public DropPanelWithCompass? DropPanel =>
+            this.GetDropPanel();
+
+        public DockKind? CurrentGroupDock => DropPanel?.DockSide;
 
         public Point FloatingSize { get; set; } = new Point(700, 400);
 
@@ -327,6 +337,9 @@ namespace NP.Avalonia.UniDock
             dockChild.IsDockVisibleChangedEvent += OnDockChild_IsDockVisibleChangedEvent;
 
             this.SetIsDockVisible();
+
+            this.FireChangeWithin();
+            this.SubscribeToChildChange(dockChild);
         }
 
         private void OnDockChild_IsDockVisibleChangedEvent(IDockGroup dockChild)
@@ -409,6 +422,9 @@ namespace NP.Avalonia.UniDock
 
         private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
         {
+            this.UnsubscribeFromChildChange(dockChild);
+            this.FireChangeWithin();
+
             _sizeCoefficients.RemoveAt(idx);
 
             dockChild.IsDockVisibleChangedEvent -= OnDockChild_IsDockVisibleChangedEvent;
@@ -500,34 +516,6 @@ namespace NP.Avalonia.UniDock
             for(int i = 0; i < coeffs.Length; i++)
             {
                 SetSizeCoefficient(i, coeffs[i]);
-            }
-        }
-
-        public IDockGroup CloneIfStable()
-        {
-            if (IsStableGroup)
-            {
-                StackDockGroup result = new StackDockGroup();
-                result.AutoDestroy = this.AutoDestroy;
-                result.TheOrientation = this.TheOrientation;
-
-                result.TheDockManager = this.TheDockManager;
-
-                var coefficients = this.GetSizeCoefficients();
-
-                foreach (IDockGroup childGroup in this.DockChildren.ToList())
-                {
-                    result.DockChildren.Add(childGroup.CloneIfStable());
-                }
-
-                result.SetSizeCoefficients(coefficients);
-
-                return result;
-            }
-            else
-            {
-                this.RemoveItselfFromParent();
-                return this;
             }
         }
     }

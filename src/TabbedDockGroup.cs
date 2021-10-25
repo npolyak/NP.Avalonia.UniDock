@@ -27,10 +27,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
-    public class TabbedDockGroup : DockIdContainingControl, ILeafDockObj
+    public class TabbedDockGroup : DockGroupBaseControl, ILeafDockObj
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
@@ -39,6 +41,8 @@ namespace NP.Avalonia.UniDock
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
+
+            DockChangedWithin?.OnNext(Unit.Default);
         }
 
         private bool _isStableGroup = false;
@@ -168,7 +172,9 @@ namespace NP.Avalonia.UniDock
 
         static TabbedDockGroup()
         {
-            TabStripPlacementProperty.Changed.AddClassHandler<TabbedDockGroup>((sender, e) => sender.OnTabStringPlacementChanged(e));
+            TabStripPlacementProperty
+                .Changed
+                .AddClassHandler<TabbedDockGroup>((sender, e) => sender.OnTabStringPlacementChanged(e));
         }
 
         private void OnTabStringPlacementChanged(AvaloniaPropertyChangedEventArgs e)
@@ -412,20 +418,6 @@ namespace NP.Avalonia.UniDock
         #endregion VerticalContentAlignment Styled Avalonia Property
 
 
-        #region ShowCompass Styled Avalonia Property
-        public bool ShowCompass
-        {
-            get { return GetValue(ShowCompassProperty); }
-            set { SetValue(ShowCompassProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> ShowCompassProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, bool>
-            (
-                nameof(ShowCompass)
-            );
-        #endregion ShowCompass Styled Avalonia Property
-
         #region AllowVerticalDocking Styled Avalonia Property
         public bool AllowVerticalDocking
         {
@@ -493,11 +485,15 @@ namespace NP.Avalonia.UniDock
             this.SetIsDockVisible();
             child.IsDockVisibleChangedEvent += OnChildDockVisibleChanged;
 
-            SelecteFirstVisibleChildIfNoSelection();
+            SelectFirstVisibleChildIfNoSelection();
+
+            this.FireChangeWithin();
+            this.SubscribeToChildChange(child);
         }
 
         private void OnChildDockVisibleChanged(IDockGroup child)
         {
+            this.FireChangeWithin();
             if (child is DockItem dockItemChild)
             {
                 if (!child.IsDockVisible && dockItemChild.IsSelected)
@@ -505,7 +501,7 @@ namespace NP.Avalonia.UniDock
                     dockItemChild.IsSelected = false;
                 }
 
-                SelecteFirstVisibleChildIfNoSelection();
+                SelectFirstVisibleChildIfNoSelection();
             }
 
             this.SetIsDockVisible();
@@ -522,7 +518,7 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void SelecteFirstVisibleChildIfNoSelection()
+        private void SelectFirstVisibleChildIfNoSelection()
         {
             if (SelectedItem == null)
             {
@@ -532,6 +528,8 @@ namespace NP.Avalonia.UniDock
 
         private void OnItemRemoved(IDockGroup child)
         {
+            this.UnsubscribeFromChildChange(child);
+            this.FireChangeWithin();
             if (child is DockItem dockItemChild )
             {
                 if (dockItemChild.IsSelected)
@@ -540,7 +538,7 @@ namespace NP.Avalonia.UniDock
                 }
             }
 
-            SelecteFirstVisibleChildIfNoSelection();
+            SelectFirstVisibleChildIfNoSelection();
             child.IsDockVisibleChangedEvent -= OnChildDockVisibleChanged;
             this.SetIsDockVisible();
         }
@@ -555,9 +553,6 @@ namespace NP.Avalonia.UniDock
 
             _mimicCollectionBehavior.InputCollection = null;
         }
-
-
-        public IEnumerable<DockItem> LeafItems => Items.NullToEmpty().Cast<DockItem>().ToList();
 
         public IDockGroup? GetContainingGroup() => this;
 
@@ -584,29 +579,5 @@ namespace NP.Avalonia.UniDock
                 nameof(TabSeparatorBackground)
             );
         #endregion TabSeparatorBackground Styled Avalonia Property
-
-
-        public IDockGroup CloneIfStable()
-        {
-            if (IsStableGroup)
-            {
-                TabbedDockGroup result = new TabbedDockGroup();
-                result.AutoDestroy = this.AutoDestroy;
-                result.TabOrientation = this.TabOrientation;
-
-                foreach (IDockGroup childGroup in this.DockChildren.NullToEmpty().ToList())
-                {
-                    result?.DockChildren?.Add(childGroup.CloneIfStable());
-                }
-
-                result.TheDockManager = this.TheDockManager;
-                return result;
-            }
-            else
-            {
-                this.RemoveItselfFromParent();
-                return this;
-            }
-        }
     }
 }

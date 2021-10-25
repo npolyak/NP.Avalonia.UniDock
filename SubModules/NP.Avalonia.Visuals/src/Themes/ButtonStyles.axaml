@@ -65,4 +65,10 @@
       <Setter Property="behaviors:CallAction.TheEvent"
               Value="{x:Static Button.ClickEvent}"/>
     </Style>
+  <Style Selector="Button.IconButton:disabled">
+    <Setter Property="IsHitTestVisible"
+            Value="False"/>
+    <Setter Property="Opacity"
+            Value="0.2"/>
+  </Style>
 </Styles>

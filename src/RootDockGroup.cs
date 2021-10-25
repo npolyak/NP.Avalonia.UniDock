@@ -26,7 +26,7 @@ using System.Linq;
 
 namespace NP.Avalonia.UniDock
 {
-    public class RootDockGroup : DockIdContainingControl, IDockGroup, IDisposable
+    public class RootDockGroup : DockGroupBaseControl, IDockGroup, IDisposable
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
@@ -39,6 +39,8 @@ namespace NP.Avalonia.UniDock
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
+
+            this.FireChangeWithin();
         }
 
         public bool IsStableGroup
@@ -52,12 +54,14 @@ namespace NP.Avalonia.UniDock
 
         public RootDockGroup? ParentWindowGroup { get; set; }
 
-        // should never be called on the window root group
-        public IDockGroup CloneIfStable() => throw new NotImplementedException();
-
         public event Action<RootDockGroup>? HasNoChildrenEvent;
 
         private SingleActiveBehavior<DockItem> _singleActiveBehavior = new SingleActiveBehavior<DockItem>();
+
+        public DropPanelWithCompass? DropPanel =>
+            this.GetDropPanel();
+
+        public DockKind? CurrentGroupDock => DropPanel?.DockSide;
 
 
         #region ActiveDockItem Direct Avalonia Property
@@ -116,6 +120,22 @@ namespace NP.Avalonia.UniDock
             get => DockAttachedProperties.GetTheDockManager(this);
             set => DockAttachedProperties.SetTheDockManager(this, value);
         }
+
+
+        #region ShowCompassCenter Styled Avalonia Property
+        public bool ShowCompassCenter
+        {
+            get { return GetValue(ShowCompassCenterProperty); }
+            set { SetValue(ShowCompassCenterProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowCompassCenterProperty =
+            AvaloniaProperty.Register<RootDockGroup, bool>
+            (
+                nameof(ShowCompassCenter),
+                true
+            );
+        #endregion ShowCompassCenter Styled Avalonia Property
 
         public IDockGroup? DockParent
         {
@@ -278,7 +298,7 @@ namespace NP.Avalonia.UniDock
                 control = leafDockChild.GetVisual();
             }
 
-            return (Control)LogicalChildren.OfType<IControl>().FirstOrDefault(item => ReferenceEquals(item, control))!;
+            return (Control) control;
         }
 
 
@@ -300,6 +320,9 @@ namespace NP.Avalonia.UniDock
             NumberDockChildren = DockChildren?.Count() ?? 0;
             newChildToInsert.IsDockVisibleChangedEvent += OnChildIsDockVisibleChanged;
             this.SetIsDockVisible();
+
+            this.FireChangeWithin();
+            this.SubscribeToChildChange(newChildToInsert);
         }
 
         private void OnChildIsDockVisibleChanged(IDockGroup obj)
@@ -309,6 +332,8 @@ namespace NP.Avalonia.UniDock
 
         private void OnChildRemoved(IDockGroup childToRemove)
         {
+            this.UnsubscribeFromChildChange(childToRemove);
+            this.FireChangeWithin();
             childToRemove.IsDockVisibleChangedEvent -= OnChildIsDockVisibleChanged;
             Control visualChildToRemove = FindVisualChild(childToRemove);
 

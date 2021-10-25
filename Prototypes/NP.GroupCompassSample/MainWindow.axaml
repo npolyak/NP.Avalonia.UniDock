@@ -22,14 +22,22 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="*, Auto">
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}">
+    <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}">
       <np:DockItem Header="Tab2"
                    DefaultDockGroupId="Group1"
                    DefaultDockOrderInGroup="2">
         <TextBlock Text="Hi World!"/>
       </np:DockItem>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
 
+    <!--<np:DropPanelWithCompass ShowHull="False"
+                             AllowCenterDocking="False"
+                             DockSide="Bottom"/>-->
+
+    <!--<np:DockCompass HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ShowHull="False"
+                    AllowCenterDocking="False"/>-->
     <StackPanel Margin="10,5"
                 Grid.Row="1"
                 Orientation="Horizontal"

@@ -265,5 +265,25 @@ namespace NP.Avalonia.UniDock
                 "CanReattachToDefaultGroup"
             );
         #endregion CanReattachToDefaultGroup Attached Avalonia Property
+
+
+        #region ShowCompass Attached Avalonia Property
+        public static bool GetShowCompass(AvaloniaObject obj)
+        {
+            return obj.GetValue(ShowCompassProperty);
+        }
+
+        public static void SetShowCompass(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(ShowCompassProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> ShowCompassProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "ShowCompass"
+            );
+        #endregion ShowCompass Attached Avalonia Property
+
     }
 }

@@ -22,6 +22,8 @@ using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
@@ -32,11 +34,18 @@ namespace NP.Avalonia.UniDock
         IActiveItem<DockItem>
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
+        
+        IDictionary<IDockGroup, IDisposable> IDockGroup.ChildSubscriptions => 
+            throw new NotImplementedException();
+
+        public Subject<Unit> DockChangedWithin { get; } = new Subject<Unit>();
 
         // IsActive in current top level (root) group (or in floating window) changed
         public event Action<DockItem>? IsActiveChanged;
 
         public GroupKind TheGroupKind => GroupKind.DockItem;
+
+        public bool HasStableDescendant => false;
 
         #region IsActive Styled Avalonia Property
         /// <summary>
@@ -73,6 +82,8 @@ namespace NP.Avalonia.UniDock
 
             IDockGroup topDockGroup = this.GetDockGroupRoot();
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+
+            this.FireChangeWithin();
         }
 
         public bool IsPredefined { get; set; } = true;
@@ -120,7 +131,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            DockIdContainingControl.DockIdProperty.AddOwner<DockItem>();
+            DockGroupBaseControl.DockIdProperty.AddOwner<DockItem>();
         #endregion Id Styled Avalonia Property
 
         private void FireDockIdChanged()
@@ -242,6 +253,8 @@ namespace NP.Avalonia.UniDock
         public DockItemPresenter? TheVisual { get; internal set; }
 
         public IControl GetVisual() => (TheVisual as IControl) ?? this;
+
+        public IDockGroup? GetContainingGroup() => DockParent;
 
         private bool _isSelected = false;
         public bool IsSelected 
@@ -429,10 +442,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<bool> ShowCompassProperty =
-            AvaloniaProperty.Register<DockItem, bool>
-            (
-                nameof(ShowCompass)
-            );
+            DockAttachedProperties.ShowCompassProperty.AddOwner<DockItem>();
         #endregion ShowCompass Styled Avalonia Property
 
         public void CleanSelfOnRemove()
@@ -464,8 +474,6 @@ namespace NP.Avalonia.UniDock
 
             IsSelected = false;
         }
-
-        public IEnumerable<DockItem> LeafItems => this.ToCollection();
 
         void IDockGroup.SimplifySelf()
         {
@@ -499,13 +507,6 @@ namespace NP.Avalonia.UniDock
 
                 this.SetCanReattachToDefaultGroup();
             }
-        }
-
-        // always un-stable
-        public IDockGroup CloneIfStable()
-        {
-            this.RemoveItselfFromParent();
-            return this;
         }
     }
 }

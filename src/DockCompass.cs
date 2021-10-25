@@ -64,6 +64,38 @@ namespace NP.Avalonia.UniDock
         }
 
 
+        #region ShowHull Styled Avalonia Property
+        public bool ShowHull
+        {
+            get { return GetValue(ShowHullProperty); }
+            set { SetValue(ShowHullProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowHullProperty =
+            AvaloniaProperty.Register<DockCompass, bool>
+            (
+                nameof(ShowHull),
+                true
+            );
+        #endregion ShowHull Styled Avalonia Property
+
+
+        #region AllowCenterDocking Styled Avalonia Property
+        public bool AllowCenterDocking
+        {
+            get { return GetValue(AllowCenterDockingProperty); }
+            set { SetValue(AllowCenterDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowCenterDockingProperty =
+            AvaloniaProperty.Register<DockCompass, bool>
+            (
+                nameof(AllowCenterDocking),
+                true
+            );
+        #endregion AllowCenterDocking Styled Avalonia Property
+
+
         #region AllowVerticalDocking Styled Avalonia Property
         public bool AllowVerticalDocking
         {

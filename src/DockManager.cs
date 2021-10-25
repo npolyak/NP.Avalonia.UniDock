@@ -36,11 +36,11 @@ namespace NP.Avalonia.UniDock
         public string? Id { get; set; }
 
         [Part]
-        private IStackGroupFactory StackGroupFactory { get; set; } = 
+        private IStackGroupFactory StackGroupFactory { get; set; } =
             new StackGroupFactory();
 
         [Part]
-        private ITabbedGroupFactory TabbedGroupFactory { get; set; } = 
+        private ITabbedGroupFactory TabbedGroupFactory { get; set; } =
             new TabbedGroupFactory();
 
         [Part]
@@ -98,9 +98,9 @@ namespace NP.Avalonia.UniDock
             if (DockItemsViewModels == null)
             {
                 return;
-            }    
+            }
 
-            Type[] types = 
+            Type[] types =
                 DockItemsViewModels.Select(item => item.GetType()).Distinct().ToArray();
 
             DockItemsViewModels?.SerializeToFile(filePath, types);
@@ -143,7 +143,7 @@ namespace NP.Avalonia.UniDock
                 _predefinedWindows.Remove(window);
             }
         }
-        
+
 
         private IList<IDockGroup> _connectedGroups = new ObservableCollection<IDockGroup>();
         public IEnumerable<IDockGroup> ConnectedGroups => _connectedGroups;
@@ -156,7 +156,7 @@ namespace NP.Avalonia.UniDock
 
             _connectedGroups.Add(group);
         }
-            
+
         internal void RemoveConnectedGroup(IDockGroup group)
         {
             _connectedGroups.Remove(group);
@@ -192,6 +192,23 @@ namespace NP.Avalonia.UniDock
         public IEnumerable<ILeafDockObj> DockLeafObjsWithoutLeafParents =>
             DockLeafObjs.Where(leaf => !leaf.HasLeafAncestor()).ToList();
 
+        private static bool IsGroupOperating(IDockGroup group)
+        {
+            var v = group.GetVisual();
+
+            return v.IsVisible && v.IsAttachedToLogicalTree && v.GetControlsWindow<Window>().IsVisible;
+        }
+
+        public IEnumerable<RootDockGroup> AllOperatingRootDockGroups => 
+            AllGroups.OfType<RootDockGroup>()
+            .Where(g => IsGroupOperating(g)).ToList();
+
+        public IEnumerable<IDockGroup> AllOperatingLeafGroupsWOLeafParents =>
+            AllGroups
+                .Where(g => g.HasLeafAncestor() == false)
+                .Where(g => IsGroupOperating(g))
+                .Where(g => (g is TabbedDockGroup) || g.GetNumberChildren() == 0)
+                .ToList();
 
         public void ClearGroups()
         {
@@ -222,7 +239,14 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private IList<(ILeafDockObj Group, Rect2D Rect)>? _currentDockGroups;
+        private IList<(IDockGroup Group, Rect2D Rect)>? _currentDockGroups;
+        private IList<(RootDockGroup Group, Rect2D Rect)>? _rootGroups;
+
+        private static (T Group, Rect2D Rect) GroupToPair<T>(T group)
+            where T : IDockGroup
+        {
+            return (group, group.GetVisual().GetScreenBounds());
+        }
 
         IDisposable? _pointerMovedSubscription;
         private void BeginDragAction()
@@ -230,11 +254,21 @@ namespace NP.Avalonia.UniDock
             if (_draggedWindow == null)
                 return;
 
-            _currentDockGroups = 
-                DockLeafObjsWithoutLeafParents
-                .Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree && leaf.GetVisual().IsVisible && leaf.GetVisual().GetControlsWindow<Window>().IsVisible)
-                .Except(_draggedWindow.TheDockGroup.GetLeafGroups())
-                .Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
+            _currentDockGroups =
+                AllOperatingLeafGroupsWOLeafParents
+                    .Except(_draggedWindow.TheDockGroup.GetDockGroupSelfAndDescendants())
+                    .Select(g => GroupToPair(g)).ToList();
+
+            _rootGroups =
+                AllOperatingRootDockGroups
+                    .Except(_draggedWindow.TheDockGroup.ToCollection())
+                    .Except(_currentDockGroups.OfType<RootDockGroup>())
+                    .Select(g => GroupToPair(g)).ToList();
+
+            //DockLeafObjsWithoutLeafParents
+            //.Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree && leaf.GetVisual().IsVisible && leaf.GetVisual().GetControlsWindow<Window>().IsVisible)
+            //.Except(_draggedWindow.TheDockGroup.GetLeafGroups())
+            //.Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
 
             _pointerMovedSubscription = 
                 CurrentScreenPointBehavior.CurrentScreenPoint
@@ -244,8 +278,8 @@ namespace NP.Avalonia.UniDock
         /// <summary>
         /// group into which we insert dragged item(s)
         /// </summary>
-        private ILeafDockObj? _currentLeafObjToInsertWithRespectTo = null;
-        private ILeafDockObj? CurrentLeafObjToInsertWithRespectTo
+        private IDockGroup? _currentLeafObjToInsertWithRespectTo = null;
+        private IDockGroup? CurrentLeafObjToInsertWithRespectTo
         {
             get => _currentLeafObjToInsertWithRespectTo;
 
@@ -268,6 +302,34 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private RootDockGroup? _currentRootDockGroup = null;
+        private RootDockGroup? CurrentRootDockGroup
+        {
+            get => _currentRootDockGroup;
+
+            set
+            {
+                if (_currentRootDockGroup == value)
+                {
+                    return;
+                }
+
+                if (_currentRootDockGroup != null)
+                {
+                    _currentRootDockGroup.ShowCompassCenter = true;
+                    _currentRootDockGroup.ShowCompass = false;
+                }
+
+                _currentRootDockGroup = value;
+
+                if (_currentRootDockGroup != null)
+                {
+                    _currentRootDockGroup.ShowCompassCenter = false;
+                    _currentRootDockGroup.ShowCompass = true;
+                }
+            }
+        }
+
         private void OnPointerMoved(Point2D pointerScreenLocation)
         {
             if (_currentDockGroups == null)
@@ -280,33 +342,53 @@ namespace NP.Avalonia.UniDock
                     .Where(gr => gr.Group.IsVisible && gr.Rect.ContainsPoint(pointerScreenLocation))
                     .Select(gr => gr.Group);
 
-            var pointerAboveWindows =
-                pointerAboveGroups
-                    .Select
-                    (
-                        g => g.GetVisual().GetVisualAncestors()
-                              .OfType<Window>()
-                              .FirstOrDefault()).ToList();
-
             CurrentLeafObjToInsertWithRespectTo = pointerAboveGroups.FirstOrDefault();
+
+            if ((CurrentLeafObjToInsertWithRespectTo != null) &&
+                (CurrentLeafObjToInsertWithRespectTo is not RootDockGroup) )
+            {
+                CurrentRootDockGroup = CurrentLeafObjToInsertWithRespectTo.GetDockGroupRoot() as RootDockGroup;
+            }
         }
 
-        private void DropWithOrientation(DockKind? dock, IDockGroup originalDraggedGroup)
+        private void DropWithOrientation(IDockGroup? currentDockGroupToInsertWithRespectTo, DockKind dock, IDockGroup draggedGroup)
         {
-            if (dock == null || dock == DockKind.Tabs)
+            if (dock == DockKind.Center)
             {
                 throw new Exception("Programming ERROR: dock should be one of Left, Top, Right, Bottom");
             }
 
-            var draggedGroup = originalDraggedGroup.CloneIfStable();
+            draggedGroup.RemoveItselfFromParent();
 
-            IDockGroup parentGroup = CurrentLeafObjToInsertWithRespectTo!.DockParent!;
+            IDockGroup? parentGroup = null;
+            IDockGroup? childGroup = null;
 
-            Orientation orientation = (Orientation) dock.ToOrientation()!;
+            if (currentDockGroupToInsertWithRespectTo is RootDockGroup rootDockGroup)
+            {
+                parentGroup = currentDockGroupToInsertWithRespectTo;
+                childGroup = rootDockGroup.TheChild!;
 
+            }
+            else
+            {
+                parentGroup = currentDockGroupToInsertWithRespectTo!.DockParent!;
+                childGroup = currentDockGroupToInsertWithRespectTo!;
+            }
+
+            SetOrientationParentChildRelationship(parentGroup, childGroup, dock, draggedGroup);
+
+            (draggedGroup.GetLeafItems().FirstOrDefault() as IActiveItem<DockItem>)?.MakeActive();
+
+            DraggedWindow?.Close();
+        }
+
+        private void SetOrientationParentChildRelationship(IDockGroup parentGroup, IDockGroup childGroup, DockKind? dock, IDockGroup draggedGroup)
+        {
             int childIdx =
                 parentGroup
-                    .DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo);
+                    .DockChildren.IndexOf(childGroup);
+            
+            Orientation orientation = (Orientation)dock.ToOrientation()!;
 
             if (parentGroup is StackDockGroup dockStackGroup && dockStackGroup.TheOrientation == orientation)
             {
@@ -319,24 +401,20 @@ namespace NP.Avalonia.UniDock
             {
                 GridLength sizeCoeff = parentGroup.GetSizeCoeff(childIdx);
 
-                CurrentLeafObjToInsertWithRespectTo.RemoveItselfFromParent();
+                childGroup.RemoveItselfFromParent();
                 StackDockGroup insertGroup = StackGroupFactory.Create();
 
                 insertGroup.TheOrientation = orientation;
-                
+
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
 
                 parentGroup.SetSizeCoeff(childIdx, sizeCoeff);
 
-                insertGroup.DockChildren?.Insert(0, CurrentLeafObjToInsertWithRespectTo);
+                insertGroup.DockChildren?.Insert(0, childGroup);
 
                 int insertIdx = 0.ToInsertIdx(dock);
                 insertGroup.DockChildren?.Insert(insertIdx, draggedGroup);
             }
-
-            (draggedGroup.GetLeafItems().FirstOrDefault() as IActiveItem<DockItem>)?.MakeActive();
-
-            DraggedWindow?.Close();
         }
 
         public ObservableCollection<Window> AllWindows => _allWindowsBehavior.Result;
@@ -364,7 +442,7 @@ namespace NP.Avalonia.UniDock
                 (
                     AllGroupsBehavior.Result, 
                     group => group.DockId,
-                    group => group.GetObservable(DockIdContainingControl.DockIdProperty));
+                    group => group.GetObservable(DockGroupBaseControl.DockIdProperty));
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -473,58 +551,80 @@ namespace NP.Avalonia.UniDock
 
                 currentWindowToDropInto?.SetCannotClose();
 
+                IDockGroup? currentDockGroupToInsertWithRespectTo = CurrentLeafObjToInsertWithRespectTo;
+
                 DockKind ? currentDock = CurrentLeafObjToInsertWithRespectTo?.CurrentGroupDock;
+
+                if (currentDock == null)
+                {
+                    currentDockGroupToInsertWithRespectTo = CurrentRootDockGroup;
+
+                    currentDock = currentDockGroupToInsertWithRespectTo?.CurrentGroupDock;
+                }
+
                 if (draggedGroup != null)
                 {
                     switch (currentDock)
                     {
-                        case DockKind.Tabs:
+                        case DockKind.Center:
                         {
                             var leafItems = DraggedWindow?.LeafItems.ToList();
 
-                            if (leafItems.IsNullOrEmptyCollection())
-                            {
-                                return;
-                            }
-
-                            leafItems.DoForEach(item => item.RemoveItselfFromParent());
-                            IDockGroup currentGroup =
-                                CurrentLeafObjToInsertWithRespectTo?.GetContainingGroup()!;
-
-                            var groupToInsertItemsInto = currentGroup as TabbedDockGroup;
-
-                            if (groupToInsertItemsInto == null)
-                            {
-                                groupToInsertItemsInto = TabbedGroupFactory.Create();
-
-                                int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(CurrentLeafObjToInsertWithRespectTo!);
-                                GridLength sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);
-
-                                currentGroup.DockChildren?.Remove(CurrentLeafObjToInsertWithRespectTo!);
-
-                                currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
-                                currentGroup.SetSizeCoeff(currentLeafObjIdx, sizeCoeff);
-
-                                CurrentLeafObjToInsertWithRespectTo?.CleanSelfOnRemove();
-
-                                var additionaLeafItems = CurrentLeafObjToInsertWithRespectTo?.LeafItems;
-
-                                additionaLeafItems?.DoForEach(item => item.RemoveItselfFromParent());
-
-                                if (additionaLeafItems != null)
-                                {
-                                    leafItems = leafItems?.Union(additionaLeafItems).ToList();
-                                }
-
-                                groupToInsertItemsInto.ApplyTemplate();
-                            }
-
-                            groupToInsertItemsInto.DockChildren.InsertCollectionAtStart(leafItems);
                             var firstLeafItem = leafItems?.FirstOrDefault();
+
+                            if (currentDockGroupToInsertWithRespectTo is RootDockGroup ||
+                                currentDockGroupToInsertWithRespectTo is StackDockGroup)
+                            {
+                                draggedGroup.RemoveItselfFromParent();
+                                currentDockGroupToInsertWithRespectTo.DockChildren.Add(draggedGroup);
+                                firstLeafItem?.Select();
+                            }
+                            else
+                            {
+                                if (leafItems.IsNullOrEmptyCollection())
+                                {
+
+                                    leafItems.DoForEach(item => item.RemoveItselfFromParent());
+                                    IDockGroup currentGroup =
+                                        currentDockGroupToInsertWithRespectTo?.GetContainingGroup()!;
+
+                                    var groupToInsertItemsInto = currentGroup as TabbedDockGroup;
+
+                                    if (groupToInsertItemsInto == null)
+                                    {
+                                        groupToInsertItemsInto = TabbedGroupFactory.Create();
+
+                                        int currentLeafObjIdx = currentGroup.DockChildren.IndexOf(currentDockGroupToInsertWithRespectTo!);
+                                        GridLength sizeCoeff = currentGroup.GetSizeCoeff(currentLeafObjIdx);
+
+                                        currentGroup.DockChildren?.Remove(currentDockGroupToInsertWithRespectTo!);
+
+                                        currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
+                                        currentGroup.SetSizeCoeff(currentLeafObjIdx, sizeCoeff);
+
+                                        currentDockGroupToInsertWithRespectTo?.CleanSelfOnRemove();
+
+                                        var additionaLeafItems = currentDockGroupToInsertWithRespectTo?.LeafItems;
+
+                                        additionaLeafItems?.DoForEach(item => item.RemoveItselfFromParent());
+
+                                        if (additionaLeafItems != null)
+                                        {
+                                            leafItems = leafItems?.Union(additionaLeafItems).ToList();
+                                        }
+
+                                        groupToInsertItemsInto.ApplyTemplate();
+                                    }
+
+                                    groupToInsertItemsInto.DockChildren.InsertCollectionAtStart(leafItems);
+
+
+                                    firstLeafItem?.Select();
+                                }
+                            }
 
                             DraggedWindow?.Close();
 
-                            firstLeafItem?.Select();
                          break;
                         }
                         case DockKind.Left:
@@ -532,7 +632,7 @@ namespace NP.Avalonia.UniDock
                         case DockKind.Right:
                         case DockKind.Bottom:
                         {
-                            DropWithOrientation(currentDock, draggedGroup);
+                            DropWithOrientation(currentDockGroupToInsertWithRespectTo, currentDock.Value, draggedGroup);
 
                             break;
                         }
@@ -548,6 +648,11 @@ namespace NP.Avalonia.UniDock
                 if (CurrentLeafObjToInsertWithRespectTo != null)
                 {
                     CurrentLeafObjToInsertWithRespectTo = null;
+                }
+
+                if (CurrentRootDockGroup != null)
+                {
+                    CurrentRootDockGroup = null;
                 }
 
                 currentWindowToDropInto?.ResetCanClose();

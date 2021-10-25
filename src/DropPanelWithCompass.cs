@@ -15,6 +15,7 @@ using Avalonia.VisualTree;
 using System.Linq;
 using System;
 using Avalonia.Media;
+using Avalonia.Layout;
 
 namespace NP.Avalonia.UniDock
 {
@@ -72,6 +73,61 @@ namespace NP.Avalonia.UniDock
             );
         #endregion SelectBackground Styled Avalonia Property
 
+
+        #region CompassHorizontalAlignment Styled Avalonia Property
+        public HorizontalAlignment CompassHorizontalAlignment
+        {
+            get { return GetValue(CompassHorizontalAlignmentProperty); }
+            set { SetValue(CompassHorizontalAlignmentProperty, value); }
+        }
+
+        public static readonly StyledProperty<HorizontalAlignment> CompassHorizontalAlignmentProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, HorizontalAlignment>
+            (
+                nameof(CompassHorizontalAlignment)
+            );
+        #endregion CompassHorizontalAlignment Styled Avalonia Property
+
+
+        #region CompassVerticalAlignment Styled Avalonia Property
+        public VerticalAlignment CompassVerticalAlignment
+        {
+            get { return GetValue(CompassVerticalAlignmentProperty); }
+            set { SetValue(CompassVerticalAlignmentProperty, value); }
+        }
+
+        public static readonly StyledProperty<VerticalAlignment> CompassVerticalAlignmentProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, VerticalAlignment>
+            (
+                nameof(CompassVerticalAlignment)
+            );
+        #endregion CompassVerticalAlignment Styled Avalonia Property
+
+
+        #region ShowHull Styled Avalonia Property
+        public bool ShowHull
+        {
+            get { return GetValue(ShowHullProperty); }
+            set { SetValue(ShowHullProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowHullProperty =
+            DockCompass.ShowHullProperty.AddOwner<DropPanelWithCompass>();
+        #endregion ShowHull Styled Avalonia Property
+
+
+        #region AllowCenterDocking Styled Avalonia Property
+        public bool AllowCenterDocking
+        {
+            get { return GetValue(AllowCenterDockingProperty); }
+            set { SetValue(AllowCenterDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowCenterDockingProperty =
+            DockCompass.AllowCenterDockingProperty.AddOwner<DropPanelWithCompass>();
+        #endregion AllowCenterDocking Styled Avalonia Property
+
+
         #region AllowVerticalDocking Styled Avalonia Property
         public bool AllowVerticalDocking
         {
@@ -80,11 +136,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<bool> AllowVerticalDockingProperty =
-            AvaloniaProperty.Register<DropPanelWithCompass, bool>
-            (
-                nameof(AllowVerticalDocking),
-                true
-            );
+            DockCompass.AllowVerticalDockingProperty.AddOwner<DropPanelWithCompass>();
         #endregion AllowVerticalDocking Styled Avalonia Property
 
 
@@ -96,11 +148,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<bool> AllowHorizontalDockingProperty =
-            AvaloniaProperty.Register<DropPanelWithCompass, bool>
-            (
-                nameof(AllowHorizontalDocking),
-                true
-            );
+            DockCompass.AllowHorizontalDockingProperty.AddOwner<DropPanelWithCompass>();
         #endregion AllowHorizontalDocking Styled Avalonia Property
     }
 }

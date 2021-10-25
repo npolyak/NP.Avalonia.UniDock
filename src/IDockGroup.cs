@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
@@ -18,6 +19,8 @@ using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
@@ -30,6 +33,10 @@ namespace NP.Avalonia.UniDock
         event Action<IDockGroup> IsDockVisibleChangedEvent;
 
         internal void FireIsDockVisibleChangedEvent();
+
+        IDictionary<IDockGroup, IDisposable> ChildSubscriptions { get; }
+
+        Subject<Unit> DockChangedWithin { get; }
 
         IDockGroup? DockParent { get; set; }
 
@@ -53,6 +60,8 @@ namespace NP.Avalonia.UniDock
 
         bool IsGroupEmpty => DockChildren == null || DockChildren.Count == 0;
 
+        bool ShowCompass { get; set; }
+
         bool CanFloat
         {
             get => true;
@@ -61,6 +70,8 @@ namespace NP.Avalonia.UniDock
 
             }
         }
+
+        bool HasStableDescendant { get; }
 
         bool CanClose
         {
@@ -119,38 +130,45 @@ namespace NP.Avalonia.UniDock
             dockParent?.Simplify();
         }
 
-        IDockGroup CloneIfStable();
+        IDockGroup? GetContainingGroup() => this;
+
+        IControl GetVisual() => this;
+
+        DockKind? CurrentGroupDock { get; }
+
+        IEnumerable<DockItem> LeafItems
+        {
+            get
+            {
+                return this.GetDockGroupSelfAndDescendants()
+                           .OfType<DockItem>()
+                           .Distinct();
+            }
+        }
     }
 
     public interface ILeafDockObj : IDockGroup
     {
-        bool ShowCompass { get; set; }
-
-        DockKind? CurrentGroupDock { get; }
-
-        IEnumerable<DockItem> LeafItems { get; }
-
-        IDockGroup? GetContainingGroup() => DockParent;
-
-        IControl GetVisual() => this;
     }
 
     public static class DockGroupHelper
     {
+        public static void FireChangeWithin(this IDockGroup group)
+        {
+            group.DockChangedWithin?.OnNext(Unit.Default);
+        }
+
         public static void RemoveItselfFromParent(this IDockGroup item)
         {
-            //if (!item.IsStableGroup)
+            IDockGroup? parent = item.DockParent;
+
+            if (parent != null)
             {
-                IDockGroup? parent = item.DockParent;
-
-                if (parent != null)
-                {
-                    parent.DockChildren!.Remove(item);
-                    item.DockParent = null;
-                }
-
-                item.CleanSelfOnRemove();
+                parent.DockChildren!.Remove(item);
+                item.DockParent = null;
             }
+
+            item.CleanSelfOnRemove();
         }
 
         public static int GetNumberChildren(this IDockGroup item)
@@ -158,7 +176,7 @@ namespace NP.Avalonia.UniDock
             return item?.DockChildren?.Count ?? 0;
         }
 
-        public static bool HasLeafAncestor(this ILeafDockObj item)
+        public static bool HasLeafAncestor(this IDockGroup item)
         {
             return 
                 item.GetDockGroupAncestors()
@@ -364,6 +382,21 @@ namespace NP.Avalonia.UniDock
             DockAttachedProperties.SetCanReattachToDefaultGroup(group, group.IsAllowedToReattachToDefaultGroup());
         }
 
+        public static void SubscribeToChildChange(this IDockGroup group, IDockGroup child)
+        {
+            IDisposable subscription = child.DockChangedWithin.Subscribe(u => group.DockChangedWithin.OnNext(u));
+
+            group.ChildSubscriptions[child] = subscription;
+        }
+
+        public static void UnsubscribeFromChildChange(this IDockGroup group, IDockGroup child)
+        {
+            if (group.ChildSubscriptions.Remove(child, out IDisposable? subscription))
+            {
+                subscription?.Dispose();
+            }
+        }
+
         public static void ReattachToDefaultGroup(this IDockGroup group)
         {
             if (!group.IsAllowedToReattachToDefaultGroup())
@@ -410,6 +443,21 @@ namespace NP.Avalonia.UniDock
 
             group.SetCanReattachToDefaultGroup();
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+        }
+
+        internal static DropPanelWithCompass? GetDropPanel(this IDockGroup dockGroup)
+        {
+            return dockGroup
+                    .GetVisualDescendants()
+                    .OfType<Grid>()
+                    .FirstOrDefault(g => g.Name == "PART_RootPanel")
+                    ?.Children.OfType<DropPanelWithCompass>()
+                    .FirstOrDefault();
+        }
+
+        public static bool HasStableGroup(this IDockGroup group)
+        {
+            return group.GetDockGroupSelfAndDescendants().Any(g => g.IsStableGroup);
         }
     }
 }

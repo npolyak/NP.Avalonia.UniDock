@@ -15,7 +15,7 @@ namespace NP.Avalonia.UniDock
 {
     public enum DockKind
     {
-        Tabs,
+        Center,
         Left,
         Top,
         Right,
