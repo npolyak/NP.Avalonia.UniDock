@@ -581,7 +581,7 @@ namespace NP.Avalonia.UniDock
                             }
                             else
                             {
-                                if (leafItems.IsNullOrEmptyCollection())
+                                if (!leafItems.IsNullOrEmptyCollection())
                                 {
 
                                     leafItems.DoForEach(item => item.RemoveItselfFromParent());

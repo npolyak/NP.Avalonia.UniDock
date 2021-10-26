@@ -20,6 +20,14 @@ namespace NP.Avalonia.Visuals.Behaviors
 {
     public static class VisualHelper
     {
+        public static Dock[] Docks { get; } =
+        {
+            Dock.Left,
+            Dock.Top,
+            Dock.Right,
+            Dock.Bottom
+        };
+
         public static TItem GetControlUnderCurrentMousePosition<TItem>(this PointerEventArgs e, Control itemContainer)
             where TItem : Control
         {

@@ -94,6 +94,9 @@
                 Grid.Row="1"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
+
+      <ComboBox Items="{x:Static np:VisualHelper.Docks}">
+      </ComboBox>
       <Button x:Name="SaveButton"
               Content="Save"
               Padding="10,5"

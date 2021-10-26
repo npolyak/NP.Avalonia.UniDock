@@ -454,7 +454,41 @@
                                           Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
                                           Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"
                                           np:DragHeaderBehavior.IsSet="True"
-                                          Height="22"/>
+                                          Height="22">
+                  <np:DockItemHeaderControl.ButtonsTemplate>
+                    <ControlTemplate>
+                      <StackPanel Orientation="Horizontal"
+                                  np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}">
+                        <ComboBox Items="{x:Static np:VisualHelper.Docks}"
+                                  Padding="0"
+                                  BorderThickness="0"
+                                  Margin="5,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                  SelectedItem="{Binding Path=TabStripPlacement,
+                                                         Mode=TwoWay,
+                                                         RelativeSource={RelativeSource AncestorType=np:TabbedDockGroup}}">
+                          <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                              <Path Width="13"
+                                    Height="13"
+                                    Stretch="Fill"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    np:FindResourceBehavior.TheProp="{x:Static Path.DataProperty}"
+                                    np:FindResourceBehavior.ResourceKey="{Binding StringFormat='Border\{0\}'}"
+                                    Fill="Black">
+                                
+                              </Path>
+                            </DataTemplate>
+                          </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button x:Name="CloseButton"
+                                Classes="CloseButton"/>
+                      </StackPanel>
+                    </ControlTemplate>
+                  </np:DockItemHeaderControl.ButtonsTemplate>
+                </np:DockItemHeaderControl>
                 <Grid x:Name="Separator"
                       Grid.Row="1"
                       Height="2"/>
@@ -501,8 +535,6 @@
                   <local:DropPanelWithCompass
                         Grid.Row="1"
                         Grid.Column="1"
-                        AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
-                        AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
                         IsVisible="{Binding Path=ShowCompass, 
                                             RelativeSource= {RelativeSource TemplatedParent}}"/>
                 </Grid>

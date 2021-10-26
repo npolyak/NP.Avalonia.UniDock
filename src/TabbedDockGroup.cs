@@ -55,10 +55,6 @@ namespace NP.Avalonia.UniDock
                     return;
 
                 _isStableGroup = value;
-
-                //this.SetStableParent();
-                
-                SetHorizontalAndVerticalDockingAllowed();
             }
         }
 
@@ -153,23 +149,6 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void SetHorizontalAndVerticalDockingAllowed()
-        {
-            if (_isStableGroup)
-            {
-            //    StackDockGroup? parentGroup = DockParent as StackDockGroup;
-
-            //    AllowHorizontalDocking = parentGroup?.TheOrientation == Orientation.Horizontal;
-            //    AllowVerticalDocking = parentGroup?.TheOrientation == Orientation.Vertical;
-            //}
-            //else
-            //{
-                AllowHorizontalDocking = true;
-                AllowVerticalDocking = true;
-                return;
-            }
-        }
-
         static TabbedDockGroup()
         {
             TabStripPlacementProperty
@@ -257,7 +236,6 @@ namespace NP.Avalonia.UniDock
                 _dockParent = value;
 
                 this.SetStableParent();
-                SetHorizontalAndVerticalDockingAllowed();
                 this.SetCanReattachToDefaultGroup();
             }
         }
@@ -416,39 +394,6 @@ namespace NP.Avalonia.UniDock
                 nameof(VerticalContentAlignment)
             );
         #endregion VerticalContentAlignment Styled Avalonia Property
-
-
-        #region AllowVerticalDocking Styled Avalonia Property
-        public bool AllowVerticalDocking
-        {
-            get { return GetValue(AllowVerticalDockingProperty); }
-            set { SetValue(AllowVerticalDockingProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> AllowVerticalDockingProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, bool>
-            (
-                nameof(AllowVerticalDocking),
-                true
-            );
-        #endregion AllowVerticalDocking Styled Avalonia Property
-
-
-        #region AllowHorizontalDocking Styled Avalonia Property
-        public bool AllowHorizontalDocking
-        {
-            get { return GetValue(AllowHorizontalDockingProperty); }
-            set { SetValue(AllowHorizontalDockingProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> AllowHorizontalDockingProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, bool>
-            (
-                nameof(AllowHorizontalDocking),
-                true
-            );
-        #endregion AllowHorizontalDocking Styled Avalonia Property
-
 
         #region DefaultDockOrderInGroup Styled Avalonia Property
         public double DefaultDockOrderInGroup
