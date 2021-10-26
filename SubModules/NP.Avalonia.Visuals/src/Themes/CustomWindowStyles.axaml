@@ -211,6 +211,7 @@
 
               <TemplatedControl Grid.Column="2"
                                 HorizontalAlignment="Right"
+                                behaviors:HandleEventBehavior.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
                                 Template="{Binding Path=ButtonsAreaTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
                                 DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
             </Grid>

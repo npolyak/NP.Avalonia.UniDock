@@ -188,5 +188,41 @@ namespace NP.Avalonia.Visuals.Controls
             );
         #endregion HasVisibleLogicalChildren Attached Avalonia Property
 
+
+        #region PrimaryIconData Attached Avalonia Property
+        public static Geometry GetPrimaryIconData(IControl obj)
+        {
+            return obj.GetValue(PrimaryIconDataProperty);
+        }
+
+        public static void SetPrimaryIconData(IControl obj, Geometry value)
+        {
+            obj.SetValue(PrimaryIconDataProperty, value);
+        }
+
+        public static readonly AttachedProperty<Geometry> PrimaryIconDataProperty =
+            AvaloniaProperty.RegisterAttached<object, IControl, Geometry>
+            (
+                "PrimaryIconData"
+            );
+        #endregion PrimaryIconData Attached Avalonia Property
+
+        #region AlternateIconData Attached Avalonia Property
+        public static Geometry GetAlternateIconData(IControl obj)
+        {
+            return obj.GetValue(AlternateIconDataProperty);
+        }
+
+        public static void SetAlternateIconData(IControl obj, Geometry value)
+        {
+            obj.SetValue(AlternateIconDataProperty, value);
+        }
+
+        public static readonly AttachedProperty<Geometry> AlternateIconDataProperty =
+            AvaloniaProperty.RegisterAttached<object, IControl, Geometry>
+            (
+                "AlternateIconData"
+            );
+        #endregion AlternateIconData Attached Avalonia Property
     }
 }

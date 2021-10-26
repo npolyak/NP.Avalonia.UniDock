@@ -304,5 +304,42 @@ namespace NP.Avalonia.UniDock
             );
         #endregion IsInDockEditableState Attached Avalonia Property
 
+
+        #region ShowGroupBoundaries Attached Avalonia Property
+        public static bool GetShowGroupBoundaries(AvaloniaObject obj)
+        {
+            return obj.GetValue(ShowGroupBoundariesProperty);
+        }
+
+        public static void SetShowGroupBoundaries(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(ShowGroupBoundariesProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> ShowGroupBoundariesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "ShowGroupBoundaries"
+            );
+        #endregion ShowGroupBoundaries Attached Avalonia Property
+
+
+        #region IsPointerOverHeader Attached Avalonia Property
+        public static bool GetIsPointerOverHeader(AvaloniaObject obj)
+        {
+            return obj.GetValue(IsPointerOverHeaderProperty);
+        }
+
+        public static void SetIsPointerOverHeader(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(IsPointerOverHeaderProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsPointerOverHeaderProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "IsPointerOverHeader"
+            );
+        #endregion IsPointerOverHeader Attached Avalonia Property
     }
 }

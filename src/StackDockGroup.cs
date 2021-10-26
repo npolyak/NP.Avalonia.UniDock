@@ -256,7 +256,7 @@ namespace NP.Avalonia.UniDock
 
             _stackGroup.RemoveFromParentPanel();
 
-            panel.Children.Add(_stackGroup);
+            panel.Children.Insert(1, _stackGroup);
         }
 
         private void OnInitSizeCoeffsChanged(string obj)

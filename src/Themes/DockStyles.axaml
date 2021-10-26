@@ -64,7 +64,7 @@
 
   <Style Selector="Button.CloseButton">
     <Setter Property="np:ClassesBehavior.InsertClasses"
-            Value="WindowIconButton IconButton"/>
+            Value="HeaderIconButton WindowIconButton IconButton"/>
     <Setter Property="Width"
             Value="15"/>
     <Setter Property="Height"
@@ -298,6 +298,7 @@
               <TemplatedControl x:Name="ButtonsControl"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
+                                np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}"
                                 Template="{TemplateBinding ButtonsTemplate}"/>
             </Grid>
           </Grid>
@@ -480,27 +481,33 @@
                       <StackPanel Orientation="Horizontal"
                                   np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}">
                         <ComboBox Items="{x:Static np:VisualHelper.Docks}"
+                                  IsVisible="{Binding $parent[local:TabbedDockGroup].(local:DockAttachedProperties.IsInDockEditableState)}"
                                   Padding="0"
                                   BorderThickness="0"
                                   Margin="5,0"
                                   Foreground="Black"
                                   Opacity="0.7"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
+                                  Background="Transparent"
+                                  ToolTip.Tip="Choose Side for Tabs"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
                                   SelectedItem="{Binding Path=TabStripPlacement,
                                                          Mode=TwoWay,
                                                          RelativeSource={RelativeSource AncestorType=np:TabbedDockGroup}}">
                           <ComboBox.ItemTemplate>
                             <DataTemplate>
-                              <Path Width="13"
-                                    Height="13"
-                                    Stretch="Fill"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    np:FindResourceBehavior.TheProp="{x:Static Path.DataProperty}"
-                                    np:FindResourceBehavior.ResourceKey="{Binding StringFormat='Border\{0\}'}"
-                                    Opacity="0.5"
-                                    Fill="{Binding $parent[ComboBox].Foreground}"/>
+                              <Grid Background="Transparent"
+                                      ToolTip.Tip="{Binding StringFormat='\{0\}'}">
+                                <Path Width="13"
+                                      Height="13"
+                                      Stretch="Fill"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      np:FindResourceBehavior.TheProp="{x:Static Path.DataProperty}"
+                                      np:FindResourceBehavior.ResourceKey="{Binding StringFormat='Border\{0\}'}"
+                                      Opacity="0.5"
+                                      Fill="{Binding $parent[ComboBox].Foreground}"/>
+                              </Grid>
                             </DataTemplate>
                           </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -745,16 +752,47 @@
             Value="Black"/>
     <Setter Property="Background"
             Value="Transparent"/>
+    <Setter Property="np:DockAttachedProperties.IsPointerOverHeader"
+            Value="{Binding Path=(np:FindPartBehavior.VisualPart).IsPointerOver, RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="np:DockAttachedProperties.ShowGroupBoundaries">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static np:BoolConverters.And}">
+          <Binding Path="(np:DockAttachedProperties.IsInDockEditableState)"
+                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="(np:DockAttachedProperties.IsPointerOverHeader)"
+                   RelativeSource="{RelativeSource Self}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
     <Setter Property="HeaderControlTemplate">
       <ControlTemplate>
         <Grid RowDefinitions="Auto, Auto"
               IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}">
-          <np:DockItemHeaderControl x:Name="Header"
+          <np:DockItemHeaderControl x:Name="PART_Header"
                                     DataContext="{Binding RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
                                     Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
                                     Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
                                     np:DragHeaderBehavior.IsSet="True"
-                                    Height="22"/>
+                                    np:FindPartBehavior.AncestorObject="{Binding RelativeSource={RelativeSource AncestorType=np:StackDockGroup}}"
+                                    Height="22">
+            <np:DockItemHeaderControl.ButtonsTemplate>
+              <ControlTemplate>
+                <StackPanel Orientation="Horizontal"
+                            np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}">
+                  <ToggleButton Classes="HeaderIconButton IconButton IconToggleButton AlternateIconToggleButton"
+                                np:AttachedProperties.PrimaryIconData="{StaticResource LockOpen}"
+                                np:AttachedProperties.AlternateIconData="{StaticResource LockClosed}"
+                                ToolTip.Tip="Lock/Unlock"
+                                IsVisible="{Binding $parent[np:StackDockGroup].IsInEditableState}"
+                                Width="15"
+                                Height="15"
+                                Margin="5,0"/>
+                  <Button x:Name="CloseButton"
+                          Classes="CloseButton"/>
+                </StackPanel>
+              </ControlTemplate>
+            </np:DockItemHeaderControl.ButtonsTemplate>
+          </np:DockItemHeaderControl>
           <Grid x:Name="Separator"
                 Grid.Row="1"
                 Height="2"/>
@@ -772,8 +810,15 @@
                   ShowHull="False"
                   AllowHorizontalDocking="False"
                   AllowVerticalDocking="False"
+                  Grid.Row="1"
                   IsVisible="{Binding Path=ShowCompass, 
                                       RelativeSource= {RelativeSource TemplatedParent}}"/>
+            <Grid x:Name="SelectGroup"
+                  Background="Cyan"
+                  Opacity="0.1"
+                  Grid.Row="1"
+                  IsVisible="{Binding Path=(np:DockAttachedProperties.ShowGroupBoundaries),
+                                      RelativeSource={RelativeSource TemplatedParent}}"/>
           </Grid>
         </ControlTemplate>
       </Setter.Value>
