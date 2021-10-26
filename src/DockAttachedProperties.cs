@@ -285,5 +285,24 @@ namespace NP.Avalonia.UniDock
             );
         #endregion ShowCompass Attached Avalonia Property
 
+
+        #region IsInDockEditableState Attached Avalonia Property
+        public static bool GetIsInDockEditableState(AvaloniaObject obj)
+        {
+            return obj.GetValue(IsInDockEditableStateProperty);
+        }
+
+        public static void SetIsInDockEditableState(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(IsInDockEditableStateProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsInDockEditableStateProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "IsInDockEditableState"
+            );
+        #endregion IsInDockEditableState Attached Avalonia Property
+
     }
 }

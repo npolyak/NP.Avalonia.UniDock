@@ -644,5 +644,18 @@ namespace NP.Avalonia.Visuals.Controls
         #endregion TitleAreaContentTemplate Styled Avalonia Property
 
 
+        #region ButtonsAreaTemplate Styled Avalonia Property
+        public ControlTemplate ButtonsAreaTemplate
+        {
+            get { return GetValue(ButtonsAreaTemplateProperty); }
+            set { SetValue(ButtonsAreaTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<ControlTemplate> ButtonsAreaTemplateProperty =
+            AvaloniaProperty.Register<CustomWindow, ControlTemplate>
+            (
+                nameof(ButtonsAreaTemplate)
+            );
+        #endregion ButtonsAreaTemplate Styled Avalonia Property
     }
 }

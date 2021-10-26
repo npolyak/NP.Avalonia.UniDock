@@ -14,7 +14,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:NP.Avalonia.Visuals.Behaviors"
         xmlns:controls="clr-namespace:NP.Avalonia.Visuals.Controls">
-    <Style Selector="Button.IconButton">
+    <Style Selector=":is(Button).IconButton">
       <Setter Property="controls:AttachedProperties.IconStretch"
               Value="Uniform"/>
       <Setter Property="controls:AttachedProperties.RealBackground"
@@ -35,15 +35,15 @@
         </Setter.Value>
       </Setter>
     </Style>
-    <Style Selector="Button.IconButton:pointerover">
+    <Style Selector=":is(Button).IconButton:pointerover">
       <Setter Property="controls:AttachedProperties.RealBackground"
               Value="{Binding Path=(controls:AttachedProperties.MouseOverBrush), RelativeSource={RelativeSource Self}}"/>
     </Style>
-    <Style Selector="Button.IconButton:pressed">
+    <Style Selector=":is(Button).IconButton:pressed">
       <Setter Property="controls:AttachedProperties.RealBackground"
               Value="{Binding Path=Background, RelativeSource={RelativeSource Self}}"/>
     </Style>
-    <Style Selector="Button.WindowIconButton">
+    <Style Selector=":is(Button).WindowIconButton">
       <Setter Property="Opacity"
               Value="0.5"/>
       <Setter Property="Background"
@@ -65,10 +65,19 @@
       <Setter Property="behaviors:CallAction.TheEvent"
               Value="{x:Static Button.ClickEvent}"/>
     </Style>
-  <Style Selector="Button.IconButton:disabled">
+  <Style Selector=":is(Button).IconButton:disabled">
     <Setter Property="IsHitTestVisible"
             Value="False"/>
     <Setter Property="Opacity"
             Value="0.2"/>
+  </Style>
+
+  <Style Selector="ToggleButton.IconToggleButton[IsChecked=True]">
+    <!--<Setter Property="controls:AttachedProperties.RealBackground"
+            Value="White"/>-->
+    <Setter Property="Opacity"
+            Value="1"/>
+    <Setter Property="Foreground"
+            Value="DarkBlue"/>
   </Style>
 </Styles>

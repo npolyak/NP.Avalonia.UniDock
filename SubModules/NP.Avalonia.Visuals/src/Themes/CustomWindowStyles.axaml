@@ -15,6 +15,9 @@
         xmlns:behaviors="clr-namespace:NP.Avalonia.Visuals.Behaviors"
         xmlns:converters="clr-namespace:NP.Avalonia.Visuals.Converters"
         xmlns:controls="clr-namespace:NP.Avalonia.Visuals.Controls">
+
+  <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
+
   <Styles.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -104,10 +107,35 @@
                      behaviors:ClassesBehavior.TheClasses="{Binding Path=TitleClasses}"/>
         </StackPanel>
       </DataTemplate>
+
+      <ControlTemplate x:Key="CustomWindowButtonsTemplate">
+        <StackPanel x:Name="WindowButtonsPanel"
+                    Orientation="Horizontal">
+          <Button x:Name="MinimizeButton"
+                  Classes="WindowIconButton IconButton"
+                  controls:AttachedProperties.IconData="{StaticResource MinimizeIcon}"
+                  controls:AttachedProperties.IconHeight="2.1"
+                  controls:AttachedProperties.IconStretch="Fill"
+                  behaviors:CallAction.MethodName="Minimize"/>
+          <Button x:Name="RestoreButton"
+                  Classes="WindowIconButton IconButton"
+                  IsVisible="{Binding Path=CanRestore}"
+                  controls:AttachedProperties.IconData="{StaticResource RestoreIcon}"
+                  behaviors:CallAction.MethodName="Restore"/>
+          <Button x:Name="MaximizeButton"
+                  Classes="WindowIconButton IconButton"
+                  IsVisible="{Binding Path=CanMaximize}"
+                  controls:AttachedProperties.IconData="{StaticResource MaximizeIcon}"
+                  behaviors:CallAction.MethodName="Maximize"/>
+          <Button x:Name="CloseButton"
+                  Classes="WindowIconButton IconButton"
+                  IsVisible="{Binding Path=CanClose}"
+                  controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
+                  behaviors:CallAction.MethodName="Close"/>
+        </StackPanel>
+      </ControlTemplate>
     </ResourceDictionary>
   </Styles.Resources>
-
-  <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ButtonStyles.axaml"/>
 
   <Style Selector="TextBlock.DefaultWindowTitle">
     <Setter Property="Foreground"
@@ -139,6 +167,8 @@
             Value="LightGray"/>
     <Setter Property="BorderThickness"
             Value="1"/>
+    <Setter Property="ButtonsAreaTemplate"
+            Value="{StaticResource CustomWindowButtonsTemplate}"/>
     <!--<Setter Property="TitleAreaContent"
             Value="{Binding RelativeSource={RelativeSource Self}}"/>-->
     <Setter Property="TitleAreaContent"
@@ -171,40 +201,18 @@
                                                 VerticalAlignment="Stretch"/>
               
               <ContentPresenter HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Grid.Column="1"
-                                Content="{Binding Path=HeaderContent, 
-                                                  RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
-                                                  TargetNullValue='', 
-                                                  FallbackValue=''}"
-                                ContentTemplate="{Binding Path=HeaderContentTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
-              <StackPanel x:Name="WindowButtonsPanel"
-                          Orientation="Horizontal"
-                          HorizontalAlignment="Right"
-                          Grid.Column="2"
-                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}">
-                <Button x:Name="MinimiziButton"
-                        Classes="WindowIconButton IconButton"
-                        controls:AttachedProperties.IconData="{StaticResource MinimizeIcon}"
-                        controls:AttachedProperties.IconHeight="2.1"
-                        controls:AttachedProperties.IconStretch="Fill"
-                        behaviors:CallAction.MethodName="Minimize"/>
-                <Button x:Name="RestoreButton"
-                        Classes="WindowIconButton IconButton"
-                        IsVisible="{Binding Path=CanRestore}"
-                        controls:AttachedProperties.IconData="{StaticResource RestoreIcon}"
-                        behaviors:CallAction.MethodName="Restore"/>
-                <Button x:Name="MaximizeButton"
-                        Classes="WindowIconButton IconButton"
-                        IsVisible="{Binding Path=CanMaximize}"
-                        controls:AttachedProperties.IconData="{StaticResource MaximizeIcon}"
-                        behaviors:CallAction.MethodName="Maximize"/>
-                <Button x:Name="CloseButton"
-                        Classes="WindowIconButton IconButton"
-                        IsVisible="{Binding Path=CanClose}"
-                        controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
-                        behaviors:CallAction.MethodName="Close"/>
-              </StackPanel>
+                  VerticalAlignment="Stretch"
+                  Grid.Column="1"
+                  Content="{Binding Path=HeaderContent, 
+                                    RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
+                                    TargetNullValue='', 
+                                    FallbackValue=''}"
+                  ContentTemplate="{Binding Path=HeaderContentTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+
+              <TemplatedControl Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Template="{Binding Path=ButtonsAreaTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                DataContext="{Binding RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
             </Grid>
           </Grid>
         </ControlTemplate>

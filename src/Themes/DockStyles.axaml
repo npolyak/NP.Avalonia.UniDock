@@ -41,6 +41,22 @@
         <Button x:Name="CloseButton"
                 Classes="CloseButton"/>
       </ControlTemplate>
+
+      <ControlTemplate x:Key="DockEditToggleButtonTemplate">
+        <ToggleButton Classes="WindowIconButton IconButton IconToggleButton"
+              np:AttachedProperties.IconData="{StaticResource Pencil}"
+              ToolTip.Tip="Edit"
+              IsVisible="{Binding $parent[Window].(np:DockAttachedProperties.TheDockManager).IsInEditableState}"
+              IsChecked="{Binding $parent[Window].(np:DockAttachedProperties.IsInDockEditableState), Mode=TwoWay}"/>
+      </ControlTemplate>
+      
+      <ControlTemplate x:Key="FloatingWindowButtonsTemplate">
+        <StackPanel x:Name="FloatingWindowButtonsPanel"
+                    Orientation="Horizontal">
+          <TemplatedControl Template="{StaticResource DockEditToggleButtonTemplate}"/>
+          <TemplatedControl Template="{StaticResource CustomWindowButtonsTemplate}"/>
+        </StackPanel>
+      </ControlTemplate>
     </ResourceDictionary>
   </Styles.Resources>
   <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/TextStyles.axaml"/>
@@ -413,8 +429,12 @@
             Value="Stretch"/>
     <Setter Property="VerticalAlignment"
             Value="Stretch"/>
+    <Setter Property="np:DockAttachedProperties.IsInDockEditableState"
+            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState),
+                            RelativeSource={RelativeSource AncestorType=Window}}"/>
     <Setter Property="ShowHeader"
-            Value="{Binding Path=TheDockManager.IsInEditableState, RelativeSource={RelativeSource Self}}"/>
+            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState), 
+                            RelativeSource={RelativeSource Self}}"/>
     <Setter Property="IsVisible"
             Value="{Binding Path=(np:DockAttachedProperties.IsDockVisible), 
                             RelativeSource={RelativeSource Self}}"/>
@@ -463,6 +483,8 @@
                                   Padding="0"
                                   BorderThickness="0"
                                   Margin="5,0"
+                                  Foreground="Black"
+                                  Opacity="0.7"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                   SelectedItem="{Binding Path=TabStripPlacement,
@@ -477,9 +499,8 @@
                                     VerticalAlignment="Center"
                                     np:FindResourceBehavior.TheProp="{x:Static Path.DataProperty}"
                                     np:FindResourceBehavior.ResourceKey="{Binding StringFormat='Border\{0\}'}"
-                                    Fill="Black">
-                                
-                              </Path>
+                                    Opacity="0.5"
+                                    Fill="{Binding $parent[ComboBox].Foreground}"/>
                             </DataTemplate>
                           </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -693,6 +714,8 @@
             Value="{Binding Path=TheDockGroup.ActiveDockItem.Header, 
                             StringFormat='Floating Window - {0}'
                             RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="ButtonsAreaTemplate"
+            Value="{StaticResource FloatingWindowButtonsTemplate}"/>
     <Setter Property="HeaderContentTemplate">
       <Setter.Value>
         <DataTemplate>
@@ -710,8 +733,12 @@
   </Style>
 
   <Style Selector="np|StackDockGroup">
+    <Setter Property="np:DockAttachedProperties.IsInDockEditableState"
+            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState),
+                            RelativeSource={RelativeSource AncestorType=Window}}"/>
     <Setter Property="ShowHeader"
-            Value="{Binding Path=TheDockManager.IsInEditableState, RelativeSource={RelativeSource Self}}"/>
+            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState), 
+                            RelativeSource={RelativeSource Self}}"/>
     <Setter Property="HeaderBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderForeground"
