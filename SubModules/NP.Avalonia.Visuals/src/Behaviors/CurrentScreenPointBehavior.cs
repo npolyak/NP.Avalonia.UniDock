@@ -77,15 +77,21 @@ namespace NP.Avalonia.Visuals.Behaviors
             control.PointerReleased += Control_PointerReleased;
         }
 
-        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e)
+        public static void ReleaseCapture()
         {
             if (CapturedControl != null)
             {
                 CapturedControl.PointerReleased -= Control_PointerReleased;
+                CapturedControl.PointerReleased -= Control_PointerReleased;
             }
-            
+
             Mouse?.Capture(null);
             _capturedWindow = null;
+        }
+
+        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            ReleaseCapture();
         }
     }
 }

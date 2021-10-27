@@ -176,6 +176,8 @@ namespace NP.Avalonia.UniDock
             FloatingWindow dockWindow;
             try
             {
+                CurrentScreenPointBehavior.ReleaseCapture();
+
                 floatingWindow?.SetCloseIsNotAllowed();
 
                 Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
@@ -204,6 +206,7 @@ namespace NP.Avalonia.UniDock
                 dockWindow.Height = _draggedDockGroup.FloatingSize.Y;
                 dockWindow.TheDockGroup.DockChildren.Add(_draggedDockGroup!);
 
+ 
                 ClearHandlers(sender);
             }
             finally

@@ -349,6 +349,10 @@ namespace NP.Avalonia.UniDock
             {
                 CurrentRootDockGroup = CurrentLeafObjToInsertWithRespectTo.GetDockGroupRoot() as RootDockGroup;
             }
+            else
+            {
+                CurrentRootDockGroup = null;
+            }
         }
 
         private void DropWithOrientation(IDockGroup? currentDockGroupToInsertWithRespectTo, DockKind dock, IDockGroup draggedGroup)

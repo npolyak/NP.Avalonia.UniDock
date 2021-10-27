@@ -11,9 +11,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.7" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+    <PackageReference Include="Avalonia" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj">
