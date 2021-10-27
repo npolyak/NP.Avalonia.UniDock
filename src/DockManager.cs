@@ -203,11 +203,11 @@ namespace NP.Avalonia.UniDock
             AllGroups.OfType<RootDockGroup>()
             .Where(g => IsGroupOperating(g)).ToList();
 
-        public IEnumerable<IDockGroup> AllOperatingLeafGroupsWOLeafParents =>
+        private IEnumerable<IDockGroup> AllOperatingLeafGroupsWOLeafParents =>
             AllGroups
-                .Where(g => g.HasLeafAncestor() == false)
+                .Where(g => !g.HasLeafAncestor()&& !g.HasLockedAncestor())
                 .Where(g => IsGroupOperating(g))
-                .Where(g => (g is TabbedDockGroup) || g.GetNumberChildren() == 0)
+                .Where(g => (g is TabbedDockGroup) || g.GetNumberChildren() == 0 || g.IsGroupLocked)
                 .ToList();
 
         public void ClearGroups()
@@ -254,25 +254,33 @@ namespace NP.Avalonia.UniDock
             if (_draggedWindow == null)
                 return;
 
+            SetGroups();
+
+            _pointerMovedSubscription = 
+                CurrentScreenPointBehavior.CurrentScreenPoint
+                                          .Subscribe(OnPointerMoved);
+        }
+
+        internal void SetGroups()
+        {
+            if (_draggedWindow == null)
+            {
+                return;
+            }
+
             _currentDockGroups =
                 AllOperatingLeafGroupsWOLeafParents
                     .Except(_draggedWindow.TheDockGroup.GetDockGroupSelfAndDescendants())
                     .Select(g => GroupToPair(g)).ToList();
+
+            bool hasAnyNonLockedLeafItems = _draggedWindow.GetLeafGroupsWithoutLock().Any();
+            _currentDockGroups.DoForEach(g => g.Group.AllowCenterDocking = hasAnyNonLockedLeafItems);
 
             _rootGroups =
                 AllOperatingRootDockGroups
                     .Except(_draggedWindow.TheDockGroup.ToCollection())
                     .Except(_currentDockGroups.OfType<RootDockGroup>())
                     .Select(g => GroupToPair(g)).ToList();
-
-            //DockLeafObjsWithoutLeafParents
-            //.Where(leaf => leaf.GetVisual().IsAttachedToLogicalTree && leaf.GetVisual().IsVisible && leaf.GetVisual().GetControlsWindow<Window>().IsVisible)
-            //.Except(_draggedWindow.TheDockGroup.GetLeafGroups())
-            //.Select(g => (g, g.GetVisual().GetScreenBounds())).ToList();
-
-            _pointerMovedSubscription = 
-                CurrentScreenPointBehavior.CurrentScreenPoint
-                                          .Subscribe(OnPointerMoved);
         }
 
         /// <summary>
@@ -572,23 +580,29 @@ namespace NP.Avalonia.UniDock
                     {
                         case DockKind.Center:
                         {
-                            var leafItems = DraggedWindow?.LeafItems.ToList();
-
-                            var firstLeafItem = leafItems?.FirstOrDefault();
-
                             if (currentDockGroupToInsertWithRespectTo is RootDockGroup ||
                                 currentDockGroupToInsertWithRespectTo is StackDockGroup)
                             {
                                 draggedGroup.RemoveItselfFromParent();
                                 currentDockGroupToInsertWithRespectTo.DockChildren.Add(draggedGroup);
+
+                                var firstLeafItem = DraggedWindow?.LeafItems?.FirstOrDefault();
+
                                 firstLeafItem?.Select();
                             }
                             else
                             {
+                                var leafItems = 
+                                    DraggedWindow?.GetLeafGroupsIncludingGroupsWithLock()
+                                                  .Where(group => !group.IsGroupLocked)
+                                                  .SelectMany(g => g.LeafItems).ToList();
+
                                 if (!leafItems.IsNullOrEmptyCollection())
                                 {
-
                                     leafItems.DoForEach(item => item.RemoveItselfFromParent());
+
+                                    var firstLeafItem = leafItems?.FirstOrDefault();
+
                                     IDockGroup currentGroup =
                                         currentDockGroupToInsertWithRespectTo?.GetContainingGroup()!;
 
@@ -622,12 +636,11 @@ namespace NP.Avalonia.UniDock
 
                                     groupToInsertItemsInto.DockChildren.InsertCollectionAtStart(leafItems);
 
-
                                     firstLeafItem?.Select();
                                 }
                             }
 
-                            DraggedWindow?.Close();
+                            DraggedWindow?.CloseIfAllowed();
 
                          break;
                         }

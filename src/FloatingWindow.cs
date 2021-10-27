@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace NP.Avalonia.UniDock
 {
@@ -116,7 +117,7 @@ namespace NP.Avalonia.UniDock
         {
             CanClose = !TheDockGroup.HasStableDescendant;
 
-            CloseIfNeeded();
+            CloseIfAllowed();
         }
 
         private void FloatingWindow_Closed(object? sender, EventArgs e)
@@ -130,11 +131,18 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        internal void CloseIfNeeded()
+        internal void CloseIfAllowed(bool closeOrHide = true)
         {
             if (CanClose && this.LeafItems.Count() == 0 && AutoDestroy && _isCloseAllowed)
             {
-                this.Close();
+                if (closeOrHide)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    this.Hide();
+                }
             }
         }
 
@@ -173,11 +181,15 @@ namespace NP.Avalonia.UniDock
             this.Activated += CustomWindow_Activated!;
         }
 
-        private void CustomWindow_Activated(object sender, EventArgs e)
+        private async void CustomWindow_Activated(object sender, EventArgs e)
         {
             this.Activated -= CustomWindow_Activated!;
             SetInitialPosition();
             SetDragOnMovePointer();
+
+            await Task.Delay(200);
+
+            TheDockManager?.SetGroups();
         }
 
         private void SetInitialPosition()
@@ -202,9 +214,6 @@ namespace NP.Avalonia.UniDock
 
             TheDockManager?.CompleteDragDropAction();
         }
-
-        private IEnumerable<ILeafDockObj> GetLeafGroups() => 
-            this.TheDockGroup.GetLeafGroups();
 
         public IEnumerable<DockItem> LeafItems => TheDockGroup.LeafItems;
 
@@ -231,6 +240,16 @@ namespace NP.Avalonia.UniDock
                 .Where(item => item.IsAllowedToReattachToDefaultGroup())
                 .ToList()
                 .DoForEach(item => item.ReattachToDefaultGroup());
+        }
+
+        public IEnumerable<IDockGroup> GetLeafGroupsIncludingGroupsWithLock()
+        {
+            return TheDockGroup.GetLeafGroupsIncludingGroupsWithLock();
+        }
+
+        public IEnumerable<IDockGroup> GetLeafGroupsWithoutLock()
+        {
+            return TheDockGroup.GetLeafGroupsWithoutLock();
         }
     }
 }

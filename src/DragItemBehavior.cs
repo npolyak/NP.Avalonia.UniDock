@@ -182,8 +182,6 @@ namespace NP.Avalonia.UniDock
 
                 Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
 
-                parentItem?.Simplify();
-
                 DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
 
                 // create the window
@@ -200,6 +198,8 @@ namespace NP.Avalonia.UniDock
                 // remove from the current items
                 _draggedDockGroup?.RemoveItselfFromParent();
 
+                parentItem?.Simplify();
+
                 _draggedDockGroup!.CleanSelfOnRemove();
 
                 dockWindow.Width = _draggedDockGroup.FloatingSize.X;
@@ -212,7 +212,26 @@ namespace NP.Avalonia.UniDock
             finally
             {
                 floatingWindow?.ResetIsCloseAllowed();
-                floatingWindow?.CloseIfNeeded();
+
+                floatingWindow?.CloseIfAllowed(false);
+
+                if (floatingWindow != null && !floatingWindow.IsVisible)
+                {
+                    floatingWindow.TheDockManager = null;
+                }
+
+                void CleanUpFloatingWindow(FloatingWindow? win)
+                {
+                    win?.CloseIfAllowed();
+                }
+
+                void CleanUp()
+                {
+                    CleanUpFloatingWindow(floatingWindow);
+                    CurrentScreenPointBehavior.PointerReleasedEvent -= CleanUp;
+                }
+
+                CurrentScreenPointBehavior.PointerReleasedEvent += CleanUp;
             }
 
             dockWindow.ShowDockWindow();

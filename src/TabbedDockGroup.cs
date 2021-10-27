@@ -523,5 +523,17 @@ namespace NP.Avalonia.UniDock
                 nameof(TabSeparatorBackground)
             );
         #endregion TabSeparatorBackground Styled Avalonia Property
+
+
+        #region AllowCenterDocking Styled Avalonia Property
+        public bool AllowCenterDocking
+        {
+            get { return GetValue(AllowCenterDockingProperty); }
+            set { SetValue(AllowCenterDockingProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
+            DockAttachedProperties.AllowCenterDockingProperty.AddOwner<TabbedDockGroup>();
+        #endregion AllowCenterDocking Styled Avalonia Property
     }
 }

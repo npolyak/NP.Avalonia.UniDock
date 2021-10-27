@@ -362,5 +362,25 @@ namespace NP.Avalonia.UniDock
                 true
             );
         #endregion IsUnderLockedGroup Attached Avalonia Property
+
+
+        #region AllowCenterDocking Attached Avalonia Property
+        public static bool GetAllowCenterDocking(AvaloniaObject obj)
+        {
+            return obj.GetValue(AllowCenterDockingProperty);
+        }
+
+        public static void SetAllowCenterDocking(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(AllowCenterDockingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "AllowCenterDocking",
+                true
+            );
+        #endregion AllowCenterDocking Attached Avalonia Property
     }
 }

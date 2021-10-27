@@ -29,6 +29,8 @@ namespace NP.Avalonia.Visuals.Behaviors
 
         public static Point2D CurrentScreenPointValue { get; private set; } = new Point2D();
 
+        public static event Action PointerReleasedEvent;
+
         static CurrentScreenPointBehavior()
         {
             InputManager.Instance.Process.Subscribe(OnInputReceived);
@@ -92,6 +94,8 @@ namespace NP.Avalonia.Visuals.Behaviors
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e)
         {
             ReleaseCapture();
+
+            PointerReleasedEvent?.Invoke();
         }
     }
 }

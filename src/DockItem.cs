@@ -506,5 +506,16 @@ namespace NP.Avalonia.UniDock
                 this.SetCanReattachToDefaultGroup();
             }
         }
+
+        #region AllowCenterDocking Styled Avalonia Property
+        public bool AllowCenterDocking
+        {
+            get { return GetValue(AllowCenterDockingProperty); }
+            set { SetValue(AllowCenterDockingProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
+            DockAttachedProperties.AllowCenterDockingProperty.AddOwner<DockItem>();
+        #endregion AllowCenterDocking Styled Avalonia Property
     }
 }

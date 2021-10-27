@@ -154,6 +154,15 @@ namespace NP.Avalonia.UniDock
 
             }
         }
+
+        public bool AllowCenterDocking
+        {
+            get => true;
+            set
+            {
+
+            }
+        }
     }
 
     public interface ILeafDockObj : IDockGroup
@@ -191,6 +200,15 @@ namespace NP.Avalonia.UniDock
                 item.GetDockGroupAncestors()
                     .Any(ancestor => ancestor is ILeafDockObj);
         }
+
+
+        public static bool HasLockedAncestor(this IDockGroup item)
+        {
+            return
+                item.GetDockGroupAncestors()
+                    .Any(anc => anc.IsGroupLocked);
+        }
+
 
         public static GridLength GetSizeCoeff(this IDockGroup group, int idx)
         {
@@ -284,15 +302,31 @@ namespace NP.Avalonia.UniDock
                         .Subscribe(OnIsDockVisbleChanged);
             }
         }
-
         public static IEnumerable<ILeafDockObj> GetLeafGroups(this IDockGroup dockGroup)
         {
-            var leafGroups = 
+            var leafGroups =
                 dockGroup.GetDockGroupSelfAndDescendants(stopCondition: item => item is ILeafDockObj)
                          .OfType<ILeafDockObj>()
                          .Distinct();
 
             return leafGroups;
+        }
+
+        public static IEnumerable<IDockGroup> GetLeafGroupsIncludingGroupsWithLock(this IDockGroup dockGroup)
+        {
+            var leafGroups =
+                dockGroup.GetDockGroupSelfAndDescendants(stopCondition: item => (item.IsGroupLocked) || (item is ILeafDockObj))
+                        .Where(g => g.IsGroupLocked || g is ILeafDockObj)
+                        .Distinct();
+
+            return leafGroups;
+        }
+
+        public static IEnumerable<IDockGroup> GetLeafGroupsWithoutLock(this IDockGroup dockGroup)
+        {
+            return dockGroup.GetLeafGroupsIncludingGroupsWithLock()
+                            .Where(group => !group.IsGroupLocked)
+                            .SelectMany(g => g.LeafItems).ToList();
         }
 
         public static IEnumerable<DockItem> GetLeafItems(this IDockGroup dockGroup)
@@ -457,6 +491,11 @@ namespace NP.Avalonia.UniDock
         public static bool HasStableGroup(this IDockGroup group)
         {
             return group.GetDockGroupSelfAndDescendants().Any(g => g.IsStableGroup);
+        }
+
+        public static void ClearGroups(this IDockGroup group)
+        {
+
         }
     }
 }
