@@ -70,9 +70,15 @@ namespace NP.Avalonia.UniDock.Serialization
 
         #endregion Width or Height Coefficients
 
+        #region Only Applicable to StackDockGroup
         // only applicable to DockStackGroup, otherwise - null
         [XmlAttribute]
         public Orientation TheOrientation { get; set; }
+
+        [XmlAttribute]
+        // only applicable to DockStackGroup, otherwise - false
+        public bool IsGroupLocked { get; set; }
+        #endregion Only Applicable to StackDockGroup
 
         [XmlAttribute]
         public bool IsPredefined { get; set; }
@@ -106,7 +112,7 @@ namespace NP.Avalonia.UniDock.Serialization
             p.CanClose = dg.CanClose;
             p.DefaultDockOrderInGroup = dg.DefaultDockOrderInGroup;
             p.AutoInvisible = dg.AutoInvisible;
-            
+
             if (dg.GetNumberChildren() > 0)
             {
                 p.ChildrenDockIds = new List<string>();
@@ -123,6 +129,8 @@ namespace NP.Avalonia.UniDock.Serialization
                     dockStackGroup.GetSizeCoefficients()
                                   .Select(item => item.ToString())
                                   .ToArray();
+
+                p.IsGroupLocked = dockStackGroup.IsGroupLocked;
             }
 
             if (dg is StackDockGroup stackGroup)
@@ -153,6 +161,7 @@ namespace NP.Avalonia.UniDock.Serialization
             if (dg is StackDockGroup stackGroup)
             {
                 stackGroup.TheOrientation = (Orientation)p.TheOrientation!;
+                stackGroup.IsGroupLocked = p.IsGroupLocked;
             }
 
             if (dg is DockItem dockItem)

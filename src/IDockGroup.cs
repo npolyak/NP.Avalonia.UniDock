@@ -145,6 +145,15 @@ namespace NP.Avalonia.UniDock
                            .Distinct();
             }
         }
+
+        bool IsGroupLocked
+        {
+            get => false;
+            set
+            {
+
+            }
+        }
     }
 
     public interface ILeafDockObj : IDockGroup
@@ -306,17 +315,6 @@ namespace NP.Avalonia.UniDock
         public static DockObjectInfo ToDockObjectInfo(this IDockGroup group)
         {
             return new DockObjectInfo(group.DockId, group.TheGroupKind);
-        }
-
-        public static void SetStableParent(this IDockGroup group)
-        {
-            if (group.IsStableGroup)
-            {
-                if (group.DockParent != null)
-                {
-                    group.DockParent.IsStableGroup = true;
-                }
-            }
         }
 
         public static T? GetResource<T>(this IDockGroup? dockGroup, object resourceKey)

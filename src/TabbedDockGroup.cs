@@ -235,7 +235,6 @@ namespace NP.Avalonia.UniDock
 
                 _dockParent = value;
 
-                this.SetStableParent();
                 this.SetCanReattachToDefaultGroup();
             }
         }

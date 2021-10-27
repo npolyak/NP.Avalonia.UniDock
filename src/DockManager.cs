@@ -113,10 +113,10 @@ namespace NP.Avalonia.UniDock
                     .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, extraTypes);
         }
 
-        IList<Window> _predefinedWindows = new ObservableCollection<Window>();
+        private readonly IList<Window> _predefinedWindows = new ObservableCollection<Window>();
         public IEnumerable<Window> PredefinedWindows => _predefinedWindows;
 
-        IList<FloatingWindow> _floatingWindows = new ObservableCollection<FloatingWindow>();
+        private readonly IList<FloatingWindow> _floatingWindows = new ObservableCollection<FloatingWindow>();
         public IEnumerable<FloatingWindow> FloatingWindows => _floatingWindows;
 
         private UnionBehavior<Window> _allWindowsBehavior;

@@ -6,7 +6,7 @@
         Width="700"
         Height="700"
         np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
+        np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.GroupHeaderSample.MainWindow"
         Title="NP.GroupHeaderSample"
         BorderBrush="Gray">
@@ -26,7 +26,7 @@
       <np:RootDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
-                                    WindowSize ="300, 300">
+                                    WindowSize ="800, 400">
           <np:StackDockGroup TheOrientation="Horizontal"
                              DockId="FloatingGroup1">
             <np:DockItem Header="FloatingWindowPanel1"
