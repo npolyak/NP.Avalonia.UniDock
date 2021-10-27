@@ -341,5 +341,26 @@ namespace NP.Avalonia.UniDock
                 "IsPointerOverHeader"
             );
         #endregion IsPointerOverHeader Attached Avalonia Property
+
+
+        #region IsUnderLockedGroup Attached Avalonia Property
+        public static bool GetIsUnderLockedGroup(IDockGroup obj)
+        {
+            return obj.GetValue(IsUnderLockedGroupProperty);
+        }
+
+        public static void SetIsUnderLockedGroup(IDockGroup obj, bool value)
+        {
+            obj.SetValue(IsUnderLockedGroupProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsUnderLockedGroupProperty =
+            AvaloniaProperty.RegisterAttached<object, IDockGroup, bool>
+            (
+                "IsUnderLockedGroup",
+                false, 
+                true
+            );
+        #endregion IsUnderLockedGroup Attached Avalonia Property
     }
 }

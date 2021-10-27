@@ -457,6 +457,22 @@ namespace NP.Avalonia.UniDock
             this.SimplifySelfImpl();
         }
 
+        #region IsGroupLocked Styled Avalonia Property
+        public bool IsGroupLocked
+        {
+            get { return GetValue(IsGroupLockedProperty); }
+            set { SetValue(IsGroupLockedProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsGroupLockedProperty =
+            AvaloniaProperty.Register<StackDockGroup, bool>
+            (
+                nameof(IsGroupLocked),
+                false
+            );
+        #endregion IsGroupLocked Styled Avalonia Property
+
+
         public bool AutoDestroy { get; set; } = true;
 
         #region DefaultDockOrderInGroup Styled Avalonia Property

@@ -134,5 +134,17 @@ namespace NP.Avalonia.UniDock
                 nameof(IsFullyActive)
             );
         #endregion IsFullyActive Styled Avalonia Property
+
+
+        #region ShowHeader Styled Avalonia Property
+        public bool ShowHeader
+        {
+            get { return GetValue(ShowHeaderProperty); }
+            set { SetValue(ShowHeaderProperty, value); }
+        }
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            DockAttachedProperties.ShowHeaderProperty.AddOwner<DockItemPresenter>();
+        #endregion ShowHeader Styled Avalonia Property
     }
 }

@@ -433,9 +433,17 @@
     <Setter Property="np:DockAttachedProperties.IsInDockEditableState"
             Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState),
                             RelativeSource={RelativeSource AncestorType=Window}}"/>
-    <Setter Property="ShowHeader"
-            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState), 
-                            RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="ShowHeader">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static np:BoolConverters.And}">
+          <Binding Path="(np:DockAttachedProperties.IsInDockEditableState)"
+                   RelativeSource="{RelativeSource Self}"/>
+          <Binding Path="(np:DockAttachedProperties.IsUnderLockedGroup)"
+                   Converter="{x:Static np:BoolConverters.Not}"
+                   RelativeSource="{RelativeSource Self}"/>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
     <Setter Property="IsVisible"
             Value="{Binding Path=(np:DockAttachedProperties.IsDockVisible), 
                             RelativeSource={RelativeSource Self}}"/>
@@ -651,13 +659,17 @@
         </MultiBinding>
       </Setter.Value>
     </Setter>
+    <Setter Property="ShowHeader"
+            Value="{Binding Path=(np:DockAttachedProperties.IsUnderLockedGroup), 
+                            Converter={x:Static np:BoolConverters.Not}, 
+                            RelativeSource={RelativeSource Self}}"/>
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="np:DockItem">
+        <ControlTemplate TargetType="np:DockItemPresenter">
           <Grid RowDefinitions="Auto, *"
                 Background="White">
             <Grid RowDefinitions="Auto, Auto"
-                  IsVisible="{Binding Path=ShowHeader}">
+                  IsVisible="{Binding Path=ShowHeader, RelativeSource={RelativeSource TemplatedParent}}">
               <np:DockItemHeaderControl x:Name="Header"
                                         Background="{Binding Path=HeaderBackground, RelativeSource={RelativeSource TemplatedParent}}"
                                         Foreground="{Binding Path=HeaderForeground, RelativeSource={RelativeSource TemplatedParent}}"
@@ -743,9 +755,35 @@
     <Setter Property="np:DockAttachedProperties.IsInDockEditableState"
             Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState),
                             RelativeSource={RelativeSource AncestorType=Window}}"/>
-    <Setter Property="ShowHeader"
-            Value="{Binding Path=(np:DockAttachedProperties.IsInDockEditableState), 
-                            RelativeSource={RelativeSource Self}}"/>
+    <Setter Property="ShowHeader">
+      <Setter.Value>
+        <MultiBinding Converter="{x:Static np:BoolConverters.Or}">
+          <Binding Path="IsGroupLocked"
+                   RelativeSource="{RelativeSource Self}"/>
+          <MultiBinding Converter="{x:Static np:BoolConverters.And}">
+            <Binding Path="(np:DockAttachedProperties.IsInDockEditableState)"
+                     RelativeSource="{RelativeSource Self}"/>
+            <Binding Path="(np:DockAttachedProperties.IsUnderLockedGroup)"
+                     Converter="{x:Static np:BoolConverters.Not}"
+                     RelativeSource="{RelativeSource Self}"/>
+          </MultiBinding>
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="np:TriggerBehavior.SourceProperty"
+            Value="{x:Static np:StackDockGroup.IsGroupLockedProperty}"/>
+    <Setter Property="np:TriggerBehavior.TargetProperty"
+            Value="{x:Static np:DockAttachedProperties.IsUnderLockedGroupProperty}"/>
+    <Setter Property="np:TriggerBehavior.SourceTriggerValue">
+      <Setter.Value>
+        <x:Boolean>True</x:Boolean>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="np:TriggerBehavior.TargetValue">
+      <Setter.Value>
+        <x:Boolean>True</x:Boolean>
+      </Setter.Value>
+    </Setter>
     <Setter Property="HeaderBackground"
             Value="{StaticResource DockHeaderBrush}"/>
     <Setter Property="HeaderForeground"
@@ -783,10 +821,10 @@
                                 np:AttachedProperties.PrimaryIconData="{StaticResource LockOpen}"
                                 np:AttachedProperties.AlternateIconData="{StaticResource LockClosed}"
                                 ToolTip.Tip="Lock/Unlock"
-                                IsVisible="{Binding $parent[np:StackDockGroup].IsInEditableState}"
-                                Width="15"
-                                Height="15"
-                                Margin="5,0"/>
+                                IsVisible="{Binding $parent[np:StackDockGroup].(np:DockAttachedProperties.IsInDockEditableState)}"
+                                np:AttachedProperties.IconMargin="1.5"
+                                Margin="5,0"
+                                IsChecked="{Binding $parent[np:StackDockGroup].IsGroupLocked, Mode=TwoWay}"/>
                   <Button x:Name="CloseButton"
                           Classes="CloseButton"/>
                 </StackPanel>
