@@ -171,42 +171,48 @@ namespace NP.Avalonia.UniDock
 
             Window parentWindow = parentItem.GetVisualAncestors().OfType<Window>().First();
 
-            // remove from the current items
-            _draggedDockGroup?.RemoveItselfFromParent();
+            FloatingWindow? floatingWindow = parentWindow as FloatingWindow;
 
-            parentItem?.Simplify();
+            FloatingWindow dockWindow;
+            try
+            {
+                floatingWindow?.SetCloseIsNotAllowed();
 
-            DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
+                Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
 
-            // create the window
-            var dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
+                parentItem?.Simplify();
 
-            dockWindow.ParentWindowGroup = topDockGroup as RootDockGroup;
+                DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
 
-            dockWindow.SetMovePtr();
+                // create the window
+                dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
 
-            DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
+                dockWindow.ParentWindowGroup = topDockGroup as RootDockGroup;
 
-            _draggedDockGroup!.CleanSelfOnRemove();
+                dockWindow.SetMovePtr();
 
-            dockWindow.Width = _draggedDockGroup.FloatingSize.X;
-            dockWindow.Height = _draggedDockGroup.FloatingSize.Y;
-            dockWindow.TheDockGroup.DockChildren.Add(_draggedDockGroup!);
+                DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 
-            Window ownerWindow = DockAttachedProperties.GetDockChildWindowOwner(parentWindow);
+                DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
 
-            DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
+                // remove from the current items
+                _draggedDockGroup?.RemoveItselfFromParent();
 
-            ClearHandlers(sender);
+                _draggedDockGroup!.CleanSelfOnRemove();
 
-            await Task.Delay(200);
+                dockWindow.Width = _draggedDockGroup.FloatingSize.X;
+                dockWindow.Height = _draggedDockGroup.FloatingSize.Y;
+                dockWindow.TheDockGroup.DockChildren.Add(_draggedDockGroup!);
+
+                ClearHandlers(sender);
+            }
+            finally
+            {
+                floatingWindow?.ResetIsCloseAllowed();
+                floatingWindow?.CloseIfNeeded();
+            }
 
             dockWindow.ShowDockWindow();
-
-            if (!dockWindow.IsActive)
-            {
-                dockWindow.Activate();
-            }
         }
     }
 }

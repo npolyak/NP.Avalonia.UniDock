@@ -21,18 +21,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 
 namespace NP.Avalonia.UniDock
 {
     public class FloatingWindow : CustomWindow, IDockManagerContainer
     {
-        public bool IsStable => TheDockGroup.IsStableGroup;
-
-        public bool AutoInvisible
-        {
-            get => TheDockGroup.AutoInvisible;
-            set => TheDockGroup.AutoInvisible = value;
-        }
+        public bool AutoDestroy { get; set; } = true;
 
         public RootDockGroup TheDockGroup { get; } = 
             new RootDockGroup();
@@ -78,6 +73,7 @@ namespace NP.Avalonia.UniDock
             TheDockGroup.TheDockManager = TheDockManager;
         }
 
+        private readonly IDisposable _subscription;
         public FloatingWindow() 
         {
             DragOnBeginMove = false;
@@ -96,7 +92,31 @@ namespace NP.Avalonia.UniDock
 
             TheDockGroup.IsDockVisibleChangedEvent += 
                 TheDockGroup_IsDockVisibleChangedEvent;
-            ResetCanClose();
+
+            _subscription = 
+                TheDockGroup.DockChangedWithin.Subscribe(OnDockChangedWithin);
+        }
+
+        #region
+        // the following functionality is used in 
+        private bool _isCloseAllowed = true;
+
+        internal void SetCloseIsNotAllowed()
+        {
+            _isCloseAllowed = false;
+        }
+
+        internal void ResetIsCloseAllowed()
+        {
+            _isCloseAllowed = true;
+        }
+        #endregion
+
+        private void OnDockChangedWithin(Unit obj)
+        {
+            CanClose = !TheDockGroup.HasStableDescendant;
+
+            CloseIfNeeded();
         }
 
         private void FloatingWindow_Closed(object? sender, EventArgs e)
@@ -110,30 +130,17 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private bool _canClose;
-
-        internal void SetCannotClose()
+        internal void CloseIfNeeded()
         {
-            _canClose = false;
+            if (CanClose && this.LeafItems.Count() == 0 && AutoDestroy && _isCloseAllowed)
+            {
+                this.Close();
+            }
         }
 
-        internal void ResetCanClose()
-        {
-            _canClose = true;
-        }
         private void TheDockGroup_IsDockVisibleChangedEvent(IDockGroup obj)
         {
-            if (TheDockGroup.GetIsDockVisible())
-            {
-                if (!this.IsVisible)
-                {
-                    this.ShowDockWindow();
-                }
-            }
-            else if (this.IsVisible && _canClose)
-            {
-                this.Hide();
-            }
+
         }
 
         private void TheDockGroup_PossibleDockChangeInsideEvent(RootDockGroup obj)
@@ -152,15 +159,7 @@ namespace NP.Avalonia.UniDock
 
         protected virtual void BeforeClosing(CancelEventArgs e)
         {
-            if (IsStable)
-            {
-                this.Hide();
-                e.Cancel = true;
-            }
-            else
-            {
-                TheDockManager = null;
-            }
+            TheDockManager = null;
         }
 
         private void FloatingWindow_Closing(object? sender, CancelEventArgs e)

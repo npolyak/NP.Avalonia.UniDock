@@ -548,8 +548,8 @@ namespace NP.Avalonia.UniDock
                 _pointerMovedSubscription = null;
 
                 IDockGroup? draggedGroup = DraggedWindow?.TheDockGroup?.TheChild;
-
-                currentWindowToDropInto?.SetCannotClose();
+                
+                currentWindowToDropInto?.SetCloseIsNotAllowed();
 
                 IDockGroup? currentDockGroupToInsertWithRespectTo = CurrentLeafObjToInsertWithRespectTo;
 
@@ -655,7 +655,7 @@ namespace NP.Avalonia.UniDock
                     CurrentRootDockGroup = null;
                 }
 
-                currentWindowToDropInto?.ResetCanClose();
+                currentWindowToDropInto?.ResetIsCloseAllowed();
 
                 DraggedWindow = null;
             }

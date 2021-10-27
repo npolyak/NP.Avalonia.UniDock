@@ -223,10 +223,10 @@ namespace NP.Avalonia.UniDock
             if (group.GetNumberChildren() == 1)
             {
                 FloatingWindow? window = group.GetGroupWindow();
-
                 try
                 {
-                    window?.SetCannotClose();
+                    window?.SetCloseIsNotAllowed();
+
                     int idx = dockParent.DockChildren.IndexOf(group);
 
                     GridLength sizeCoeff = dockParent.GetSizeCoeff(idx);
@@ -244,7 +244,7 @@ namespace NP.Avalonia.UniDock
                 }
                 finally
                 {
-                    window?.ResetCanClose();
+                    window?.ResetIsCloseAllowed();
                 }
             }
         }

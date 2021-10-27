@@ -49,7 +49,7 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
-            _items?.DoForEach(item => SetItemValue(item));
+            _items?.ToList()?.DoForEach(item => SetItemValue(item));
         }
 
         private void SetItemValue(T item)

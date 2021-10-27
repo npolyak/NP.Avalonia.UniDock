@@ -24,12 +24,8 @@ using System.Linq;
 using NP.Avalonia.UniDockService;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using NP.Avalonia.Visuals.Behaviors;
-using Avalonia.VisualTree;
-using System.Reactive;
-using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {

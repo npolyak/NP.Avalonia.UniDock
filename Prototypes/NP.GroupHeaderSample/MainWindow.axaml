@@ -28,8 +28,7 @@
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
           <np:StackDockGroup TheOrientation="Horizontal"
-                             DockId="FloatingGroup1"
-                             IsStableGroup="True">
+                             DockId="FloatingGroup1">
             <np:DockItem Header="FloatingWindowPanel1"
                          DockId="FloatingDockItem1"
                          DefaultDockGroupId="FloatingGroup1"

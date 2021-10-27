@@ -42,7 +42,7 @@ namespace NP.Avalonia.UniDock.Serialization
         public string? TopLevelGroupId { get; set; }
 
         [XmlAttribute]
-        public bool AutoInvisible { get; set; }
+        public bool AutoDestroy { get; set; }
     }
 
     public static class WindowParamsHelper
@@ -78,7 +78,7 @@ namespace NP.Avalonia.UniDock.Serialization
             if (w is FloatingWindow dockWindow)
             {
                 wp.TopLevelGroupId = dockWindow.TheDockGroup.DockId;
-                wp.AutoInvisible = dockWindow.AutoInvisible;
+                wp.AutoDestroy = dockWindow.AutoDestroy;
             }
 
             return wp;
@@ -102,7 +102,7 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (w is FloatingWindow floatingWindow)
             {
-                floatingWindow.AutoInvisible = wp.AutoInvisible;
+                floatingWindow.AutoDestroy = wp.AutoDestroy;
             }
         }
 
