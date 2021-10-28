@@ -161,22 +161,6 @@ namespace NP.Avalonia.UniDock
                 {
                     _floatingWindow.TheDockGroup.TheChild = _dockContent;
                 }
-                _floatingWindow.AutoDestroy = AutoDestroy;
-            }
-        }
-
-        bool _autoDestroy = true;
-        public bool AutoDestroy
-        {
-            get => _autoDestroy; 
-            set
-            {
-                if (_autoDestroy == value)
-                    return;
-
-                _autoDestroy = value;
-
-                SetDockContent();
             }
         }
 

@@ -692,7 +692,10 @@ namespace NP.Avalonia.UniDock
             writer.Flush();
         }
 
-        public void RestoreFromFile(string filePath)
+        public void RestoreFromFile
+        (
+            string filePath, 
+            bool restorePredefinedWindowsPositionParams = false)
         {
             using StreamReader reader = new StreamReader(filePath);
 
@@ -701,7 +704,7 @@ namespace NP.Avalonia.UniDock
             DockManagerParams dmp =
                 XmlSerializationUtils.Deserialize<DockManagerParams>(serializationStr);
 
-            this.SetDockManagerFromParams(dmp);
+            this.SetDockManagerFromParams(dmp, restorePredefinedWindowsPositionParams);
         }
 
         internal IDockGroup? FindGroupById(string? dockId)

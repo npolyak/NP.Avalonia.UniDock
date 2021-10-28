@@ -28,8 +28,6 @@ namespace NP.Avalonia.UniDock
 {
     public class FloatingWindow : CustomWindow, IDockManagerContainer
     {
-        public bool AutoDestroy { get; set; } = true;
-
         public RootDockGroup TheDockGroup { get; } = 
             new RootDockGroup();
 
@@ -61,17 +59,48 @@ namespace NP.Avalonia.UniDock
             set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
 
+        #region SavedPosition Styled Avalonia Property
+        public Point2D? SavedPosition
+        {
+            get { return GetValue(SavedPositionProperty); }
+            internal set { SetValue(SavedPositionProperty, value); }
+        }
+
+        public static readonly StyledProperty<Point2D?> SavedPositionProperty =
+            AvaloniaProperty.Register<FloatingWindow, Point2D?>
+            (
+                nameof(SavedPosition)
+            );
+        #endregion SavedPosition Styled Avalonia Property
+
+
+        #region SavedSize Styled Avalonia Property
+        public Point2D? SavedSize
+        {
+            get { return GetValue(SavedSizeProperty); }
+            internal set { SetValue(SavedSizeProperty, value); }
+        }
+
+        public static readonly StyledProperty<Point2D?> SavedSizeProperty =
+            AvaloniaProperty.Register<FloatingWindow, Point2D?>
+            (
+                nameof(SavedSize)
+            );
+        #endregion SavedSize Styled Avalonia Property
+
+
+        private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            TheDockGroup.TheDockManager = TheDockManager;
+        }
+
+
         static FloatingWindow()
         {
             DockAttachedProperties
                 .TheDockManagerProperty
                 .Changed
                 .AddClassHandler<FloatingWindow>((dw, e) => dw.OnDockManagerChanged(e));
-        }
-
-        private void OnDockManagerChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            TheDockGroup.TheDockManager = TheDockManager;
         }
 
         private readonly IDisposable _subscription;
@@ -96,6 +125,28 @@ namespace NP.Avalonia.UniDock
 
             _subscription = 
                 TheDockGroup.DockChangedWithin.Subscribe(OnDockChangedWithin);
+
+            this.GetObservable(WindowStateProperty).Subscribe(OnWindowStateChanged);
+        }
+
+        private void OnWindowStateChanged(WindowState windowState)
+        {
+            if (windowState == WindowState.Normal)
+            {
+                if (SavedPosition != null)
+                {
+                    this.Position = SavedPosition.ToPixelPoint();
+                    SavedPosition = null;
+                }
+
+                if (SavedSize != null)
+                {
+
+                    this.Width = SavedSize.X;
+                    this.Height = SavedSize.Y;
+                    SavedSize = null;
+                }
+            }
         }
 
         #region
@@ -133,7 +184,7 @@ namespace NP.Avalonia.UniDock
 
         internal void CloseIfAllowed(bool closeOrHide = true)
         {
-            if (CanClose && this.LeafItems.Count() == 0 && AutoDestroy && _isCloseAllowed)
+            if (CanClose && this.LeafItems.Count() == 0 && _isCloseAllowed)
             {
                 if (closeOrHide)
                 {
@@ -168,6 +219,29 @@ namespace NP.Avalonia.UniDock
         protected virtual void BeforeClosing(CancelEventArgs e)
         {
             TheDockManager = null;
+        }
+
+        private void SetPosition()
+        {
+            if (this.WindowState != WindowState.Normal)
+            {
+                return;
+            }
+
+            SavedPosition = Position.ToPoint2D();
+            SavedSize = new Point2D(this.Bounds.Width, this.Bounds.Height);
+        }
+
+        public override void Minimize()
+        {
+            SetPosition();
+            base.Minimize();
+        }
+
+        public override void Maximize()
+        {
+            SetPosition();
+            base.Maximize();
         }
 
         private void FloatingWindow_Closing(object? sender, CancelEventArgs e)

@@ -9,7 +9,8 @@ namespace NP.Avalonia.UniDockService
 
         void SaveToFile(string filePath);
 
-        void RestoreFromFile(string filePath);
+        void RestoreFromFile(string filePath,
+                             bool restorePredefinedWindowsPositionParams = false);
 
         void SaveViewModelsToFile(string filePath);
 

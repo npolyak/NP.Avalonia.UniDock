@@ -165,7 +165,11 @@ namespace NP.Avalonia.UniDock.Serialization
             return dg;
         }
 
-        public static void SetDockManagerFromParams(this DockManager dm, DockManagerParams dmp)
+        public static void SetDockManagerFromParams
+        (
+            this DockManager dm, 
+            DockManagerParams dmp, 
+            bool restorePredefinedWindowsPositionParams = false)
         {
             List<DockItem> dockItems = dm.ConnectedGroups.OfType<DockItem>().ToList();
 
@@ -193,12 +197,15 @@ namespace NP.Avalonia.UniDock.Serialization
 
                 if (w != null)
                 {
-                    w.SetWindowFromParams(wp);
+                    bool setWindowPositionParams =
+                        (!dm.PredefinedWindows.Contains(w)) || restorePredefinedWindowsPositionParams;
+
+                    w.SetWindowFromParams(wp, setWindowPositionParams);
                 }
                 else
                 {
                     w = wp.RestoreWindow(dm);
-                    w.SetWindowFromParams(wp);
+                    w.SetWindowFromParams(wp, true);
                 }
             }
 

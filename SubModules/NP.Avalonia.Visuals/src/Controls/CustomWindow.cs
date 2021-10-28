@@ -168,7 +168,7 @@ namespace NP.Avalonia.Visuals.Controls
             this.WindowState = WindowState.Normal;
         }
 
-        public void Minimize()
+        public virtual void Minimize()
         {
             this.WindowState = WindowState.Minimized;
         }

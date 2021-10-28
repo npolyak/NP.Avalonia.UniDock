@@ -5,7 +5,6 @@
         xmlns:local="clr-namespace:NP.GroupHeaderSample"
         Width="700"
         Height="700"
-        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
         np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.GroupHeaderSample.MainWindow"
         Title="NP.GroupHeaderSample"

@@ -23,6 +23,10 @@ namespace NP.Avalonia.UniDock.Serialization
 
         public Point2D? Size { get; set; }
 
+        public Point2D? SaveTopLeft { get; set; }
+
+        public Point2D? SavedSize { get; set; }
+
         [XmlAttribute]
         public string? Title { get; set; }
 
@@ -40,9 +44,6 @@ namespace NP.Avalonia.UniDock.Serialization
 
         [XmlAttribute]
         public string? TopLevelGroupId { get; set; }
-
-        [XmlAttribute]
-        public bool AutoDestroy { get; set; }
     }
 
     public static class WindowParamsHelper
@@ -77,32 +78,38 @@ namespace NP.Avalonia.UniDock.Serialization
 
             if (w is FloatingWindow dockWindow)
             {
+                wp.SaveTopLeft = dockWindow.SavedPosition;
+                wp.SavedSize = dockWindow.SavedSize;
+
                 wp.TopLevelGroupId = dockWindow.TheDockGroup.DockId;
-                wp.AutoDestroy = dockWindow.AutoDestroy;
             }
 
             return wp;
         }
 
-        public static void  SetWindowFromParams(this Window w, WindowParams wp)
+        public static void  SetWindowFromParams(this Window w, WindowParams wp, bool setWindowPositionParams)
         {
-            w.Position = wp.TopLeft.ToPixelPoint();
-            w.Width = wp.Size!.X;
-            w.Height = wp.Size.Y;
+            if (setWindowPositionParams)
+            {
+                w.Position = wp.TopLeft.ToPixelPoint();
+                w.Width = wp.Size!.X;
+                w.Height = wp.Size.Y;
 
-            w.Title = wp.Title;
-            w.WindowState = wp.TheWindowState;
+                w.Title = wp.Title;
+                w.WindowState = wp.TheWindowState;
+            }
+
+            if (w is FloatingWindow dockWindow)
+            {
+                dockWindow.SavedPosition = wp.SaveTopLeft;
+                dockWindow.SavedSize = wp.SavedSize;
+            }
 
             string? windowId = wp.WindowId;
 
             if (windowId != null)
             {
                 DockAttachedProperties.SetWindowId(w, windowId);
-            }
-
-            if (w is FloatingWindow floatingWindow)
-            {
-                floatingWindow.AutoDestroy = wp.AutoDestroy;
             }
         }
 
