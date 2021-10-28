@@ -28,16 +28,6 @@ namespace NP.Avalonia.UniDock
     {
         protected static DragItemBehavior<TItem>? Instance { get; set; }
 
-        public static bool GetIsSet(AvaloniaObject obj)
-        {
-            return obj.GetValue(IsSetProperty);
-        }
-
-        public static readonly AttachedProperty<bool> IsSetProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>
-            (
-                "IsSet"
-            );
         protected static void OnIsSetChanged(AvaloniaPropertyChangedEventArgs<bool> change)
         {
             Control itemsContainer = (Control)change.Sender;
@@ -57,10 +47,10 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        static DragItemBehavior()
-        {
-            IsSetProperty.Changed.Subscribe(OnIsSetChanged);
-        }
+        //static DragItemBehavior()
+        //{
+        //    IsSetProperty.Changed.Subscribe(OnIsSetChanged);
+        //}
 
         private Point2D? _startMousePoint;
 

@@ -22,12 +22,25 @@ namespace NP.Avalonia.UniDock
 {
     public class DragTabBehavior : DragItemBehavior<TabItem>
     {
+
         #region IsSet Attached Avalonia Property
+        public static bool GetIsSet(AvaloniaObject obj)
+        {
+            return obj.GetValue(IsSetProperty);
+        }
+
         public static void SetIsSet(AvaloniaObject obj, bool value)
         {
             obj.SetValue(IsSetProperty, value);
         }
+
+        public static readonly AttachedProperty<bool> IsSetProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "IsSet"
+            );
         #endregion IsSet Attached Avalonia Property
+
 
         private static DockItem? GetDockItem(TabItem tabItem) =>
             tabItem.Content as DockItem;
@@ -78,6 +91,7 @@ namespace NP.Avalonia.UniDock
         static DragTabBehavior()
         {
             Instance = new DragTabBehavior();
+            IsSetProperty.Changed.Subscribe(OnIsSetChanged);
         }
     }
 }

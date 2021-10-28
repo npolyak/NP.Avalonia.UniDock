@@ -535,5 +535,22 @@ namespace NP.Avalonia.UniDock
         public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
             DockAttachedProperties.AllowCenterDockingProperty.AddOwner<TabbedDockGroup>();
         #endregion AllowCenterDocking Styled Avalonia Property
+
+
+        #region AllowTabDocking Styled Avalonia Property
+        public bool AllowTabDocking
+        {
+            get { return GetValue(AllowTabDockingProperty); }
+            set { SetValue(AllowTabDockingProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> AllowTabDockingProperty =
+            AvaloniaProperty.Register<TabbedDockGroup, bool>
+            (
+                nameof(AllowTabDocking),
+                true
+            );
+        #endregion AllowTabDocking Styled Avalonia Property
+
     }
 }

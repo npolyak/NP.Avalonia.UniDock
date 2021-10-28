@@ -12,17 +12,30 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using System;
 
 namespace NP.Avalonia.UniDock
 {
     public class DragHeaderBehavior : DragItemBehavior<DockItemHeaderControl>
     {
         #region IsSet Attached Avalonia Property
+        public static bool GetIsSet(AvaloniaObject obj)
+        {
+            return obj.GetValue(IsSetProperty);
+        }
+
         public static void SetIsSet(AvaloniaObject obj, bool value)
         {
             obj.SetValue(IsSetProperty, value);
         }
+
+        public static readonly AttachedProperty<bool> IsSetProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "IsSet"
+            );
         #endregion IsSet Attached Avalonia Property
+
 
         private static IDockGroup? GetDockGroup(DockItemHeaderControl headerControl) =>
             headerControl.DataContext as IDockGroup;
@@ -39,7 +52,8 @@ namespace NP.Avalonia.UniDock
 
         static DragHeaderBehavior()
         {
-            Instance = new DragHeaderBehavior();
+            Instance = new DragHeaderBehavior(); 
+            IsSetProperty.Changed.Subscribe(OnIsSetChanged);
         }
     }
 }
