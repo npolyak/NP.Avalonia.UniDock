@@ -112,12 +112,6 @@ namespace NP.Avalonia.UniDock
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
 
-            //TheDockGroup.HasNoChildrenEvent += 
-            //    TheDockGroup_HasNoChildrenEvent;
-
-            TheDockGroup.PossibleDockChangeInsideEvent += 
-                TheDockGroup_PossibleDockChangeInsideEvent;
-
             this.Closing += FloatingWindow_Closing;
 
             this.Closed += FloatingWindow_Closed;
@@ -171,6 +165,11 @@ namespace NP.Avalonia.UniDock
             CanClose = !TheDockGroup.HasStableDescendant;
 
             CloseIfAllowed();
+
+            CanReattachToDefaultGroup =
+                LeafItemsWithDefaultPosition
+                    .Where(item => item.IsAllowedToReattachToDefaultGroup())
+                    .Any();
         }
 
         private void FloatingWindow_Closed(object? sender, EventArgs e)
@@ -202,14 +201,6 @@ namespace NP.Avalonia.UniDock
         private void TheDockGroup_IsDockVisibleChangedEvent(IDockGroup obj)
         {
 
-        }
-
-        private void TheDockGroup_PossibleDockChangeInsideEvent(RootDockGroup obj)
-        {
-            CanReattachToDefaultGroup = 
-                LeafItemsWithDefaultPosition
-                    .Where(item => item.IsAllowedToReattachToDefaultGroup())
-                    .Any();
         }
 
         public void DoInvalidateStyles()
@@ -294,7 +285,9 @@ namespace NP.Avalonia.UniDock
         public IEnumerable<DockItem> LeafItems => TheDockGroup.LeafItems;
 
         public IEnumerable<DockItem> LeafItemsWithDefaultPosition =>
-            LeafItems.Where(item => !item.DefaultDockGroupId.IsNullOrEmpty());
+            TheDockGroup.GetLeafGroupsWithoutLock()
+                        .OfType<DockItem>()
+                        .Where(item => !item.DefaultDockGroupId.IsNullOrEmpty());
 
         #region CanReattachToDefaultGroup Styled Avalonia Property
         public bool CanReattachToDefaultGroup

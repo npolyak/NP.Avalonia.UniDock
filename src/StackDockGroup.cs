@@ -241,6 +241,13 @@ namespace NP.Avalonia.UniDock
             this.GetObservable(DockAttachedProperties.TheDockManagerProperty).Subscribe(OnDockManagerChanged);
 
             this.GetObservable(InitialSizeCoefficientsProperty).Subscribe(OnInitSizeCoeffsChanged!);
+
+            this.GetObservable(IsGroupLockedProperty).Subscribe(OnIsGroupLockedChanged);
+        }
+
+        private void OnIsGroupLockedChanged(bool obj)
+        {
+            this.FireChangeWithin();
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
