@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>NP.Avalonia.Visuals</RootNamespace>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <PackageId>NP.Avalonia.Visuals</PackageId>
     <Version>0.90.1</Version>
     <Authors>Nick Polyak, Ph. D.</Authors>
@@ -21,7 +20,7 @@
     <None Remove=".git" />
     <None Remove="Assets\avalonia-32.png" />
     <None Remove="LICENSE" />
-    <None Remove="NP.Avalonia.Visuals.0.82.1.nupkg" />
+    <None Remove="*.nupkg" />
     <None Remove="NP.Avalonia.Visuals.nuspec" />
     <None Remove="README.md" />
   </ItemGroup>
@@ -41,15 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>NP.Utilities.dll</IncludeAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\..\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj"/>
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj" />
   </ItemGroup>
-  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
-    <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
-    </ItemGroup>
-  </Target>
 </Project>

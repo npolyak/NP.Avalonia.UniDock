@@ -1,9 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="*.nuspec" />
+    <None Remove="*.nuget" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="*.nupkg" />
+    <None Remove="*.nuspec" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\NP.Utilities\src\NP.Utilities.csproj" />
