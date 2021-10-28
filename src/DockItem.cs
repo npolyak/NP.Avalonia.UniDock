@@ -517,5 +517,20 @@ namespace NP.Avalonia.UniDock
         public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
             DockAttachedProperties.AllowCenterDockingProperty.AddOwner<DockItem>();
         #endregion AllowCenterDocking Styled Avalonia Property
+
+
+        #region GroupOnlyById Styled Avalonia Property
+        public string? GroupOnlyById
+        {
+            get { return GetValue(GroupOnlyByIdProperty); }
+            set { SetValue(GroupOnlyByIdProperty, value); }
+        }
+
+        public static readonly StyledProperty<string?> GroupOnlyByIdProperty =
+            AvaloniaProperty.Register<DockItem, string?>
+            (
+                nameof(GroupOnlyById)
+            );
+        #endregion GroupOnlyById Styled Avalonia Property
     }
 }

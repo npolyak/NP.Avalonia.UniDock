@@ -192,10 +192,12 @@ namespace NP.Avalonia.UniDock
 
                 _draggedDockGroup!.CleanSelfOnRemove();
 
+                dockWindow.TheDockGroup.GroupOnlyById = 
+                    _draggedDockGroup.GroupOnlyById;
+
                 dockWindow.Width = _draggedDockGroup.FloatingSize.X;
                 dockWindow.Height = _draggedDockGroup.FloatingSize.Y;
                 dockWindow.TheDockGroup.DockChildren.Add(_draggedDockGroup!);
-
  
                 ClearHandlers(sender);
             }

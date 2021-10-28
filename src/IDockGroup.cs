@@ -82,6 +82,8 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        string? GroupOnlyById { get; set; }
+
         /// stable groups become invisible when they do not have any items.
         /// They are not removed, when empty or have only one item. 
         /// They are used to set the default locations of predefined DockItems

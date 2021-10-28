@@ -271,6 +271,7 @@ namespace NP.Avalonia.UniDock
             _currentDockGroups =
                 AllOperatingLeafGroupsWOLeafParents
                     .Except(_draggedWindow.TheDockGroup.GetDockGroupSelfAndDescendants())
+                    .Where(g => g.GroupOnlyById == _draggedWindow.GroupOnlyById)
                     .Select(g => GroupToPair(g)).ToList();
 
             bool hasAnyNonLockedLeafItems = _draggedWindow.GetLeafGroupsWithoutLock().Any();
@@ -280,6 +281,7 @@ namespace NP.Avalonia.UniDock
                 AllOperatingRootDockGroups
                     .Except(_draggedWindow.TheDockGroup.ToCollection())
                     .Except(_currentDockGroups.OfType<RootDockGroup>())
+                    .Where(g => g.GroupOnlyById == _draggedWindow.GroupOnlyById)
                     .Select(g => GroupToPair(g)).ToList();
         }
 
@@ -352,10 +354,12 @@ namespace NP.Avalonia.UniDock
 
             CurrentLeafObjToInsertWithRespectTo = pointerAboveGroups.FirstOrDefault();
 
+            var rootDockGroup = CurrentLeafObjToInsertWithRespectTo?.GetDockGroupRoot() as RootDockGroup; 
             if ((CurrentLeafObjToInsertWithRespectTo != null) &&
-                (CurrentLeafObjToInsertWithRespectTo is not RootDockGroup) )
+                (CurrentLeafObjToInsertWithRespectTo is not RootDockGroup) &&
+                rootDockGroup?.GroupOnlyById == DraggedWindow?.GroupOnlyById)
             {
-                CurrentRootDockGroup = CurrentLeafObjToInsertWithRespectTo.GetDockGroupRoot() as RootDockGroup;
+                CurrentRootDockGroup = rootDockGroup;
             }
             else
             {
@@ -415,6 +419,8 @@ namespace NP.Avalonia.UniDock
 
                 childGroup.RemoveItselfFromParent();
                 StackDockGroup insertGroup = StackGroupFactory.Create();
+
+                insertGroup.GroupOnlyById = parentGroup.GroupOnlyById;
 
                 insertGroup.TheOrientation = orientation;
 
@@ -618,6 +624,8 @@ namespace NP.Avalonia.UniDock
                                         currentGroup.DockChildren?.Remove(currentDockGroupToInsertWithRespectTo!);
 
                                         currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
+                                        groupToInsertItemsInto.GroupOnlyById = currentGroup.GroupOnlyById;
+
                                         currentGroup.SetSizeCoeff(currentLeafObjIdx, sizeCoeff);
 
                                         currentDockGroupToInsertWithRespectTo?.CleanSelfOnRemove();

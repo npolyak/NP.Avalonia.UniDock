@@ -100,6 +100,21 @@ namespace NP.Avalonia.UniDock
             DockAttachedProperties.CanReattachToDefaultGroupProperty.AddOwner<DockGroupBaseControl>();
         #endregion CanReattachToDefaultGroup Styled Avalonia Property
 
+
+        #region GroupOnlyById Styled Avalonia Property
+        public string? GroupOnlyById
+        {
+            get { return GetValue(GroupOnlyByIdProperty); }
+            set { SetValue(GroupOnlyByIdProperty, value); }
+        }
+
+        public static readonly StyledProperty<string?> GroupOnlyByIdProperty =
+            AvaloniaProperty.Register<DockGroupBaseControl, string?>
+            (
+                nameof(GroupOnlyById)
+            );
+        #endregion GroupOnlyById Styled Avalonia Property
+
         private IDisposable _subscription;
         public DockGroupBaseControl()
         {

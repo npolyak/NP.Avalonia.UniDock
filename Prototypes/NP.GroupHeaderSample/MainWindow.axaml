@@ -58,16 +58,20 @@
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical">
         <np:StackDockGroup TheOrientation="Horizontal"
-                           DockId="Group1"
-                           IsStableGroup="True">
+                           DockId="DocumentGroup"
+                           IsStableGroup="True"
+                           AutoInvisible="False"
+                           GroupOnlyById="Documents">
           <np:DockItem Header="Tab1"
                        DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="1">
+                       DefaultDockOrderInGroup="1"
+                       GroupOnlyById="Documents">
             <TextBlock Text="Hello World!"/>
           </np:DockItem>
           <np:DockItem Header="Tab2"
                        DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="2">
+                       DefaultDockOrderInGroup="2"
+                       GroupOnlyById="Documents">
             <TextBlock Text="Hi World!"/>
           </np:DockItem>
         </np:StackDockGroup>

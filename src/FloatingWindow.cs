@@ -160,6 +160,8 @@ namespace NP.Avalonia.UniDock
         }
         #endregion
 
+        public string? GroupOnlyById => TheDockGroup.GroupOnlyById;
+
         private void OnDockChangedWithin(Unit obj)
         {
             CanClose = !TheDockGroup.HasStableDescendant;
