@@ -61,19 +61,31 @@ namespace NP.Avalonia.UniDock.Serialization
 
         private static Window? GetWindowById(this DockManager dm, string? windowId)
         {
-            Window? w = dm.AllWindows.FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == windowId);
+            Window? w = 
+                dm.AllWindows
+                  .FirstOrDefault(win => DockAttachedProperties.GetWindowId(win) == windowId);
 
             return w;
         }
 
-        private static WindowParams? GetWindowParamsById(this DockManagerParams dmp, string? windowId)
+        private static WindowParams? GetWindowParamsById
+        (
+            this DockManagerParams dmp, 
+            string? windowId)
         {
-            WindowParams? wp = dmp.WindowsSerializationParams.NullToEmpty()?.FirstOrDefault(winParams => winParams.WindowId == windowId);
+            WindowParams? wp = 
+                dmp.WindowsSerializationParams
+                   .NullToEmpty()
+                   ?.FirstOrDefault(winParams => winParams.WindowId == windowId);
 
             return wp;
         }
 
-        private static Window? ShowOwnersAndWindow(this DockManager dm, DockManagerParams dmp, string windowId)
+        private static Window? ShowOwnersAndWindow
+        (
+            this DockManager dm, 
+            DockManagerParams dmp, 
+            string windowId)
         {
             WindowParams? wp = dmp.GetWindowParamsById(windowId);
 
@@ -202,10 +214,15 @@ namespace NP.Avalonia.UniDock.Serialization
 
                     w.SetWindowFromParams(wp, setWindowPositionParams);
                 }
-                else
+                else if (wp.IsDockWindow)
                 {
                     w = wp.RestoreWindow(dm);
                     w.SetWindowFromParams(wp, true);
+                }
+                else
+                {
+                    // if the window is predefined (not a dock window) it has to exist or it will be 
+                    // skipped in reconstruction.
                 }
             }
 

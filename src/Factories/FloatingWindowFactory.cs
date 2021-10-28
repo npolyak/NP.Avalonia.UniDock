@@ -14,6 +14,8 @@ namespace NP.Avalonia.UniDock.Factories
             dockWindow.Classes = new Classes("PlainFloatingWindow" );
             dockWindow.TitleClasses = "WindowTitle";
 
+            dockWindow.IsDockWindow = true;
+
             return dockWindow;
         }
     }

@@ -31,6 +31,8 @@ namespace NP.Avalonia.UniDock
         public RootDockGroup TheDockGroup { get; } = 
             new RootDockGroup();
 
+        public bool IsDockWindow { get; set; }
+
         [Content]
         public IDockGroup? DockContent
         {

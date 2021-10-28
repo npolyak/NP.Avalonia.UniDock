@@ -14,6 +14,7 @@ namespace NP.GroupHeaderSample
 
             dockWindow.Classes = new Classes("PlainFloatingWindow", "MyFloatingWindow");
             dockWindow.TitleClasses = "WindowTitle";
+            dockWindow.IsDockWindow = true;
 
             return dockWindow;
         }

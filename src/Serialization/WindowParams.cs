@@ -28,6 +28,9 @@ namespace NP.Avalonia.UniDock.Serialization
         public Point2D? SavedSize { get; set; }
 
         [XmlAttribute]
+        public bool IsDockWindow { get; set; } = false;
+
+        [XmlAttribute]
         public string? Title { get; set; }
 
         [XmlAttribute]
@@ -81,6 +84,8 @@ namespace NP.Avalonia.UniDock.Serialization
                 wp.SaveTopLeft = dockWindow.SavedPosition;
                 wp.SavedSize = dockWindow.SavedSize;
 
+                wp.IsDockWindow = dockWindow.IsDockWindow;
+
                 wp.TopLevelGroupId = dockWindow.TheDockGroup.DockId;
             }
 
@@ -103,6 +108,7 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 dockWindow.SavedPosition = wp.SaveTopLeft;
                 dockWindow.SavedSize = wp.SavedSize;
+                dockWindow.IsDockWindow = wp.IsDockWindow;
             }
 
             string? windowId = wp.WindowId;
