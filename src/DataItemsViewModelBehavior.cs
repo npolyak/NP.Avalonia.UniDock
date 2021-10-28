@@ -61,6 +61,7 @@ namespace NP.Avalonia.UniDock
                     DockId = vm.DockId!,
                     DefaultDockGroupId = vm.DefaultDockGroupId!,
                     DefaultDockOrderInGroup = vm.DefaultDockOrderInGroup,
+                    GroupOnlyById = vm.GroupOnlyById,
                     CanFloat = vm.CanFloat,
                     CanClose = vm.CanClose,
                     IsPredefined = vm.IsPredefined

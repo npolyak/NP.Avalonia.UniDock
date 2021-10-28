@@ -12,6 +12,8 @@ namespace NP.Avalonia.UniDockService
 
         string? DefaultDockGroupId { get; }
 
+        string? GroupOnlyById { get; }
+
         double DefaultDockOrderInGroup { get; }
 
         bool IsSelected { get; set; }
@@ -62,6 +64,9 @@ namespace NP.Avalonia.UniDockService
         
         [XmlAttribute]
         public string? DefaultDockGroupId { get; set; }
+
+        [XmlAttribute]
+        public string? GroupOnlyById { get; set; }
 
         [XmlAttribute]
         public double DefaultDockOrderInGroup { get; set; } = default;

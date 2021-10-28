@@ -59,6 +59,9 @@ namespace NP.Avalonia.UniDock.Serialization
         [XmlAttribute]
         public bool AutoInvisible { get; set; }
 
+        [XmlAttribute]
+        public string? GroupOnlyById { get; set; }
+
         #region Width or Height Coefficients
         /// <summary>
         /// these coefficients are only applicable to children of DockStackGroups and
@@ -117,6 +120,7 @@ namespace NP.Avalonia.UniDock.Serialization
             p.CanClose = dg.CanClose;
             p.DefaultDockOrderInGroup = dg.DefaultDockOrderInGroup;
             p.AutoInvisible = dg.AutoInvisible;
+            p.GroupOnlyById = dg.GroupOnlyById;
 
             if (dg.GetNumberChildren() > 0)
             {
@@ -167,6 +171,7 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.CanClose = p.CanClose;
             dg.DefaultDockOrderInGroup = p.DefaultDockOrderInGroup;
             dg.AutoInvisible = p.AutoInvisible;
+            dg.GroupOnlyById = p.GroupOnlyById;
 
             if (dg is TabbedDockGroup tabbedDockGroup)
             {
