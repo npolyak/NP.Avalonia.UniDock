@@ -83,6 +83,11 @@ namespace NP.Avalonia.UniDock.Serialization
         [XmlAttribute]
         public bool IsPredefined { get; set; }
 
+        #region Only Applicable to TabbedDockGroup
+        [XmlAttribute]
+        public bool AllowTabDocking { get; set; }
+        #endregion Only Applicable to TabbedDockGroup
+
         #region DockItem parameters
         [XmlAttribute]
         public string? DefaultDockGroupId { get; set; }
@@ -123,6 +128,11 @@ namespace NP.Avalonia.UniDock.Serialization
                 }
             }
 
+            if (dg is TabbedDockGroup tabbedDockGroup)
+            {
+                p.AllowTabDocking = tabbedDockGroup.AllowTabDocking;
+            }
+
             if (dg is StackDockGroup dockStackGroup)
             {
                 p.SizeCoefficients = 
@@ -157,6 +167,12 @@ namespace NP.Avalonia.UniDock.Serialization
             dg.CanClose = p.CanClose;
             dg.DefaultDockOrderInGroup = p.DefaultDockOrderInGroup;
             dg.AutoInvisible = p.AutoInvisible;
+
+            if (dg is TabbedDockGroup tabbedDockGroup)
+            {
+                tabbedDockGroup.AllowTabDocking = p.AllowTabDocking;
+            }
+
 
             if (dg is StackDockGroup stackGroup)
             {
