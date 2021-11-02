@@ -382,5 +382,45 @@ namespace NP.Avalonia.UniDock
                 true
             );
         #endregion AllowCenterDocking Attached Avalonia Property
+
+
+        #region CanFloat Attached Avalonia Property
+        public static bool GetCanFloat(AvaloniaObject obj)
+        {
+            return obj.GetValue(CanFloatProperty);
+        }
+
+        public static void SetCanFloat(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(CanFloatProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanFloatProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "CanFloat",
+                true
+            );
+        #endregion CanFloat Attached Avalonia Property
+
+
+        #region CanClose Attached Avalonia Property
+        public static bool GetCanClose(AvaloniaObject obj)
+        {
+            return obj.GetValue(CanCloseProperty);
+        }
+
+        public static void SetCanClose(AvaloniaObject obj, bool value)
+        {
+            obj.SetValue(CanCloseProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanCloseProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>
+            (
+                "CanClose",
+                true
+            );
+        #endregion CanClose Attached Avalonia Property
     }
 }

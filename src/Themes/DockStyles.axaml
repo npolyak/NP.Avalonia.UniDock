@@ -61,7 +61,7 @@
       <ControlTemplate x:Key="AncorIconTemplate">
         <Grid Background="Transparent"
                 ToolTip.Tip="Stable Group"
-                IsVisible="{Binding Path=$parent[np:StackDockGroup].IsStableGroup}">
+                IsVisible="{Binding Path=$parent[np:IDockGroup].IsStableGroup}">
           <Path Data="{StaticResource Anchor}"
                 Classes="DockIndicatorIcon"/>
         </Grid>
@@ -114,6 +114,12 @@
     </Setter>
   </Style>
 
+  <Style Selector="ToggleButton.EditButton">
+    <Setter Property="np:AttachedProperties.IconData"
+            Value="{StaticResource Pencil}"/>
+    <Setter Property="ToolTip.Tip"
+            Value="Edit"/>
+  </Style>
 
   <Style Selector="local|DockSideControl">
     <Setter Property="BorderBrush"

@@ -86,27 +86,19 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<bool> CanFloatProperty =
-            AvaloniaProperty.Register<DockItem, bool>
-            (
-                nameof(CanFloat),
-                true
-            );
+            DockAttachedProperties.CanFloatProperty.AddOwner<DockItem>();
         #endregion CanFloat Styled Avalonia Property
 
 
         #region CanClose Styled Avalonia Property
         public bool CanClose
         {
-            get { return GetValue(CanRemoveProperty); }
-            set { SetValue(CanRemoveProperty, value); }
+            get { return GetValue(CanCloseProperty); }
+            set { SetValue(CanCloseProperty, value); }
         }
 
-        public static readonly StyledProperty<bool> CanRemoveProperty =
-            AvaloniaProperty.Register<DockItem, bool>
-            (
-                nameof(CanClose),
-                true
-            );
+        public static readonly StyledProperty<bool> CanCloseProperty =
+            DockAttachedProperties.CanCloseProperty.AddOwner<DockItem>();
         #endregion CanClose Styled Avalonia Property
 
         public event Action<IDockGroup>? DockIdChanged;

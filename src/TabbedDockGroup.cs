@@ -552,5 +552,28 @@ namespace NP.Avalonia.UniDock
             );
         #endregion AllowTabDocking Styled Avalonia Property
 
+
+        #region CanFloat Styled Avalonia Property
+        public bool CanFloat
+        {
+            get { return GetValue(CanFloatProperty); }
+            set { SetValue(CanFloatProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanFloatProperty =
+            DockAttachedProperties.CanFloatProperty.AddOwner<TabbedDockGroup>();
+        #endregion CanFloat Styled Avalonia Property
+
+
+        #region CanClose Styled Avalonia Property
+        public bool CanClose
+        {
+            get { return GetValue(CanCloseProperty); }
+            set { SetValue(CanCloseProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanCloseProperty =
+            DockAttachedProperties.CanCloseProperty.AddOwner<TabbedDockGroup>();
+        #endregion CanClose Styled Avalonia Property
     }
 }

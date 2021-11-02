@@ -4,7 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>NP.Avalonia.Visuals</RootNamespace>
     <PackageId>NP.Avalonia.Visuals</PackageId>
-    <Version>0.90.1</Version>
     <Authors>Nick Polyak, Ph. D.</Authors>
     <Company>AWebPros</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -169,7 +169,7 @@ namespace NP.Avalonia.UniDock
             CloseIfAllowed();
 
             CanReattachToDefaultGroup =
-                LeafItemsWithDefaultPosition
+                TheDockGroup.GetGroupsWithoutLockParts()
                     .Where(item => item.IsAllowedToReattachToDefaultGroup())
                     .Any();
         }
@@ -307,7 +307,7 @@ namespace NP.Avalonia.UniDock
 
         public void ReattachToDefaultGroup()
         {
-            LeafItemsWithDefaultPosition
+            TheDockGroup.GetGroupsWithoutLockParts()
                 .Where(item => item.IsAllowedToReattachToDefaultGroup())
                 .ToList()
                 .DoForEach(item => item.ReattachToDefaultGroup());

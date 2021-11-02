@@ -536,5 +536,28 @@ namespace NP.Avalonia.UniDock
                 SetSizeCoefficient(i, coeffs[i]);
             }
         }
+
+        #region CanFloat Styled Avalonia Property
+        public bool CanFloat
+        {
+            get { return GetValue(CanFloatProperty); }
+            set { SetValue(CanFloatProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanFloatProperty =
+            DockAttachedProperties.CanFloatProperty.AddOwner<StackDockGroup>();
+        #endregion CanFloat Styled Avalonia Property
+
+
+        #region CanClose Styled Avalonia Property
+        public bool CanClose
+        {
+            get { return GetValue(CanCloseProperty); }
+            set { SetValue(CanCloseProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> CanCloseProperty =
+            DockAttachedProperties.CanCloseProperty.AddOwner<StackDockGroup>();
+        #endregion CanClose Styled Avalonia Property
     }
 }

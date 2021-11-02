@@ -64,22 +64,16 @@ namespace NP.Avalonia.UniDock
 
         bool CanFloat
         {
-            get => true;
-            set
-            {
-
-            }
+            get => false;
+            set => throw new NotImplementedException();
         }
 
         bool HasStableDescendant { get; }
 
         bool CanClose
         {
-            get => true;
-            set
-            {
-
-            }
+            get => false;
+            set => throw new NotImplementedException();
         }
 
         string? GroupOnlyById { get; set; }
@@ -312,6 +306,12 @@ namespace NP.Avalonia.UniDock
                          .Distinct();
 
             return leafGroups;
+        }
+
+        public static IEnumerable<IDockGroup> GetGroupsWithoutLockParts(this IDockGroup dockGroup)
+        {
+            return dockGroup.GetDockGroupSelfAndDescendants(stopCondition: item => (item.IsGroupLocked))
+                            .Distinct();
         }
 
         public static IEnumerable<IDockGroup> GetLeafGroupsIncludingGroupsWithLock(this IDockGroup dockGroup)

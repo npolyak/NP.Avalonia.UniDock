@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>NP.Avalonia.UniDock</id>
-    <version>1.0.1</version>
+    <version>1.0.7</version>
     <title>NP.Avalonia.UniDock</title>
     <authors>Nick Polyak, Ph. D.</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,10 +18,10 @@
         <dependency id="Avalonia" version="0.10.10"/>
         <dependency id="Avalonia.Desktop" version="0.10.10"/>
         <dependency id="Avalonia.Diagnostics" version="0.10.10"/>
-        <dependency id="NP.Avalonia.Visuals" version="0.96.6"/>
-        <dependency id="NP.IoCy" version="0.9.9"/>
+        <dependency id="NP.Avalonia.Visuals" version="1.0.1"/>
+        <dependency id="NP.IoCy" version="1.0.7"/>
         <dependency id="NP.Concepts.Behaviors" version="1.0.1"/>
-        <dependency id="NP.Avalonia.UniDockService" version="0.99.2"/>
+        <dependency id="NP.Avalonia.UniDockService" version="0.99.3"/>
         <dependency id="NP.Utilities" version="1.0.5"/>
     </dependencies>
   </metadata>

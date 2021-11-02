@@ -56,6 +56,8 @@
         </np:FloatingWindowContainer>
       </np:RootDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
+                         DockId="TopLevelGroup"
+                         IsStableGroup="True"
                          TheOrientation="Vertical">
         <np:StackDockGroup TheOrientation="Horizontal"
                            DockId="DocumentGroup"
@@ -76,7 +78,9 @@
           </np:DockItem>
         </np:StackDockGroup>
         <np:TabbedDockGroup IsStableGroup="True"
-                            DockId="Group2">
+                            DefaultDockGroupId="TopLevelGroup"
+                            DockId="Group2"
+                            CanFloat="False">
           <np:DockItem Header="Tab3">
             <TextBlock Text="Hi World 3333!"/>
           </np:DockItem>

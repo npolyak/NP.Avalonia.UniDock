@@ -5,13 +5,17 @@
     <Nullable>enable</Nullable>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <PackageId>NP.Avalonia.UniDock</PackageId>
-    <Version>0.90.0</Version>
     <Authors>Nick Polyak, Ph. D.</Authors>
     <Company>AWebPros</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="NP.Avalonia.UniDock.1.0.0.nupkg" />
+    <None Remove="NP.Avalonia.UniDock.1.0.3.nupkg" />
+    <None Remove="NP.Avalonia.UniDock.1.0.4.nupkg" />
+    <None Remove="NP.Avalonia.UniDock.1.0.5.nupkg" />
+    <None Remove="NP.Avalonia.UniDock.1.0.6.nupkg" />
+    <None Remove="NP.Avalonia.UniDock.1.0.7.nupkg" />
     <None Remove="NP.Avalonia.UniDock.nuspec" />
   </ItemGroup>
   <ItemGroup>
