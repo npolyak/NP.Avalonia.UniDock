@@ -15,9 +15,9 @@ namespace NP.ViewModelSample
     {
         private DockManager _dockManager;
 
-        private ObservableCollection<DockItemViewModel> _vms;
+        private ObservableCollection<DockItemViewModelBase> _vms;
 
-        public ObservableCollection<DockItemViewModel> VMs => _vms;
+        public ObservableCollection<DockItemViewModelBase> VMs => _vms;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,15 +34,15 @@ namespace NP.ViewModelSample
             Button restoreButton = this.FindControl<Button>("RestoreButton");
             restoreButton.Click += RestoreButton_Click;
 
-            ObservableCollection<DockItemViewModel> vms = 
-                new ObservableCollection<DockItemViewModel>();
+            ObservableCollection<DockItemViewModelBase> vms = 
+                new ObservableCollection<DockItemViewModelBase>();
 
             _vms = vms;
 
-            DockItemViewModel vm1 = new DockItemViewModel
+            DockItemViewModelBase vm1 = new DockItemViewModelBase
             {
                 DockId = "Tab1",
-                HeaderContent = "Tab1",
+                Header = "Tab1",
                 DefaultDockGroupId = "Group1",
                 DefaultDockOrderInGroup = 1,
                 Content = "Hello World!"
@@ -51,10 +51,10 @@ namespace NP.ViewModelSample
             vms.Add(vm1);
 
 
-            DockItemViewModel vm2 = new DockItemViewModel
+            DockItemViewModelBase vm2 = new DockItemViewModelBase
             {
                 DockId = "Tab2",
-                HeaderContent = "Tab2",
+                Header = "Tab2",
                 DefaultDockGroupId = "Group1",
                 DefaultDockOrderInGroup = 2,
                 Content = "Hi World!",
@@ -67,10 +67,10 @@ namespace NP.ViewModelSample
 
             _dockManager.DockItemsViewModels = vms;
 
-            DockItemViewModel vm3 = new DockItemViewModel
+            DockItemViewModelBase vm3 = new DockItemViewModelBase
             {
                 DockId = "Tab3",
-                HeaderContent = "Tab3",
+                Header = "Tab3",
                 DefaultDockGroupId = "Group2",
                 DefaultDockOrderInGroup = 0,
                 Content = "3333"
@@ -78,21 +78,20 @@ namespace NP.ViewModelSample
 
             vms.Add(vm3);
 
-            DockItemViewModel vm4 = new DockItemViewModel
+            DockItemViewModelBase vm4 = new DockItemViewModelBase
             {
                 DockId = "Tab4",
-                HeaderContent = "Tab4",
+                Header = "Tab4",
                 DefaultDockGroupId = "Group2",
                 DefaultDockOrderInGroup = 1,
                 Content = "4444"
             };
 
             vms.Add(vm4);
-
-            DockItemViewModel floatingVm1 = new DockItemViewModel
+            DockItemViewModelBase floatingVm1 = new DockItemViewModelBase
             {
                 DockId = "FloatingDockItem1",
-                HeaderContent = "FloatingWindowPanel1",
+                Header = "FloatingWindowPanel1",
                 DefaultDockGroupId = "FloatingGroup1",
                 DefaultDockOrderInGroup = 1,
                 Content = "Floating Panel"
@@ -100,10 +99,10 @@ namespace NP.ViewModelSample
 
             vms.Add(floatingVm1);
 
-            DockItemViewModel floatingVm2 = new DockItemViewModel
+            DockItemViewModelBase floatingVm2 = new DockItemViewModelBase
             {
                 DockId = "FloatingDockItem2",
-                HeaderContent = "Floating Tab 1",
+                Header = "Floating Tab 1",
                 DefaultDockGroupId = "FloatingGroup2",
                 DefaultDockOrderInGroup = 1,
                 Content = "Floating Tab 1"
@@ -111,10 +110,10 @@ namespace NP.ViewModelSample
 
             vms.Add(floatingVm2);
 
-            DockItemViewModel floatingVm3 = new DockItemViewModel
+            DockItemViewModelBase floatingVm3 = new DockItemViewModelBase
             {
                 DockId = "FloatingDockItem3",
-                HeaderContent = "Floating Tab 2",
+                Header = "Floating Tab 2",
                 DefaultDockGroupId = "FloatingGroup2",
                 DefaultDockOrderInGroup = 2,
                 Content = "Floating Tab 2"
@@ -139,10 +138,10 @@ namespace NP.ViewModelSample
         {
             string tabStr = $"Tab{_tabNumber}";
 
-            var newTabVm = new DockItemViewModel
+            var newTabVm = new DockItemViewModelBase
             {
                 DockId = tabStr,
-                HeaderContent = tabStr,
+                Header = tabStr,
                 DefaultDockGroupId = "Group2",
                 DefaultDockOrderInGroup = _tabNumber,
                 Content = tabStr,
@@ -160,10 +159,10 @@ namespace NP.ViewModelSample
         {
             string floatingTabStr = $"FloatingTab{_floatingTabNumber}";
 
-            var newTabVm = new DockItemViewModel
+            var newTabVm = new DockItemViewModelBase
             {
                 DockId = floatingTabStr,
-                HeaderContent = floatingTabStr,
+                Header = floatingTabStr,
                 DefaultDockGroupId = "FloatingGroup2",
                 DefaultDockOrderInGroup = _floatingTabNumber,
                 Content = floatingTabStr,

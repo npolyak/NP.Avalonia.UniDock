@@ -82,14 +82,6 @@
 /Prototypes/NP.GroupCompassSample/.vs
 /Prototypes/NP.GroupCompassSample/bin/Debug/net5.0
 /Prototypes/NP.GroupCompassSample/obj
-/SubModules/NP.Avalonia.Visuals/src/NP.Avalonia.Visuals.0.91.6.nupkg
-/SubModules/NP.Avalonia.UniDockService/src/NP.Avalonia.UniDockService.0.99.1.nupkg
 /Prototypes/NP.GroupHeaderSample/bin/Debug/Sample.zip
-/src/NP.Avalonia.UniDock.nuspec~
-/src/NP.Avalonia.UniDock.1.0.0.nupkg
-/src/NP.Avalonia.UniDock.1.0.7.nupkg
-/SubModules/NP.Avalonia.UniDockService/src/NP.Avalonia.UniDockService.0.99.3.nupkg
-/SubModules/NP.Avalonia.Visuals/src/NP.Avalonia.Visuals.1.0.1.nupkg
-/src/NP.Avalonia.UniDock.1.0.9.nupkg
-/src/NP.Avalonia.UniDock.1.0.8.nupkg
-/src/NP.Avalonia.UniDock.1.0.10.nupkg
+*~
+*.nupkg

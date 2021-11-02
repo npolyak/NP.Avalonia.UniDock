@@ -6,7 +6,7 @@ namespace NP.ViewModelSample
 {
     public class MyCustomFloatingWindowFactory : IFloatingWindowFactory
     {
-        public virtual FloatingWindow CreateFloatingWindow(object? floatingWindowChooser)
+        public virtual FloatingWindow CreateFloatingWindow()
         {
             // create the window
 
