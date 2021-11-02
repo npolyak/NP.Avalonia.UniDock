@@ -185,13 +185,20 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private bool _isInsideClose = false;
         internal void CloseIfAllowed(bool closeOrHide = true)
         {
             if (CanClose && this.LeafItems.Count() == 0 && _isCloseAllowed)
             {
                 if (closeOrHide)
                 {
-                    this.Close();
+                    if (!_isInsideClose)
+                    {
+                        // to prevent calling Close() recursively
+                        _isInsideClose = true;
+                        this.Close();
+                        _isInsideClose = false;
+                    }
                 }
                 else
                 {

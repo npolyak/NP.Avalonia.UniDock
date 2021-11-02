@@ -184,8 +184,6 @@ namespace NP.Avalonia.UniDock
 
         public UnionBehavior<IDockGroup> AllGroupsBehavior { get; }
 
-        public ExpandoObjectBehavior<IDockGroup> DockIdKeysGroups { get; }
-
         public IList<ILeafDockObj> DockLeafObjs { get; } =
             new List<ILeafDockObj>();
 
@@ -454,13 +452,6 @@ namespace NP.Avalonia.UniDock
                 _allWindowsBehavior.Result.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
 
             AllGroupsBehavior = new UnionBehavior<IDockGroup>(_disconnectedGroups, _connectedGroups);
-
-            DockIdKeysGroups =
-                new ExpandoObjectBehavior<IDockGroup>
-                (
-                    AllGroupsBehavior.Result, 
-                    group => group.DockId,
-                    group => group.GetObservable(DockGroupBaseControl.DockIdProperty));
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -568,6 +559,8 @@ namespace NP.Avalonia.UniDock
                 IDockGroup? draggedGroup = DraggedWindow?.TheDockGroup?.TheChild;
                 
                 currentWindowToDropInto?.SetCloseIsNotAllowed();
+
+                DraggedWindow?.SetCloseIsNotAllowed();
 
                 IDockGroup? currentDockGroupToInsertWithRespectTo = CurrentLeafObjToInsertWithRespectTo;
 
@@ -681,6 +674,8 @@ namespace NP.Avalonia.UniDock
                 }
 
                 currentWindowToDropInto?.ResetIsCloseAllowed();
+                DraggedWindow?.ResetIsCloseAllowed();
+                DraggedWindow?.CloseIfAllowed();
 
                 DraggedWindow = null;
             }

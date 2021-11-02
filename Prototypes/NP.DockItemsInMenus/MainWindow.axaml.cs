@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDock;
+using NP.Concepts.Behaviors;
 using System.Linq;
 
 namespace NP.DockItemsInMenus
@@ -12,6 +13,8 @@ namespace NP.DockItemsInMenus
     public partial class MainWindow : Window
     {
         private DockManager _dockManager;
+
+        public ExpandoObjectBehavior<IDockGroup> DockIdKeysGroups { get; }
 
         public MainWindow()
         {
@@ -21,6 +24,13 @@ namespace NP.DockItemsInMenus
 #endif
             _dockManager = (DockManager) this.FindResource("TheDockManager")!;
 
+            DockIdKeysGroups =
+                new ExpandoObjectBehavior<IDockGroup>
+                (
+                    _dockManager.AllGroupsBehavior.Result,
+                    group => group.DockId,
+                    group => group.GetObservable(DockGroupBaseControl.DockIdProperty));
+
             Opened += MainWindow_Opened;
 
             Button saveButton = this.FindControl<Button>("SaveButton");
@@ -29,6 +39,7 @@ namespace NP.DockItemsInMenus
             Button restoreButton = this.FindControl<Button>("RestoreButton");
             restoreButton.Click += RestoreButton_Click;
         }
+
 
 
         private const string SerializationFile = "Serialization.xml";

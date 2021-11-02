@@ -15,8 +15,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <np:DockManager x:Key="TheDockManager" 
-                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
+      <np:DockManager x:Key="TheDockManager" />
     </ResourceDictionary>
   </Window.Resources>
   <Window.Styles>
@@ -24,7 +23,7 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <Menu DataContext="{DynamicResource TheDockManager}"
+    <Menu DataContext="{DynamicResource $parent[Window]}"
           Height="30">
       <MenuItem Header="Item1">
         <MenuItem Header="Tab1"
@@ -93,9 +92,9 @@
         </MenuItem>
       </MenuItem>
     </Menu>
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+    <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                         Grid.Row="1">
-      <np:SimpleDockGroup.FloatingWindows>
+      <np:RootDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
@@ -127,7 +126,7 @@
             </np:TabbedDockGroup>
           </np:StackDockGroup>
         </np:FloatingWindowContainer>
-      </np:SimpleDockGroup.FloatingWindows>
+      </np:RootDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True">
@@ -167,7 +166,7 @@
           </np:DockItem>
         </np:TabbedDockGroup>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
 
     <StackPanel Margin="10,5"
                 Grid.Row="2"
