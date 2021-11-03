@@ -69,8 +69,16 @@ namespace NP.Avalonia.UniDock
             }
 
             dockItem.DataContext = vm;
-            dockItem.Header = vm.Header;
-            dockItem.Content = vm.Content;
+
+            if (vm.Header != null)
+            {
+                dockItem.Header = vm.Header;
+            }
+
+            if (vm.Content != null)
+            {
+                dockItem.Content = vm.Content;
+            }
 
             void AddBind<T>
             (

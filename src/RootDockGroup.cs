@@ -246,7 +246,7 @@ namespace NP.Avalonia.UniDock
 
         private void OnFloatingWindowAdded(FloatingWindowContainer floatingWindowContainer)
         {
-            floatingWindowContainer.ParentWindowGroup = this;
+            floatingWindowContainer.ParentWindowGroup = this.GetTopParentWindowGroup();
         }
 
         private void SimpleDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -363,5 +363,16 @@ namespace NP.Avalonia.UniDock
         public bool AutoDestroy { get; set; } = true;
 
         public IEnumerable<DockItem> LeafItems => this.GetLeafItems();
+    }
+
+    public static class RootDockGroupHelper
+    {
+        public static RootDockGroup GetTopParentWindowGroup(this RootDockGroup group)
+        {
+            if (group.ParentWindowGroup == null)
+                return group;
+
+            return group.ParentWindowGroup.GetTopParentWindowGroup();
+        }
     }
 }

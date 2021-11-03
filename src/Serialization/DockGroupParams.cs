@@ -62,6 +62,9 @@ namespace NP.Avalonia.UniDock.Serialization
         [XmlAttribute]
         public string? GroupOnlyById { get; set; }
 
+        [XmlAttribute]
+        public string? ParentWindowGroupId { get; set; }
+
         #region Width or Height Coefficients
         /// <summary>
         /// these coefficients are only applicable to children of DockStackGroups and
@@ -132,6 +135,11 @@ namespace NP.Avalonia.UniDock.Serialization
                 }
             }
 
+            if (dg is RootDockGroup rootDockGroup)
+            {
+                p.ParentWindowGroupId = rootDockGroup.ParentWindowGroup?.DockId;
+            }
+
             if (dg is TabbedDockGroup tabbedDockGroup)
             {
                 p.AllowTabDocking = tabbedDockGroup.AllowTabDocking;
@@ -145,11 +153,8 @@ namespace NP.Avalonia.UniDock.Serialization
                                   .ToArray();
 
                 p.IsGroupLocked = dockStackGroup.IsGroupLocked;
-            }
 
-            if (dg is StackDockGroup stackGroup)
-            {
-                p.TheOrientation = stackGroup.TheOrientation;
+                p.TheOrientation = dockStackGroup.TheOrientation;
             }
 
             if (dg is DockItem dockItem)
@@ -167,8 +172,13 @@ namespace NP.Avalonia.UniDock.Serialization
         {
             dg.DockId = p.DockId!;
             dg.IsPredefined = p.IsPredefined;
-            dg.CanFloat = p.CanFloat;
-            dg.CanClose = p.CanClose;
+
+            if (dg is not RootDockGroup)
+            {
+                dg.CanFloat = p.CanFloat;
+                dg.CanClose = p.CanClose;
+            }
+
             dg.DefaultDockOrderInGroup = p.DefaultDockOrderInGroup;
             dg.AutoInvisible = p.AutoInvisible;
             dg.GroupOnlyById = p.GroupOnlyById;

@@ -208,6 +208,11 @@ namespace NP.Avalonia.UniDock
 
         private void OnIsActiveInWindowChanged(bool isActiveInWindow)
         {
+            if (IsActive)
+            {
+                this.Select();
+            }
+
             IsActiveChanged?.Invoke(this);
         }
 

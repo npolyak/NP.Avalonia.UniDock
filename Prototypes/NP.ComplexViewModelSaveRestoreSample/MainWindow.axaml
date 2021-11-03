@@ -91,20 +91,18 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="Auto, *, Auto">
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
+    <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
                         Grid.Row="1">
       
-      <np:SimpleDockGroup.FloatingWindows>
+      <np:RootDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    AutoInvisible="False"
                                     WindowRelativePosition="1000, 100"
                                     WindowSize ="300, 300">
             <np:TabbedDockGroup x:Name="OrdersTabGroup"
                                 DockId="OrdersGroup"
-                                IsStableGroup="True"
-                                AutoInvisible="True"/>
+                                IsStableGroup="True"/>
         </np:FloatingWindowContainer>
-      </np:SimpleDockGroup.FloatingWindows>
+      </np:RootDockGroup.FloatingWindows>
       
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
@@ -125,7 +123,7 @@
                             DockId="StockGroup"
                             AutoDestroy="False"/>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
 
     <StackPanel Margin="10,5"
                 Grid.Row="2"

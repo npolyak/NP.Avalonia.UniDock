@@ -111,6 +111,7 @@ namespace NP.Avalonia.UniDock
             DragOnBeginMove = false;
             HasCustomWindowFeatures = true;
             Content = TheDockGroup;
+            IsDockWindow = true;
 
             this.Closing += FloatingWindow_Closing;
 

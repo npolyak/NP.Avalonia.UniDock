@@ -5,126 +5,70 @@
         xmlns:local="clr-namespace:NP.ViewModelSaveRestoreSample"
         Width="700"
         Height="800"
-        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
+        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
         x:Class="NP.ViewModelSaveRestoreSample.MainWindow"
         Title="NP.ViewModelSaveRestoreSample"
         BorderBrush="Gray">
   <Window.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
-      </ResourceDictionary.MergedDictionaries>
-
-      <DataTemplate x:Key="TheHeaderDataTemplate">
-        <TextBlock Background="Red"
-                   Foreground="White"
-                   Text="{Binding}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-      </DataTemplate>
-      <DataTemplate x:Key="TheDataTemplate">
-        <TextBlock Background="Green"
-                   Foreground="White"
-                   Text="{Binding}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-      </DataTemplate>
-    </ResourceDictionary>
+    <!-- Define the dock manager-->
+    <np:DockManager x:Key="TheDockManager"/>
   </Window.Resources>
   <Window.Styles>
     <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml"/>
   </Window.Styles>
-  <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-        RowDefinitions="Auto, *, Auto">
-    <ListBox Items="{Binding Path=TheDataItemsViewModelBehavior.DockItemsViewModels, RelativeSource={RelativeSource AncestorType=Window}}"
-             Height="100">
+
+  <Grid RowDefinitions="Auto, *, Auto"
+        Margin="5">
+    <ListBox Items="{Binding Path=DockItemsViewModels, Source={StaticResource TheDockManager}}"
+             Height="70">
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <CheckBox IsChecked="{Binding Path=IsDockVisible, Mode=TwoWay}"
-                      Content="{Binding Path=Header}"/>
-          </StackPanel>
+          <CheckBox IsChecked="{Binding Path=IsDockVisible, Mode=TwoWay}"
+                    Content="{Binding DockId}"/>
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
-                        Grid.Row="1">
-      
-      <np:SimpleDockGroup.FloatingWindows>
-        <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    WindowRelativePosition="1000, 100"
-                                    WindowSize ="300, 300">
-          <np:StackDockGroup TheOrientation="Horizontal"
-                             DockId="FloatingGroup1"
-                             IsStableGroup="True">
-            <np:DockItem Header="FloatingWindowPanel1"
-                         DockId="FloatingDockItem1"
-                         DefaultDockGroupId="FloatingGroup1"
-                         DefaultDockOrderInGroup="1"
-                         Content="Floating Panel"
-                         HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
-                         ContentTemplateResourceKey="TheDataTemplate">
-            </np:DockItem>
-
-            <np:TabbedDockGroup x:Name="FloatingGroup2"
-                                DockId="FloatingGroup2"
-                                DefaultDockOrderInGroup="2"
-                                IsStableGroup="True"/>
-          </np:StackDockGroup>
-        </np:FloatingWindowContainer>
-      </np:SimpleDockGroup.FloatingWindows>
-      
-      <np:StackDockGroup x:Name="TheStackGroup"
-                         TheOrientation="Vertical"
-                         IsStableGroup="True">
+    <!-- top level group should reference the dock manager-->
+    <np:RootDockGroup TheDockManager="{StaticResource TheDockManager}"
+                      Grid.Row="1">
+      <!-- Second Level group arranges the top and the bottom parts 
+           vertically-->
+      <np:StackDockGroup TheOrientation="Vertical"
+                         DockId="RootGroup">
+        <!-- top group arranges two top Dock Panes horizontally-->
         <np:StackDockGroup TheOrientation="Horizontal"
                            IsStableGroup="True"
-                           DockId="Group1">
-          <np:DockItem Header="Tab1"
-                       DockId="Tab1"
-                       DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="1"
-                       Content="Hello World"
-                       HeaderContentTemplateResourceKey="TheHeaderDataTemplate"
-                       ContentTemplateResourceKey="TheDataTemplate"/>
-          
-          <np:DockItem Header="Tab2"
-                       DockId="Tab2"
-                       DefaultDockGroupId="Group1"
-                       DefaultDockOrderInGroup="2">
+                           DockId="TopStackGroup">
+          <np:DockItem Header="Hi">
             <TextBlock Text="Hi World!"/>
           </np:DockItem>
-          
+          <np:DockItem Header="Hello">
+            <TextBlock Text="Hello World!"/>
+          </np:DockItem>
         </np:StackDockGroup>
+
+        <!-- Tabbed group at the bottom -->
         <np:TabbedDockGroup IsStableGroup="True"
-                            DockId="Group2">
-        </np:TabbedDockGroup>
+                            DockId="Tabs"/>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
-
-    <StackPanel Margin="10,5"
+    </np:RootDockGroup>
+    <StackPanel Orientation="Horizontal"
                 Grid.Row="2"
-                Orientation="Horizontal"
                 HorizontalAlignment="Right">
-      <Button x:Name="AddMainTabButton"
-              Content="Add Main Tab"
+      <Button x:Name="AddTabButton"
+              Content="AddTab"
               Padding="10,5"
-              Margin="0,0,10,0" />
-
-      <Button x:Name="AddFloatingTabButton"
-              Content="Add Floating Tab"
-              Padding="10,5"
-              Margin="0,0,10,0" />
+              Margin="5"/>
 
       <Button x:Name="SaveButton"
               Content="Save"
               Padding="10,5"
-              Margin="0,0,10,0" />
+              Margin="5"/>
 
       <Button x:Name="RestoreButton"
               Content="Restore"
-              Padding="10,5" />
+              Padding="10,5"
+              Margin="5"/>
     </StackPanel>
   </Grid>
 </Window>
