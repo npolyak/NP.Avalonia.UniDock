@@ -111,6 +111,8 @@ namespace NP.Avalonia.UniDock
             this.DockItemsViewModels =
                 XmlSerializationUtils
                     .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, extraTypes);
+
+            this.SelectTabsInTabbedGroupsWithoutSelection();
         }
 
         private readonly IList<Window> _predefinedWindows = new ObservableCollection<Window>();
@@ -722,6 +724,17 @@ namespace NP.Avalonia.UniDock
             IDockGroup? dockGroup = FindGroupById(dockId);
 
             return dockGroup?.ToDockObjectInfo();
+        }
+
+        public void SelectTabsInTabbedGroupsWithoutSelection()
+        {
+            foreach(var group in ConnectedGroups.OfType<TabbedDockGroup>())
+            {
+                if (group.SelectedItem == null)
+                {
+                    group.SelectFirst();
+                }
+            }
         }
     }
 }
