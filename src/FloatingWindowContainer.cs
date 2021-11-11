@@ -21,7 +21,6 @@ namespace NP.Avalonia.UniDock
 
             _floatingWindow = _dockManager.FloatingWindowFactory.CreateFloatingWindow();
 
-
             SetParentGroup();
 
             _floatingWindow.Position = WindowRelativePosition!.Value + ParentWindow.Position;

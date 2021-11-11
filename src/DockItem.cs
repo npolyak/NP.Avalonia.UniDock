@@ -11,7 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Metadata;
@@ -19,17 +19,14 @@ using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
-using NP.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
     public class DockItem :
-        Control, 
+        DockGroupBaseControl, 
         ILeafDockObj,
         ISelectableItem<DockItem>,
         IActiveItem<DockItem>
@@ -39,14 +36,12 @@ namespace NP.Avalonia.UniDock
         IDictionary<IDockGroup, IDisposable> IDockGroup.ChildSubscriptions => 
             throw new NotImplementedException();
 
-        public Subject<Unit> DockChangedWithin { get; } = new Subject<Unit>();
-
         // IsActive in current top level (root) group (or in floating window) changed
         public event Action<DockItem>? IsActiveChanged;
 
         public GroupKind TheGroupKind => GroupKind.DockItem;
 
-        public bool HasStableDescendant => false;
+        public override bool HasStableDescendant => false;
 
         #region IsActive Styled Avalonia Property
         /// <summary>
@@ -102,29 +97,8 @@ namespace NP.Avalonia.UniDock
             DockAttachedProperties.CanCloseProperty.AddOwner<DockItem>();
         #endregion CanClose Styled Avalonia Property
 
-        public event Action<IDockGroup>? DockIdChanged;
-
-        #region DockId Styled Avalonia Property
-        public string DockId
-        {
-            get { return GetValue(DockIdProperty); }
-            set { SetValue(DockIdProperty, value); }
-        }
-
-        public static readonly StyledProperty<string> DockIdProperty =
-            DockGroupBaseControl.DockIdProperty.AddOwner<DockItem>();
-        #endregion Id Styled Avalonia Property
-
-        private void FireDockIdChanged()
-        {
-            DockIdChanged?.Invoke(this);
-        }
-
         static DockItem()
         {
-            DockIdProperty
-                .Changed
-                .AddClassHandler<DockItem>((g, e) => g.OnDockIdChanged(e));
             IsSelectedProperty
                 .Changed
                 .Subscribe(OnIsSelectedChanged);
@@ -217,11 +191,6 @@ namespace NP.Avalonia.UniDock
             IsActiveChanged?.Invoke(this);
         }
 
-        private void OnDockIdChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            FireDockIdChanged();
-        }
-
         #region IsSelectedProperty Direct Avalonia Property
         public static readonly DirectProperty<DockItem, bool> IsSelectedProperty =
             AvaloniaProperty.RegisterDirect<DockItem, bool>
@@ -264,7 +233,6 @@ namespace NP.Avalonia.UniDock
             set => DockAttachedProperties.SetTheDockManager(this, value!);
         }
 
-
         private bool _isAtContentInitStage = true;
 
         private bool _isAtHeaderContentInitStage = true;
@@ -281,38 +249,25 @@ namespace NP.Avalonia.UniDock
             HeaderContentTemplateResourceKey != null &&
             HeaderTemplate == null;
 
-
-        IDockGroup? _dockParent;
-        public IDockGroup? DockParent
-        { 
-            get => _dockParent; 
-            set
+        protected override void OnDockParentChanged()
+        {
+            base.OnDockParentChanged();
+            if ((this as ILogical).IsAttachedToLogicalTree)
             {
-                if (_dockParent == value)
-                    return;
-
-                _dockParent = value;
-
-                if ((this as ILogical).IsAttachedToLogicalTree)
+                if (IsAtHeaderContentInitState)
                 {
-                    if (IsAtHeaderContentInitState)
-                    {
-                        TrySetHeaderContentTemplate();
-                    }
-                    if (IsAtContentInitState)
-                    {
-                        TrySetContentTemplate();
-                    }
+                    TrySetHeaderContentTemplate();
                 }
-                else if (DockParent != null)
+                if (IsAtContentInitState)
                 {
-                    DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
+                    TrySetContentTemplate();
                 }
-
-                this.SetCanReattachToDefaultGroup();
+            }
+            else if (DockParent != null)
+            {
+                DockParent!.AttachedToLogicalTree += _dockParent_AttachedToLogicalTree;
             }
         }
-
 
         private void TrySetContentTemplate()
         {
@@ -455,17 +410,6 @@ namespace NP.Avalonia.UniDock
             IsSelected = true;
         }
 
-        #region CanReattachToDefaultGroup Styled Avalonia Property
-        public bool CanReattachToDefaultGroup
-        {
-            get { return GetValue(CanReattachToDefaultGroupProperty); }
-            set { SetValue(CanReattachToDefaultGroupProperty, value); }
-        }
-
-        public static readonly AttachedProperty<bool> CanReattachToDefaultGroupProperty =
-            DockAttachedProperties.CanReattachToDefaultGroupProperty.AddOwner<DockItem>();
-        #endregion CanReattachToDefaultGroup Styled Avalonia Property
-
 
         const string NO_HEADER = "NO_HEADER";
 
@@ -494,16 +438,6 @@ namespace NP.Avalonia.UniDock
             this.FireSelectionChanged();
         }
 
-        #region ShowCompass Styled Avalonia Property
-        public bool ShowCompass
-        {
-            get { return GetValue(ShowCompassProperty); }
-            set { SetValue(ShowCompassProperty, value); }
-        }
-
-        public static readonly StyledProperty<bool> ShowCompassProperty =
-            DockAttachedProperties.ShowCompassProperty.AddOwner<DockItem>();
-        #endregion ShowCompass Styled Avalonia Property
 
         public void CleanSelfOnRemove()
         {
@@ -579,20 +513,5 @@ namespace NP.Avalonia.UniDock
         public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
             DockAttachedProperties.AllowCenterDockingProperty.AddOwner<DockItem>();
         #endregion AllowCenterDocking Styled Avalonia Property
-
-
-        #region GroupOnlyById Styled Avalonia Property
-        public string? GroupOnlyById
-        {
-            get { return GetValue(GroupOnlyByIdProperty); }
-            set { SetValue(GroupOnlyByIdProperty, value); }
-        }
-
-        public static readonly StyledProperty<string?> GroupOnlyByIdProperty =
-            AvaloniaProperty.Register<DockItem, string?>
-            (
-                nameof(GroupOnlyById)
-            );
-        #endregion GroupOnlyById Styled Avalonia Property
     }
 }

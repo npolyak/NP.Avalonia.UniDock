@@ -160,22 +160,6 @@ namespace NP.Avalonia.UniDock
             DockAttachedProperties.ShowHeaderProperty.AddOwner<StackDockGroup>();
         #endregion ShowHeader Styled Avalonia Property
 
-
-        private IDockGroup? _dockParent;
-        public IDockGroup? DockParent
-        {
-            get => _dockParent;
-            set
-            {
-                if (_dockParent == value)
-                    return;
-
-                _dockParent = value;
-
-                this.SetCanReattachToDefaultGroup();
-            }
-        }
-
         [Content]
         public IList<IDockGroup> DockChildren { get; } = new ObservableCollection<IDockGroup>();
 
@@ -184,11 +168,6 @@ namespace NP.Avalonia.UniDock
         public void Remove()
         {
             RemoveEvent?.Invoke(this);
-        }
-
-        static StackDockGroup()
-        {
-            DockIdProperty.Changed.AddClassHandler<StackDockGroup>((g, e) => g.OnDockIdChanged(e));
         }
 
         IDisposable? _behavior;

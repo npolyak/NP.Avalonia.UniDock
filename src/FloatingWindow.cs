@@ -54,6 +54,11 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        public object? DockDataContext
+        {
+            get => TheDockGroup.DockDataContext;
+            set => TheDockGroup.DockDataContext = value;
+        }
 
         public DockManager? TheDockManager
         {

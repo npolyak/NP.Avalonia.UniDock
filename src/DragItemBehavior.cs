@@ -185,6 +185,8 @@ namespace NP.Avalonia.UniDock
 
                 DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
 
+                dockWindow.DockDataContext = _draggedDockGroup.DockDataContext;
+
                 // remove from the current items
                 _draggedDockGroup?.RemoveItselfFromParent();
 

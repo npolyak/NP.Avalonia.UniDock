@@ -31,7 +31,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public static readonly StyledProperty<string> DockIdProperty =
-            AvaloniaProperty.Register<TabbedDockGroup, string>
+            AvaloniaProperty.Register<DockGroupBaseControl, string>
             (
                 nameof(DockId)
             );
@@ -77,7 +77,7 @@ namespace NP.Avalonia.UniDock
                 (o, v) => o.HasStableDescendant = v
             );
 
-        public bool HasStableDescendant
+        public virtual bool HasStableDescendant
         {
             get => _HasStableChild;
             protected set
@@ -115,10 +115,63 @@ namespace NP.Avalonia.UniDock
             );
         #endregion GroupOnlyById Styled Avalonia Property
 
+
+        #region DockDataContext Styled Avalonia Property
+        public object? DockDataContext
+        {
+            get { return GetValue(DockDataContextProperty); }
+            set { SetValue(DockDataContextProperty, value); }
+        }
+
+        public static readonly StyledProperty<object?> DockDataContextProperty =
+            AvaloniaProperty.Register<DockGroupBaseControl, object?>
+            (
+                nameof(DockDataContext),
+                null,
+                true
+            );
+        #endregion DockDataContext Styled Avalonia Property
+
+
+        #region DockParent Styled Avalonia Property
+        public virtual IDockGroup? DockParent
+        {
+            get { return GetValue(DockParentProperty); }
+            set { SetValue(DockParentProperty, value); }
+        }
+
+        public static readonly StyledProperty<IDockGroup?> DockParentProperty =
+            AvaloniaProperty.Register<DockGroupBaseControl, IDockGroup?>
+            (
+                nameof(DockParent)
+            );
+        #endregion DockParent Styled Avalonia Property
+
+
+        static DockGroupBaseControl()
+        {
+            DockIdProperty
+                .Changed
+                .AddClassHandler<DockGroupBaseControl>((g, e) => g.OnDockIdChanged(e));
+        }
+
         private IDisposable _subscription;
         public DockGroupBaseControl()
         {
             _subscription = DockChangedWithin.Subscribe(OnDockChangedWithin);
+
+            this.GetObservable(DockParentProperty).Subscribe(OnDockParentChangedImpl);
+        }
+
+        private void OnDockParentChangedImpl(IDockGroup dockParent)
+        {
+            OnDockParentChanged();
+            ((IDockGroup)this).SetCanReattachToDefaultGroup();
+        }
+
+        protected virtual void OnDockParentChanged()
+        {
+            
         }
 
         private void OnDockChangedWithin(Unit _)

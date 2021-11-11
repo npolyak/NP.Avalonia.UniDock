@@ -224,21 +224,6 @@ namespace NP.Avalonia.UniDock
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;
 
-        private IDockGroup? _dockParent;
-        public IDockGroup? DockParent
-        {
-            get => _dockParent;
-            set
-            {
-                if (_dockParent == value)
-                    return;
-
-                _dockParent = value;
-
-                this.SetCanReattachToDefaultGroup();
-            }
-        }
-
         private readonly SingleSelectionBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionBehavior<DockItem>();
 

@@ -40,6 +40,8 @@ namespace NP.Avalonia.UniDock
 
         IDockGroup? DockParent { get; set; }
 
+        object? DockDataContext { get; }
+
         bool IsDockVisible
         {
             get => DockAttachedProperties.GetIsDockVisible(this);
@@ -110,7 +112,7 @@ namespace NP.Avalonia.UniDock
             set { }
         }
 
-        string DefaultDockGroupId { get => null!; }
+        string? DefaultDockGroupId { get => null; }
 
         void CleanSelfOnRemove()
         {

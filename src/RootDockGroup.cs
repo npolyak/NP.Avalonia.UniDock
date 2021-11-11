@@ -137,7 +137,7 @@ namespace NP.Avalonia.UniDock
             );
         #endregion ShowCompassCenter Styled Avalonia Property
 
-        public IDockGroup? DockParent
+        public override IDockGroup? DockParent
         {
             get => null;
             set => throw new NotImplementedException();
@@ -181,11 +181,6 @@ namespace NP.Avalonia.UniDock
 
         #endregion FloatingWindows Direct Avalonia Property
 
-
-        static RootDockGroup()
-        {
-            DockIdProperty.Changed.AddClassHandler<RootDockGroup>((g, e) => g.OnDockIdChanged(e));
-        }
 
         private IDisposable? _addRemoveChildBehavior;
         private SetDockGroupBehavior? _setBehavior;
