@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:NP.GroupHeaderSample"
         Width="700"
         Height="700"
+        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Self}}"
         np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
         x:Class="NP.GroupHeaderSample.MainWindow"
         Title="NP.GroupHeaderSample"
@@ -43,7 +44,8 @@
                            DockId="FloatingDockItem0"
                            DefaultDockGroupId="FloatingGroup2"
                            DefaultDockOrderInGroup="1">
-                <TextBlock Text="Floating Tab 1"/>
+                <TextBlock Text="Floating Tab 1"
+                         Foreground="{DynamicResource MyForeground}"/>
               </np:DockItem>
               <np:DockItem Header="Floating Tab 2"
                            DockId="FloatingDockItem2"
@@ -65,10 +67,12 @@
                            AutoInvisible="False"
                            GroupOnlyById="Documents">
           <np:DockItem Header="Tab1"
+                       DockId="Tab1"
                        DefaultDockGroupId="Group1"
                        DefaultDockOrderInGroup="1"
                        GroupOnlyById="Documents">
-            <TextBlock Text="Hello World!"/>
+            <TextBlock Text="Hello World!"
+                         Foreground="{DynamicResource MyForeground}"/>
           </np:DockItem>
           <np:DockItem Header="Tab2"
                        DefaultDockGroupId="Group1"

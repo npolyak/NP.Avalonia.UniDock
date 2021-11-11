@@ -712,7 +712,7 @@ namespace NP.Avalonia.UniDock
             this.SetDockManagerFromParams(dmp, restorePredefinedWindowsPositionParams);
         }
 
-        internal IDockGroup? FindGroupById(string? dockId)
+        public IDockGroup? FindGroupById(string? dockId)
         {
             var result = this.AllGroups.FirstOrDefault(g => g.DockId == dockId);
 

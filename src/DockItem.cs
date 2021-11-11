@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Metadata;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
 using NP.Avalonia.Visuals.Behaviors;
@@ -28,7 +29,7 @@ using System.Reactive.Subjects;
 namespace NP.Avalonia.UniDock
 {
     public class DockItem :
-        HeaderedContentControl, 
+        Control, 
         ILeafDockObj,
         ISelectableItem<DockItem>,
         IActiveItem<DockItem>
@@ -356,6 +357,70 @@ namespace NP.Avalonia.UniDock
                 DockParent.AttachedToLogicalTree -= _dockParent_AttachedToLogicalTree;
             }
         }
+
+
+        #region Content Styled Avalonia Property
+        [DependsOn(nameof(ContentTemplate))]
+        [Content]
+        public object Content
+        {
+            get { return GetValue(ContentProperty); }
+            set { SetValue(ContentProperty, value); }
+        }
+
+        public static readonly StyledProperty<object> ContentProperty =
+            AvaloniaProperty.Register<DockItem, object>
+            (
+                nameof(Content)
+            );
+        #endregion Content Styled Avalonia Property
+
+
+        #region ContentTemplate Styled Avalonia Property
+        public DataTemplate ContentTemplate
+        {
+            get { return GetValue(ContentTemplateProperty); }
+            set { SetValue(ContentTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<DataTemplate> ContentTemplateProperty =
+            AvaloniaProperty.Register<DockItem, DataTemplate>
+            (
+                nameof(ContentTemplate)
+            );
+        #endregion ContentTemplate Styled Avalonia Property
+
+
+        #region Header Styled Avalonia Property
+        [DependsOn(nameof(HeaderTemplate))]
+        public object Header
+        {
+            get { return GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
+        }
+
+        public static readonly StyledProperty<object> HeaderProperty =
+            AvaloniaProperty.Register<DockItem, object>
+            (
+                nameof(Header)
+            );
+        #endregion Header Styled Avalonia Property
+
+
+        #region HeaderTemplate Styled Avalonia Property
+        public DataTemplate HeaderTemplate
+        {
+            get { return GetValue(HeaderTemplateProperty); }
+            set { SetValue(HeaderTemplateProperty, value); }
+        }
+
+        public static readonly StyledProperty<DataTemplate> HeaderTemplateProperty =
+            AvaloniaProperty.Register<DockItem, DataTemplate>
+            (
+                nameof(HeaderTemplate)
+            );
+        #endregion HeaderTemplate Styled Avalonia Property
+
 
         // dock item is the end item, so it has no dock children.
         public IList<IDockGroup>? DockChildren => null;
