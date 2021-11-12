@@ -177,15 +177,14 @@ namespace NP.Avalonia.UniDock
                 // create the window
                 dockWindow = dockManager.FloatingWindowFactory.CreateFloatingWindow();
 
-                dockWindow.ParentWindowGroup = (topDockGroup as RootDockGroup)?.GetTopParentWindowGroup();
+                dockWindow.ProducingUserDefinedWindowGroup = 
+                    _draggedDockGroup.ProducingUserDefinedWindowGroup;
 
                 dockWindow.SetMovePtr();
 
                 DockAttachedProperties.SetTheDockManager(dockWindow, dockManager);
 
                 DockAttachedProperties.SetDockChildWindowOwner(dockWindow, ownerWindow);
-
-                dockWindow.DockDataContext = _draggedDockGroup.DockDataContext;
 
                 // remove from the current items
                 _draggedDockGroup?.RemoveItselfFromParent();

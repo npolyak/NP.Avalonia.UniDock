@@ -21,10 +21,10 @@ namespace NP.Avalonia.UniDock
 {
     public class SetAttachedPropertyFromParentBehavior<TParent, T, TProp> : ForEachItemOverrideBehavior<T>
         where TParent : IDockManagerContainer, IControl
-        where T : IDockManagerContainer
+        where T : IControl
     {
         protected TParent Parent { get; }
-        private AttachedProperty<TProp> _attachedProp;
+        private AvaloniaProperty<TProp> _attachedProp;
 
         private IDisposable? _subscription;
 
@@ -32,8 +32,8 @@ namespace NP.Avalonia.UniDock
         public SetAttachedPropertyFromParentBehavior
         (
             TParent parent, 
-            IEnumerable<T>? items, 
-            AttachedProperty<TProp> attachedProperty) : base(items)
+            IEnumerable<T>? items,
+            AvaloniaProperty<TProp> attachedProperty) : base(items)
         {
             _items = items;
             Parent = parent;
@@ -54,7 +54,7 @@ namespace NP.Avalonia.UniDock
 
         private void SetItemValue(T item)
         {
-            item.TheDockManager = Parent.TheDockManager;
+            item.SetValue(_attachedProp, Parent.GetValue(_attachedProp));
         }
 
         protected override void OnItemAdded(T item)
@@ -76,27 +76,61 @@ namespace NP.Avalonia.UniDock
         }
     }
 
-    public class SetAttachedPropertyFromParentGroupBehavior<T, TProp> : 
-        SetAttachedPropertyFromParentBehavior<IDockGroup, T, TProp>
-        where T : IDockGroup
+    public class SetAttachedPropertyFromParentGroupBehavior<TProp> : 
+        SetAttachedPropertyFromParentBehavior<IDockGroup, IDockGroup, TProp>
     {
         public SetAttachedPropertyFromParentGroupBehavior
         (
             IDockGroup parent, 
-            IEnumerable<T>? items, 
-            AttachedProperty<TProp> attachedProperty) :
+            IEnumerable<IDockGroup>? items, 
+            AvaloniaProperty<TProp> attachedProperty) :
             base(parent, items, attachedProperty)
         {
 
         }
+    }
 
-        protected override void OnItemAdded(T item)
+    public class SetDockManagerPropertyFromParentGroupBehavior :
+        SetAttachedPropertyFromParentGroupBehavior<DockManager>
+    {
+        public SetDockManagerPropertyFromParentGroupBehavior
+        (
+            IDockGroup parent, 
+            IEnumerable<IDockGroup>? items
+        ) :
+            base(parent, items, DockAttachedProperties.TheDockManagerProperty)
         {
-            IDockGroup topGroup = ((IDockGroup)Parent).GetDockGroupRoot();
+
+        }
+
+        protected override void OnItemAdded(IDockGroup item)
+        {
+            IDockGroup topGroup = Parent.GetDockGroupRoot();
 
             base.OnItemAdded(item);
 
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topGroup);
+        }
+    }
+
+    public class SetProducingUserDefinedWindowFromParentGroupBehavior :
+        SetAttachedPropertyFromParentGroupBehavior<RootDockGroup>
+    {
+        public SetProducingUserDefinedWindowFromParentGroupBehavior
+        (
+            IDockGroup parent,
+            IEnumerable<IDockGroup>? items
+        ) : base(parent, items, DockGroupBaseControl.ProducingUserDefinedWindowGroupProperty!)
+        {
+
+        }
+
+        protected override void OnItemAdded(IDockGroup item)
+        {
+            if (item.ProducingUserDefinedWindowGroup == null)
+            {
+                base.OnItemAdded(item);
+            }
         }
     }
 }

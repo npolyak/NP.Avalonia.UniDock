@@ -118,6 +118,14 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(HeaderContentTemplateResourceKeyProperty)
                 .Subscribe(OnHeaderContentTemplateResourceKeyChanged!);
+
+            this.GetObservable(ProducingUserDefinedWindowGroupProperty)
+                .Subscribe(OnProducingUserDefinedWindowGroupPropertyChanged!);
+        }
+
+        private void OnProducingUserDefinedWindowGroupPropertyChanged(RootDockGroup obj)
+        {
+            this.SetDockDataContextBinding();
         }
 
         private void OnHeaderContentTemplateResourceKeyChanged(string newResourceKey)
@@ -414,7 +422,7 @@ namespace NP.Avalonia.UniDock
         const string NO_HEADER = "NO_HEADER";
 
         public override string ToString() =>
-            $"TheDockItem: {DockId} {Header?.ToString()} { HeaderTemplate?.ToString()?? NO_HEADER} {Content?.ToString()}";
+            $"TheDockItem: {DockId} DockDataContext:{DockDataContext} {Header?.ToString()} { HeaderTemplate?.ToString()?? NO_HEADER} {Content?.ToString()}";
 
         private void FireSelectionChanged()
         {
@@ -513,5 +521,61 @@ namespace NP.Avalonia.UniDock
         public static readonly AttachedProperty<bool> AllowCenterDockingProperty =
             DockAttachedProperties.AllowCenterDockingProperty.AddOwner<DockItem>();
         #endregion AllowCenterDocking Styled Avalonia Property
+
+        private IDisposable _dockDataContextSubscription = null;
+        private Binding _dockDataContextBinding;
+        public Binding DockDataContextBinding
+        {
+            get => _dockDataContextBinding;
+
+            set
+            {
+                if (_dockDataContextBinding == value)
+                {
+                    return;
+                }
+                BreakDockDataContextBinding();
+                _dockDataContextBinding = value;
+
+                SetDockDataContextBinding();
+            }
+        }
+
+        private void BreakDockDataContextBinding()
+        {
+            _dockDataContextSubscription?.Dispose();
+            _dockDataContextSubscription = null;
+        }
+
+        #region DockDataContext Styled Avalonia Property
+        public object? DockDataContext
+        {
+            get { return GetValue(DockDataContextProperty); }
+            set { SetValue(DockDataContextProperty, value); }
+        }
+
+        public static readonly StyledProperty<object?> DockDataContextProperty =
+            AvaloniaProperty.Register<DockItem, object?>
+            (
+                nameof(DockDataContext)
+            );
+        #endregion DockDataContext Styled Avalonia Property
+
+        private void SetDockDataContextBinding()
+        {
+            BreakDockDataContextBinding();
+            if ((_dockDataContextBinding == null) || 
+                (ProducingUserDefinedWindowGroup == null))
+            {
+                return;
+            }
+
+            _dockDataContextSubscription = 
+                this.Bind
+                (
+                    DockDataContextProperty, 
+                    _dockDataContextBinding, 
+                    ProducingUserDefinedWindowGroup);
+        }
     }
 }

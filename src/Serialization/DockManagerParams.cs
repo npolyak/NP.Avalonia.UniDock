@@ -253,17 +253,12 @@ namespace NP.Avalonia.UniDock.Serialization
             // set the coefficients for the DockStackGroups
             foreach(var group in dm.ConnectedGroups)
             {
-                if (group is RootDockGroup rootDockGroup)
-                {
-                    DockGroupParams p = dmp.FindGroupParamsById(group.DockId)!;
-                    rootDockGroup.ParentWindowGroup = 
-                        dm.FindGroupById(p.ParentWindowGroupId) as RootDockGroup;
-                }
+                DockGroupParams p = dmp.FindGroupParamsById(group.DockId)!;
+                group.ProducingUserDefinedWindowGroup =
+                    dm.FindGroupById(p.ProducingUserDefinedWindowGroupId) as RootDockGroup;
 
                 if (group is StackDockGroup stackDockGroup)
                 {
-                    DockGroupParams? p = dmp.FindGroupParamsById(group.DockId);
-
                     if (p?.SizeCoefficients != null)
                     {
                         stackDockGroup

@@ -45,19 +45,13 @@ namespace NP.Avalonia.UniDock
         }
 
 
-        public RootDockGroup? ParentWindowGroup 
+        public RootDockGroup? ProducingUserDefinedWindowGroup
         { 
-            get => TheDockGroup.ParentWindowGroup;
+            get => TheDockGroup.ProducingUserDefinedWindowGroup;
             set
             {
-                TheDockGroup.ParentWindowGroup = value;
+                TheDockGroup.ProducingUserDefinedWindowGroup = value;
             }
-        }
-
-        public object? DockDataContext
-        {
-            get => TheDockGroup.DockDataContext;
-            set => TheDockGroup.DockDataContext = value;
         }
 
         public DockManager? TheDockManager

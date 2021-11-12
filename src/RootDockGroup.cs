@@ -30,8 +30,6 @@ namespace NP.Avalonia.UniDock
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
-        public event Action<RootDockGroup>? PossibleDockChangeInsideEvent;
-
         public bool AutoInvisible { get; set; }
 
         public Point FloatingSize { get; set; } = new Point(700, 400);
@@ -51,8 +49,6 @@ namespace NP.Avalonia.UniDock
 
             }
         }
-
-        public RootDockGroup? ParentWindowGroup { get; set; }
 
         public event Action<RootDockGroup>? HasNoChildrenEvent;
 
@@ -226,6 +222,23 @@ namespace NP.Avalonia.UniDock
                 FloatingWindows,
                 (floatingWindowContainer, ownerWindow) => floatingWindowContainer.ParentWindow = ownerWindow
             );
+
+            this.AttachedToVisualTree += RootDockGroup_AttachedToVisualTree;
+        }
+
+        private void RootDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            FloatingWindow? floatingWindow = this.GetGroupWindow();
+
+            if (floatingWindow?.IsDockWindow != true)
+            {
+                this.ProducingUserDefinedWindowGroup = this; // this is a root group within user defined window
+
+                foreach(FloatingWindowContainer floatingWindowContainer in this.FloatingWindows.NullToEmpty())
+                {
+                    floatingWindowContainer.ProducingUserDefinedWindowGroup = this;
+                }
+            }
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -241,7 +254,7 @@ namespace NP.Avalonia.UniDock
 
         private void OnFloatingWindowAdded(FloatingWindowContainer floatingWindowContainer)
         {
-            floatingWindowContainer.ParentWindowGroup = this.GetTopParentWindowGroup();
+            floatingWindowContainer.ProducingUserDefinedWindowGroup = this.ProducingUserDefinedWindowGroup;
         }
 
         private void SimpleDockGroup_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -279,8 +292,6 @@ namespace NP.Avalonia.UniDock
         {
             if (group != this)
                 return;
-
-            PossibleDockChangeInsideEvent?.Invoke(this);
 
             _singleActiveBehavior.TheCollection = LeafItems.ToList();
         }
@@ -358,16 +369,5 @@ namespace NP.Avalonia.UniDock
         public bool AutoDestroy { get; set; } = true;
 
         public IEnumerable<DockItem> LeafItems => this.GetLeafItems();
-    }
-
-    public static class RootDockGroupHelper
-    {
-        public static RootDockGroup GetTopParentWindowGroup(this RootDockGroup group)
-        {
-            if (group.ParentWindowGroup == null)
-                return group;
-
-            return group.ParentWindowGroup.GetTopParentWindowGroup();
-        }
     }
 }

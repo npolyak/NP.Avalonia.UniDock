@@ -40,8 +40,6 @@ namespace NP.Avalonia.UniDock
 
         IDockGroup? DockParent { get; set; }
 
-        object? DockDataContext { get; }
-
         bool IsDockVisible
         {
             get => DockAttachedProperties.GetIsDockVisible(this);
@@ -57,7 +55,9 @@ namespace NP.Avalonia.UniDock
         bool AutoDestroy { get; set; }
 
         bool AutoInvisible { get; set; }
-        
+
+        RootDockGroup? ProducingUserDefinedWindowGroup { get; set; }
+
         bool ShowHeader { get => true; set { } }
 
         bool IsGroupEmpty => DockChildren == null || DockChildren.Count == 0;
@@ -380,9 +380,9 @@ namespace NP.Avalonia.UniDock
                 }
             }
 
-            RootDockGroup? parentDockGroup = rootGroup?.ParentWindowGroup;
+            RootDockGroup? userDefinedWindowGroup = rootGroup?.ProducingUserDefinedWindowGroup;
 
-            return parentDockGroup?.GetResource<T>(resourceKey);
+            return userDefinedWindowGroup?.GetResource<T>(resourceKey);
         }
 
         public static bool MatchesDefaultGroup(this IDockGroup? group, IDockGroup? dockGroupToMatch)

@@ -116,6 +116,8 @@ namespace NP.Avalonia.UniDock
                 return;
             }
 
+            dockItem.ProducingUserDefinedWindowGroup = dockGroup.ProducingUserDefinedWindowGroup;
+
             if (vm.HeaderContentTemplateResourceKey != null)
             {
                 dockItem.HeaderTemplate =

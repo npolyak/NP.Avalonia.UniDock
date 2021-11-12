@@ -116,23 +116,6 @@ namespace NP.Avalonia.UniDock
         #endregion GroupOnlyById Styled Avalonia Property
 
 
-        #region DockDataContext Styled Avalonia Property
-        public object? DockDataContext
-        {
-            get { return GetValue(DockDataContextProperty); }
-            set { SetValue(DockDataContextProperty, value); }
-        }
-
-        public static readonly StyledProperty<object?> DockDataContextProperty =
-            AvaloniaProperty.Register<DockGroupBaseControl, object?>
-            (
-                nameof(DockDataContext),
-                null,
-                true
-            );
-        #endregion DockDataContext Styled Avalonia Property
-
-
         #region DockParent Styled Avalonia Property
         public virtual IDockGroup? DockParent
         {
@@ -147,6 +130,19 @@ namespace NP.Avalonia.UniDock
             );
         #endregion DockParent Styled Avalonia Property
 
+        #region ProducingUserDefinedWindowGroup Styled Avalonia Property
+        public RootDockGroup? ProducingUserDefinedWindowGroup
+        {
+            get { return GetValue(ProducingUserDefinedWindowGroupProperty); }
+            set { SetValue(ProducingUserDefinedWindowGroupProperty, value); }
+        }
+
+        public static readonly StyledProperty<RootDockGroup?> ProducingUserDefinedWindowGroupProperty =
+            AvaloniaProperty.Register<DockGroupBaseControl, RootDockGroup?>
+            (
+                nameof(ProducingUserDefinedWindowGroup)
+            );
+        #endregion ProducingUserDefinedWindowGroup Styled Avalonia Property
 
         static DockGroupBaseControl()
         {

@@ -424,6 +424,8 @@ namespace NP.Avalonia.UniDock
 
                 insertGroup.TheOrientation = orientation;
 
+                insertGroup.ProducingUserDefinedWindowGroup = parentGroup.ProducingUserDefinedWindowGroup;
+
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
 
                 parentGroup.SetSizeCoeff(childIdx, sizeCoeff);
@@ -620,6 +622,7 @@ namespace NP.Avalonia.UniDock
 
                                         currentGroup.DockChildren?.Insert(currentLeafObjIdx, groupToInsertItemsInto);
                                         groupToInsertItemsInto.GroupOnlyById = currentGroup.GroupOnlyById;
+                                        groupToInsertItemsInto.ProducingUserDefinedWindowGroup = currentGroup.ProducingUserDefinedWindowGroup;
 
                                         currentGroup.SetSizeCoeff(currentLeafObjIdx, sizeCoeff);
 

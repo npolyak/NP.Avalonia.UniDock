@@ -14,17 +14,29 @@ using System.Collections.Generic;
 
 namespace NP.Avalonia.UniDock
 {
-    public class SetDockGroupBehavior<T> : IDisposable
-        where T : IDockGroup
+    public class SetDockGroupBehavior : IDisposable
     {
-        private RemoveDockGroupBehavior<T>? _removeItemBehavior;
-        private SetParentBehavior<T>? _setParentBehavior;
-        private SetAttachedPropertyFromParentGroupBehavior<T, DockManager>? _setDockManagerBehavior;
-        public SetDockGroupBehavior(IDockGroup parent, IList<T> items)
+        private RemoveDockGroupBehavior<IDockGroup>? _removeItemBehavior;
+        private SetParentBehavior<IDockGroup>? _setParentBehavior;
+        private SetDockManagerPropertyFromParentGroupBehavior? _setDockManagerBehavior;
+        private SetProducingUserDefinedWindowFromParentGroupBehavior? _setProducingUserDefinedWindowGroupBehavior;
+        public SetDockGroupBehavior(IDockGroup parent, IList<IDockGroup> items)
         {
-            _removeItemBehavior = new RemoveDockGroupBehavior<T>(items);
-            _setParentBehavior = new SetParentBehavior<T>(parent, items);
-            _setDockManagerBehavior = new SetAttachedPropertyFromParentGroupBehavior<T, DockManager>(parent, items, DockAttachedProperties.TheDockManagerProperty);
+            _removeItemBehavior = new RemoveDockGroupBehavior<IDockGroup>(items);
+            _setParentBehavior = new SetParentBehavior<IDockGroup>(parent, items);
+            _setDockManagerBehavior = 
+                new SetDockManagerPropertyFromParentGroupBehavior
+                (
+                    parent, 
+                    items
+                );
+
+            _setProducingUserDefinedWindowGroupBehavior = 
+                new SetProducingUserDefinedWindowFromParentGroupBehavior
+                (
+                    parent,
+                    items
+                );
         }
 
         public void Dispose()
@@ -35,15 +47,8 @@ namespace NP.Avalonia.UniDock
             _setParentBehavior = null;
             _removeItemBehavior?.Dispose();
             _removeItemBehavior = null;
-        }
-    }
-
-    public class SetDockGroupBehavior : SetDockGroupBehavior<IDockGroup>
-    {
-        public SetDockGroupBehavior(IDockGroup parent, IList<IDockGroup> items) : 
-            base(parent, items)
-        {
-
+            _setProducingUserDefinedWindowGroupBehavior?.Dispose();
+            _setProducingUserDefinedWindowGroupBehavior = null;
         }
     }
 }

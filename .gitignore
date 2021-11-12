@@ -85,3 +85,7 @@
 /Prototypes/NP.GroupHeaderSample/bin/Debug/Sample.zip
 *~
 *.nupkg
+/Prototypes/NP.DataContextSample/.vs/DockWindowsSample/DesignTimeBuild
+/Prototypes/NP.DataContextSample/.vs
+/Prototypes/NP.DataContextSample/bin/Debug
+/Prototypes/NP.DataContextSample/obj

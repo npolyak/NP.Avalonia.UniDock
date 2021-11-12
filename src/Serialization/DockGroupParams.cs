@@ -63,7 +63,7 @@ namespace NP.Avalonia.UniDock.Serialization
         public string? GroupOnlyById { get; set; }
 
         [XmlAttribute]
-        public string? ParentWindowGroupId { get; set; }
+        public string? ProducingUserDefinedWindowGroupId { get; set; }
 
         #region Width or Height Coefficients
         /// <summary>
@@ -135,10 +135,7 @@ namespace NP.Avalonia.UniDock.Serialization
                 }
             }
 
-            if (dg is RootDockGroup rootDockGroup)
-            {
-                p.ParentWindowGroupId = rootDockGroup.ParentWindowGroup?.DockId;
-            }
+            p.ProducingUserDefinedWindowGroupId = dg.ProducingUserDefinedWindowGroup?.DockId;
 
             if (dg is TabbedDockGroup tabbedDockGroup)
             {
@@ -187,7 +184,6 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 tabbedDockGroup.AllowTabDocking = p.AllowTabDocking;
             }
-
 
             if (dg is StackDockGroup stackGroup)
             {
