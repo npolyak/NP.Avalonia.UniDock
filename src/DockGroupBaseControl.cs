@@ -12,6 +12,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using System;
 using System.Collections.Generic;
 using System.Reactive;
@@ -19,7 +20,7 @@ using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockGroupBaseControl : TemplatedControl
+    public class DockGroupBaseControl : TemplatedControl, IDockDataContextContainer
     {
         public event Action<IDockGroup>? DockIdChanged;
 
@@ -156,7 +157,15 @@ namespace NP.Avalonia.UniDock
         {
             _subscription = DockChangedWithin.Subscribe(OnDockChangedWithin);
 
-            this.GetObservable(DockParentProperty).Subscribe(OnDockParentChangedImpl);
+            this.GetObservable(DockParentProperty).Subscribe(OnDockParentChangedImpl!);
+
+            this.GetObservable(ProducingUserDefinedWindowGroupProperty)
+                .Subscribe(OnProducingUserDefinedWindowGroupPropertyChanged!);
+        }
+
+        private void OnProducingUserDefinedWindowGroupPropertyChanged(RootDockGroup obj)
+        {
+            this.SetDockDataContextBinding();
         }
 
         private void OnDockParentChangedImpl(IDockGroup dockParent)
@@ -173,6 +182,64 @@ namespace NP.Avalonia.UniDock
         private void OnDockChangedWithin(Unit _)
         {
             HasStableDescendant = ((IDockGroup)this).HasStableGroup();
+        }
+
+
+        private IDisposable? _dockDataContextSubscription = null;
+        private Binding? _dockDataContextBinding;
+        public Binding? DockDataContextBinding
+        {
+            get => _dockDataContextBinding;
+
+            set
+            {
+                if (_dockDataContextBinding == value)
+                {
+                    return;
+                }
+                BreakDockDataContextBinding();
+                _dockDataContextBinding = value;
+
+                SetDockDataContextBinding();
+            }
+        }
+
+        private void BreakDockDataContextBinding()
+        {
+            _dockDataContextSubscription?.Dispose();
+            _dockDataContextSubscription = null;
+        }
+
+
+        #region DockDataContext Styled Avalonia Property
+        public object? DockDataContext
+        {
+            get { return GetValue(DockDataContextProperty); }
+            internal set { SetValue(DockDataContextProperty, value); }
+        }
+
+        public static readonly StyledProperty<object?> DockDataContextProperty =
+            AvaloniaProperty.Register<DockGroupBaseControl, object?>
+            (
+                nameof(DockDataContext)
+            );
+        #endregion DockDataContext Styled Avalonia Property
+
+        private void SetDockDataContextBinding()
+        {
+            BreakDockDataContextBinding();
+            if ((_dockDataContextBinding == null) ||
+                (ProducingUserDefinedWindowGroup == null))
+            {
+                return;
+            }
+
+            _dockDataContextSubscription =
+                this.Bind
+                (
+                    DockDataContextProperty,
+                    _dockDataContextBinding,
+                    ProducingUserDefinedWindowGroup);
         }
     }
 }

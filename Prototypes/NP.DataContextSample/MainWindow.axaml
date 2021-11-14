@@ -51,11 +51,12 @@
               </np:DockItem>
               <np:DockItem Header="Floating Tab 2"
                            DockId="FloatingDockItem2"
-                           DockDataContextBinding="{Binding Path=TheStr, 
-                                                            Source={StaticResource TheViewModel}}"
                            DefaultDockGroupId="FloatingGroup2"
-                           DefaultDockOrderInGroup="2">
-                <TextBlock Text="{Binding Path=DockDataContext}"/>
+                           DefaultDockOrderInGroup="2"
+                           DockDataContextBinding="{Binding Path=TheStr, 
+                                                            Source={StaticResource TheViewModel}}">
+                <TextBlock Text="{Binding Path=DockDataContext, 
+                                          RelativeSource={RelativeSource AncestorType=np:IDockDataContextContainer}}"/>
               </np:DockItem>
             </np:TabbedDockGroup>
           </np:StackDockGroup>
@@ -88,7 +89,8 @@
         <np:TabbedDockGroup IsStableGroup="True"
                             DefaultDockGroupId="TopLevelGroup"
                             DockId="Group2"
-                            CanFloat="False">
+                            DockDataContextBinding="{Binding Path=TheStr, 
+                                                             Source={StaticResource TheViewModel}}">
           <np:DockItem Header="Tab3">
             <TextBlock Text="Hi World 3333!"/>
           </np:DockItem>

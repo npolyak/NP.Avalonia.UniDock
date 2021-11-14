@@ -24,7 +24,7 @@ using System.Reactive.Subjects;
 
 namespace NP.Avalonia.UniDock
 {
-    public interface IDockGroup : IDockManagerContainer, IControl, IRemovable
+    public interface IDockGroup : IDockManagerContainer, IControl, IRemovable, IDockDataContextContainer
     {
         public string DockId { get; set; }
 
