@@ -460,8 +460,18 @@ namespace NP.Avalonia.UniDock
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Window window = (Window) sender;
+            // OnWindowClosed(sender as Window);
+        }
 
+        private void Window_Closed(object? sender, EventArgs e)
+        {
+            Window window = (Window)sender!;
+
+            OnWindowClosed(window);
+        }
+
+        private void OnWindowClosed(Window window)
+        {
             IEnumerable<IDockGroup> dockGroups;
 
             if (window is FloatingWindow dockWindow)
@@ -487,7 +497,8 @@ namespace NP.Avalonia.UniDock
 
         private void OnWindowItemAdded(Window window)
         {
-            window.Closing += Window_Closing!;
+            //window.Closing += Window_Closing!;
+            window.Closed += Window_Closed;
 
             string? windowId = DockAttachedProperties.GetWindowId(window);
 

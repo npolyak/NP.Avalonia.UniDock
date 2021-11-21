@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDock;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NP.DataContextSample
 {
@@ -15,6 +16,8 @@ namespace NP.DataContextSample
 
         public MainWindow()
         {
+            this.Closing += OnMainWindowClosing;
+
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
@@ -31,7 +34,16 @@ namespace NP.DataContextSample
 
             Button restoreButton = this.FindControl<Button>("RestoreButton");
             restoreButton.Click += RestoreButton_Click;
+
         }
+
+        private async void OnMainWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("Window OnMainWindowClosing");
+            DockManager dockManager = DockAttachedProperties.GetTheDockManager(this);
+            dockManager.SaveToFile(SerializationFile);
+        }
+
 
         private void ChangeDockDataContext_Click(object? sender, RoutedEventArgs e)
         {

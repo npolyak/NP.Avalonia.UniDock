@@ -176,6 +176,7 @@ namespace NP.Avalonia.UniDock
 
         private void FloatingWindow_Closed(object? sender, EventArgs e)
         {
+            TheDockManager = null;
             var allGroups = TheDockGroup.GetDockGroupSelfAndDescendants().Reverse().ToList();
 
             foreach (var group in allGroups)
@@ -220,7 +221,6 @@ namespace NP.Avalonia.UniDock
 
         protected virtual void BeforeClosing(CancelEventArgs e)
         {
-            TheDockManager = null;
         }
 
         private void SetPosition()
