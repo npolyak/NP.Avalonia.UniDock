@@ -217,6 +217,11 @@ namespace NP.Avalonia.UniDock
                 if (!group.IsRoot)
                 {
                     group.RemoveItselfFromParent();
+
+                    if (!group.IsStableGroup)
+                    {
+                        group.TheDockManager = null;
+                    }
                 }
             }
         }
@@ -467,10 +472,10 @@ namespace NP.Avalonia.UniDock
         {
             Window window = (Window)sender!;
 
-            OnWindowClosed(window);
+            ClearWindowsGroups(window);
         }
 
-        private void OnWindowClosed(Window window)
+        private void ClearWindowsGroups(Window window)
         {
             IEnumerable<IDockGroup> dockGroups;
 
