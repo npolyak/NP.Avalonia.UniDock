@@ -1,0 +1,67 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+  <Style Selector="TextBlock">
+    <Setter Property="Margin" Value="8" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+
+  <Style Selector="Border.BorderStyle">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="BorderThickness" Value="2,3,0,0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+  </Style>
+
+  <Style Selector="Button.LocalizationPrototypeButton">
+    <Setter Property="BorderBrush"
+            Value="{DynamicResource BorderBrush}"/>
+    <Setter Property="Background"
+            Value="{DynamicResource BackgroundBrush}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="buttonShape"
+                CornerRadius="4"
+                Grid.RowSpan="2"
+                RenderTransformOrigin="0.5,0.5"
+                Margin="0,-0.333,0,0.333"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"/>
+
+            <ContentPresenter x:Name="contentPresenter"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              Margin="8,4,8,4"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              Grid.RowSpan="2"
+                              RecognizesAccessKey="True"
+                              RenderTransformOrigin="0.5,0.5"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button:pointerover">
+    <Setter Property="Background"
+            Value="{DynamicResource BorderBrush}"/>
+  </Style>
+
+  <Style Selector="Button:pressed">
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush EndPoint="45.7%,36.1%" StartPoint="40.3%,06.5%">
+          <GradientStop Color="#FF222222" Offset="0"/>
+          <GradientStop Color="#FF181818" Offset="1"/>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>

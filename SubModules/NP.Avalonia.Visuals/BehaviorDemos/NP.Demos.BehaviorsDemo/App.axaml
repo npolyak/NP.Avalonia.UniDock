@@ -1,0 +1,34 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="NP.ThemingPrototype.App"
+             xmlns:np="https://np.com/visuals"
+             xmlns:local="clr-namespace:NP.ThemingPrototype">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<np:ThemeLoader Name="LightDarkThemeLoader"
+								SelectedThemeId="Dark">
+					<np:ThemeInfo Id="Light"
+								  ResourceUrl="/Themes/MainColorThemes/LightColorsTheme.axaml"/>
+					<np:ThemeInfo Id="Dark"
+								  ResourceUrl="/Themes/MainColorThemes/DarkColorsTheme.axaml"/>
+				</np:ThemeLoader>
+				<np:ThemeLoader Name="AccentThemeLoader"
+								SelectedThemeId="DarkBlue">
+					<np:ThemeInfo Id="DarkBlue"
+								  ResourceUrl="/Themes/MainColorThemes/AccentColorThemes/DarkBlueAccent.axaml"/>
+					<np:ThemeInfo Id="LightBlue"
+								  ResourceUrl="/Themes/MainColorThemes/AccentColorThemes/DarkBlueAccent.axaml"/>
+				</np:ThemeLoader>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+	<Application.Styles>
+		<!--<FluentTheme Mode="Dark"/>-->
+		<StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+		<!--<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>-->
+
+		<StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/ThemeStyles.axaml"/>
+		<StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml"/>
+	</Application.Styles>
+</Application>

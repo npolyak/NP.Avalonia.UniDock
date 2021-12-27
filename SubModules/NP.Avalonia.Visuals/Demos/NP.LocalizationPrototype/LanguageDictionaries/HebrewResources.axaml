@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:np="https://np.com/visuals">
+  <np:VisualFlow x:Key="Flow">Reverse</np:VisualFlow>
+  <x:Double x:Key="WindowWidth">560</x:Double>
+  <x:Double x:Key="WindowHeight">390</x:Double>
+  <x:String x:Key="WindowTitle">חלון דוגמה</x:String>
+  <x:String x:Key="SimpleText">זהו טקסט פשוט</x:String>
+  <x:String x:Key="FormattedText">זה טקסט ערוך. לדוגמה, רוחב החלון הינו {0} וגובהו {1}</x:String>
+  <x:Double x:Key="ControlWidth">460</x:Double>
+  <x:Double x:Key="ControlHeight">100</x:Double>
+  <SolidColorBrush x:Key="ControlBackground" Color="Gray"/>
+  <x:String x:Key="ControlText">פקד זה לוקח רוחב, גובה, צבע וכיוון שפה מהמילון</x:String>
+  <SolidColorBrush x:Key="FirstDataTemplateForeground" Color="{DynamicResource GoldColor}"/>
+  <x:String x:Key="FirstDataTemplateText">טקסט וצבע מתוך תבנית-נתונים עבור אובייקט מספר {0}</x:String>
+  <SolidColorBrush x:Key="SecondDataTemplateForeground" Color="{DynamicResource SilverColor}"/>
+  <x:String x:Key="SecondDataTemplateText">טקסט וצבע נוסף מתוך תבנית-נתונים עבור אובייקט מספר {0}</x:String>
+  <x:String x:Key="Flag">avares://NP.LocalizationPrototype/Images/Hebrew.jpg</x:String>
+  <x:String x:Key="CloseWindowMessage">צא</x:String>
+  <x:String x:Key="ShowError">הצג שגיאה</x:String>
+  <x:String x:Key="NotEnoughMemory">אין מספיק זכרון</x:String>
+</ResourceDictionary>

@@ -1,0 +1,39 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="NP.AutoGridTest.App"
+             xmlns:np="https://np.com/visuals"
+             xmlns:local="clr-namespace:NP.AutoGridTest">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<!--<ResourceInclude Source="/Themes/LightCrystalTheme.axaml"/>-->
+				<np:ThemeLoader Name="ColorThemeLoader"
+								SelectedThemeId="Dark">
+					<np:ThemeInfo Id="Light"
+								  ResourceUrl="/Themes/LightCrystalTheme.axaml"/>
+					<np:ThemeInfo Id="Dark"
+								  ResourceUrl="/Themes/DarkCrystalTheme.axaml"/>
+				</np:ThemeLoader>
+			</ResourceDictionary.MergedDictionaries>
+
+			<SolidColorBrush x:Key="PrimaryBrush"
+							 Color="{DynamicResource PrimaryColor}"/>
+			<LinearGradientBrush x:Key="MouseOverBrush" 
+								 StartPoint="50%,0%"
+								 EndPoint="50%,100%">
+				<LinearGradientBrush.GradientStops>
+					<GradientStop Offset="0" 
+								  Color="{DynamicResource MouseOverHighColor}"/>
+					<GradientStop Offset="1"
+								  Color="{DynamicResource MouseOverLowColor}"/>
+				</LinearGradientBrush.GradientStops>
+			</LinearGradientBrush>
+		</ResourceDictionary>
+	</Application.Resources>
+  <Application.Styles>
+    <!--<FluentTheme Mode="Dark"/>-->
+	  <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseDark.xaml"/>
+	  <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+	  <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/PieSegmentStyles.axaml"/>
+  </Application.Styles>
+</Application>

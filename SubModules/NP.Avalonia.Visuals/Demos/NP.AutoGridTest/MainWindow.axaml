@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:NP.AutoGridTest"
+        xmlns:np="https://np.com/visuals"
+        x:Class="NP.AutoGridTest.MainWindow"
+        Title="NP.AutoGridTest"
+        x:Name="Root"
+		Width="500"
+		Height="400"
+		Background="{StaticResource PrimaryBrush}">
+	<!--<Button Background="Blue"
+			Foreground="White"
+			CornerRadius="5"
+			Content="A Button"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			Padding="10,5"
+			BorderThickness="5"
+			BorderBrush="Red"/>-->
+	
+	<!--<np:PieSegment StartAngle="0" 
+				   EndAngle="90"
+				   InnerRadius="80"
+				   OuterRadius="160"
+				   Background="Red"
+				   HorizontalAlignment="Center"
+				   VerticalAlignment="Center"/>-->
+
+	<!--<Button Background="Black"
+			BorderBrush="Red"
+			Foreground="White"
+			BorderThickness="2"
+			CornerRadius="3"
+			Content="Hello"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center">
+		<local:PropertiesChangeObserver.PropChangeObserver>
+			<local:PropertiesChangeObserver>
+				<local:PropContainer Key="{x:Static Button.CommandProperty}"/>
+			</local:PropertiesChangeObserver>
+		</local:PropertiesChangeObserver.PropChangeObserver>
+	</Button>-->
+	<Grid RowDefinitions="*, Auto"
+		  Margin="10">
+		<np:AutoGrid x:Name="MyAutoGrid" 
+					 HorizontalAlignment="Center"
+			         VerticalAlignment="Center"
+					 ShowGridLines="True">
+			<np:AutoGrid.RowsHeights>
+				<GridLength x:Key="1">100</GridLength>
+			</np:AutoGrid.RowsHeights>
+			<np:AutoGrid.ColumnsWidths>
+				<GridLength x:Key="0">*</GridLength>
+			</np:AutoGrid.ColumnsWidths>
+			<Border Width="100"
+					Height="100"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Background="{StaticResource MouseOverBrush}"/>
+			<Button Content="Button 2"
+					np:AutoGrid.Row="1"
+					np:AutoGrid.Column="1"/>
+			<Button x:Name="Button3"
+					Content="Button 3"
+					np:AutoGrid.Row="2"
+					np:AutoGrid.Column="1"/>
+		</np:AutoGrid>
+
+		<StackPanel Grid.Row="1" 
+					Orientation="Horizontal"
+					HorizontalAlignment="Right">
+			
+			<Button x:Name="ChangeLocationButton"
+					Content="Change Location"
+					Margin="10,0"/>
+			<Button x:Name="ChangeThemeButton"
+					Content="Change Theme"/>
+		</StackPanel>
+	</Grid>
+</Window>

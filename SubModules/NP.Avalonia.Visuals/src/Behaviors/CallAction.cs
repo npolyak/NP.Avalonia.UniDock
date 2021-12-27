@@ -142,7 +142,8 @@ namespace NP.Avalonia.Visuals.Behaviors
         public static readonly AttachedProperty<RoutingStrategies?> TheRoutingStrategyProperty =
             AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies?>
             (
-                "TheRoutingStrategy"
+                "TheRoutingStrategy",
+                RoutingStrategies.Bubble
             );
         #endregion TheRoutingStrategy Attached Avalonia Property
 

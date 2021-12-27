@@ -22,27 +22,28 @@
                     <ToolTip>Property Name</ToolTip>
                     <Default>MyProperty</Default>
                 </Literal>
-                <Literal>
-                    <ID>ownerclass</ID>
-                    <ToolTip>The owning class of this Property.</ToolTip>
-					<Default>Control</Default>
-                </Literal>
+				<Literal>
+					<ID>ownerclass</ID>
+					<ToolTip>The owning class of this Property.  Typically the class that it is declared in.</ToolTip>
+					<Function>ClassName()</Function>
+					<Default>ownerclass</Default>
+				</Literal>
             </Declarations>
             <Code Language="csharp">
                 <![CDATA[
 #region $property$ Attached Avalonia Property
-public static $type$ Get$property$(AvaloniaObject obj)
+public static $type$ Get$property$(IControl obj)
 {
     return obj.GetValue($property$Property);
 }
 
-public static void Set$property$(AvaloniaObject obj, $type$ value)
+public static void Set$property$(IControl obj, $type$ value)
 {
     obj.SetValue($property$Property, value);
 }
 
 public static readonly AttachedProperty<$type$> $property$Property =
-    AvaloniaProperty.RegisterAttached<object, $ownerclass$, $type$>
+    AvaloniaProperty.RegisterAttached<$ownerclass$, IControl, $type$>
     (
         "$property$"
     );

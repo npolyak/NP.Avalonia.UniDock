@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:np="https://np.com/visuals">
+  <np:VisualFlow x:Key="Flow">Normal</np:VisualFlow>
+  <x:Double x:Key="WindowWidth">780</x:Double>
+  <x:Double x:Key="WindowHeight">340</x:Double>
+  <x:String x:Key="WindowTitle">Демонстрационное Окно</x:String>
+  <x:String x:Key="SimpleText">Это просто текст</x:String>
+  <x:String x:Key="FormattedText">Это отформатированный текст. Например, ширина окна {0} и высота {1}</x:String>
+  <x:Double x:Key="ControlWidth">660</x:Double>
+  <x:Double x:Key="ControlHeight">70</x:Double>
+  <SolidColorBrush x:Key="ControlBackground" Color="DarkGray"/>
+  <x:String x:Key="ControlText">Этот контроль берет ширину, высоту, цвет и направление из словаря</x:String>
+  <SolidColorBrush x:Key="FirstDataTemplateForeground" Color="{DynamicResource SilverColor}"/>
+  <x:String x:Key="FirstDataTemplateText">Текст и цвет внутри дата темплэйта для экземпляра {0}</x:String>
+  <SolidColorBrush x:Key="SecondDataTemplateForeground" Color="{DynamicResource GoldColor}"/>
+  <x:String x:Key="SecondDataTemplateText">Другой текст и другой цвет внутри дата темплэйта для экземпляра {0}</x:String>
+  <x:String x:Key="Flag">avares://NP.LocalizationPrototype/Images/Russian.jpg</x:String>
+  <x:String x:Key="CloseWindowMessage">Закрыть Окно</x:String>
+  <x:String x:Key="ShowError">Показать Ошибку</x:String>
+  <x:String x:Key="NotEnoughMemory">Не хватает памяти</x:String>
+</ResourceDictionary>

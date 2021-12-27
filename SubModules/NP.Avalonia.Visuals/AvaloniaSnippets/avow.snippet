@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Define a shared Style AvaloniaProperty</Title>
+            <Shortcut>avow</Shortcut>
+            <Description>Code snippet for a shared Style Avalonia Property</Description>
+            <Author>Nick Polyak</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>property</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Default>MyProperty</Default>
+                </Literal>
+                <Literal>
+                    <ID>type</ID>
+                    <ToolTip>Property Type</ToolTip>
+                    <Default>double</Default>
+                </Literal>
+                <Literal>
+                    <ID>PropContainer</ID>
+                    <ToolTip>class that contains original property</ToolTip>
+					<Default>AttachedProperties</Default>
+                </Literal>
+				<Literal>
+					<ID>ownerclass</ID>
+					<ToolTip>The owning class of this Property.  Typically the class that it is declared in.</ToolTip>
+					<Function>ClassName()</Function>
+					<Default>ownerclass</Default>
+				</Literal>
+            </Declarations>
+            <Code Language="csharp">
+                <![CDATA[
+#region $property$ shared Styled Avalonia Property
+public $type$ $property$
+{
+    get { return GetValue($property$Property); }
+    set { SetValue($property$Property, value); }
+}
+
+public static readonly StyledProperty<$type$> $property$Property =
+    $PropContainer$.$property$Property.AddOwner<$ownerclass$>();
+#endregion $property$ shared Styled Avalonia Property
+$end$]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

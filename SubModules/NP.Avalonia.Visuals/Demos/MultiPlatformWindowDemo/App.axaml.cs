@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using NP.Utilities;
 
 namespace NP.Demos.MultiPlatformWindowDemo
 {
@@ -21,6 +22,8 @@ namespace NP.Demos.MultiPlatformWindowDemo
                     Classes = new Classes("PlainCustomWindow")
                 };
             }
+
+            NP.NLogAdapter.NLog.SetLog();
 
             base.OnFrameworkInitializationCompleted();
         }

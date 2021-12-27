@@ -19,23 +19,10 @@
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>NP.Concepts.Behaviors.dll</IncludeAssets>
-    </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>NP.Utilities.dll</IncludeAssets>
-    </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj">
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <IncludeAssets>NP.Avalonia.Visuals.dll</IncludeAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj" />
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behaviors.csproj"/>
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj"/>
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj"/>
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj" />
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.ViewModelInterfaces\src\NP.ViewModelInterfaces.csproj" />
   </ItemGroup>
-  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
-    <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
-    </ItemGroup>
-  </Target>
 </Project>

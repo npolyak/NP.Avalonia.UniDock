@@ -1,0 +1,8 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="WindowBgColor">#FFFFFFFF</Color>
+	<Color x:Key="SectionBgColor">#D4D4D4</Color>
+	<Color x:Key="SectionBorderColor">#979797</Color>
+	<Color x:Key="PrimaryForegroundColor">#050505</Color>
+	<Color x:Key="SecondaryForegroundColor">#282828</Color>
+</ResourceDictionary>

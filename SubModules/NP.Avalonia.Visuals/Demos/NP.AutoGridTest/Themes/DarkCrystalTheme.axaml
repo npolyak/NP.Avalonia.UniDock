@@ -1,0 +1,6 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="PrimaryColor">#FF000000</Color>
+	<Color x:Key="MouseOverHighColor">#FFF3F3F3</Color>
+	<Color x:Key="MouseOverLowColor">#FF222222</Color>
+</ResourceDictionary>

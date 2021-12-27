@@ -91,9 +91,9 @@
                                 RelativeSource={RelativeSource Self}}"/>
     </Style>
 
-    <Style Selector="ToggleButton.AlternateIconToggleButton[IsChecked=True]">
-        <Setter Property="controls:AttachedProperties.IconData"
+	<Style Selector="ToggleButton.AlternateIconToggleButton[IsChecked=True]">
+		<Setter Property="controls:AttachedProperties.IconData"
                 Value="{Binding Path=(controls:AttachedProperties.AlternateIconData), 
                                 RelativeSource={RelativeSource Self}}"/>
-      </Style>
+	</Style>
 </Styles>

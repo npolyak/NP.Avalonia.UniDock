@@ -1,0 +1,129 @@
+<np:CustomWindow xmlns="https://github.com/avaloniaui"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				 xmlns:local="clr-namespace:NP.ThemingPrototype"
+				 xmlns:np="https://np.com/visuals"
+				 xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Collections"
+				 x:Class="NP.ThemingPrototype.MainWindow"
+				 Classes="PlainCustomWindow"
+				 Title="Theming Prototype"
+				 HeaderHeight="40"
+				 Focusable="False"
+				 HeaderBackground="Transparent"
+				 Background="{DynamicResource SectionBackgroundBrush}"
+				 ThePoint="22,33"
+				 x:Name="Root"
+				 Width="1000"
+				 Height="400">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid x:Name="RootPanel"
+		  Margin="3">
+		<Grid.Resources>
+			
+		</Grid.Resources>
+		<Grid RowDefinitions="*, Auto"
+			  Margin="10">
+			<np:AutoGrid>
+				<np:LabeledControl Text="Button:"
+								   Margin="0,5,15,5">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<Button x:Name="TestButton"
+									Content="Test"
+									Classes="Theme"/>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+
+				<np:LabeledControl Text="Disabled Button:"
+								   np:AutoGrid.Column="1"
+								   Margin="15,5">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<Button x:Name="TestButton"
+									Content="Test"
+									Classes="Theme"
+									IsEnabled="False"/>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+				<np:LabeledControl Text="Button with Icon:"
+								   Margin="15,5"
+								   np:AutoGrid.Column="2">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<Button x:Name="TestButton"
+									Classes="Theme_WithIconHorizontal"
+									np:AttachedProperties.Text="Hello"
+									np:AttachedProperties.IconData="{StaticResource LockOpen}"/>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+				<np:LabeledControl Text="Button with Icon Below:"
+								   Margin="15,5"
+								   np:AutoGrid.Column="3">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<Button x:Name="TestButton"
+									Classes="Theme_WithIconVertical"
+									np:AttachedProperties.Text="Hello"
+									np:AttachedProperties.IconData="{StaticResource LockClosed}">
+							</Button>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+				<np:LabeledControl Text="Button with Icon Below (Predefined Height): "
+								   TheTextWrapping="WrapWithOverflow"
+								   MaxTextWidth="150"
+								   Margin="15,5"
+								   np:AutoGrid.Column="4">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<Button x:Name="TestButton"
+									Classes="Theme_WithIconVertical"
+									np:AttachedProperties.Text="Hello"
+									np:AttachedProperties.TextVerticalAlignment="Top"
+									np:AttachedProperties.IconData="{StaticResource LockClosed}">
+								<np:AttachedProperties.RowsHeights>
+									<scg:Dictionary x:TypeArguments="x:Int32, GridLength">
+										<GridLength x:Key="0">30</GridLength>
+									</scg:Dictionary>
+								</np:AttachedProperties.RowsHeights>
+							</Button>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+				<np:LabeledControl Text="My ComboBox: "
+								   Margin="15,5"
+								   np:AutoGrid.Column="5">
+					<np:LabeledControl.ContainedControlTemplate>
+						<ControlTemplate>
+							<np:NpComboBox VerticalAlignment="Center"
+											  Classes="Theme"
+											  Width="100">
+								<ComboBoxItem Content="Hello 1"/>
+								<ComboBoxItem Content="Hello 2"/>
+								<ComboBoxItem Content="Hello 3"/>
+							</np:NpComboBox>
+						</ControlTemplate>
+					</np:LabeledControl.ContainedControlTemplate>
+				</np:LabeledControl>
+			</np:AutoGrid>
+			<StackPanel x:Name="ButtonPanel"
+						Grid.Row="1"
+						Orientation="Horizontal"
+						HorizontalAlignment="Right">
+				<Button x:Name="ChangeThemeButton"
+						Content="Change Theme"
+						Padding="10,5"
+						Classes="Theme"/>
+			</StackPanel>
+		</Grid>
+	</Grid>
+</np:CustomWindow>

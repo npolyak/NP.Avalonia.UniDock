@@ -1,0 +1,168 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:NP.LocalizationPrototype"
+        xmlns:np="https://np.com/visuals"
+        x:Class="NP.LocalizationPrototype.MainWindow"
+        Title="NP.LocalizationPrototype"
+        TransparencyLevelHint="Transparent"
+        SystemDecorations="None"
+         Background="Transparent"
+        Foreground="{DynamicResource ForegroundBrush}"
+        x:Name="Root"
+        Width="{DynamicResource WindowWidth}"
+        Height="{DynamicResource WindowHeight}">
+  <Window.Resources>
+    <np:HorizontalTransform x:Key="TheScale" 
+                            TheVisualFlow="{DynamicResource Flow}"/>
+  </Window.Resources>
+  <Window.DataTemplates>
+    <DataTemplate DataType="local:Data">
+      <TextBlock Margin="8"
+                 HorizontalAlignment="Stretch">
+        <TextBlock.TextAlignment>
+          <MultiBinding Converter="{x:Static np:VisualFlowToTextAlignmentConverter.Instance}">
+            <DynamicResourceExtension ResourceKey="Flow"/>
+          </MultiBinding>
+        </TextBlock.TextAlignment>
+        <TextBlock.Text>
+          <MultiBinding Converter="{x:Static np:StringFormatConverter.Instance}">
+            <np:DynamicResourceBinding Path="Uid"/>
+            <Binding Path="ID"/>
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+    </DataTemplate>
+  </Window.DataTemplates>
+
+  <Border Classes="BorderStyle"
+                       RenderTransform="{StaticResource TheScale}">
+    <Grid x:Name="_panel"
+          RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+      <Grid HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="8,8,0,8">
+          <ComboBox x:Name="LanguageChoosingCombo"
+                     RenderTransform="{StaticResource TheScale}"
+                    np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}"
+                    Items="{Binding Source={x:Static local:LanguageHelper.Languages}}"
+                    SelectedItem="{Binding Path=SelectedLanguage, 
+                                           Mode=TwoWay, 
+                                           RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
+                    Margin="0,0,8,0"
+                    Background="Transparent"/>
+          <ComboBox x:Name="ColorThemeChoosingCombo"
+                    RenderTransform="{StaticResource TheScale}"
+                    np:HandleEventBehavior.TheEvent="{x:Static InputElement.PointerPressedEvent}"
+                    Items="{Binding Source={x:Static local:ColorThemesHelper.ColorThemes}}"
+                    SelectedItem="{Binding Path=SelectedColorTheme, 
+                                           Mode=TwoWay, 
+                                           RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
+                    Margin="0,0,8,0"
+                    Background="Transparent"/>
+        </StackPanel>
+        <Image np:AttachedProperties.UriString="{DynamicResource Flag}"
+               Source="{Binding Path=(np:AttachedProperties.UriString), 
+                                Converter={x:Static np:BitmapConverter.Instance},
+                                RelativeSource={RelativeSource Self}}"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Height="24" />
+        
+        <TextBlock Text="{DynamicResource SimpleText}"
+                   FontSize="14"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource ForegroundBrush}"
+                   RenderTransform="{StaticResource TheScale}"/>
+      </Grid>
+
+      <Grid RowDefinitions="Auto, Auto"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch">
+          <TextBlock FontSize="16"
+                     HorizontalAlignment="Stretch"
+                     RenderTransform="{StaticResource TheScale}">
+            <TextBlock.TextAlignment>
+              <MultiBinding Converter="{x:Static np:VisualFlowToTextAlignmentConverter.Instance}">
+                <DynamicResourceExtension ResourceKey="Flow"/>
+              </MultiBinding>
+            </TextBlock.TextAlignment>
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static np:StringFormatConverter.Instance}">
+                <DynamicResourceExtension  ResourceKey="FormattedText"/>
+                <Binding Path="#Root.Width"/>
+                <Binding Path="#Root.Height"/>
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
+      </Grid>
+
+      <Grid Background="{DynamicResource ControlBackground}"
+             Width="{DynamicResource ControlWidth}"
+             Height="{DynamicResource ControlHeight}"
+            HorizontalAlignment="Left"
+            Grid.Row="2">
+        <TextBlock Text="{DynamicResource ControlText}"
+                   TextAlignment="Left"
+                   FontSize="18"
+                   RenderTransform="{StaticResource TheScale}">
+          <TextBlock.TextAlignment>
+            <MultiBinding Converter="{x:Static np:VisualFlowToTextAlignmentConverter.Instance}">
+              <DynamicResourceExtension ResourceKey="Flow"/>
+            </MultiBinding>
+          </TextBlock.TextAlignment>
+        </TextBlock>
+      </Grid>
+
+
+      <Grid Height="25"
+            Grid.Row="3"/>
+
+      <ContentControl x:Name="_elementI"
+                      FontSize="20"
+                      HorizontalAlignment="Left"
+                      Foreground="{DynamicResource FirstDataTemplateForeground}"
+                      RenderTransform="{StaticResource TheScale}"
+                      Grid.Row="5"/>
+      <ContentControl x:Name="_elementII"
+                      HorizontalAlignment="Stretch"
+                      Foreground="{DynamicResource SecondDataTemplateForeground}"
+                      RenderTransform="{StaticResource TheScale}"
+                      FontSize="20"
+                      Grid.Row="6"/>
+
+      <DockPanel LastChildFill="False"
+                 Grid.Row="7">
+
+
+        <!--<Button x:Name="ChangeUidButton"
+                Classes="LocalizationPrototypeButton"
+                DockPanel.Dock="Right"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Margin="8"
+                HorizontalAlignment="Center"
+                Content="Change Uid"/>-->
+
+        <Button x:Name="CloseButton"
+                Classes="LocalizationPrototypeButton"
+                DockPanel.Dock="Right"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Margin="8"
+                HorizontalAlignment="Center"
+                RenderTransform="{StaticResource TheScale}"
+                Content="{DynamicResource CloseWindowMessage}"/>
+
+        <Button x:Name="ErrorButton"
+                Classes="LocalizationPrototypeButton"
+                DockPanel.Dock="Right"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Margin="8"
+                HorizontalAlignment="Center"
+                RenderTransform="{StaticResource TheScale}"
+                Content="{DynamicResource ShowError}"/>
+
+      </DockPanel>
+    </Grid>
+  </Border>
+</Window>

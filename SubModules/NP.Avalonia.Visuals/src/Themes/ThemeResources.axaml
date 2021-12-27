@@ -1,0 +1,62 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				    xmlns:np="https://np.com/visuals">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="/Themes/DefaultColors.axaml"/>
+	</ResourceDictionary.MergedDictionaries>
+	<SolidColorBrush x:Key="MostProminentBrush"
+					 Color="{DynamicResource MostProminentColor}"/>
+	<SolidColorBrush x:Key="WindowBackgroundBrush"
+					 Color="{DynamicResource WindowBgColor}"/>
+	<SolidColorBrush x:Key="SectionBackgroundBrush"
+					 Color="{DynamicResource SectionBgColor}"/>
+	<SolidColorBrush x:Key="SectionBorderBrush"
+					 Color="{DynamicResource SectionBorderColor}"/>
+	<SolidColorBrush x:Key="PrimaryForegroundBrush"
+					 Color="{DynamicResource PrimaryForegroundColor}"/>
+	<SolidColorBrush x:Key="SecondaryForegroundBrush"
+					 Color="{DynamicResource SecondaryForegroundColor}"/>
+	<SolidColorBrush x:Key="MostProminentInvertedBrush"
+					 Color="{DynamicResource MostProminentInvertedColor}"/>
+	<LinearGradientBrush x:Key="ControlBackground"
+						 StartPoint="50%,0%"
+						 EndPoint="50%, 100%">
+		<GradientStop Offset="0"
+					  Color="{DynamicResource ControlBackgroundHighColor}"/>
+		<GradientStop Offset="1"
+					  Color="{DynamicResource ControlBackgroundLowColor}"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ControlBorderBrush"
+				 StartPoint="50%,0%"
+				 EndPoint="50%, 100%">
+		<GradientStop Offset="0"
+					  Color="{DynamicResource ControlBorderHighColor}"/>
+		<GradientStop Offset="1"
+					  Color="{DynamicResource ControlBorderLowColor}"/>
+	</LinearGradientBrush>
+
+	<SolidColorBrush x:Key="AccentBrush"
+					 Color="{DynamicResource AccentColor}"/>
+
+	<SolidColorBrush x:Key="BorderAccentBrush"
+					 Color="{DynamicResource BorderAccentColor}"/>
+
+	<np:BoolToDoubleConverter x:Key="PointerOverOpacityConverter"
+							  TrueValue="0.1"
+							  FalseValue="0"/>
+	<np:BoolToDoubleConverter x:Key="IsPressedOpacityConverter"
+					  TrueValue="0.05"
+					  FalseValue="0"/>
+
+	<np:BoolToDoubleConverter x:Key="IsEnabledOpacityConverter"
+							  TrueValue="1"
+							  FalseValue="0.4"/>
+
+	<np:BoolToBrushConverter x:Key="FocusedBorderBrushConverter"
+							 FalseValue="{x:Null}"
+							 TrueValue="{StaticResource BorderAccentBrush}"/>
+
+	<np:LastNonDefaultDoubleConverter x:Key="TheOpacityConverter"/>
+	<np:LastNonDefaultBrushConverter x:Key="BorderBrushConverter"/>
+
+</ResourceDictionary>

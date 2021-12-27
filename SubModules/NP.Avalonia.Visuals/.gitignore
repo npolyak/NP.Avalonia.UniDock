@@ -8,3 +8,17 @@
 /src/bin/Debug/net5.0
 /src/obj
 /Demos/MultiPlatformWindowDemo/.vs/MultiPlatformWindowDemo/DesignTimeBuild
+/src/NP.Avalonia.Visuals.1.0.2.nupkg
+/src/NP.Avalonia.Visuals.1.0.3.nupkg
+/src/bin/Release/net5.0
+/src/NP.Avalonia.Visuals.1.0.4.nupkg
+/Demos/MultiPlatformWindowDemo/.vs/MultiPlatformWindowDemo/v17
+/Demos/MultiPlatformWindowDemo/bin/Debug
+/Demos/NP.Demos.CustomWindowSample/.vs
+/Demos/NP.Demos.CustomWindowSample/bin/Debug/net5.0
+/Demos/NP.Demos.CustomWindowSample/obj/Debug/net5.0
+/Demos/NP.Demos.CustomWindowSample/obj
+/Demos/NP.Demos.CustomWindowCustomizationSample/.vs
+/Demos/NP.Demos.CustomWindowCustomizationSample/bin/Debug
+/Demos/NP.Demos.CustomWindowCustomizationSample/obj
+/src/*.nupkg

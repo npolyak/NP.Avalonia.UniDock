@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:np="https://np.com/visuals">
+  <np:VisualFlow x:Key="Flow">Normal</np:VisualFlow>
+  <x:Double x:Key="WindowWidth">750</x:Double>
+  <x:Double x:Key="WindowHeight">340</x:Double>
+  <x:String x:Key="WindowTitle">Demo Window</x:String>
+  <x:String x:Key="SimpleText">This is a simple text</x:String>
+  <x:String x:Key="FormattedText">This is a formatted text. For example, the width of this window is {0}, and its height is {1} </x:String>
+  <x:Double x:Key="ControlWidth">650</x:Double>
+  <x:Double x:Key="ControlHeight">50</x:Double>
+  <SolidColorBrush x:Key="ControlBackground" Color="DarkGray"/>
+  <x:String x:Key="ControlText">This control takes width, height, color and flow direction from the dictionary</x:String>
+  <SolidColorBrush x:Key="FirstDataTemplateForeground" Color="{DynamicResource SilverColor}"/>
+  <x:String x:Key="FirstDataTemplateText">Text and color within a Data Template for instance {0}</x:String>
+  <SolidColorBrush x:Key="SecondDataTemplateForeground" Color="{DynamicResource GoldColor}"/>
+  <x:String x:Key="SecondDataTemplateText">Different text and different color within a Data Template for instance {0}</x:String>
+  <x:String x:Key="Flag">avares://NP.LocalizationPrototype/Images/USA.png</x:String>
+  <x:String x:Key="CloseWindowMessage">Exit</x:String>
+  <x:String x:Key="ShowError">Show Error</x:String>
+  <x:String x:Key="NotEnoughMemory">There is not enough memory</x:String>
+</ResourceDictionary>

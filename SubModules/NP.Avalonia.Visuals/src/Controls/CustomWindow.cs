@@ -26,7 +26,7 @@ using NP.Utilities;
 using System;
 using System.ComponentModel;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 
 namespace NP.Avalonia.Visuals.Controls
 {
@@ -54,6 +54,9 @@ namespace NP.Avalonia.Visuals.Controls
 
         IDisposable _windowCustomFeatureDisposer;
 
+
+        private ResizeBehavior _resizeBehavior;
+
         public CustomWindow()
         {
 #if DEBUG
@@ -66,6 +69,8 @@ namespace NP.Avalonia.Visuals.Controls
 
             _windowCustomFeatureDisposer =
                 HasCustomWindowFeaturesProperty.Changed.Subscribe(OnHasCustomFeaturesChanged);
+
+            _resizeBehavior = new ResizeBehavior(this);
         }
 
         
@@ -187,7 +192,15 @@ namespace NP.Avalonia.Visuals.Controls
                 this.Cursor = new Cursor(cursorType);
 
                 SetIsHitVisibleOnResizeControls(false);
-                PlatformImpl?.BeginResizeDrag(edge, e);
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    _resizeBehavior.StartDrag(edge, e);
+                }
+                else
+                {
+                    PlatformImpl?.BeginResizeDrag(edge, e);
+                }
                 SetIsHitVisibleOnResizeControls(true);
 
                 this.Cursor = oldWindowCursor;
@@ -342,6 +355,11 @@ namespace NP.Avalonia.Visuals.Controls
                     this.Position = StartWindowPosition + PointerShift;
                 }
             }
+        }
+
+        internal void Resize(Size size)
+        {
+            PlatformImpl?.Resize(size);
         }
 
         #region DragOnBeginMove Styled Avalonia Property

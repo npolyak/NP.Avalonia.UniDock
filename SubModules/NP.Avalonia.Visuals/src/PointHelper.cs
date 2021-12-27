@@ -23,9 +23,14 @@ namespace NP.Avalonia.Visuals
             return new Point(pt.X, pt.Y);
         }
 
-        public static PixelPoint ToPixelPoint(this Point2D point)
+        public static PixelPoint ToPixelPoint(this Point2D point, double scale = 1)
         {
-            return new PixelPoint((int) point.X, (int) point.Y);
+            return new PixelPoint((int) (point.X * scale), (int) (point.Y * scale));
+        }
+
+        public static PixelPoint ToPixelPoint(this Point point, double scale = 1)
+        {
+            return point.ToPoint2D().ToPixelPoint(scale);
         }
 
         public static Point2D ToPoint2D(this Size size)

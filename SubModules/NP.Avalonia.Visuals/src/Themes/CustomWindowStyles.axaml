@@ -113,21 +113,25 @@
                     Orientation="Horizontal">
           <Button x:Name="MinimizeButton"
                   Classes="WindowIconButton IconButton"
+				  Focusable="False"
                   controls:AttachedProperties.IconData="{StaticResource MinimizeIcon}"
                   controls:AttachedProperties.IconHeight="2.1"
                   controls:AttachedProperties.IconStretch="Fill"
                   behaviors:CallAction.MethodName="Minimize"/>
           <Button x:Name="RestoreButton"
                   Classes="WindowIconButton IconButton"
+                  Focusable="False"
                   IsVisible="{Binding Path=CanRestore}"
                   controls:AttachedProperties.IconData="{StaticResource RestoreIcon}"
                   behaviors:CallAction.MethodName="Restore"/>
           <Button x:Name="MaximizeButton"
                   Classes="WindowIconButton IconButton"
+                  Focusable="False"
                   IsVisible="{Binding Path=CanMaximize}"
                   controls:AttachedProperties.IconData="{StaticResource MaximizeIcon}"
                   behaviors:CallAction.MethodName="Maximize"/>
           <Button x:Name="CloseButton"
+                  Focusable="False"
                   Classes="WindowIconButton IconButton"
                   IsVisible="{Binding Path=CanClose}"
                   controls:AttachedProperties.IconData="{StaticResource CloseIcon}"
@@ -155,6 +159,8 @@
         Value="5"/>
     <Setter Property="BorderThickness"
             Value="1"/>
+	<Setter Property="Focusable"
+			Value="False"/>
     <Setter Property="SystemDecorations"
             Value="None"/>
     <Setter Property="MinWidth"
@@ -193,23 +199,27 @@
               </Grid.ColumnDefinitions>
 
               <controls:AvaloniaContentPresenter x:Name="PART_HeaderTitleAreaContentPresenter"
-                                                RealContent="{Binding Path=TitleAreaContent,
-                                                                      RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                                                ContentTemplate="{Binding Path=TitleAreaContentTemplate, 
-                                                                          RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Stretch"/>
+                                                 RealContent="{Binding Path=TitleAreaContent,
+                                                                       RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                                 ContentTemplate="{Binding Path=TitleAreaContentTemplate, 
+                                                                           RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Stretch"
+												 Focusable="False"/>
               
               <ContentPresenter HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Grid.Column="1"
-                  Content="{Binding Path=HeaderContent, 
-                                    RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
-                                    TargetNullValue='', 
-                                    FallbackValue=''}"
-                  ContentTemplate="{Binding Path=HeaderContentTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
+                                VerticalAlignment="Stretch"
+                                Grid.Column="1"
+				                Focusable="False"
+                                Content="{Binding Path=HeaderContent, 
+                                                RelativeSource={RelativeSource AncestorType=controls:CustomWindow}, 
+                                                TargetNullValue='', 
+                                                FallbackValue=''}"
+                                ContentTemplate="{Binding Path=HeaderContentTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
 
-              <TemplatedControl Grid.Column="2"
+              <TemplatedControl x:Name="TheButtonsAreaTemplate" 
+								Grid.Column="2"
+								Focusable="False"
                                 HorizontalAlignment="Right"
                                 behaviors:HandleEventBehavior.TheEvent="{x:Static InputElement.DoubleTappedEvent}"
                                 Template="{Binding Path=ButtonsAreaTemplate, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"
@@ -235,6 +245,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
               <TemplatedControl x:Name="PART_HeaderControl"
+								Focusable="False"
                                 Template="{Binding Path=HeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                                 IsVisible="{Binding Path=IsCustomHeaderVisible, RelativeSource={RelativeSource AncestorType=controls:CustomWindow}}"/>
               <Panel x:Name="HeaderSeparator"
@@ -246,6 +257,7 @@
 
               <Grid Grid.Row="2">
                 <Border x:Name="BackgroundBorder"
+						Focusable="False"
                         Background="{TemplateBinding Background}"
                         IsHitTestVisible="False"
                         BorderThickness="{Binding Path=BorderThickness, 
@@ -261,7 +273,8 @@
                                     Content="{TemplateBinding Content}"
                                     Margin="{TemplateBinding Padding}"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+									Focusable="False"/>
                 </Grid>
               </Grid>
 
@@ -270,7 +283,8 @@
                       Background="{x:Null}"
                       IsHitTestVisible="False"
                       BorderThickness="{TemplateBinding BorderThickness}"
-                      BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+                      BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+					  Focusable="False"/>
               
               <Grid x:Name="ResizeGrid"
                     Grid.RowSpan="3" Margin="{Binding Path=BorderThickness,
@@ -310,27 +324,24 @@
     </Setter>
   </Style>
 
-  <Style Selector=":is(controls|CustomWindow).PlainCustomWindow">
-    <Setter Property="Title"
-            Value="My Test Window"/>
-    <Setter Property="HeaderBackground"
-            Value="Transparent"/>
-    <Setter Property="HeaderHeight"
-            Value="30"/>
-    <Setter Property="HeaderSeparatorHeight"
-            Value="2"/>
-    <Setter Property="HeaderSeparatorBrush"
-            Value="Black"/>
-    <Setter Property="CustomHeaderIcon"
-            Value="/Assets/avalonia-32.png"/>
-    <Setter Property="CustomHeaderIconMargin"
-            Value="5,5,0,5"/>
-    <Setter Property="TitleMargin"
-            Value="5"/>
-    <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
-    <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-    <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
-    <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
-  </Style>
+	<Style Selector=":is(controls|CustomWindow).PlainCustomWindow">
+		<Setter Property="Title"
+				Value="My Test Window"/>
+		<Setter Property="HeaderBackground"
+				Value="Transparent"/>
+		<Setter Property="HeaderHeight"
+				Value="30"/>
+		<Setter Property="HeaderSeparatorHeight"
+				Value="2"/>
+		<Setter Property="HeaderSeparatorBrush"
+				Value="Black"/>
+		<Setter Property="CustomHeaderIcon"
+				Value="/Assets/avalonia-32.png"/>
+		<Setter Property="CustomHeaderIconMargin"
+				Value="5,5,0,5"/>
+		<Setter Property="TitleMargin"
+				Value="5"/>
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
 </Styles>

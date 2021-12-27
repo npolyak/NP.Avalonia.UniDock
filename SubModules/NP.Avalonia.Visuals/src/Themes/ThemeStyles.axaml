@@ -1,0 +1,319 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:np="https://np.com/visuals">
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Themes/ThemeResources.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Styles.Resources>
+	<Style Selector="TextBlock">
+		<Setter Property="IsHitTestVisible"
+				Value="False"/>
+		<Setter Property="Foreground"
+				Value="{StaticResource PrimaryForegroundBrush}"/>
+	</Style>
+	<Style Selector="TextBox">
+		<Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+				Value="Hidden"/>
+		<Setter Property="Foreground"
+				Value="{StaticResource PrimaryForegroundBrush}"/>
+	</Style>
+	<Style Selector="Path.IconInsideControl">
+		<Setter Property="Data"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconData)}"/>
+		<Setter Property="Fill"
+				Value="{Binding $parent[TemplatedControl;1].Foreground}"/>
+		<Setter Property="Margin"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconMargin)}"/>
+		<Setter Property="Stretch"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconStretch)}"/>
+		<Setter Property="Width"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconWidth)}"/>
+		<Setter Property="Height"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconHeight)}"/>
+		<Setter Property="HorizontalAlignment"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconHorizontalAlignment)}"/>
+		<Setter Property="VerticalAlignment"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconVerticalAlignment)}"/>
+		<Setter Property="np:AutoGrid.Row"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconRow)}"/>
+		<Setter Property="np:AutoGrid.Column"
+				Value="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.IconColumn)}"/>
+	</Style>
+	<Styles.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
+				<ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/ThemeResources.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<ControlTemplate x:Key="TextAndIconDataTemplate">
+				<np:AutoGrid RowsHeights="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.RowsHeights)}"
+							 ColumnsWidths="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.ColumnsWidths)}">
+					<TextBlock Text="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.Text)}"
+							   TextWrapping="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.TheTextWrapping)}"
+							   TextAlignment="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.TheTextAlignment)}"
+							   TextTrimming="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.TheTextTrimming)}"
+							   HorizontalAlignment="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.TextHorizontalAlignment)}"
+							   VerticalAlignment="{Binding $parent[TemplatedControl;1].(np:AttachedProperties.TextVerticalAlignment)}"/>
+					<Path Classes="IconInsideControl"/>
+				</np:AutoGrid>
+			</ControlTemplate>
+		</ResourceDictionary>
+	</Styles.Resources>
+	<Style Selector="PopupRoot">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="TransparencyLevelHint" Value="Transparent" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Border Name="PART_TransparencyFallback"
+							IsHitTestVisible="False" />
+					<VisualLayerManager IsPopup="True">
+						<ContentPresenter Name="PART_ContentPresenter"
+										  Background="{TemplateBinding Background}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Content="{TemplateBinding Content}"
+										  Padding="{TemplateBinding Padding}"/>
+					</VisualLayerManager>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector=":is(TemplatedControl).Theme">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="TemplatedControl">
+					<Grid>
+						<Border x:Name="BackgroundBorder"
+								Background="{TemplateBinding Background}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="{TemplateBinding CornerRadius}"
+								Focusable="False">
+							<Border.BorderBrush>
+								<MultiBinding Converter="{StaticResource BorderBrushConverter}">
+									<Binding Path="BorderBrush"
+											 RelativeSource="{RelativeSource TemplatedParent}"/>
+									<Binding Path="IsFocused"
+											 Converter="{StaticResource FocusedBorderBrushConverter}"
+											 RelativeSource="{RelativeSource TemplatedParent}"/>
+								</MultiBinding>
+							</Border.BorderBrush>
+						</Border>
+
+						<TemplatedControl x:Name="PlaceHolder" 
+										  Template="{TemplateBinding (np:AttachedProperties.MainPartTemplate)}"
+										  Margin="{TemplateBinding Padding}"
+										  Focusable="False"/>
+						
+						<Border x:Name="OpacityBorder"
+								Background="{StaticResource MostProminentInvertedBrush}"
+								Focusable="False"
+								HorizontalAlignment="Stretch"
+								VerticalAlignment="Stretch"
+								CornerRadius="{TemplateBinding CornerRadius}">
+							<Border.Opacity>
+								<MultiBinding Converter="{StaticResource TheOpacityConverter}">
+									<Binding Path="IsPointerOver"
+											 Converter="{StaticResource PointerOverOpacityConverter}"
+											 RelativeSource="{RelativeSource TemplatedParent}"/>
+									<Binding Path="IsPressed"
+											 FallbackValue="0.05"
+											 Converter="{StaticResource IsPressedOpacityConverter}"
+											 RelativeSource="{RelativeSource TemplatedParent}"/>
+								</MultiBinding>
+							</Border.Opacity>
+						</Border>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Background"
+				Value="{StaticResource ControlBackground}"/>
+		<Setter Property="BorderBrush"
+				Value="{StaticResource ControlBorderBrush}"/>
+		<Setter Property="Foreground"
+				Value="{StaticResource PrimaryForegroundBrush}"/>
+		<Setter Property="CornerRadius"
+				Value="4"/>
+		<Setter Property="BorderThickness"
+				Value="2"/>
+		<Setter Property="Opacity"
+				Value="{Binding Path=IsEnabled,
+								Converter={StaticResource IsEnabledOpacityConverter},
+								RelativeSource={RelativeSource Self}}" />
+		<Setter Property="Padding"
+				Value="10,5" />
+	</Style>
+
+	<Style Selector=":is(ContentControl).Theme">
+		<Setter Property="HorizontalContentAlignment"
+				Value="Center"/>
+		<Setter Property="VerticalContentAlignment"
+				Value="Center"/>
+		<Setter Property="np:AttachedProperties.MainPartTemplate">
+			<ControlTemplate>
+				<ContentPresenter Content="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+								  ContentTemplate="{Binding Path=ContentTemplate, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+								  IsHitTestVisible="False"
+								  Focusable="False"
+								  HorizontalAlignment="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+								  VerticalAlignment="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector=":is(TemplatedControl).Theme_WithIcon">
+		<Setter Property="np:AttachedProperties.MainPartTemplate"
+				Value="{StaticResource TextAndIconDataTemplate}"/>
+		<Setter Property="np:AttachedProperties.IconStretch"
+				Value="Uniform"/>
+		<Setter Property="np:AttachedProperties.IconHeight">
+			<Setter.Value>
+				<MultiBinding Converter="{x:Static np:SumConverter.Instance}">
+					<Binding Path="FontSize"
+							 RelativeSource="{RelativeSource Self}"/>
+					<np:ValueBinding x:TypeArguments="x:Double"
+									 Value="-1"/>
+				</MultiBinding>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style Selector=":is(TemplatedControl).Theme_WithIconHorizontal">
+		<Setter Property="np:ClassesBehavior.InsertClasses"
+				Value="Theme Theme_WithIcon"/>
+		<Setter Property="np:AttachedProperties.IconMargin"
+				Value="5,0,0,0"/>
+		<Setter Property="np:AttachedProperties.IconColumn"
+				Value="1"/>
+	</Style>
+
+	<Style Selector=":is(TemplatedControl).Theme_WithIconVertical">
+		<Setter Property="np:ClassesBehavior.InsertClasses"
+				Value="Theme Theme_WithIcon"/>
+		<Setter Property="np:AttachedProperties.IconMargin"
+				Value="0,3,0,2"/>
+		<Setter Property="np:AttachedProperties.IconRow"
+				Value="1"/>
+	</Style>
+
+	<Style Selector=":is(np|LabeledControl)">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="np:LabeledControl">
+					<np:AutoGrid>
+						<TextBlock Text="{TemplateBinding Text}"
+								   Width="{TemplateBinding TextWidth}"
+								   MaxWidth="{TemplateBinding MaxTextWidth}"
+								   TextWrapping="{TemplateBinding TheTextWrapping}"
+								   HorizontalAlignment="{TemplateBinding HorizontalTextAlignment}"
+								   VerticalAlignment="{TemplateBinding VerticalTextAlignment}"
+								   np:ClassesBehavior.TheClasses="{TemplateBinding TextClasses}"/>
+						<TemplatedControl Template="{TemplateBinding ContainedControlTemplate}"
+										  Margin="{TemplateBinding Padding}"
+										  HorizontalAlignment="{TemplateBinding HorizontalContainedControlAlignment}"
+										  VerticalAlignment="{TemplateBinding VerticalContainedControlAlignment}"
+										  np:AutoGrid.Row="{TemplateBinding ControlRow}"
+										  np:AutoGrid.Column="{TemplateBinding ControlColumn}"/>
+					</np:AutoGrid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Foreground"
+				Value="{StaticResource SecondaryForegroundBrush}"/>
+		<Setter Property="HorizontalContainedControlAlignment"
+				Value="Left"/>
+		<Setter Property="Padding"
+				Value="10,3,0,0"/>
+		<Setter Property="ControlRow"
+				Value="1"/>
+	</Style>
+
+	<StyleInclude Source="resm:Avalonia.Themes.Default.PopupRoot.xaml?assembly=Avalonia.Themes.Default"/>
+	<StyleInclude Source="resm:Avalonia.Themes.Default.ScrollViewer.xaml?assembly=Avalonia.Themes.Default"/>
+
+	<Style Selector="ComboBoxItem">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Padding" Value="2"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<ContentPresenter Name="PART_ContentPresenter"
+								  Background="{TemplateBinding Background}"
+								  BorderBrush="{TemplateBinding BorderBrush}"
+								  BorderThickness="{TemplateBinding BorderThickness}"
+								  CornerRadius="{TemplateBinding CornerRadius}"
+								  ContentTemplate="{TemplateBinding ContentTemplate}"
+								  Content="{TemplateBinding Content}"
+								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+								  Padding="{TemplateBinding Padding}"/>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector="ComboBoxItem:pointerover">
+		<Setter Property="Background"
+				Value="{DynamicResource WindowBackgroundBrush}"/>
+	</Style>
+
+	<Style Selector="ComboBoxItem:selected">
+		<Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+	</Style>
+
+	<Style Selector="np|NpComboBox.Theme">
+		<Setter Property="MaxDropDownHeight"
+				Value="200"/>
+		<Setter Property="HorizontalContentAlignment"
+				Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment"
+				Value="Stretch"/>
+		<Setter Property="np:AttachedProperties.IconWidth"
+				Value="12"/>
+		<Setter Property="np:AttachedProperties.IconMargin"
+				Value="5,5,0,2"/>
+		<Setter Property="Height"
+				Value="26.4"/>
+		<Setter Property="np:AttachedProperties.IconData"
+				Value="{StaticResource EmptyArrowDownIcon}"/>
+		<Setter Property="np:AttachedProperties.MainPartTemplate">
+			<Setter.Value>
+				<ControlTemplate>
+					<Grid ColumnDefinitions="*, Auto">
+						<ContentPresenter Content="{Binding $parent[ComboBox].SelectionBoxItem}"
+										  ContentTemplate="{Binding $parent[ComboBox].ItemTemplate}"
+										  Focusable="False"/>
+						<Path Classes="IconInsideControl"
+							  Grid.Column="1"/>
+						<Popup Name="PART_Popup"
+							   IsOpen="{Binding $parent[ComboBox].IsDropDownOpen, Mode=TwoWay}"
+							   MinWidth="{Binding $parent[ComboBox].Bounds.Width}"
+							   MaxHeight="{Binding $parent[ComboBox].MaxDropDownHeight}"
+							   PlacementTarget="{Binding $parent[ComboBox]}"
+							   PlacementMode="Bottom"
+							   IsLightDismissEnabled="True">
+							<Border Background="{DynamicResource SectionBackgroundBrush}"
+									BorderBrush="{DynamicResource SectionBorderBrush}"
+									BorderThickness="1">
+								<ScrollViewer HorizontalScrollBarVisibility="{Binding $parent[ComboBox].HorizontalScrollBarVisibility}"
+											  VerticalScrollBarVisibility="{Binding $parent[ComboBox].VerticalScrollBarVisibility}">
+									<np:NpItemsPresenter x:Name="ComboItemsPresenter"
+														Items="{Binding $parent[ComboBox].Items, Mode=OneWay}"
+														ItemsPanel="{Binding $parent[ComboBox].ItemsPanel}"
+														ItemTemplate="{Binding $parent[ComboBox].ItemTemplate, Mode=OneWay}"
+														VirtualizationMode="{Binding $parent[ComboBox].VirtualizationMode}">
+
+
+									</np:NpItemsPresenter>
+								</ScrollViewer>
+							</Border>
+						</Popup>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</Styles>
