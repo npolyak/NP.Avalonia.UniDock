@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:NP.OverlayingWindowDemo"
+        xmlns:np="https://np.com/visuals"
+        x:Class="NP.OverlayingWindowDemo.MainWindow"
+        Title="NP.OverlayingWindowDemo"
+        x:Name="Root"
+		Width="500"
+		Height="400">
+	<Grid RowDefinitions="*, Auto"
+		  Margin="10">
+		<Grid x:Name="GridWithOverlay"
+			  np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}">
+			<np:OverlayWindowBehavior.ContentTemplate>
+				<DataTemplate>
+					<Grid Width="100"
+						  Height="100"
+						  Background="Red"/>
+				</DataTemplate>
+			</np:OverlayWindowBehavior.ContentTemplate>
+		</Grid>
+		<ToggleButton IsChecked="{Binding Path=#GridWithOverlay.(np:OverlayWindowBehavior.IsOpen)}"
+					  Grid.Row="1"
+					  HorizontalAlignment="Right"
+					  VerticalAlignment="Center"/>
+	</Grid>
+</Window>
+
