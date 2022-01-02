@@ -220,9 +220,7 @@ namespace NP.Avalonia.UniDock
         }
 
         public DropPanelWithCompass? DropPanel =>
-            this?.TheVisual
-                ?.GetVisualDescendants()
-                ?.OfType<DropPanelWithCompass>().FirstOrDefault();
+            this?.TheVisual?.GetDropPanel();
 
         public DockKind? CurrentGroupDock =>
             DropPanel?.DockSide;

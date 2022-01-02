@@ -501,5 +501,24 @@ namespace NP.Avalonia.UniDock
         {
 
         }
+
+        public static DropPanelWithCompass? GetDropPanel(this IControl control)
+        {
+            Panel? overlayWindowHolderPanel =
+                control.GetVisualDescendants().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_OverlayWindowHolder");
+
+            if (overlayWindowHolderPanel == null)
+                return null;
+
+            DropPanelWithCompass? dropPanel =
+                 OverlayWindowBehavior.GetOverlayWindow(overlayWindowHolderPanel)?.GetVisualDescendants()?.OfType<DropPanelWithCompass>()?.FirstOrDefault();
+
+            return dropPanel;
+        }
+
+        public static DockKind? GetCurrentGroupDock(this IControl control)
+        {
+            return control.GetDropPanel()?.DockSide;
+        }
     }
 }

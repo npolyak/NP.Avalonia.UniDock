@@ -85,7 +85,7 @@ namespace NP.Avalonia.Visuals.Behaviors
 
 
         #region OverlayWindow Attached Avalonia Property
-        private static Window GetOverlayWindow(IControl obj)
+        public static Window GetOverlayWindow(IControl obj)
         {
             return obj.GetValue(OverlayWindowProperty);
         }
@@ -172,7 +172,7 @@ namespace NP.Avalonia.Visuals.Behaviors
                     SetOverlayWindow(control, overlayWindow);
                 }
 
-                IControl overlayedControl = GetOverlayedControl(control);
+                IControl overlayedControl = GetOverlayedControl(control) ?? control;
 
                 Rect2D screenBounds = overlayedControl.GetScreenBounds();
 

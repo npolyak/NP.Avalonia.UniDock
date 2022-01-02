@@ -20,6 +20,7 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 using NP.Avalonia.UniDockService;
+using NP.Avalonia.Visuals.Behaviors;
 using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
@@ -218,11 +219,7 @@ namespace NP.Avalonia.UniDock
 
         public IList<IDockGroup>? DockChildren => Items;
 
-        public DropPanelWithCompass? DropPanel =>
-            this.GetVisualDescendants().OfType<DropPanelWithCompass>().FirstOrDefault();
-
-        public DockKind? CurrentGroupDock =>
-            DropPanel?.DockSide;
+        public DockKind? CurrentGroupDock => this.GetCurrentGroupDock();
 
         private readonly SingleSelectionBehavior<DockItem> _singleSelectionBehavior =
             new SingleSelectionBehavior<DockItem>();

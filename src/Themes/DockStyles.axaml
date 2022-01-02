@@ -611,21 +611,27 @@
                        ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                  <local:DropPanelWithCompass
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        AllowCenterDocking="{TemplateBinding AllowCenterDocking}"
-                        IsVisible="{Binding Path=ShowCompass, 
-                                            RelativeSource= {RelativeSource TemplatedParent}}">
-                    <local:DropPanelWithCompass.AllowCenterDocking>
-                      <MultiBinding Converter="{x:Static np:BoolConverters.And}">
-                        <Binding Path="AllowCenterDocking"
-                                 RelativeSource="{RelativeSource TemplatedParent}"/>
-                        <Binding Path="AllowTabDocking"
-                                 RelativeSource="{RelativeSource TemplatedParent}"/>
-                      </MultiBinding>
-                    </local:DropPanelWithCompass.AllowCenterDocking>
-                  </local:DropPanelWithCompass>
+					<Grid x:Name="PART_OverlayWindowHolder" 
+						  Grid.Row="1"
+                          Grid.Column="1"
+						  np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}"
+						  np:OverlayWindowBehavior.IsOpen="{Binding Path=ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"
+						  np:OverlayWindowBehavior.Content="{Binding RelativeSource={RelativeSource TemplatedParent},
+						                                             Converter={x:Static np:ToControlContainerConverter.Instance}}">
+						<np:OverlayWindowBehavior.ContentTemplate>
+							<DataTemplate>
+								<local:DropPanelWithCompass
+	                                      AllowCenterDocking="{Binding Path=Control.AllowCenterDocking}">
+									<local:DropPanelWithCompass.AllowCenterDocking>
+										<MultiBinding Converter="{x:Static np:BoolConverters.And}">
+											<Binding Path="Control.AllowCenterDocking"/>
+											<Binding Path="Control.AllowTabDocking"/>
+										</MultiBinding>
+									</local:DropPanelWithCompass.AllowCenterDocking>
+								</local:DropPanelWithCompass>
+							</DataTemplate>
+						</np:OverlayWindowBehavior.ContentTemplate>
+					</Grid>
                 </Grid>
               </DockPanel>
             </Grid>
@@ -735,7 +741,19 @@
                          Grid.Row="1"
                          Fill="Black"/>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid x:Name="PART_OverlayWindowHolder" 
+				  Grid.Row="1"
+				  np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}"
+				  np:OverlayWindowBehavior.IsOpen="{Binding Path=ShowCompass}"
+				  np:OverlayWindowBehavior.Content="{Binding Path=DataContext, 
+				                                             RelativeSource={RelativeSource TemplatedParent},
+															 Converter={x:Static np:ToControlContainerConverter.Instance}}">
+				<np:OverlayWindowBehavior.ContentTemplate>
+					<DataTemplate>
+						<local:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
+													AllowCenterDocking="{Binding Path=Control.AllowCenterDocking}"/>
+					</DataTemplate>
+				</np:OverlayWindowBehavior.ContentTemplate>
               <np:DockContentPresenter x:Name="Body"
                                        DockDataContext="{Binding Path=DataContext.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
                                        Content="{Binding Path=DataContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
@@ -743,9 +761,6 @@
                                        HorizontalAlignment="Stretch"
                                        VerticalContentAlignment="Stretch"
                                        Margin="{Binding Path=DataContext.Padding, RelativeSource={RelativeSource TemplatedParent}}"/>
-              <local:DropPanelWithCompass x:Name="PART_DropPanelWithCompass"
-                                          IsVisible="{Binding ShowCompass}"
-                                          AllowCenterDocking="{Binding Path=AllowCenterDocking}"/>
             </Grid>
           </Grid>
         </ControlTemplate>
