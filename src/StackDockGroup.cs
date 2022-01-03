@@ -26,6 +26,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Controls.Primitives;
 using NP.Avalonia.Visuals.Behaviors;
+using Avalonia.VisualTree;
 
 namespace NP.Avalonia.UniDock
 {
@@ -44,8 +45,27 @@ namespace NP.Avalonia.UniDock
 
         public bool AutoInvisible { get; set; } = true;
 
-        public DropPanelWithCompass? DropPanel =>
-            this.GetDropPanel();
+        public DropPanelWithCompass? DropPanel
+        {
+            get
+            {
+                Panel? root = this.GetVisualDescendants().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_RootPanel");
+
+                if (root == null)
+                    return null;
+
+                Panel? overlayWindowHolderPanel =
+                    root.Children.Reverse().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_OverlayWindowHolder");
+
+                if (overlayWindowHolderPanel == null)
+                    return null;
+
+                DropPanelWithCompass? dropPanel =
+                     OverlayWindowBehavior.GetOverlayWindow(overlayWindowHolderPanel)?.GetVisualDescendants()?.OfType<DropPanelWithCompass>()?.FirstOrDefault();
+
+                return dropPanel;
+            }
+        }
 
         public DockKind? CurrentGroupDock => DropPanel?.DockSide;
 

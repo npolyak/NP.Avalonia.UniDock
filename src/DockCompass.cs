@@ -200,7 +200,7 @@ namespace NP.Avalonia.UniDock
                     (
                         c => PointHelper.GetScreenBounds(c).ContainsPoint(pointerScreenLocation));
 
-            if (currentSideControl == null)
+            if (currentSideControl == null || (!currentSideControl.IsVisible))
             {
                 this.ClearValue(DockAttachedProperties.DockSideProperty);
                 return;

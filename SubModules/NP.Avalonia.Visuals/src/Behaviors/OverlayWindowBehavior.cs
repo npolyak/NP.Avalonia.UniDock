@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml.Templates;
 using NP.Avalonia.Visuals;
 using NP.Utilities;
 using System;
+using System.Threading.Tasks;
 
 namespace NP.Avalonia.Visuals.Behaviors
 {
@@ -147,7 +148,7 @@ namespace NP.Avalonia.Visuals.Behaviors
             IsOpenProperty.Changed.Subscribe(OnIsOpenChanged);
         }
 
-        private static void OnIsOpenChanged(AvaloniaPropertyChangedEventArgs<bool> args)
+        private static async void OnIsOpenChanged(AvaloniaPropertyChangedEventArgs<bool> args)
         {
             IControl control = (IControl) args.Sender;
 

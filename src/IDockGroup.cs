@@ -482,16 +482,6 @@ namespace NP.Avalonia.UniDock
             DockStaticEvents.FirePossibleDockChangeHappenedInsideEvent(topDockGroup);
         }
 
-        internal static DropPanelWithCompass? GetDropPanel(this IDockGroup dockGroup)
-        {
-            return dockGroup
-                    .GetVisualDescendants()
-                    .OfType<Grid>()
-                    .FirstOrDefault(g => g.Name == "PART_RootPanel")
-                    ?.Children.OfType<DropPanelWithCompass>()
-                    .FirstOrDefault();
-        }
-
         public static bool HasStableGroup(this IDockGroup group)
         {
             return group.GetDockGroupSelfAndDescendants().Any(g => g.IsStableGroup);
@@ -502,7 +492,7 @@ namespace NP.Avalonia.UniDock
 
         }
 
-        public static DropPanelWithCompass? GetDropPanel(this IControl control)
+        internal static DropPanelWithCompass? GetDropPanel(this IControl? control)
         {
             Panel? overlayWindowHolderPanel =
                 control.GetVisualDescendants().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_OverlayWindowHolder");
