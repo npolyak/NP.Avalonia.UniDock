@@ -19,3 +19,6 @@
 [submodule "SubModules/NP.NLogAdapter"]
 	path = SubModules/NP.NLogAdapter
 	url = https://github.com/npolyak/NP.NLogAdapter.git
+[submodule "SubModules/NP.ViewModelInterfaces"]
+	path = SubModules/NP.ViewModelInterfaces
+	url = https://github.com/npolyak/NP.ViewModelInterfaces.git
