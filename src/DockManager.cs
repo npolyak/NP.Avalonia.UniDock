@@ -110,7 +110,7 @@ namespace NP.Avalonia.UniDock
         {
             this.DockItemsViewModels =
                 XmlSerializationUtils
-                    .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, extraTypes);
+                    .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, false, extraTypes);
 
             this.SelectTabsInTabbedGroupsWithoutSelection();
         }
