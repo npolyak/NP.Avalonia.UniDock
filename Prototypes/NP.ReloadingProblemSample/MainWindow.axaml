@@ -28,11 +28,16 @@
 	<Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
 		  RowDefinitions="*, Auto">
 		<np:RootDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-			<np:StackDockGroup TheOrientation="Horizontal"
+			<np:StackDockGroup
 							   DockId="DocumentGroup"
 							   IsStableGroup="True"
-							   AutoInvisible="False"
-							   GroupOnlyById="Documents">
+							   AutoInvisible="False">
+				<!--<np:DockItem Header="Tab 1">
+					<local:ReloadingUserControl/>
+				</np:DockItem>
+				<np:DockItem Header="Tab 2">
+					<local:ReloadingUserControl/>
+				</np:DockItem>-->
 			</np:StackDockGroup>
 		</np:RootDockGroup>
 	</Grid>

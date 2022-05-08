@@ -382,8 +382,10 @@
           </Grid.ContextMenu>
           <np:DockContentPresenter
               Name="PART_ContentPresenter"
+			  IsHeader="True"
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="{TemplateBinding BorderThickness}"
+			  OwningDockItem="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
               DockDataContext="{Binding Path=Content.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
               ContentTemplate="{Binding Path=Content.HeaderTemplate, RelativeSource={RelativeSource TemplatedParent}}"
               Content="{Binding Path=Content.Header, RelativeSource={RelativeSource TemplatedParent}}"
@@ -575,7 +577,7 @@
                 <local:DockTabsPresenter x:Name="PART_ItemsPresenter"
                                          local:DragTabBehavior.IsSet="{TemplateBinding AllowTabDocking}"
                                          local:DockAttachedProperties.TheDockManager="{Binding Path=(local:DockAttachedProperties.TheDockManager),
-                                                                                             RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                               RelativeSource={RelativeSource TemplatedParent}}"
                                          DockPanel.Dock="{TemplateBinding TabStripPlacement}"
                                          VerticalAlignment="Top"
                                          Items="{Binding Path=Items, RelativeSource={RelativeSource TemplatedParent}}">
@@ -606,9 +608,10 @@
                        Grid.Column="1"
                        Name="PART_SelectedContentHost"
                        Margin="{TemplateBinding Padding}"
+					   OwningDockItem="{Binding Path=SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
                        DockDataContext="{Binding Path=SelectedItem.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
-                       Content="{Binding Path=SelectedItem.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                       ContentTemplate="{Binding Path=SelectedItem.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                       Content="{Binding Path=OwningDockItem.Content, RelativeSource={RelativeSource Self}}"
+                       ContentTemplate="{Binding Path=OwningDockItem.ContentTemplate, RelativeSource={RelativeSource Self}}"
                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
 					<Grid x:Name="PART_OverlayWindowHolder" 
@@ -755,9 +758,10 @@
 					</DataTemplate>
 				</np:OverlayWindowBehavior.ContentTemplate>
               <np:DockContentPresenter x:Name="Body"
-                                       DockDataContext="{Binding Path=DataContext.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
-                                       Content="{Binding Path=DataContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                       ContentTemplate="{Binding Path=DataContext.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+									   OwningDockItem="{Binding Path=DockContext, RelativeSource={RelativeSource TemplatedParent}}"
+                                       DockDataContext="{Binding Path=DockContext.DockDataContext, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Content="{Binding Path=DockContext.Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                       ContentTemplate="{Binding Path=DockContext.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                                        HorizontalAlignment="Stretch"
                                        VerticalContentAlignment="Stretch"
                                        Margin="{Binding Path=DataContext.Padding, RelativeSource={RelativeSource TemplatedParent}}"/>

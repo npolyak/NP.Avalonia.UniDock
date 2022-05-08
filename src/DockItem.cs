@@ -11,6 +11,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
@@ -29,7 +30,8 @@ namespace NP.Avalonia.UniDock
         DockGroupBaseControl, 
         ILeafDockObj,
         ISelectableItem<DockItem>,
-        IActiveItem<DockItem>
+        IActiveItem<DockItem>,
+        IRecyclingTemplateContainer
     {
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
         
@@ -59,6 +61,10 @@ namespace NP.Avalonia.UniDock
                 nameof(IsActive)
             );
         #endregion IsActive Styled Avalonia Property
+
+        public IRecyclingDataTemplate? RecyclingDataTemplate { get; set; }
+
+        public IControl? OldChild { get; set; }
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {

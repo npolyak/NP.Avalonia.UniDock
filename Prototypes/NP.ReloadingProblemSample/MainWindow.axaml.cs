@@ -23,7 +23,6 @@ namespace NP.ReloadingProblemSample
             this.AttachDevTools();
 #endif
             _dockManager = (DockManager) this.FindResource("TheDockManager")!;
-
             _dockManager.DockItemsViewModels =
                 (
                     new DockItemViewModelBase[]
@@ -32,16 +31,21 @@ namespace NP.ReloadingProblemSample
                         {
                             DockId = "1",
                             DefaultDockGroupId = "DocumentGroup",
+                            Header = "Tab 1",
+                            Content = "Hello World",
                             ContentTemplateResourceKey = "ReloadingDataTemplate",
                         },
                         new DockItemViewModelBase
                         {
                             DockId = "2",
                             DefaultDockGroupId = "DocumentGroup",
+                            Header = "Tab 2",
+                            Content = "Hello World",
                             ContentTemplateResourceKey = "ReloadingDataTemplate",
                         }
                     }
                 ).ToObservableCollection();
+
 
         }
         private void InitializeComponent()
