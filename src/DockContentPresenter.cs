@@ -133,9 +133,11 @@ namespace NP.Avalonia.UniDock
                 else
                 {
                     newChild = dataTemplate.Build(content);
-                    RecyclingDataTemplate = null;
                 }
-                OldChild = newChild;
+                if (!IsHeader)
+                {
+                    OldChild = newChild;
+                }
             }
             else
             {
