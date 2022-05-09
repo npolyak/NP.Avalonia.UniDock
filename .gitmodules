@@ -4,6 +4,7 @@
 [submodule "SubModules/NP.Avalonia.Visuals"]
 	path = SubModules/NP.Avalonia.Visuals
 	url = https://github.com/npolyak/NP.Avalonia.Visuals.git
+	branch = main
 [submodule "SubModules/Dock"]
 	path = SubModules/Dock
 	url = https://github.com/wieslawsoltes/Dock.git
