@@ -21,6 +21,7 @@ namespace NP.WebBrowsersInsideUniDock
         private const string SerializationFile = "Serialization.xml";
         private const string VMSerializationFile = "VMSerialization.xml";
 
+        private int _count = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -28,33 +29,51 @@ namespace NP.WebBrowsersInsideUniDock
             this.AttachDevTools();
 #endif
             _dockManager = (DockManager) this.FindResource("TheDockManager")!;
-            _dockManager.DockItemsViewModels =
-                (
-                    new DockItemViewModelBase[]
-                    {
-                        new DockItemViewModelBase
-                        {
-                            DockId = "1",
-                            DefaultDockGroupId = "DocumentGroup",
-                            Header = "Tab 1",
-                            Content = "Hello World",
-                            ContentTemplateResourceKey = "ReloadingDataTemplate",
-                        },
-                        new DockItemViewModelBase
-                        {
-                            DockId = "2",
-                            DefaultDockGroupId = "DocumentGroup",
-                            Header = "Tab 2",
-                            Content = "Hello World",
-                            ContentTemplateResourceKey = "ReloadingDataTemplate",
-                        }
-                    }
-                ).ToObservableCollection();
 
+            _dockManager.DockItemsViewModels = new ObservableCollection<DockItemViewModelBase>();
+            //_dockManager.DockItemsViewModels =
+            //    (
+            //        new DockItemViewModelBase[]
+            //        {
+            //            new DockItemViewModelBase
+            //            {
+            //                DockId = "1",
+            //                DefaultDockGroupId = "DocumentGroup",
+            //                Header = "Tab 1",
+            //                Content = "Hello World",
+            //                ContentTemplateResourceKey = "ReloadingDataTemplate",
+            //            },
+            //            new DockItemViewModelBase
+            //            {
+            //                DockId = "2",
+            //                DefaultDockGroupId = "DocumentGroup",
+            //                Header = "Tab 2",
+            //                Content = "Hello World",
+            //                ContentTemplateResourceKey = "ReloadingDataTemplate",
+            //            }
+            //        }
+            //    ).ToObservableCollection();
+
+            this.FindControl<Button>("AddButton").Click += OnAdd;
             this.FindControl<Button>("SaveButton").Click += OnSave;
             this.FindControl<Button>("RestoreButton").Click += OnRestore;
         }
 
+        private void OnAdd(object? sender, RoutedEventArgs e)
+        {
+            _count++;
+            _dockManager.DockItemsViewModels.Add
+            (
+                new DockItemViewModelBase
+                {
+                    DockId = _count.ToString(),
+                    DefaultDockGroupId = "DocumentGroup",
+                    Header = $"Tab {_count}",
+                    Content = "Hello World",
+                    ContentTemplateResourceKey = "ReloadingDataTemplate"
+                }
+            );
+        }
 
         private void OnSave(object? sender, RoutedEventArgs e)
         {
