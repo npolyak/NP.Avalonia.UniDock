@@ -40,5 +40,14 @@
 				</np:DockItem>-->
 			</np:StackDockGroup>
 		</np:RootDockGroup>
+		<StackPanel Grid.Row="1"
+					HorizontalAlignment="Right"
+					Margin="10">
+			<Button x:Name="SaveButton"
+					Content="Save"
+					Margin="10,0"/>
+			<Button x:Name="RestoreButton"
+					Content="Restore"/>
+		</StackPanel>
 	</Grid>
 </Window>

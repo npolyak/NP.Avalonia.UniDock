@@ -63,8 +63,26 @@ namespace NP.Avalonia.UniDock
         #endregion IsActive Styled Avalonia Property
 
         public IRecyclingDataTemplate? RecyclingDataTemplate { get; set; }
+        
 
-        public IControl? OldChild { get; set; }
+        IControl? _oldChild = null;
+        public IControl? OldChild 
+        { 
+            get => _oldChild; 
+            set
+            {
+                if (_oldChild == value)
+                    return;
+
+                var oldChild = _oldChild;
+                _oldChild = value;
+
+                if (oldChild is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
 
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
@@ -75,6 +93,7 @@ namespace NP.Avalonia.UniDock
 
             this.FireChangeWithin();
         }
+
 
         public bool IsPredefined { get; set; } = true;
 
@@ -124,6 +143,13 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(HeaderContentTemplateResourceKeyProperty)
                 .Subscribe(OnHeaderContentTemplateResourceKeyChanged!);
+        }
+
+        ~DockItem()
+        {
+            RecyclingDataTemplate = null;
+
+            OldChild = null;
         }
 
         private void OnHeaderContentTemplateResourceKeyChanged(string newResourceKey)
