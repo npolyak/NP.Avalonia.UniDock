@@ -101,3 +101,6 @@
 /Prototypes/NP.ReloadingProblemSample/bin/Debug/net5.0
 /Prototypes/NP.ReloadingProblemSample/obj
 *.v1
+/Prototypes/NP.WebBrowsersInsideUniDock/.vs
+/Prototypes/NP.WebBrowsersInsideUniDock/bin/Debug/net5.0
+/Prototypes/NP.WebBrowsersInsideUniDock/obj

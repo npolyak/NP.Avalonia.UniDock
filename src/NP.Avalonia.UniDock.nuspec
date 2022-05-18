@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>NP.Avalonia.UniDock</id>
-    <version>1.0.30</version>
+    <version>1.0.31</version>
     <title>NP.Avalonia.UniDock</title>
     <authors>Nick Polyak, Ph. D.</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
