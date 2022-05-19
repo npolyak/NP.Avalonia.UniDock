@@ -17,3 +17,6 @@
 [submodule "SubModules/NP.ViewModelInterfaces"]
 	path = SubModules/NP.ViewModelInterfaces
 	url = https://github.com/npolyak/NP.ViewModelInterfaces.git
+[submodule "SubModules/NP.Avalonia.UniDockService"]
+	path = SubModules/NP.Avalonia.UniDockService
+	url = https://github.com/npolyak/NP.Avalonia.UniDockService.git
