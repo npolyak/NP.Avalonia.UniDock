@@ -14,11 +14,10 @@
     <copyright>Nick Polyak 2021</copyright>
     <summary>UniDock powerful multiplatform docking framework</summary>
     <tags>Avalonia, Powerful Multiplatform Docking Framework</tags>
-    <dependencies>
-        <dependency id="NP.Avalonia.Visuals" version="1.0.22"/>
-        <dependency id="NP.IoCy" version="1.0.12"/>
-        <dependency id="NP.Concepts.Behaviors" version="1.0.5"/>
+    <dependencies> 
         <dependency id="NP.Avalonia.UniDockService" version="0.99.6"/>
+        <dependency id="NP.Avalonia.Visuals" version="1.0.22"/>
+        <dependency id="NP.Concepts.Behaviors" version="1.0.5"/>
         <dependency id="NP.Utilities" version="1.0.9"/>
         <dependency id="NP.ViewModelInterfaces" version="1.0.1"/>
     </dependencies>
