@@ -11,12 +11,5 @@
       <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
       <StyleInclude Source="avares://NP.Avalonia.Visuals/Themes/CustomWindowStyles.axaml"/>
       <StyleInclude Source="avares://NP.Avalonia.UniDock/Themes/DockStyles.axaml"/>
-
-      <Style Selector="np|FloatingWindow.MyFloatingWindow">
-        <Setter Property="Title"
-                Value="{Binding Path=TheDockGroup.ActiveDockItem.Header, 
-                                StringFormat='My Floating Window - {0}'
-                                RelativeSource={RelativeSource Self}}" />
-      </Style>
     </Application.Styles>
 </Application>

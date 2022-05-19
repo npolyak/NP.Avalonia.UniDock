@@ -66,11 +66,13 @@ namespace NP.WebBrowsersInsideUniDock
             (
                 new DockItemViewModelBase
                 {
-                    DockId = _count.ToString(),
+                    DockId = "Browser_" + _count.ToString(),
                     DefaultDockGroupId = "DocumentGroup",
+                    DefaultDockOrderInGroup = _count,
                     Header = $"Tab {_count}",
                     Content = "Hello World",
-                    ContentTemplateResourceKey = "ReloadingDataTemplate"
+                    ContentTemplateResourceKey = "ReloadingDataTemplate",
+                    IsPredefined = false
                 }
             );
         }
@@ -92,8 +94,7 @@ namespace NP.WebBrowsersInsideUniDock
                 (
                     VMSerializationFile);
 
-            _dockManager.DockItemsViewModels?.OfType<DockItemViewModelBase>().FirstOrDefault()?.Select();
-            _dockManager.DockItemsViewModels?.OfType<DockItemViewModelBase>().FirstOrDefault()?.Select();
+            _count = (int) _dockManager.DockItemsViewModels!.Max(vm => vm.DefaultDockOrderInGroup);
 
             GC.Collect();
         }

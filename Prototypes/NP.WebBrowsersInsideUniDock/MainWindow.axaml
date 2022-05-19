@@ -35,6 +35,7 @@
 			</np:StackDockGroup>
 		</np:RootDockGroup>
 		<StackPanel Grid.Row="1"
+					Orientation="Horizontal"
 					HorizontalAlignment="Right"
 					Margin="10">
 
