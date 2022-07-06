@@ -17,7 +17,7 @@ namespace NP.ViewModelSaveRestoreSample
 
 
             TheContainer.MapSingleton<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
-            TheContainer.MapSingleton<DockManager, DockManager>(TheDockManager, null, true);
+            TheContainer.MapSingleton<DockManager>(TheDockManager);
             //TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
 
             TheContainer?.CompleteConfiguration();
