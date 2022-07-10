@@ -117,11 +117,13 @@ namespace NP.Avalonia.UniDock
                 {
                     if (OldChild != null && OldChild.Parent != this)
                     {
-                        ContentPresenter? parent = OldChild.Parent as ContentPresenter; ;
+                        ContentPresenter? oldChildsParent = OldChild.Parent as ContentPresenter; ;
 
-                        if (parent != null)
+                        if (oldChildsParent != null)
                         {
-                            parent.SetPropValue(nameof(Child), null, true);
+                            oldChildsParent.Content = null;
+                            oldChildsParent.ContentTemplate = null;
+                            //parent.SetPropValue(nameof(Child), null, true); // not working any more
                         }
                     }
 

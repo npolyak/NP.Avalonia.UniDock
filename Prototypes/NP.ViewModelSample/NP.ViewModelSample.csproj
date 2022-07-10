@@ -5,11 +5,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.10" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
-   </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\NP.Avalonia.UniDock.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj" />
     <ProjectReference Include="..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
