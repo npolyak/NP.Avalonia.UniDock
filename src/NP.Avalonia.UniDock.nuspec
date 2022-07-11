@@ -15,8 +15,8 @@
     <summary>UniDock powerful multiplatform docking framework</summary>
     <tags>Avalonia, Powerful Multiplatform Docking Framework</tags>
     <dependencies> 
-        <dependency id="NP.Avalonia.UniDockService" version="0.99.8"/>
-        <dependency id="NP.Avalonia.Visuals" version="1.0.24"/>
+        <dependency id="NP.Avalonia.UniDockService" version="0.99.9"/>
+        <dependency id="NP.Avalonia.Visuals" version="1.0.25"/>
     </dependencies>
   </metadata>
 </package>
