@@ -4,7 +4,7 @@ using Avalonia.Layout;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockSeparator : GridSplitter
+    public class DockSeparator : GridSplitter, IControlWithOrientation
     {
         #region TheOrientation Styled Avalonia Property
         public Orientation TheOrientation

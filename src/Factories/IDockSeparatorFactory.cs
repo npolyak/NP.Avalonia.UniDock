@@ -1,9 +1,10 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia.Controls;
+using Avalonia.Layout;
 
 namespace NP.Avalonia.UniDock.Factories
 {
     public interface IDockSeparatorFactory
     {
-        DockSeparator GetDockSeparator(Orientation orientation);
+        IControlWithOrientation GetDockSeparator(Orientation orientation);
     }
 }

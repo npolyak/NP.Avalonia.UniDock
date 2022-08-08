@@ -19,7 +19,7 @@ namespace NP.GroupCompassSample
 
             TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
 
-            TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
+            TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager);
 
             TheContainer?.CompleteConfiguration();
         }

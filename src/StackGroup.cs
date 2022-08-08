@@ -143,7 +143,7 @@ namespace NP.Avalonia.UniDock
                 int insertSeparatorIdx = NextIdx(currentChildIdx, isAfter);
                 int insertChildIdx = NextIdx(insertSeparatorIdx, isAfter);
 
-                Control separator = GetSeparator();
+                IControlWithOrientation separator = GetSeparator();
 
                 AddDefinition(insertSeparatorIdx, true);
                 AddDefinition(insertChildIdx, false);
@@ -218,9 +218,9 @@ namespace NP.Avalonia.UniDock
             InsertBeforeOrAfterItem(currentItem, itemToInsert, true);
         }
 
-        private Control GetSeparator()
+        private IControlWithOrientation GetSeparator()
         {
-            DockSeparator gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(TheOrientation)!;
+            IControlWithOrientation gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(TheOrientation)!;
 
             if (TheOrientation == Orientation.Horizontal)
             {
