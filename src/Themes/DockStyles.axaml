@@ -27,7 +27,8 @@
       <Color x:Key="DockSelectedColor">#FFCCD5F0</Color>
       <Color x:Key="DockHeaderColor">#FFEEEEF2</Color>
       <Color x:Key="DockSeparatorColor">#FFCCCEDB</Color>
-
+      <Color x:Key="DockSeparatorPreviewColor">#5A000000</Color>
+		
       <SolidColorBrush x:Key="DockMouseOverBrush"
                        Color="{StaticResource DockMouseOverColor}"/>
       <SolidColorBrush x:Key="DockSelectedBrush"
@@ -438,6 +439,11 @@
         Value="Stretch"/>
     <Setter Property="VerticalAlignment"
         Value="Stretch"/>
+	  <Setter Property="PreviewContent">
+		  <Template>
+			  <Rectangle Fill="{StaticResource DockSeparatorPreviewColor}"/>
+		  </Template>
+	  </Setter>
     <Setter Property="Template">
       <ControlTemplate>
         <Border BorderBrush="{TemplateBinding BorderBrush}"

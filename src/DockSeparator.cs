@@ -19,5 +19,10 @@ namespace NP.Avalonia.UniDock
                 nameof(TheOrientation)
             );
         #endregion TheOrientation Styled Avalonia Property
+
+        public DockSeparator()
+        {
+            ShowsPreview = true;
+        }
     }
 }

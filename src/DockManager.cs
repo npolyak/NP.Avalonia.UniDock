@@ -35,6 +35,12 @@ namespace NP.Avalonia.UniDock
         // To be used in the future when multiple DockManagers become available
         public string? Id { get; set; }
 
+        public bool ResizePreview
+        {
+            get => TheDockSeparatorFactory!.ResizePreview;
+            set => TheDockSeparatorFactory!.ResizePreview = value;   
+        }
+
         [Part]
         private IStackGroupFactory StackGroupFactory { get; set; } =
             new StackGroupFactory();
