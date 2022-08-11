@@ -10,6 +10,7 @@
 // products that use it.
 
 using Avalonia.Layout;
+using NP.Avalonia.Visuals;
 using NP.Utilities;
 using System;
 using System.Collections.Generic;
@@ -146,7 +147,7 @@ namespace NP.Avalonia.UniDock.Serialization
             {
                 p.SizeCoefficients = 
                     dockStackGroup.GetSizeCoefficients()
-                                  .Select(item => item.ToString())
+                                  .Select(item => item.ToCultureInvariantStr())
                                   .ToArray();
 
                 p.IsGroupLocked = dockStackGroup.IsGroupLocked;
