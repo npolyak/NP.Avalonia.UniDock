@@ -6,6 +6,6 @@ namespace NP.Avalonia.UniDock.Factories
     {
         bool ResizePreview { get; set; }
 
-        IControlWithOrientation GetDockSeparator(Orientation orientation);
+        DockSeparator GetDockSeparator(Orientation orientation);
     }
 }

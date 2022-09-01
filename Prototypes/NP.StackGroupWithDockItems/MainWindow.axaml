@@ -14,7 +14,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<np:DockManager x:Key="TheDockManager"/>
+			<np:DockManager x:Key="TheDockManager" 
+							ResizePreview="True"/>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Window.Styles>

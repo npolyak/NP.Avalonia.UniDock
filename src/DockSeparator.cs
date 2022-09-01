@@ -1,10 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 
 namespace NP.Avalonia.UniDock
 {
-    public class DockSeparator : GridSplitter, IControlWithOrientation
+    public class DockSeparator : GridSplitter
     {
         #region TheOrientation Styled Avalonia Property
         public Orientation TheOrientation
@@ -23,6 +25,18 @@ namespace NP.Avalonia.UniDock
         public DockSeparator()
         {
             ShowsPreview = true;
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            // do not cancel resize on lost focus
+            //base.OnLostFocus(e);
+        }
+
+        protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
+        {
+            base.OnPointerCaptureLost(e);
+            base.OnLostFocus(e);
         }
     }
 }

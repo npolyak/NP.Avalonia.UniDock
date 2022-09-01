@@ -217,53 +217,61 @@
             Value="Center"/>
     <Setter Property="CompassVerticalAlignment"
             Value="Center"/>
+	<Setter Property="ShowCompass"
+			Value="True"/>
     <Setter Property="Template">
-      <ControlTemplate TargetType="local:DropPanelWithCompass">
-        <Grid x:Name="CompassPanel"
-              RowDefinitions="*,*"
-              ColumnDefinitions="*,*">
-          <local:DropDockSideControl SelectDockSide="Center"
-                                     Grid.RowSpan="2"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Top"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Bottom"
-                                     Grid.Row="1"
-                                     Grid.ColumnSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Left"
-                                     Grid.RowSpan="2"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DropDockSideControl SelectDockSide="Right"
-                                     Grid.RowSpan="2"
-                                     Grid.Column="1"
-                                     local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
-          <local:DockCompass Grid.RowSpan="2"
-                             Grid.ColumnSpan="2"
-                             HorizontalAlignment="{TemplateBinding CompassHorizontalAlignment}"
-                             VerticalAlignment="{TemplateBinding CompassVerticalAlignment}"
-                             ShowHull="{TemplateBinding ShowHull}"
-                             AllowCenterDocking="{TemplateBinding AllowCenterDocking}"
-                             AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
-                             AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
-                             local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
+		<ControlTemplate TargetType="local:DropPanelWithCompass">
+			<Grid>
+				<Grid IsVisible="{TemplateBinding ShowSeparator}">
+					
+				</Grid>
+				<Grid x:Name="CompassPanel"
+					  RowDefinitions="*,*"
+					  ColumnDefinitions="*,*"
+					  IsVisible="{TemplateBinding ShowCompass}">
+					<local:DropDockSideControl SelectDockSide="Center"
+											   Grid.RowSpan="2"
+											   Grid.ColumnSpan="2"
+											   local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+					<local:DropDockSideControl SelectDockSide="Top"
+											   Grid.ColumnSpan="2"
+											   local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+					<local:DropDockSideControl SelectDockSide="Bottom"
+											   Grid.Row="1"
+											   Grid.ColumnSpan="2"
+											   local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+					<local:DropDockSideControl SelectDockSide="Left"
+											   Grid.RowSpan="2"
+											   local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+					<local:DropDockSideControl SelectDockSide="Right"
+											   Grid.RowSpan="2"
+											   Grid.Column="1"
+											   local:DockAttachedProperties.DockSide="{TemplateBinding DockSide}"/>
+					<local:DockCompass Grid.RowSpan="2"
+									   Grid.ColumnSpan="2"
+									   HorizontalAlignment="{TemplateBinding CompassHorizontalAlignment}"
+									   VerticalAlignment="{TemplateBinding CompassVerticalAlignment}"
+									   ShowHull="{TemplateBinding ShowHull}"
+									   AllowCenterDocking="{TemplateBinding AllowCenterDocking}"
+									   AllowHorizontalDocking="{TemplateBinding AllowHorizontalDocking}"
+									   AllowVerticalDocking="{TemplateBinding AllowVerticalDocking}"
+									   local:DockAttachedProperties.DockSide="{Binding Path=DockSide, 
                                                                              Mode=TwoWay, 
                                                                              RelativeSource={RelativeSource TemplatedParent}}">
-            <local:DockCompass.StartOrEndPointerDetection>
-              <MultiBinding Converter="{x:Static BoolConverters.And}">
-                <Binding Path="IsVisible"
-                         Mode="OneWay"
-                         RelativeSource="{RelativeSource TemplatedParent}"/>
-                <Binding Path="IsAttached"
-                         Mode="OneWay"
-                         RelativeSource="{RelativeSource Self}"/>
-              </MultiBinding>
-            </local:DockCompass.StartOrEndPointerDetection>
-          </local:DockCompass>
-        </Grid>
-      </ControlTemplate>
+						<local:DockCompass.StartOrEndPointerDetection>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<Binding Path="IsVisible"
+										 Mode="OneWay"
+										 RelativeSource="{RelativeSource TemplatedParent}"/>
+								<Binding Path="IsAttached"
+										 Mode="OneWay"
+										 RelativeSource="{RelativeSource Self}"/>
+							</MultiBinding>
+						</local:DockCompass.StartOrEndPointerDetection>
+					</local:DockCompass>
+				</Grid>
+			</Grid>
+		</ControlTemplate>
     </Setter>
   </Style>
 
@@ -965,16 +973,29 @@
 						<Grid x:Name="PART_OverlayWindowHolder"
 							  Grid.Row="1"
 						      np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}"
-							  np:OverlayWindowBehavior.IsOpen="{Binding Path=ShowCompass, RelativeSource={RelativeSource TemplatedParent}}"
-							  np:OverlayWindowBehavior.Content="{Binding RelativeSource={RelativeSource TemplatedParent},
+							  np:OverlayWindowBehavior.Content="{Binding RelativeSource={RelativeSource Self},
 						                                                 Converter={x:Static np:ToControlContainerConverter.Instance}}">
+							<np:OverlayWindowBehavior.IsOpen>
+								<MultiBinding Converter="{x:Static np:OrConverter.Instance}">
+									<Binding Path="ShowCompass" 
+											 RelativeSource="{RelativeSource TemplatedParent}"/>
+									<Binding Path="CurrentSplitterPosition" 
+											 RelativeSource="{RelativeSource Self}"
+											 Converter="{x:Static ObjectConverters.IsNotNull}"/>
+								</MultiBinding>
+							</np:OverlayWindowBehavior.IsOpen>
 							<np:OverlayWindowBehavior.ContentTemplate>
 								<DataTemplate>
-									<local:DropPanelWithCompass
-											  ShowHull="{Binding Control.IsGroupLocked}"
-											  AllowHorizontalDocking="{Binding Control.IsGroupLocked}"
-											  AllowVerticalDocking="{Binding Control.IsGroupLocked}"
-											  AllowCenterDocking="{Binding Control.IsGroupLocked, Converter={x:Static np:BoolConverters.Not}}"/>
+									<Grid Background="Pink">
+										<local:DropPanelWithCompass
+													ShowSeparator="{Binding Control.CurrentDockSeparator,
+												                        Converter={x:Static ObjectConverters.IsNotNull}}"
+													ShowCompass="{Binding Control.ShowCompass}"
+													ShowHull="{Binding Control.IsGroupLocked}"
+													AllowHorizontalDocking="{Binding Control.IsGroupLocked}"
+													AllowVerticalDocking="{Binding Control.IsGroupLocked}"
+													AllowCenterDocking="{Binding Control.IsGroupLocked, Converter={x:Static np:BoolConverters.Not}}"/>
+									</Grid>
 								</DataTemplate>
 							</np:OverlayWindowBehavior.ContentTemplate>
 

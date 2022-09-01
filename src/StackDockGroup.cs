@@ -49,19 +49,26 @@ namespace NP.Avalonia.UniDock
         {
             get
             {
-                Panel? root = this.GetVisualDescendants().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_RootPanel");
+                Panel? root = 
+                    this.GetVisualDescendants()
+                        .OfType<Panel>()
+                        .FirstOrDefault(p => p.Name == "PART_RootPanel");
 
                 if (root == null)
                     return null;
 
                 Panel? overlayWindowHolderPanel =
-                    root.Children.Reverse().OfType<Panel>().FirstOrDefault(p => p.Name == "PART_OverlayWindowHolder");
+                    root.Children.Reverse()
+                                 .OfType<Panel>()
+                                 .FirstOrDefault(p => p.Name == "PART_OverlayWindowHolder");
 
                 if (overlayWindowHolderPanel == null)
                     return null;
 
                 DropPanelWithCompass? dropPanel =
-                     OverlayWindowBehavior.GetOverlayWindow(overlayWindowHolderPanel)?.GetVisualDescendants()?.OfType<DropPanelWithCompass>()?.FirstOrDefault();
+                     OverlayWindowBehavior.GetOverlayWindow(overlayWindowHolderPanel)?
+                                          .GetVisualDescendants()
+                                          ?.OfType<DropPanelWithCompass>()?.FirstOrDefault();
 
                 return dropPanel;
             }
@@ -242,6 +249,14 @@ namespace NP.Avalonia.UniDock
             this.GetObservable(InitialSizeCoefficientsProperty).Subscribe(OnInitSizeCoeffsChanged!);
 
             this.GetObservable(IsGroupLockedProperty).Subscribe(OnIsGroupLockedChanged);
+
+            _stackGroup.GetObservable(GridPartsResizeBehavior.CurrentSplitterPositionProperty)
+                       .Subscribe(OnCurrentSplitterPositionChanged);
+        }
+
+        private void OnCurrentSplitterPositionChanged(double? currentSplitterPosition)
+        {
+            GridPartsResizeBehavior.SetCurrentSplitterPosition(this, currentSplitterPosition);
         }
 
         private void OnIsGroupLockedChanged(bool obj)

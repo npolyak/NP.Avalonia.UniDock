@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using NP.Avalonia.UniDock.Factories;
 using Avalonia.VisualTree;
+using NP.Avalonia.Visuals.Behaviors;
 
 namespace NP.Avalonia.UniDock
 {
@@ -62,6 +63,7 @@ namespace NP.Avalonia.UniDock
                 SetBehavior();
             }
         }
+
 
         protected virtual void BeforeItemsSet()
         {
@@ -143,7 +145,7 @@ namespace NP.Avalonia.UniDock
                 int insertSeparatorIdx = NextIdx(currentChildIdx, isAfter);
                 int insertChildIdx = NextIdx(insertSeparatorIdx, isAfter);
 
-                IControlWithOrientation separator = GetSeparator();
+                DockSeparator separator = GetSeparator();
 
                 AddDefinition(insertSeparatorIdx, true);
                 AddDefinition(insertChildIdx, false);
@@ -218,9 +220,9 @@ namespace NP.Avalonia.UniDock
             InsertBeforeOrAfterItem(currentItem, itemToInsert, true);
         }
 
-        private IControlWithOrientation GetSeparator()
+        private DockSeparator GetSeparator()
         {
-            IControlWithOrientation gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(TheOrientation)!;
+            DockSeparator gridSplitter = TheDockSeparatorFactory?.GetDockSeparator(TheOrientation)!;
 
             if (TheOrientation == Orientation.Horizontal)
             {
@@ -309,6 +311,8 @@ namespace NP.Avalonia.UniDock
             this.LogicalChildren.Add(_grid);
             SetBehavior();
             AfterItemsSet();
+
+            GridPartsResizeBehavior.SetTarget(_grid, this);
         }
 
         private void DisposeBehavior()

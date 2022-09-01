@@ -59,6 +59,37 @@ namespace NP.Avalonia.UniDock
             TheCompass?.FinishPointerDetection();
         }
 
+
+        #region ShowSeparator Styled Avalonia Property
+        public bool ShowSeparator
+        {
+            get { return GetValue(ShowSeparatorProperty); }
+            set { SetValue(ShowSeparatorProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowSeparatorProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, bool>
+            (
+                nameof(ShowSeparator)
+            );
+        #endregion ShowSeparator Styled Avalonia Property
+
+
+        #region ShowCompass Styled Avalonia Property
+        public bool ShowCompass
+        {
+            get { return GetValue(ShowCompassProperty); }
+            set { SetValue(ShowCompassProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> ShowCompassProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, bool>
+            (
+                nameof(ShowCompass)
+            );
+        #endregion ShowCompass Styled Avalonia Property
+
+
         #region SelectBackground Styled Avalonia Property
         public IBrush SelectBackground
         {
