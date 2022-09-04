@@ -256,7 +256,10 @@ namespace NP.Avalonia.UniDock
 
         private void OnCurrentSplitterPositionChanged(double? currentSplitterPosition)
         {
-            GridPartsResizeBehavior.SetCurrentSplitterPosition(this, currentSplitterPosition);
+            if (TheDockManager?.ResizePreview == true)
+            {
+                GridPartsResizeBehavior.SetCurrentSplitterPosition(this, currentSplitterPosition);
+            }
         }
 
         private void OnIsGroupLockedChanged(bool obj)

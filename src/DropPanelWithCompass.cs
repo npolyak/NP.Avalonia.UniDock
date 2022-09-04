@@ -16,11 +16,13 @@ using System.Linq;
 using System;
 using Avalonia.Media;
 using Avalonia.Layout;
+using Avalonia.Markup.Xaml.Templates;
 
 namespace NP.Avalonia.UniDock
 {
     public class DropPanelWithCompass : TemplatedControl
     {
+
         #region DockSide Styled Avalonia Property
         public DockKind? DockSide
         {
@@ -46,6 +48,21 @@ namespace NP.Avalonia.UniDock
                 }
             }
         }
+
+
+        #region TheOrientation Styled Avalonia Property
+        public Orientation? TheOrientation
+        {
+            get { return GetValue(TheOrientationProperty); }
+            set { SetValue(TheOrientationProperty, value); }
+        }
+
+        public static readonly StyledProperty<Orientation?> TheOrientationProperty =
+            AvaloniaProperty.Register<DropPanelWithCompass, Orientation?>
+            (
+                nameof(TheOrientation)
+            );
+        #endregion TheOrientation Styled Avalonia Property
 
 
         private DockCompass? TheCompass => 

@@ -211,7 +211,7 @@
     <Setter Property="Background"
             Value="#2000D0FF"/>
   </Style>
-
+	
   <Style Selector="local|DropPanelWithCompass">
     <Setter Property="CompassHorizontalAlignment"
             Value="Center"/>
@@ -219,11 +219,69 @@
             Value="Center"/>
 	<Setter Property="ShowCompass"
 			Value="True"/>
+	<Setter Property="ShowSeparator"
+			Value="False"/>
     <Setter Property="Template">
 		<ControlTemplate TargetType="local:DropPanelWithCompass">
 			<Grid>
 				<Grid IsVisible="{TemplateBinding ShowSeparator}">
-					
+					<Grid Background="{StaticResource DockSeparatorPreviewColor}">
+						<Grid.HorizontalAlignment>
+							<Binding Path="TheOrientation"
+		                             RelativeSource="{RelativeSource TemplatedParent}">
+								<Binding.Converter>
+									<np:OrientationToHorizontalAlignmentConverter HorizontalValue="Left"
+																	              VerticalValue="Stretch"/>
+								</Binding.Converter>
+							</Binding>
+						</Grid.HorizontalAlignment>
+						<Grid.VerticalAlignment>
+							<Binding Path="TheOrientation"
+		                             RelativeSource="{RelativeSource TemplatedParent}">
+								<Binding.Converter>
+									<np:OrientationToVerticalAlignmentConverter HorizontalValue="Stretch"
+																	            VerticalValue="Top"/>
+								</Binding.Converter>
+							</Binding>
+						</Grid.VerticalAlignment>
+						<Grid.Width>
+							<Binding Path="TheOrientation"
+									 RelativeSource="{RelativeSource TemplatedParent}">
+								<Binding.Converter>
+									<np:OrientationToDoubleConverter HorizontalValue="4"
+																	 VerticalValue="NaN"/>
+								</Binding.Converter>
+							</Binding>
+						</Grid.Width>
+						<Grid.Height>
+							<Binding Path="TheOrientation"
+		                             RelativeSource="{RelativeSource TemplatedParent}">
+								<Binding.Converter>
+									<np:OrientationToDoubleConverter HorizontalValue="NaN"
+																	 VerticalValue="4"/>
+								</Binding.Converter>
+							</Binding>
+						</Grid.Height>
+						<Grid.RenderTransform>
+							<Binding Path="TheOrientation"
+		                             RelativeSource="{RelativeSource TemplatedParent}">
+								<Binding.Converter>
+									<np:OrientationToTransformConverter>
+										<np:OrientationToTransformConverter.HorizontalValue>
+											<TranslateTransform X="{Binding Path=(np:GridPartsResizeBehavior.CurrentSplitterPosition), 
+												                            RelativeSource={RelativeSource TemplatedParent}}"
+												                Y="0"/>
+										</np:OrientationToTransformConverter.HorizontalValue>
+										<np:OrientationToTransformConverter.VerticalValue>
+											<TranslateTransform X="0"
+					                                            Y="{Binding Path=(np:GridPartsResizeBehavior.CurrentSplitterPosition), 
+												                            RelativeSource={RelativeSource TemplatedParent}}"/>
+										</np:OrientationToTransformConverter.VerticalValue>
+									</np:OrientationToTransformConverter>
+								</Binding.Converter>
+							</Binding>
+						</Grid.RenderTransform>
+					</Grid>
 				</Grid>
 				<Grid x:Name="CompassPanel"
 					  RowDefinitions="*,*"
@@ -447,11 +505,8 @@
         Value="Stretch"/>
     <Setter Property="VerticalAlignment"
         Value="Stretch"/>
-	  <Setter Property="PreviewContent">
-		  <Template>
-			  <Rectangle Fill="{StaticResource DockSeparatorPreviewColor}"/>
-		  </Template>
-	  </Setter>
+	  <Setter Property="PreviewContent"
+			  Value="{x:Null}"/>
     <Setter Property="Template">
       <ControlTemplate>
         <Border BorderBrush="{TemplateBinding BorderBrush}"
@@ -972,29 +1027,32 @@
 										  Template="{TemplateBinding HeaderControlTemplate}"/>
 						<Grid x:Name="PART_OverlayWindowHolder"
 							  Grid.Row="1"
-						      np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource Self}}"
-							  np:OverlayWindowBehavior.Content="{Binding RelativeSource={RelativeSource Self},
+						      np:OverlayWindowBehavior.OverlayedControl="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+							  np:OverlayWindowBehavior.Content="{Binding RelativeSource={RelativeSource TemplatedParent},
 						                                                 Converter={x:Static np:ToControlContainerConverter.Instance}}">
 							<np:OverlayWindowBehavior.IsOpen>
 								<MultiBinding Converter="{x:Static np:OrConverter.Instance}">
 									<Binding Path="ShowCompass" 
 											 RelativeSource="{RelativeSource TemplatedParent}"/>
-									<Binding Path="CurrentSplitterPosition" 
-											 RelativeSource="{RelativeSource Self}"
+									<Binding Path="(np:GridPartsResizeBehavior.CurrentSplitterPosition)" 
+											 RelativeSource="{RelativeSource TemplatedParent}"
 											 Converter="{x:Static ObjectConverters.IsNotNull}"/>
 								</MultiBinding>
 							</np:OverlayWindowBehavior.IsOpen>
 							<np:OverlayWindowBehavior.ContentTemplate>
 								<DataTemplate>
-									<Grid Background="Pink">
+									<Grid>
 										<local:DropPanelWithCompass
-													ShowSeparator="{Binding Control.CurrentDockSeparator,
+											    np:GridPartsResizeBehavior.CurrentSplitterPosition="{Binding Path=Control.(np:GridPartsResizeBehavior.CurrentSplitterPosition)}"
+											    TheOrientation="{Binding Path=Control.TheOrientation}"
+												ShowSeparator="{Binding Path=Control.(np:GridPartsResizeBehavior.CurrentSplitterPosition),
 												                        Converter={x:Static ObjectConverters.IsNotNull}}"
-													ShowCompass="{Binding Control.ShowCompass}"
-													ShowHull="{Binding Control.IsGroupLocked}"
-													AllowHorizontalDocking="{Binding Control.IsGroupLocked}"
-													AllowVerticalDocking="{Binding Control.IsGroupLocked}"
-													AllowCenterDocking="{Binding Control.IsGroupLocked, Converter={x:Static np:BoolConverters.Not}}"/>
+												ShowCompass="{Binding Path=Control.(np:GridPartsResizeBehavior.CurrentSplitterPosition),
+												                      Converter={x:Static ObjectConverters.IsNull}}"
+												ShowHull="{Binding Control.IsGroupLocked}"
+												AllowHorizontalDocking="{Binding Control.IsGroupLocked}"
+												AllowVerticalDocking="{Binding Control.IsGroupLocked}"
+												AllowCenterDocking="{Binding Control.IsGroupLocked, Converter={x:Static np:BoolConverters.Not}}"/>
 									</Grid>
 								</DataTemplate>
 							</np:OverlayWindowBehavior.ContentTemplate>
