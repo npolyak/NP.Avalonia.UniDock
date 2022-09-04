@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>NP.Avalonia.UniDock</id>
-    <version>1.0.39</version>
+    <version>1.0.40</version>
     <title>NP.Avalonia.UniDock</title>
     <authors>Nick Polyak, Ph. D.</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,7 +16,7 @@
     <tags>Avalonia, Powerful Multiplatform Docking Framework</tags>
     <dependencies> 
         <dependency id="NP.Avalonia.UniDockService" version="0.99.9"/>
-        <dependency id="NP.Avalonia.Visuals" version="1.0.27"/>
+        <dependency id="NP.Avalonia.Visuals" version="1.0.28"/>
     </dependencies>
   </metadata>
 </package>
