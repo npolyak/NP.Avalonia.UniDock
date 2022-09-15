@@ -6,6 +6,7 @@ using NP.Concepts.Behaviors;
 using NP.Utilities;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace NP.Avalonia.UniDock
@@ -13,6 +14,8 @@ namespace NP.Avalonia.UniDock
     public class DataItemsViewModelBehavior : VMBase
     {
         internal event Action<DockItemViewModelBase> DockItemRemovedEvent;
+
+        internal event Action<DockItemViewModelBase> DockItemSelectionChangedEvent;
 
         private IDisposable? _viewModelsBehavior;
         #region DockItemsViewModels Property
@@ -145,6 +148,8 @@ namespace NP.Avalonia.UniDock
 
             string groupId = vm.DefaultDockGroupId!;
 
+            vm.PropertyChanged += ItemVm_PropertyChanged;
+
             IDockGroup? dockGroup =
                 _dockManager.AllGroupsBehavior.Result.FirstOrDefault(g => g.DockId == groupId);
 
@@ -154,13 +159,24 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private void ItemVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(DockItemViewModelBase.IsSelected))
+            {
+                DockItemSelectionChangedEvent?.Invoke((DockItemViewModelBase)sender!);
+            }
+        }
+
         private void OnGroupViewModelRemoved(DockItemViewModelBase dockItemViewModel)
         {
             var dockItem = _dockManager.FindGroupById(dockItemViewModel.DockId);
 
             dockItem?.Remove();
 
+            dockItemViewModel.IsSelected = false;
             DockItemRemovedEvent?.Invoke(dockItemViewModel);
+
+            dockItemViewModel.PropertyChanged -= ItemVm_PropertyChanged;
         }
 
         internal void OnGroupItemAdded(IDockGroup addedGroup)
