@@ -12,6 +12,8 @@ namespace NP.Avalonia.UniDock
 {
     public class DataItemsViewModelBehavior : VMBase
     {
+        internal event Action<DockItemViewModelBase> DockItemRemovedEvent;
+
         private IDisposable? _viewModelsBehavior;
         #region DockItemsViewModels Property
         private ObservableCollection<DockItemViewModelBase>? _dockItemsViewModels;
@@ -157,6 +159,8 @@ namespace NP.Avalonia.UniDock
             var dockItem = _dockManager.FindGroupById(dockItemViewModel.DockId);
 
             dockItem?.Remove();
+
+            DockItemRemovedEvent?.Invoke(dockItemViewModel);
         }
 
         internal void OnGroupItemAdded(IDockGroup addedGroup)

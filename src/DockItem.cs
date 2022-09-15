@@ -63,7 +63,7 @@ namespace NP.Avalonia.UniDock
         #endregion IsActive Styled Avalonia Property
 
         public IRecyclingDataTemplate? RecyclingDataTemplate { get; set; }
-        
+
 
         IControl? _oldChild = null;
         public IControl? OldChild 
@@ -215,10 +215,11 @@ namespace NP.Avalonia.UniDock
 
         private void OnIsActiveInWindowChanged(bool isActiveInWindow)
         {
-            if (IsActive)
-            {
-                this.Select();
-            }
+            // I think no need to make selection follow IsActive. Everything seems to be workign without it.
+            //if (IsActive)
+            //{
+            //    this.Select();
+            //}
 
             IsActiveChanged?.Invoke(this);
         }
@@ -444,7 +445,7 @@ namespace NP.Avalonia.UniDock
         const string NO_HEADER = "NO_HEADER";
 
         public override string ToString() =>
-            $"TheDockItem: {DockId} DockDataContext:{DockDataContext} {Header?.ToString()} { HeaderTemplate?.ToString()?? NO_HEADER} {Content?.ToString()}";
+            $"TheDockItem: {DockId} DockDataContext:{DockDataContext} {Header?.ToString()} Active?{IsActive} Selected?{IsSelected} { HeaderTemplate?.ToString()?? NO_HEADER} {Content?.ToString()}";
 
         private void FireSelectionChanged()
         {

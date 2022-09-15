@@ -456,6 +456,8 @@ namespace NP.Avalonia.UniDock
         {
             _dataItemsViewModelBehavior = new DataItemsViewModelBehavior(this);
 
+            _dataItemsViewModelBehavior.DockItemRemovedEvent += _dataItemsViewModelBehavior_DockItemRemovedEvent;
+
             DockGroupHelper.SetIsDockVisibleChangeSubscription();
 
             _allWindowsBehavior = new UnionBehavior<Window>(_predefinedWindows, _floatingWindows);
@@ -467,6 +469,11 @@ namespace NP.Avalonia.UniDock
                 _allWindowsBehavior.Result.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
 
             AllGroupsBehavior = new UnionBehavior<IDockGroup>(_disconnectedGroups, _connectedGroups);
+        }
+
+        private void _dataItemsViewModelBehavior_DockItemRemovedEvent(DockItemViewModelBase obj)
+        {
+            DockItemRemovedEvent?.Invoke(obj);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -567,9 +574,12 @@ namespace NP.Avalonia.UniDock
 
         internal Action<IDockGroup>? AfterGroupItemRemoved { get; set; }
 
+        public event Action<DockItemViewModelBase> DockItemRemovedEvent;
+
         private void OnGroupItemRemoved(IDockGroup removedGroup)
         {
             AfterGroupItemRemoved?.Invoke(removedGroup);
+
             removedGroup.DockIdChanged -= AddedGroup_DockIdChanged;
         }
 

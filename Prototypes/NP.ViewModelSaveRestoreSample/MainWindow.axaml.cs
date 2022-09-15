@@ -7,9 +7,11 @@ using Avalonia.VisualTree;
 using NP.Avalonia.UniDock;
 using NP.Avalonia.UniDockService;
 using NP.Utilities;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
+using NP.Concepts.Behaviors;
 
 namespace NP.ViewModelSaveRestoreSample
 {
@@ -18,6 +20,7 @@ namespace NP.ViewModelSaveRestoreSample
         private DockManager _dockManager;
         public IUniDockService _uniDockService;
 
+        IDisposable _behavior;
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +43,35 @@ namespace NP.ViewModelSaveRestoreSample
 
             Button restoreButton = this.FindControl<Button>("RestoreButton");
             restoreButton.Click += RestoreButton_Click;
+
+            _behavior = _uniDockService.DockItemsViewModels.AddBehavior(OnItemAdded, OnItemRemoved);
+
+            _uniDockService.DockItemRemovedEvent += _uniDockService_DockItemRemovedEvent;
+        }
+
+        private void _uniDockService_DockItemRemovedEvent(DockItemViewModelBase obj)
+        {
+
+        }
+
+        void OnItemAdded(DockItemViewModelBase item)
+        {
+            item.PropertyChanged += Item_PropertyChanged;
+        }
+
+        private void Item_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var item = (DockItemViewModelBase)sender;
+            if (e.PropertyName == nameof(DockItemViewModelBase.IsSelected))
+            {
+                string str = $"{item.DockId}:{item.IsSelected}";
+                Console.WriteLine(str);
+            }
+        }
+
+        void OnItemRemoved(DockItemViewModelBase item)
+        {
+            item.PropertyChanged -= Item_PropertyChanged;
         }
 
         private int _tabNumber = 1;
@@ -77,6 +109,8 @@ namespace NP.ViewModelSaveRestoreSample
 
         private void RestoreButton_Click(object? sender, RoutedEventArgs e)
         {
+            _behavior?.Dispose();
+            _behavior = null;
             // clear the view models
             _uniDockService.DockItemsViewModels = null;
 
@@ -85,7 +119,7 @@ namespace NP.ViewModelSaveRestoreSample
 
             // restore the view models
             _uniDockService.RestoreViewModelsFromFile(VMSerializationFileName);
-
+            _behavior = _uniDockService.DockItemsViewModels.AddBehavior(OnItemAdded, OnItemRemoved);
             // select the first tab.
             _uniDockService.DockItemsViewModels?.FirstOrDefault()?.Select();
         }
