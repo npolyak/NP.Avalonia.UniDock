@@ -32,6 +32,8 @@ namespace NP.Avalonia.UniDock
 {
     public class DockManager : VMBase, IUniDockService
     {
+        public event Action<DockItemViewModelBase> DockItemAddedEvent;
+
         public event Action<DockItemViewModelBase> DockItemRemovedEvent;
 
         public event Action<DockItemViewModelBase> DockItemSelectionChangedEvent;
@@ -459,7 +461,7 @@ namespace NP.Avalonia.UniDock
         public DockManager()
         {
             _dataItemsViewModelBehavior = new DataItemsViewModelBehavior(this);
-
+            _dataItemsViewModelBehavior.DockItemAddedEvent += _dataItemsViewModelBehavior_DockItemAddedEvent;
             _dataItemsViewModelBehavior.DockItemRemovedEvent += _dataItemsViewModelBehavior_DockItemRemovedEvent;
             _dataItemsViewModelBehavior.DockItemSelectionChangedEvent += _dataItemsViewModelBehavior_DockItemSelectionChangedEvent;
 
@@ -474,6 +476,11 @@ namespace NP.Avalonia.UniDock
                 _allWindowsBehavior.Result.AddBehavior(OnWindowItemAdded, OnWindowItemRemoved);
 
             AllGroupsBehavior = new UnionBehavior<IDockGroup>(_disconnectedGroups, _connectedGroups);
+        }
+
+        private void _dataItemsViewModelBehavior_DockItemAddedEvent(DockItemViewModelBase obj)
+        {
+            DockItemAddedEvent?.Invoke(obj);
         }
 
         private void _dataItemsViewModelBehavior_DockItemSelectionChangedEvent(DockItemViewModelBase obj)

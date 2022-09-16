@@ -13,6 +13,8 @@ namespace NP.Avalonia.UniDock
 {
     public class DataItemsViewModelBehavior : VMBase
     {
+        internal event Action<DockItemViewModelBase> DockItemAddedEvent;
+
         internal event Action<DockItemViewModelBase> DockItemRemovedEvent;
 
         internal event Action<DockItemViewModelBase> DockItemSelectionChangedEvent;
@@ -142,6 +144,14 @@ namespace NP.Avalonia.UniDock
             }
         }
 
+        private void ItemVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(DockItemViewModelBase.IsSelected))
+            {
+                DockItemSelectionChangedEvent?.Invoke((DockItemViewModelBase)sender!);
+            }
+        }
+
         private void OnGroupViewModelAdded(DockItemViewModelBase vm)
         {
             DockItem dockItem = CreateDockItemFromVm(vm);
@@ -150,20 +160,14 @@ namespace NP.Avalonia.UniDock
 
             vm.PropertyChanged += ItemVm_PropertyChanged;
 
+            DockItemAddedEvent?.Invoke(vm);
+
             IDockGroup? dockGroup =
                 _dockManager.AllGroupsBehavior.Result.FirstOrDefault(g => g.DockId == groupId);
 
             if (dockGroup != null)
             {
                 SetDockItemFromVm(vm, dockGroup);
-            }
-        }
-
-        private void ItemVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(DockItemViewModelBase.IsSelected))
-            {
-                DockItemSelectionChangedEvent?.Invoke((DockItemViewModelBase)sender!);
             }
         }
 
