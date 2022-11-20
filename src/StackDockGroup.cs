@@ -36,6 +36,7 @@ namespace NP.Avalonia.UniDock
 
         public event Action<IDockGroup>? IsDockVisibleChangedEvent;
 
+
         void IDockGroup.FireIsDockVisibleChangedEvent()
         {
             IsDockVisibleChangedEvent?.Invoke(this);
@@ -344,7 +345,9 @@ namespace NP.Avalonia.UniDock
             SetNumberDockChildren();
 
             GridLength sizeCoeff = 
-               ((_initSizeCoefficients != null) && (idx < _initSizeCoefficients.Length)) ? _initSizeCoefficients[idx] : new GridLength(1, GridUnitType.Star);
+               ((_initSizeCoefficients != null) && (idx < _initSizeCoefficients.Length)) ? 
+                               _initSizeCoefficients[idx] : (dockChild.InitialSizeCoeff != null) ? 
+                                                    dockChild.InitialSizeCoeff.Value : new GridLength(1, GridUnitType.Star);
 
             _sizeCoefficients.Insert(idx, sizeCoeff);
 
@@ -359,6 +362,24 @@ namespace NP.Avalonia.UniDock
 
             this.FireChangeWithin();
             this.SubscribeToChildChange(dockChild);
+        }
+
+
+        private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
+        {
+            this.UnsubscribeFromChildChange(dockChild);
+            this.FireChangeWithin();
+
+            _sizeCoefficients.RemoveAt(idx);
+
+            dockChild.IsDockVisibleChangedEvent -= OnDockChild_IsDockVisibleChangedEvent;
+
+            dockChild.CleanSelfOnRemove();
+            SetNumberDockChildren();
+
+            RemoveChildFromStackGroup(dockChild);
+
+            this.SetIsDockVisible();
         }
 
         private void OnDockChild_IsDockVisibleChangedEvent(IDockGroup dockChild)
@@ -439,22 +460,6 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        private void OnDockChildRemoved(IEnumerable<IDockGroup> groups, IDockGroup dockChild, int idx)
-        {
-            this.UnsubscribeFromChildChange(dockChild);
-            this.FireChangeWithin();
-
-            _sizeCoefficients.RemoveAt(idx);
-
-            dockChild.IsDockVisibleChangedEvent -= OnDockChild_IsDockVisibleChangedEvent;
-
-            dockChild.CleanSelfOnRemove();
-            SetNumberDockChildren();
-
-            RemoveChildFromStackGroup(dockChild);
-
-            this.SetIsDockVisible();
-        }
 
         private void RemoveChildFromStackGroup(IDockGroup dockChild)
         {

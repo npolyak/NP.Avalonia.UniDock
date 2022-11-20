@@ -423,10 +423,22 @@ namespace NP.Avalonia.UniDock
             
             Orientation orientation = (Orientation)dock.ToOrientation()!;
 
-            if (parentGroup is StackDockGroup dockStackGroup && dockStackGroup.TheOrientation == orientation)
+            if (parentGroup is StackDockGroup parentDockStackGroup && parentDockStackGroup.TheOrientation == orientation)
             {
+                GridLength childSizeCoeff = parentGroup.GetSizeCoeff(childIdx);
+
+                // half of original child size
+                GridLength newChildSizeCoeff = new GridLength(childSizeCoeff.Value/2d, childSizeCoeff.GridUnitType);
+                
+                // set it for the event handler that sets the child size
+                draggedGroup.InitialSizeCoeff = newChildSizeCoeff;
+
+                // set to the current child
+                parentGroup.SetSizeCoeff(childIdx, newChildSizeCoeff);
                 int insertIdx = childIdx.ToInsertIdx(dock);
-                parentGroup.DockChildren.Insert(insertIdx, draggedGroup);
+
+                // insert the new child
+                parentDockStackGroup.DockChildren.Insert(insertIdx, draggedGroup);
             }
             else // create an extra DockStackGroup insert the dragged object and the 
                  // the object it is dropped on (drop object) into that group and insert

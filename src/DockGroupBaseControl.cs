@@ -145,6 +145,11 @@ namespace NP.Avalonia.UniDock
             );
         #endregion ProducingUserDefinedWindowGroup Styled Avalonia Property
 
+
+        // transient value only needed to pass size coefficient during the drop
+        // into a StackDockPanel
+        public GridLength? InitialSizeCoeff { get; set; }
+
         static DockGroupBaseControl()
         {
             DockIdProperty

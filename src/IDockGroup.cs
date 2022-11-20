@@ -48,6 +48,10 @@ namespace NP.Avalonia.UniDock
 
         Point FloatingSize { get; set; }
 
+        // transient value only needed to pass size coefficient during the drop
+        // into a StackDockPanel
+        GridLength? InitialSizeCoeff { get; set; }
+
         public GroupKind TheGroupKind { get; }
 
         IList<IDockGroup> DockChildren { get; }
