@@ -16,6 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
     <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj" />
-    <ProjectReference Include="..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj" />
+    <ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj" />
   </ItemGroup>
 </Project>
