@@ -70,7 +70,8 @@ namespace NP.TestCollectionSerialization
                 XmlSerializationUtils.Serialize<ObservableCollection<Base>>(list, typeof(C1), typeof(C2));
 
 
-            ObservableCollection<Base> l2 = XmlSerializationUtils.Deserialize<ObservableCollection<Base>>(str, typeof(C1), typeof(C2));
+            ObservableCollection<Base> l2 = 
+                XmlSerializationUtils.Deserialize<ObservableCollection<Base>>(str, false, typeof(C1), typeof(C2));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33020.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.StableFloatingWindows", "NP.StableFloatingWindows.csproj", "{6F43F7E8-455A-40C7-9F22-9E0D49C69921}"
 EndProject
@@ -16,6 +16,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Avalonia.UniDock", "..\..\src\NP.Avalonia.UniDock.csproj", "{8C3840DC-A1E3-42E6-AEA8-8EA230CAF86F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoCy", "..\..\SubModules\NP.IoCy\src\NP.IoCy.csproj", "{4DEC59D3-F308-4C96-8DC9-B475753B56A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.ViewModelInterfaces", "..\..\SubModules\NP.ViewModelInterfaces\src\NP.ViewModelInterfaces.csproj", "{64A53179-80F4-47F4-B368-6CE8ED3558D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoC.CommonImplementations", "..\..\SubModules\NP.IoC.CommonImplementations\src\NP.IoC.CommonImplementations.csproj", "{54844C70-CC23-4904-8A0B-E983FD2A785E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.DependencyInjection", "..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj", "{71609098-8851-48BA-8844-DCDD4E82E2F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +53,18 @@ Global
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64A53179-80F4-47F4-B368-6CE8ED3558D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64A53179-80F4-47F4-B368-6CE8ED3558D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64A53179-80F4-47F4-B368-6CE8ED3558D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64A53179-80F4-47F4-B368-6CE8ED3558D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54844C70-CC23-4904-8A0B-E983FD2A785E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54844C70-CC23-4904-8A0B-E983FD2A785E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54844C70-CC23-4904-8A0B-E983FD2A785E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54844C70-CC23-4904-8A0B-E983FD2A785E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71609098-8851-48BA-8844-DCDD4E82E2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71609098-8851-48BA-8844-DCDD4E82E2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71609098-8851-48BA-8844-DCDD4E82E2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71609098-8851-48BA-8844-DCDD4E82E2F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +74,9 @@ Global
 		{06657FCB-BA0E-4332-AAA4-870A87268DCC} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{647C0207-928E-46F0-B65F-3637E076889B} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{64A53179-80F4-47F4-B368-6CE8ED3558D8} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{54844C70-CC23-4904-8A0B-E983FD2A785E} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{71609098-8851-48BA-8844-DCDD4E82E2F0} = {D257FF52-0480-411B-8C43-90C47F876115}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98780B67-9675-4029-9930-B8EAB892EA72}

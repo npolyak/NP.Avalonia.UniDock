@@ -1,16 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NP.AvaloniaDock.csproj" />
-    <ProjectReference Include="..\..\SubModules\NP.Avalonia.Visuals\src\NP.Avalonia.Visuals.csproj" />
-    <ProjectReference Include="..\..\SubModules\NP.Concepts.Behaviors\src\NP.Concepts.Behavior.csproj" />
-    <ProjectReference Include="..\..\SubModules\NP.Utilities\src\NP.Utilities.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Themes\" />
+    <ProjectReference Include="..\..\src\NP.Avalonia.UniDock.csproj" />
   </ItemGroup>
 </Project>

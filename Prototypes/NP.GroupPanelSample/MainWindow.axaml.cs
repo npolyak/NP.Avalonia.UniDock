@@ -1,15 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using NP.Avalonia.UniDock;
 using NP.Avalonia.Visuals.Controls;
-using NP.AvaloniaDock;
 using NP.Utilities;
 
 namespace NP.GroupPanelSample
 {
     public partial class MainWindow : Window
     {
-        StackControlsGroup _stackGroup;
+        StackGroup _stackGroup;
 
         public MainWindow()
         {
@@ -17,7 +17,7 @@ namespace NP.GroupPanelSample
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _stackGroup = this.FindControl<StackControlsGroup>("TheStackGroup");
+            _stackGroup = this.FindControl<StackGroup>("TheStackGroup");
 
             //_stackGroup.Items.Add(new Grid { Background = new SolidColorBrush(Colors.Red) });
             //_stackGroup.Items.Add(new Grid { Background = new SolidColorBrush(Colors.Green) });

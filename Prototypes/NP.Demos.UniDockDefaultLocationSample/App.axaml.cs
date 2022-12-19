@@ -31,7 +31,7 @@ namespace NP.Demos.UniDockWindowsSample
 
             base.OnFrameworkInitializationCompleted();
 
-            NP.NLogAdapter.NLog.SetLog();
+            NP.NLogAdapter.NLogWrapper.SetLog();
         }
     }
 }

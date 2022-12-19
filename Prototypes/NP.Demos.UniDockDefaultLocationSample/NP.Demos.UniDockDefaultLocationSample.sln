@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33020.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Demos.UniDockDefaultLocationSample", "NP.Demos.UniDockDefaultLocationSample.csproj", "{6F43F7E8-455A-40C7-9F22-9E0D49C69921}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoCy", "..\..\SubModules\NP.IoCy\src\NP.IoCy.csproj", "{8326E35D-F15C-4590-BD89-364834C3706B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.NLogAdapter", "..\..\SubModules\NP.NLogAdapter\src\NP.NLogAdapter.csproj", "{969545F5-4B10-46A3-AE47-4A490715FB7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoC.CommonImplementations", "..\..\SubModules\NP.IoC.CommonImplementations\src\NP.IoC.CommonImplementations.csproj", "{A08D5E08-C8A6-46B8-B0B6-FED16894B15C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.DependencyInjection", "..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj", "{90A3A256-E74F-4D7A-8FC4-0560D22C207B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,14 @@ Global
 		{969545F5-4B10-46A3-AE47-4A490715FB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{969545F5-4B10-46A3-AE47-4A490715FB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{969545F5-4B10-46A3-AE47-4A490715FB7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08D5E08-C8A6-46B8-B0B6-FED16894B15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08D5E08-C8A6-46B8-B0B6-FED16894B15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08D5E08-C8A6-46B8-B0B6-FED16894B15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08D5E08-C8A6-46B8-B0B6-FED16894B15C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A3A256-E74F-4D7A-8FC4-0560D22C207B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A3A256-E74F-4D7A-8FC4-0560D22C207B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A3A256-E74F-4D7A-8FC4-0560D22C207B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A3A256-E74F-4D7A-8FC4-0560D22C207B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +75,8 @@ Global
 		{647C0207-928E-46F0-B65F-3637E076889B} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{8326E35D-F15C-4590-BD89-364834C3706B} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{969545F5-4B10-46A3-AE47-4A490715FB7C} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{A08D5E08-C8A6-46B8-B0B6-FED16894B15C} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{90A3A256-E74F-4D7A-8FC4-0560D22C207B} = {D257FF52-0480-411B-8C43-90C47F876115}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98780B67-9675-4029-9930-B8EAB892EA72}

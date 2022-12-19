@@ -16,7 +16,7 @@ namespace NP.TestBindingBehavior
 #if DEBUG
             this.AttachDevTools();
 #endif
-            SimpleDockGroup dockGroup = this.FindControl<SimpleDockGroup>("TheSimpleDockGroup");
+            RootDockGroup dockGroup = this.FindControl<RootDockGroup>("TheSimpleDockGroup");
 
             _collection.Add(new DockManagerContainer());
             _collection.Add(new DockManagerContainer());

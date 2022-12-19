@@ -24,9 +24,8 @@ using System.ComponentModel;
 using System.IO;
 using NP.Avalonia.UniDock.Serialization;
 using NP.Avalonia.UniDock.Factories;
-using NP.Utilities.Attributes;
-using Avalonia;
 using NP.Avalonia.UniDockService;
+using NP.DependencyInjection.Attributes;
 
 namespace NP.Avalonia.UniDock
 {
@@ -47,23 +46,23 @@ namespace NP.Avalonia.UniDock
             set => TheDockSeparatorFactory!.ResizePreview = value;   
         }
 
-        [Part]
+        [Inject]
         private IStackGroupFactory StackGroupFactory { get; set; } =
             new StackGroupFactory();
 
-        [Part]
+        [Inject]
         private ITabbedGroupFactory TabbedGroupFactory { get; set; } =
             new TabbedGroupFactory();
 
-        [Part]
+        [Inject]
         internal IFloatingWindowFactory FloatingWindowFactory { get; set; } =
             new FloatingWindowFactory();
 
-        [Part]
+        [Inject]
         internal IDockVisualItemGenerator? TheDockVisualItemGenerator { get; set; } =
             new DockVisualItemGenerator();
 
-        [Part]
+        [Inject]
         internal IDockSeparatorFactory? TheDockSeparatorFactory { get; set; } =
             new DockSeparatorFactory();
 

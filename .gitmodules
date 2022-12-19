@@ -20,3 +20,9 @@
 [submodule "SubModules/NP.Avalonia.UniDockService"]
 	path = SubModules/NP.Avalonia.UniDockService
 	url = https://github.com/npolyak/NP.Avalonia.UniDockService.git
+[submodule "SubModules/NP.DependencyInjection"]
+	path = SubModules/NP.DependencyInjection
+	url = https://github.com/npolyak/NP.DependencyInjection.git
+[submodule "SubModules/NP.IoC.CommonImplementations"]
+	path = SubModules/NP.IoC.CommonImplementations
+	url = https://github.com/npolyak/NP.IoC.CommonImplementations.git

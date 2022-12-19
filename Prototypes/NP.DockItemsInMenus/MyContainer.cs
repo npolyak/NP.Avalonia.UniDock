@@ -1,19 +1,20 @@
 ﻿using NP.Avalonia.UniDock.Factories;
+using NP.DependencyInjection.Interfaces;
 using NP.IoCy;
 
 namespace NP.DockItemsInMenus
 {
     public static class MyContainer
     {
-        public static IoCContainer? TheContainer { get; }
+        public static IDependencyInjectionContainer? TheContainer { get; }
 
         static MyContainer()
         {
-            TheContainer = new IoCContainer();
+            var containerBuilder = new ContainerBuilder();
 
-            TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
+            containerBuilder.RegisterType<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
 
-            TheContainer?.CompleteConfiguration();
+            TheContainer = containerBuilder.Build();
         }
     }
 }

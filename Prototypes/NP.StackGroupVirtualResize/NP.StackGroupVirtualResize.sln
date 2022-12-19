@@ -17,6 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Avalonia.UniDock", "..\.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoCy", "..\..\SubModules\NP.IoCy\src\NP.IoCy.csproj", "{4DEC59D3-F308-4C96-8DC9-B475753B56A9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.DependencyInjection", "..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj", "{B96AAA20-4575-4170-8849-B0FBE7C3FDD6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.ViewModelInterfaces", "..\..\SubModules\NP.ViewModelInterfaces\src\NP.ViewModelInterfaces.csproj", "{2A5FA45C-9102-440D-9AD8-F840C602C4B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoC.CommonImplementations", "..\..\SubModules\NP.IoC.CommonImplementations\src\NP.IoC.CommonImplementations.csproj", "{7C803269-21DB-4937-8E95-18033C618A0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +53,18 @@ Global
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B96AAA20-4575-4170-8849-B0FBE7C3FDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B96AAA20-4575-4170-8849-B0FBE7C3FDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B96AAA20-4575-4170-8849-B0FBE7C3FDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B96AAA20-4575-4170-8849-B0FBE7C3FDD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5FA45C-9102-440D-9AD8-F840C602C4B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5FA45C-9102-440D-9AD8-F840C602C4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5FA45C-9102-440D-9AD8-F840C602C4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5FA45C-9102-440D-9AD8-F840C602C4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C803269-21DB-4937-8E95-18033C618A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C803269-21DB-4937-8E95-18033C618A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C803269-21DB-4937-8E95-18033C618A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C803269-21DB-4937-8E95-18033C618A0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +74,9 @@ Global
 		{06657FCB-BA0E-4332-AAA4-870A87268DCC} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{647C0207-928E-46F0-B65F-3637E076889B} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{4DEC59D3-F308-4C96-8DC9-B475753B56A9} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{B96AAA20-4575-4170-8849-B0FBE7C3FDD6} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{2A5FA45C-9102-440D-9AD8-F840C602C4B3} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{7C803269-21DB-4937-8E95-18033C618A0B} = {D257FF52-0480-411B-8C43-90C47F876115}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98780B67-9675-4029-9930-B8EAB892EA72}

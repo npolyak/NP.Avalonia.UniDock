@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.ViewModelInterfaces", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.Avalonia.UniDockService", "..\..\SubModules\NP.Avalonia.UniDockService\src\NP.Avalonia.UniDockService.csproj", "{C7B0D50D-CB5F-4958-AF0B-248B3CEB8CBB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.IoC.CommonImplementations", "..\..\SubModules\NP.IoC.CommonImplementations\src\NP.IoC.CommonImplementations.csproj", "{2186A3C1-0B71-4657-BD1D-E50AF9A15D69}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NP.DependencyInjection", "..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj", "{A62C7261-E37B-4DD9-833A-31D958D622F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{C7B0D50D-CB5F-4958-AF0B-248B3CEB8CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7B0D50D-CB5F-4958-AF0B-248B3CEB8CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7B0D50D-CB5F-4958-AF0B-248B3CEB8CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2186A3C1-0B71-4657-BD1D-E50AF9A15D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2186A3C1-0B71-4657-BD1D-E50AF9A15D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2186A3C1-0B71-4657-BD1D-E50AF9A15D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2186A3C1-0B71-4657-BD1D-E50AF9A15D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A62C7261-E37B-4DD9-833A-31D958D622F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A62C7261-E37B-4DD9-833A-31D958D622F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A62C7261-E37B-4DD9-833A-31D958D622F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A62C7261-E37B-4DD9-833A-31D958D622F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +75,8 @@ Global
 		{647C0207-928E-46F0-B65F-3637E076889B} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{FB87EDFC-1410-469E-BC95-9C80C9259754} = {D257FF52-0480-411B-8C43-90C47F876115}
 		{C7B0D50D-CB5F-4958-AF0B-248B3CEB8CBB} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{2186A3C1-0B71-4657-BD1D-E50AF9A15D69} = {D257FF52-0480-411B-8C43-90C47F876115}
+		{A62C7261-E37B-4DD9-833A-31D958D622F8} = {D257FF52-0480-411B-8C43-90C47F876115}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98780B67-9675-4029-9930-B8EAB892EA72}

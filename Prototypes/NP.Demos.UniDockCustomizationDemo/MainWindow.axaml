@@ -36,49 +36,45 @@
   </Window.Resources>
   <Grid RowDefinitions="*, Auto">
     <Grid ColumnDefinitions="*, *">
-      <np:SimpleDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
-                           DockId="Group1">
-        <np:DockTabbedGroup AutoDestroy="False">
-          <np:DockTabbedGroup.Items>
-            <np:DockItem Header="Tab1"
-                         DockId="DockItem1">
-              <TextBlock Text="Hello World!"/>
-            </np:DockItem>
-            <np:DockItem Header="Tab2"
-                         DockId="DockItem2">
-              <TextBlock Text="Hi World!"/>
-            </np:DockItem>
-            <np:DockItem Header="Tab3"
-                         DockId="DockItem3">
-              <TextBlock Text="Hi World 1234!"/>
-            </np:DockItem>
-          </np:DockTabbedGroup.Items>
-        </np:DockTabbedGroup>
-      </np:SimpleDockGroup>
-      <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+		<np:RootDockGroup  np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
+							 DockId="Group1">
+			<np:TabbedDockGroup AutoDestroy="False">
+				<np:DockItem Header="Tab1"
+							 DockId="DockItem1">
+					<TextBlock Text="Hello World!"/>
+				</np:DockItem>
+				<np:DockItem Header="Tab2"
+							 DockId="DockItem2">
+					<TextBlock Text="Hi World!"/>
+				</np:DockItem>
+				<np:DockItem Header="Tab3"
+							 DockId="DockItem3">
+					<TextBlock Text="Hi World 1234!"/>
+				</np:DockItem>
+			</np:TabbedDockGroup>
+		</np:RootDockGroup>
+      <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}"
                           DockId="Group2"
                           Grid.Column="1">
-        <np:DockTabbedGroup AutoDestroy="False">
-          <np:DockTabbedGroup.Items>
-            <np:DockItem Header="Tab4" 
-                         Content="Hello World!"
-                         DockId="DockItem4">
-              <np:DockItem.ContentTemplate>
-                <DataTemplate>
-                  <Grid RowDefinitions="Auto, *">
-                    <TextBlock Foreground="Red"
-                               FontSize="20"
-                               Text="{Binding}"/>
-                  </Grid>
-                </DataTemplate>
-              </np:DockItem.ContentTemplate>
-            </np:DockItem>
-            <np:DockItem Header="Tab5" 
-                         DockId="DockItem5"
-                         Content="Hi World!"/>
-          </np:DockTabbedGroup.Items>
-        </np:DockTabbedGroup>
-      </np:SimpleDockGroup>
+		  <np:TabbedDockGroup AutoDestroy="False">
+			  <np:DockItem Header="Tab4"
+						   Content="Hello World!"
+						   DockId="DockItem4">
+				  <np:DockItem.ContentTemplate>
+					  <DataTemplate>
+						  <Grid RowDefinitions="Auto, *">
+							  <TextBlock Foreground="Red"
+										 FontSize="20"
+										 Text="{Binding}"/>
+						  </Grid>
+					  </DataTemplate>
+				  </np:DockItem.ContentTemplate>
+			  </np:DockItem>
+			  <np:DockItem Header="Tab5"
+						   DockId="DockItem5"
+						   Content="Hi World!"/>
+		  </np:TabbedDockGroup>
+      </np:RootDockGroup>
     </Grid>
     <StackPanel Grid.Row="1" Orientation="Horizontal"
                 HorizontalAlignment="Right">

@@ -23,7 +23,7 @@
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="*, Auto">
     <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{x:Static local:MyContainer.TheDockManager}"
-                      DockDataContext="Hello World!">
+					  >
       <np:RootDockGroup.FloatingWindows>
         <np:FloatingWindowContainer WindowId="AddedWindow1"
                                     WindowRelativePosition="1000, 100"

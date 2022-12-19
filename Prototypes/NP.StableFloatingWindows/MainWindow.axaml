@@ -15,8 +15,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://NP.Avalonia.Visuals/Themes/Geometries.axaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <np:DockManager x:Key="TheDockManager" 
-                      TheDockObjectComposer="{x:Static local:MyContainer.TheContainer}"/>
+      <np:DockManager x:Key="TheDockManager"/>
     </ResourceDictionary>
   </Window.Resources>
   <Window.Styles>
@@ -24,40 +23,40 @@
   </Window.Styles>
   <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
         RowDefinitions="*, Auto">
-    <np:SimpleDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
-      <np:SimpleDockGroup.FloatingWindows>
-        <np:FloatingWindowContainer WindowId="AddedWindow1"
-                                    WindowRelativePosition="1000, 100"
-                                    WindowSize ="300, 300">
-          <np:StackDockGroup TheOrientation="Horizontal"
-                             DockId="FloatingGroup1"
-                             IsStableGroup="True">
-            <np:DockItem Header="FloatingWindowPanel1"
-                         DockId="FloatingDockItem1"
-                         DefaultDockGroupId="FloatingGroup1"
-                         DefaultDockOrderInGroup="1">
-              <TextBlock Text="Floating Panel"/>
-            </np:DockItem>
-            <np:TabbedDockGroup x:Name="FloatingGroup2"
-                                DockId="FloatingGroup2"
-                                DefaultDockOrderInGroup="2"
-                                IsStableGroup="True">
-              <np:DockItem Header="Floating Tab 1"
-                           DockId="FloatingDockItem0"
-                           DefaultDockGroupId="FloatingGroup2"
-                           DefaultDockOrderInGroup="1">
-                <TextBlock Text="Floating Tab 1"/>
-              </np:DockItem>
-              <np:DockItem Header="Floating Tab 2"
-                           DockId="FloatingDockItem2"
-                           DefaultDockGroupId="FloatingGroup2"
-                           DefaultDockOrderInGroup="2">
-                <TextBlock Text="Floating Tab 2"/>
-              </np:DockItem>
-            </np:TabbedDockGroup>
-          </np:StackDockGroup>
-        </np:FloatingWindowContainer>
-      </np:SimpleDockGroup.FloatingWindows>
+    <np:RootDockGroup np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
+		<np:RootDockGroup.FloatingWindows>
+			<np:FloatingWindowContainer WindowId="AddedWindow1"
+										WindowRelativePosition="1000, 100"
+										WindowSize ="300, 300">
+				<np:StackDockGroup TheOrientation="Horizontal"
+								   DockId="FloatingGroup1"
+								   IsStableGroup="True">
+					<np:DockItem Header="FloatingWindowPanel1"
+								 DockId="FloatingDockItem1"
+								 DefaultDockGroupId="FloatingGroup1"
+								 DefaultDockOrderInGroup="1">
+						<TextBlock Text="Floating Panel"/>
+					</np:DockItem>
+					<np:TabbedDockGroup x:Name="FloatingGroup2"
+										DockId="FloatingGroup2"
+										DefaultDockOrderInGroup="2"
+										IsStableGroup="True">
+						<np:DockItem Header="Floating Tab 1"
+									 DockId="FloatingDockItem0"
+									 DefaultDockGroupId="FloatingGroup2"
+									 DefaultDockOrderInGroup="1">
+							<TextBlock Text="Floating Tab 1"/>
+						</np:DockItem>
+						<np:DockItem Header="Floating Tab 2"
+									 DockId="FloatingDockItem2"
+									 DefaultDockGroupId="FloatingGroup2"
+									 DefaultDockOrderInGroup="2">
+							<TextBlock Text="Floating Tab 2"/>
+						</np:DockItem>
+					</np:TabbedDockGroup>
+				</np:StackDockGroup>
+			</np:FloatingWindowContainer>
+		</np:RootDockGroup.FloatingWindows>
       <np:StackDockGroup x:Name="TheStackGroup"
                          TheOrientation="Vertical"
                          IsStableGroup="True">
@@ -92,7 +91,7 @@
           </np:DockItem>
         </np:TabbedDockGroup>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
 
     <StackPanel Margin="10,5"
                 Grid.Row="1"
@@ -107,5 +106,6 @@
               Content="Restore"
               Padding="10,5" />
     </StackPanel>
-  </Grid>
+  
+</Grid>
 </Window>

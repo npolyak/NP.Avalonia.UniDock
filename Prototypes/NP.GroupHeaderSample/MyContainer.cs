@@ -2,26 +2,27 @@
 using NP.Avalonia.UniDock.Factories;
 using NP.Avalonia.UniDockService;
 using NP.IoCy;
+using NP.DependencyInjection.Interfaces;
 
 namespace NP.GroupHeaderSample
 {
     public static class MyContainer
     {
-        public static IoCContainer? TheContainer { get; }
+        public static IDependencyInjectionContainer TheContainer { get; }
 
         public static DockManager TheDockManager { get; } = new DockManager();
 
         static MyContainer()
         {
-            TheContainer = new IoCContainer();
+            var containerBuilder = new ContainerBuilder();
 
             TheDockManager.IsInEditableState = true;
 
-            TheContainer.Map<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
+            containerBuilder.RegisterType<IFloatingWindowFactory, MyCustomFloatingWindowFactory>();
 
-            TheContainer.MapSingleton<IUniDockService, DockManager>(TheDockManager, null, true);
+            containerBuilder.RegisterSingletonInstance<IUniDockService>(TheDockManager);
 
-            TheContainer?.CompleteConfiguration();
+            TheContainer = containerBuilder.Build();
         }
     }
 }

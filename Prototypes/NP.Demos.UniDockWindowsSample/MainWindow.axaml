@@ -26,7 +26,7 @@
     </ResourceDictionary>
   </Window.Resources>
   <Grid RowDefinitions="*, Auto, Auto">
-    <np:SimpleDockGroup DockId="RootGroup"
+    <np:RootDockGroup DockId="RootGroup"
                         np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
       <np:StackDockGroup TheOrientation="Horizontal">
         <np:StackDockGroup TheOrientation="Vertical">
@@ -109,7 +109,7 @@
           </np:StackDockGroup>
         </np:StackDockGroup>
       </np:StackDockGroup>
-    </np:SimpleDockGroup>
+    </np:RootDockGroup>
     <Grid x:Name="Separator" 
           Grid.Row="1"
           Height="3"

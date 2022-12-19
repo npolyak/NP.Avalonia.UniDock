@@ -8,53 +8,23 @@
             WindowId="TheMainWindow"
             DockChildWindowOwnerId="TheMainWindow">
             <TopLeft
-                X="448"
-                Y="448" />
+                X="968"
+                Y="1093" />
             <Size
                 X="800"
                 Y="600" />
         </WindowParams>
         <WindowParams
             IsDockWindow="true"
-            Title="Floating Window - LeftTop 2"
+            Title="Floating Window - LeftBottom 1"
             TheWindowState="Normal"
             OwnerWindowId="TheMainWindow"
             WindowId="FloatingWindow_1"
             DockChildWindowOwnerId="TheMainWindow"
             TopLevelGroupId="RootDockGroup_19">
             <TopLeft
-                X="1736"
-                Y="655" />
-            <Size
-                X="700"
-                Y="400" />
-        </WindowParams>
-        <WindowParams
-            IsDockWindow="true"
-            Title="Floating Window - LeftBottom 1"
-            TheWindowState="Normal"
-            OwnerWindowId="TheMainWindow"
-            WindowId="FloatingWindow_4"
-            DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="RootDockGroup_23">
-            <TopLeft
-                X="2130"
-                Y="1353" />
-            <Size
-                X="700"
-                Y="400" />
-        </WindowParams>
-        <WindowParams
-            IsDockWindow="true"
-            Title="Floating Window - LeftBottom 2"
-            TheWindowState="Normal"
-            OwnerWindowId="TheMainWindow"
-            WindowId="FloatingWindow_5"
-            DockChildWindowOwnerId="TheMainWindow"
-            TopLevelGroupId="RootDockGroup_24">
-            <TopLeft
-                X="2630"
-                Y="694" />
+                X="2291"
+                Y="1383" />
             <Size
                 X="700"
                 Y="400" />
@@ -83,7 +53,7 @@
             GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
             DockId="StackDockGroup_1"
             ParentDockId="RootGroup"
-            ChildrenDockIds="TabbedDockGroup_9 StackDockGroup_12"
+            ChildrenDockIds="StackDockGroup_2 TabbedDockGroup_9 StackDockGroup_12"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="true"
@@ -96,14 +66,52 @@
             <SizeCoefficients>
                 <string>1*</string>
                 <string>1*</string>
+                <string>1*</string>
             </SizeCoefficients>
         </DockGroupParams>
         <DockGroupParams
             CanFloat="true"
             CanClose="true"
+            GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
+            DockId="StackDockGroup_2"
+            ParentDockId="StackDockGroup_1"
+            ChildrenDockIds="TabbedDockGroup_3 LeftBottom2"
+            DefaultDockOrderInGroup="0"
+            AutoDestroy="false"
+            AutoInvisible="true"
+            ProducingUserDefinedWindowGroupId="RootGroup"
+            TheOrientation="Vertical"
+            IsGroupLocked="false"
+            IsPredefined="false"
+            AllowTabDocking="false"
+            IsDockVisible="false">
+            <SizeCoefficients>
+                <string>1*</string>
+                <string>1*</string>
+            </SizeCoefficients>
+        </DockGroupParams>
+        <DockGroupParams
+            CanFloat="true"
+            CanClose="true"
+            GroupFullTypeName="NP.Avalonia.UniDock.TabbedDockGroup"
+            DockId="TabbedDockGroup_3"
+            ParentDockId="StackDockGroup_2"
+            ChildrenDockIds="LeftTop1 LeftTop2"
+            DefaultDockOrderInGroup="0"
+            AutoDestroy="false"
+            AutoInvisible="false"
+            ProducingUserDefinedWindowGroupId="RootGroup"
+            TheOrientation="Horizontal"
+            IsGroupLocked="false"
+            IsPredefined="false"
+            AllowTabDocking="true"
+            IsDockVisible="false" />
+        <DockGroupParams
+            CanFloat="true"
+            CanClose="true"
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="LeftTop1"
-            ParentDockId="StackDockGroup_21"
+            ParentDockId="TabbedDockGroup_3"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="false"
@@ -121,7 +129,7 @@
             CanClose="true"
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="LeftTop2"
-            ParentDockId="StackDockGroup_21"
+            ParentDockId="TabbedDockGroup_3"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="false"
@@ -139,7 +147,7 @@
             CanClose="true"
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="LeftBottom1"
-            ParentDockId="RootDockGroup_23"
+            ParentDockId="RootDockGroup_19"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="false"
@@ -157,7 +165,7 @@
             CanClose="true"
             GroupFullTypeName="NP.Avalonia.UniDock.DockItem"
             DockId="LeftBottom2"
-            ParentDockId="RootDockGroup_24"
+            ParentDockId="StackDockGroup_2"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="false"
@@ -362,58 +370,7 @@
             CanClose="false"
             GroupFullTypeName="NP.Avalonia.UniDock.RootDockGroup"
             DockId="RootDockGroup_19"
-            ChildrenDockIds="StackDockGroup_21"
-            DefaultDockOrderInGroup="0"
-            AutoDestroy="false"
-            AutoInvisible="false"
-            ProducingUserDefinedWindowGroupId="RootGroup"
-            TheOrientation="Horizontal"
-            IsGroupLocked="false"
-            IsPredefined="false"
-            AllowTabDocking="false"
-            IsDockVisible="false" />
-        <DockGroupParams
-            CanFloat="true"
-            CanClose="true"
-            GroupFullTypeName="NP.Avalonia.UniDock.StackDockGroup"
-            DockId="StackDockGroup_21"
-            ParentDockId="RootDockGroup_19"
-            ChildrenDockIds="LeftTop1 LeftTop2"
-            DefaultDockOrderInGroup="0"
-            AutoDestroy="false"
-            AutoInvisible="true"
-            ProducingUserDefinedWindowGroupId="RootGroup"
-            TheOrientation="Horizontal"
-            IsGroupLocked="false"
-            IsPredefined="false"
-            AllowTabDocking="false"
-            IsDockVisible="false">
-            <SizeCoefficients>
-                <string>1*</string>
-                <string>1*</string>
-            </SizeCoefficients>
-        </DockGroupParams>
-        <DockGroupParams
-            CanFloat="false"
-            CanClose="false"
-            GroupFullTypeName="NP.Avalonia.UniDock.RootDockGroup"
-            DockId="RootDockGroup_23"
             ChildrenDockIds="LeftBottom1"
-            DefaultDockOrderInGroup="0"
-            AutoDestroy="false"
-            AutoInvisible="false"
-            ProducingUserDefinedWindowGroupId="RootGroup"
-            TheOrientation="Horizontal"
-            IsGroupLocked="false"
-            IsPredefined="false"
-            AllowTabDocking="false"
-            IsDockVisible="false" />
-        <DockGroupParams
-            CanFloat="false"
-            CanClose="false"
-            GroupFullTypeName="NP.Avalonia.UniDock.RootDockGroup"
-            DockId="RootDockGroup_24"
-            ChildrenDockIds="LeftBottom2"
             DefaultDockOrderInGroup="0"
             AutoDestroy="false"
             AutoInvisible="false"
