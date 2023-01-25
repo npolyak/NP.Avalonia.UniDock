@@ -6,7 +6,7 @@ namespace NP.StableFloatingWindows
 {
     public static class MyContainer
     {
-        public static IDependencyInjectionContainer TheContainer { get; }
+        public static IDependencyInjectionContainer<object> TheContainer { get; }
 
         static MyContainer()
         {
