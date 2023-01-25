@@ -8,7 +8,7 @@ namespace NP.ViewModelSample
 {
     public static class MyContainer
     {
-        public static IDependencyInjectionContainer TheContainer { get; }
+        public static IDependencyInjectionContainer<object> TheContainer { get; }
 
         public static DockManager TheDockManager { get; } = new DockManager();
 
