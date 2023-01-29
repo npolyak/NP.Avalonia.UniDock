@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<PackageId>NP.Avalonia.UniDock</PackageId>
-		<PackageVersion>1.0.47</PackageVersion>
+		<PackageVersion>1.0.48</PackageVersion>
 		<Authors>Nick Polyak, Ph. D.</Authors>
 		<Company>AWebPros</Company>
 		<Description>UniDock powerful multiplatform docking framework</Description>

@@ -456,12 +456,24 @@ namespace NP.Avalonia.UniDock
 
                 parentGroup.DockChildren.Insert(childIdx, insertGroup);
 
-                parentGroup.SetSizeCoeff(childIdx, sizeCoeff);
+                int originalChildIdx = 0;
 
-                insertGroup.DockChildren?.Insert(0, childGroup);
+                insertGroup.DockChildren?.Insert(originalChildIdx, childGroup);
 
                 int insertIdx = 0.ToInsertIdx(dock);
+
                 insertGroup.DockChildren?.Insert(insertIdx, draggedGroup);
+
+                if (insertIdx == 0)
+                {
+                    originalChildIdx = 1;
+                }
+
+                GridLength originalChildCoeff = insertGroup.GetSizeCoefficient(originalChildIdx);
+
+                insertGroup.SetSizeCoeff(insertIdx, originalChildCoeff);
+
+                parentGroup.SetSizeCoeff(childIdx, sizeCoeff);
             }
         }
 
