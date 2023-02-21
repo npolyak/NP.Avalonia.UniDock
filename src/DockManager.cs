@@ -117,11 +117,34 @@ namespace NP.Avalonia.UniDock
             DockItemsViewModels?.SerializeToFile(filePath, types);
         }
 
+        public void SaveViewModelsToStream(Stream stream)
+        {
+            if (DockItemsViewModels == null)
+            {
+                return;
+            }
+
+            Type[] types =
+                DockItemsViewModels.Select(item => item.GetType()).Distinct().ToArray();
+
+            DockItemsViewModels?.SerializeToStream(stream, types);
+        }
+
+
         public void RestoreViewModelsFromFile(string filePath, params Type[] extraTypes)
         {
             this.DockItemsViewModels =
                 XmlSerializationUtils
                     .DeserializeFromFile<ObservableCollection<DockItemViewModelBase>>(filePath, false, extraTypes);
+
+            this.SelectTabsInTabbedGroupsWithoutSelection();
+        }
+
+        public void RestoreViewModelsFromStream(Stream stream, params Type[] extraTypes)
+        {
+            this.DockItemsViewModels =
+                XmlSerializationUtils
+                    .DeserializeFromStream<ObservableCollection<DockItemViewModelBase>>(stream, false, extraTypes);
 
             this.SelectTabsInTabbedGroupsWithoutSelection();
         }
@@ -756,18 +779,24 @@ namespace NP.Avalonia.UniDock
             }
         }
 
-        public void SaveToFile(string filePath)
+        public void SaveDockManagerParamsToStream(Stream stream)
         {
             var dockManagerParams = this.ToParams();
 
             string serializationStr =
                 XmlSerializationUtils.Serialize(dockManagerParams);
 
-            using StreamWriter writer = new StreamWriter(filePath);
+            using StreamWriter writer = new StreamWriter(stream);
 
             writer.Write(serializationStr);
 
             writer.Flush();
+        }
+
+        public void SaveToFile(string filePath)
+        {
+            using FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            SaveDockManagerParamsToStream(fileStream);
         }
 
         public void RestoreFromFile
@@ -775,7 +804,20 @@ namespace NP.Avalonia.UniDock
             string filePath, 
             bool restorePredefinedWindowsPositionParams = false)
         {
-            using StreamReader reader = new StreamReader(filePath);
+
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            RestoreDockManagerParamsFromStream(fileStream, restorePredefinedWindowsPositionParams);
+        }
+
+        public void RestoreDockManagerParamsFromStream(Stream stream, bool restorePredefinedWindowsPositionParams = false)
+        {
+            using StreamReader reader = new StreamReader(stream);
 
             string serializationStr = reader.ReadToEnd();
 

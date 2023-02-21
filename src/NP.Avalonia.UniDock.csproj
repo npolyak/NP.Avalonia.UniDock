@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<PackageId>NP.Avalonia.UniDock</PackageId>
-		<PackageVersion>1.0.48</PackageVersion>
+		<PackageVersion>1.0.50</PackageVersion>
 		<Authors>Nick Polyak, Ph. D.</Authors>
 		<Company>AWebPros</Company>
 		<Description>UniDock powerful multiplatform docking framework</Description>
@@ -12,6 +12,13 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageTags>Avalonia, Multiplatform Docking Framework</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>False</Optimize>
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>portable</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="*.nupkg" />
@@ -23,8 +30,8 @@
 		<ProjectReference Include="$(SolutionDir)..\..\SubModules\NP.DependencyInjection\src\NP.DependencyInjection.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='Release'">
-		<PackageReference Include="NP.Avalonia.Visuals" Version="1.0.35" />
-		<PackageReference Include="NP.Avalonia.UniDockService" Version="1.0.3" />
-		<PackageReference Include="NP.DependencyInjection" Version="1.0.9"/>
+		<PackageReference Include="NP.Avalonia.Visuals" Version="1.0.36" />
+		<PackageReference Include="NP.Avalonia.UniDockService" Version="1.0.4" />
+		<PackageReference Include="NP.DependencyInjection" Version="1.0.9" />
 	</ItemGroup>
 </Project>

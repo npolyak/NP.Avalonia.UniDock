@@ -30,9 +30,12 @@
       </np:DockItem>
     </np:RootDockGroup>
 
-    <!--<np:DropPanelWithCompass ShowHull="False"
+	  <!--
+    <np:DropPanelWithCompass ShowHull="False"
                              AllowCenterDocking="False"
-                             DockSide="Bottom"/>-->
+                             DockSide="Bottom"/>
+	  
+	  -->
 
     <!--<np:DockCompass HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
