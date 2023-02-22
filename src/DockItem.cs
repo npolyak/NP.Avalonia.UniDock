@@ -129,6 +129,7 @@ namespace NP.Avalonia.UniDock
                 .Subscribe(OnIsSelectedChanged);
         }
 
+        private DockManager? _prevDockManager = null;
 
         public DockItem()
         {
@@ -143,6 +144,21 @@ namespace NP.Avalonia.UniDock
 
             this.GetObservable(HeaderContentTemplateResourceKeyProperty)
                 .Subscribe(OnHeaderContentTemplateResourceKeyChanged!);
+
+            this.GetObservable(DockAttachedProperties.TheDockManagerProperty)
+                .Subscribe(OnDockManagerChanged);
+        }
+
+        public event Action<DockItem> DockItemDestroyedEvent;
+
+        private void OnDockManagerChanged(DockManager dockManager)
+        {
+            if (dockManager == null && _prevDockManager != null)
+            {
+                DockItemDestroyedEvent?.Invoke(this);
+            }
+
+            _prevDockManager = dockManager;
         }
 
         ~DockItem()
